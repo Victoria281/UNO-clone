@@ -7,7 +7,9 @@ const devConfig = {
     host: process.env.PG_HOST,
     port: process.env.PG_PORT,
     database: process.env.PG_DATABASE,
-    ssl: true
+    ssl: {
+        rejectUnauthorized: false,
+    }
 }
 
 const proConfig = {
