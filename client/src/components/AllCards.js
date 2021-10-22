@@ -6,7 +6,14 @@ const AllCards = () => {
 
   const getCards = async () => {
     try {
-      const response = await fetch("http://localhost:5000/getall");
+
+      //proxy is only use in development so it will be ignored in production
+      //so if there is http://localhost:5000 then by default it is going to use heroku domain
+      //remember this heroku app is just our server serving the build static content and also
+      //holding the restful api
+
+      //https://uno-clone.herokuapp.com/
+      const response = await fetch("/getall");
       const jsonData = await response.json();
 
       setCards(jsonData.cards);
