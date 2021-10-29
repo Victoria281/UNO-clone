@@ -1,5 +1,6 @@
 import React, { Fragment, useEffect, useState } from "react";
 
+
 import shuffleCards from "../components/shuffle";
 import "../index.css";
 
@@ -43,6 +44,47 @@ const Game = () => {
       image_file: ""
     }
   });
+
+  const botcard = (arr) => {
+    var normal = arr.filter(
+      (item) => item.color === current.color || item.values === current.values
+    );
+    var wild = arr.filter((item) => item.color === "wild");
+  };
+  
+  const Player = ({ player }) => {
+    return (
+      <ul>
+        {turn === 0 &&
+          player.map((decks) => (
+            <li key={decks.id}>
+              <div
+                onClick={() => {
+                  playCard(decks, player);
+                }}
+              >
+                <img
+                  className="img-responsive"
+                  src={decks.image_file}
+                  alt={decks.values + " " + decks.color}
+                />
+                <p className="imageText">{decks.image_file}</p>
+              </div>
+            </li>
+          ))}
+        {turn !== 0 &&
+          player.map((decks) => (
+            <li key={decks.id}>
+              <div>
+                <p>{decks.values}</p>
+                <p>{decks.color}</p>
+              </div>
+            </li>
+          ))}
+      </ul>
+    );
+  };
+
 const playCard = (cardInfo, player) => {
     console.log("played card");
     console.log(cardInfo);
@@ -274,6 +316,12 @@ const playCard = (cardInfo, player) => {
         </tr>
       </table>
 
+        <div class="row">
+          <div class="col-sm-3">
+            <h5>Player 1</h5>
+            <Player player={players.player1} type="human" />
+          </div>
+        </div>
     </div>
   );
 };
