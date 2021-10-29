@@ -17,6 +17,7 @@ const Game = () => {
   // const [order, setOrder] = useState(shuffleCards([0, 1, 2, 3]));
   const [order, setOrder] = useState([0, 1, 2, 3]);
   const [turn, setTurn] = useState(order[0]);
+  const [selectColor, setSelectColor] = useState(false);
   const [play, setPlay] = useState({
     player1: {
       id: 0,
@@ -43,8 +44,7 @@ const Game = () => {
       image_file: ""
     }
   });
-
-   const botplay = (arr) => {
+  const botplay = (arr) => {
     console.log("Bot plays card");
     // console.log(arr);
     // console.log(current);
@@ -106,7 +106,10 @@ const Game = () => {
             </div>
           </li>
         ))}
-  
+      </ul>
+    );
+  };
+
   const Player = ({ player }) => {
     return (
       <ul>
@@ -140,7 +143,7 @@ const Game = () => {
     );
   };
 
-const playCard = (cardInfo, player) => {
+  const playCard = (cardInfo, player) => {
     console.log("played card");
     console.log(cardInfo);
     console.log(player);
@@ -288,7 +291,7 @@ const playCard = (cardInfo, player) => {
   const getCards = async () => {
     console.log("retrieving cards");
     try {
-      const response = await fetch("https://uno-clone.herokuapp.com/getall");
+      const response = await fetch("/getall");
       const jsonData = await response.json();
       var cards_retrieved = jsonData.cards;
       setCards(cards_retrieved);
@@ -309,7 +312,7 @@ const playCard = (cardInfo, player) => {
     getCards();
   }, []);
 
-useEffect(() => {
+  useEffect(() => {
     console.log("Now is player " + (turn + 1) + " turn");
     if (
       players.player1.length === 0 ||
@@ -324,7 +327,6 @@ useEffect(() => {
       }
     }
   }, [turn]);
-
 
   return (
     <div className="container">
@@ -349,7 +351,7 @@ useEffect(() => {
           </td>
           <td>{order}</td>
           <td>Player {turn + 1}</td>
-          <td></td>
+          <td>{selectColor && <p>Choose a color</p>}</td>
         </tr>
       </table>
 
@@ -388,12 +390,12 @@ useEffect(() => {
         </tr>
       </table>
 
-        <div class="row">
-          <div class="col-sm-3">
-            <h5>Player 1</h5>
-            <Player player={players.player1} type="human" />
-          </div>
-<div class="col-sm-3">
+      <div class="row">
+        <div class="col-sm-3">
+          <h5>Player 1</h5>
+          <Player player={players.player1} type="human" />
+        </div>
+        <div class="col-sm-3">
           <h5>Bot 1</h5>
           <Bot arr={players.player2} />
         </div>
@@ -405,7 +407,7 @@ useEffect(() => {
           <h5>Bot 3</h5>
           <Bot arr={players.player4} />
         </div>
-        </div>
+      </div>
     </div>
   );
 };
