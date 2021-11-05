@@ -1,13 +1,19 @@
 import React, { Fragment, useEffect, useState } from "react";
-
+import Modal from "react-modal";
 import shuffleCards from "../components/shuffle";
-import "../index.css";
+import "../styles.css";
 
+import { useHistory } from "react-router-dom";
 const Game = () => {
   const [cards, setCards] = useState([]);
   const [mainDeck, setMainDeck] = useState([]);
   const [used, setUsed] = useState([]);
-  const [current, setCurrent] = useState({ card: "", cardid: 0 });
+  const [current, setCurrent] = useState({
+    id: 0,
+    values: 0,
+    color: "",
+    image_file: ""
+  });
   const [players, setPlayers] = useState({
     player1: [],
     player2: [],
@@ -15,86 +21,84 @@ const Game = () => {
     player4: []
   });
   // const [order, setOrder] = useState(shuffleCards([0, 1, 2, 3]));
-  const [order, setOrder] = useState([0, 1, 2, 3]);
+  const [isUnoButtonPressed, setUnoButtonPressed] = useState(false);
   const [selectColor, setSelectColor] = useState(false);
-  const [turn, setTurn] = useState(order[0]);
-  const [playable, setPlayable] = useState([]);
   const [ifShow, setIfShow] = useState(false);
-  const [selectColor, setSelectColor] = useState(false);
+  const [order, setOrder] = useState([0, 1, 2, 3]);
+  const [playable, setPlayable] = useState([]);
+  const [turn, setTurn] = useState(order[0]);
   const [play, setPlay] = useState({
     player1: {
       id: 0,
       values: 0,
-      color: 0,
+      color: "",
       image_file: ""
     },
     player2: {
       id: 0,
       values: 0,
-      color: 0,
+      color: "",
       image_file: ""
     },
     player3: {
       id: 0,
       values: 0,
-      color: 0,
+      color: "",
       image_file: ""
     },
     player4: {
       id: 0,
       values: 0,
-      color: 0,
+      color: "",
       image_file: ""
     }
   });
+
   const botplay = (arr) => {
-    console.log("Bot plays card");
+    // console.log("Bot plays card");
     // console.log(arr);
     // console.log(current);
+
     var normal_playable = arr.filter(
       (item) => item.color === current.color || item.values === current.values
     );
     var wild_playable = arr.filter((item) => item.color === "wild");
 
-    console.log("Bot can play");
-    console.log(normal_playable);
-    console.log(wild_playable);
+    // console.log("Bot can play");
+    // console.log(normal_playable);
+    // console.log(wild_playable);
 
     var r = Math.random();
     var cardplayed = {};
 
-    //Need to prioritise colour as well
-    //Split normal playable into colour and similar values 
-    //Pass in checks for colour playable and do the same as before
-    // (Maybe can even have increased chance to use same colour and same number before the rest )
-
-    //Check if there is playable cards
     if (wild_playable.length !== 0 && normal_playable.length !== 0) {
       if (r < 0.75) {
-        // 75% chance to play wild card
         cardplayed =
           wild_playable[Math.floor(Math.random() * wild_playable.length)];
       } else {
-        // 25% chance to play normal card 
         cardplayed =
           normal_playable[Math.floor(Math.random() * normal_playable.length)];
       }
       playCard(cardplayed, arr);
     } else if (wild_playable.length !== 0) {
-      // Run if there is no normal cards to play
       cardplayed =
         wild_playable[Math.floor(Math.random() * wild_playable.length)];
       playCard(cardplayed, arr);
     } else if (normal_playable.length !== 0) {
-      //Run if there is no wild card to play 
       cardplayed =
         normal_playable[Math.floor(Math.random() * normal_playable.length)];
       playCard(cardplayed, arr);
     } else {
-      //No card to pay at all
       console.log("no card to play");
+      console.log(turn);
       // console.log(turn + 1);
       var expectedPlayerInd = order.indexOf(turn);
+
+      players["player" + (turn + 1)].push(mainDeck[0]);
+      setMainDeck(mainDeck.slice(1, mainDeck.length));
+      setPlayers(players);
+      console.log("player" + (turn + 1) + "added a card");
+
       expectedPlayerInd += 1;
       if (expectedPlayerInd === 4) {
         expectedPlayerInd = 0;
@@ -105,17 +109,13 @@ const Game = () => {
       setTurn(order[expectedPlayerInd]);
     }
   };
+
   const Bot = (arr) => {
     return (
       <ul>
         {arr.arr.map((decks) => (
           <li key={decks.id}>
             <div>
-              <img
-                className="img-responsive"
-                src={decks.image_file}
-                alt={decks.values + " " + decks.color}
-              />
               <p className="imageText">{decks.image_file}</p>
             </div>
           </li>
@@ -128,22 +128,34 @@ const Game = () => {
     return (
       <ul>
         {turn === 0 &&
-          player.map((decks) => (
-            <li key={decks.id}>
-              <div
-                onClick={() => {
-                  playCard(decks, player);
-                }}
-              >
-                <img
-                  className="img-responsive"
-                  src={decks.image_file}
-                  alt={decks.values + " " + decks.color}
-                />
-                <p className="imageText">{decks.image_file}</p>
-              </div>
-            </li>
-          ))}
+          player.map((decks) => {
+            console.log(playable.includes(decks));
+            return (
+              <li key={decks.id}>
+                {playable.includes(decks) && (
+                  <div
+                    onClick={() => {
+                      playCard(decks, player);
+                    }}
+                  >
+                    <p className="imageText">{decks.image_file}</p>
+                    <p className="imageText">CanPlay</p>
+                  </div>
+                )}
+                {!playable.includes(decks) && (
+                  <div>
+                    {/* <img
+                      className="img-responsive"
+                      src="https://www.ultraboardgames.com/uno/gfx/skip.jpg"
+                      alt={decks.values + " " + decks.color}
+                    /> */}
+                    <p className="imageText">{decks.image_file}</p>
+                    <p className="imageText">CannotPlay</p>
+                  </div>
+                )}
+              </li>
+            );
+          })}
         {turn !== 0 &&
           player.map((decks) => (
             <li key={decks.id}>
@@ -157,18 +169,6 @@ const Game = () => {
     );
   };
 
-  const PassTurnBtn = () => (
-    <button
-      className="passTurn"
-      onClick={() => {
-        setTurn(turn + 1);
-        setIfShow(false);
-      }}
-    >
-      Next
-    </button>
-
-)
   const ChooseColorWild = () => (
     <div>
       <Modal isOpen={selectColor} className="colorChoose">
@@ -226,9 +226,22 @@ const Game = () => {
     </div>
   );
 
-  const playCard = (cardInfo, player) => {
-    
+  const PassTurnBtn = () => (
+    <button
+      className="passTurn"
+      onClick={() => {
+        setTurn(turn + 1);
+        setIfShow(false);
+      }}
+    >
+      Next
+    </button>
+  );
 
+  const playCard = (cardInfo, player) => {
+    // console.log("played card");
+    // console.log(cardInfo);
+    // console.log(player);
     setIfShow(false);
     used.push(current);
     setUsed(used);
@@ -241,7 +254,7 @@ const Game = () => {
     play["player" + (turn + 1)] = cardInfo;
     setPlay(play);
 
-    console.log("current player " + (turn + 1));
+    // console.log("current player " + (turn + 1));
     var expectedPlayerInd = order.indexOf(turn);
     expectedPlayerInd += 1;
     if (expectedPlayerInd === 4) {
@@ -249,12 +262,21 @@ const Game = () => {
     } else if (expectedPlayerInd > 4) {
       expectedPlayerInd = Math.trunc(expectedPlayerInd / 4);
     }
-    console.log("next player " + (order[expectedPlayerInd] + 1));
+    // console.log("next player " + (order[expectedPlayerInd] + 1));
+
+    // To add 2 cards if player does not press "NUO"
+    // Only for player1 as bot is not dumb
+    if (players.player1.length === 0 && !isUnoButtonPressed) {
+      for (var penalty2 = 0; penalty2 < 2; penalty2++) {
+        players["player1"].push(mainDeck[penalty2]);
+      }
+      alert("You forgot to press NUO. 2 cards are drawn as penalty");
+    }
 
     switch (cardInfo.values) {
       //skip is 10
       case "10":
-        console.log("skip called");
+        // console.log("skip called");
         // console.log(turn);
         // console.log(order.indexOf(turn));
         var currentplayerIndex = order.indexOf(turn);
@@ -274,12 +296,12 @@ const Game = () => {
         setPlay(play);
         setTurn(order[currentplayerIndex]);
         // console.log(turn);
-        console.log("skip ended");
+        // console.log("skip ended");
         break;
 
       //reverse is 11
       case "11":
-        console.log("reverse called");
+        // console.log("reverse called");
         var newOrder = [order[3], order[2], order[1], order[0]];
         var reverseplayerIndex = newOrder.indexOf(turn);
         reverseplayerIndex += 1;
@@ -289,18 +311,18 @@ const Game = () => {
           reverseplayerIndex = Math.trunc(reverseplayerIndex / 4);
         }
 
-        console.log(
-          "reverse next player " + (newOrder[reverseplayerIndex] + 1)
-        );
+        // console.log(
+        //   "reverse next player " + (newOrder[reverseplayerIndex] + 1)
+        // );
         setOrder(newOrder);
         setTurn(newOrder[reverseplayerIndex]);
-        console.log("reverse ended");
+        // console.log("reverse ended");
 
         break;
 
       //+2 draw is 12
       case "12":
-        console.log("draw 2 called");
+        // console.log("draw 2 called");
         for (var draw2 = 0; draw2 < 2; draw2++) {
           players["player" + (order[expectedPlayerInd] + 1)].push(
             mainDeck[draw2]
@@ -308,13 +330,13 @@ const Game = () => {
         }
         setMainDeck(mainDeck.slice(2, mainDeck.length));
         setPlayers(players);
-        console.log("draw 2 ended");
+        // console.log("draw 2 ended");
         setTurn(order[expectedPlayerInd]);
         break;
 
       //wild is 13
       case "13":
-        console.log("wild called");
+        // console.log("wild called");
         // To Choose Colour
         if (expectedPlayerInd === 1) {
           setSelectColor(true);
@@ -328,22 +350,19 @@ const Game = () => {
           console.log(num);
           setCurrent(current);
         }
-        console.log("wild ended");
+        // console.log("wild ended");
         setTurn(order[expectedPlayerInd]);
         break;
 
       //+4 is 14
       case "14":
-        console.log("draw 4 called");
+        // console.log("draw 4 called");
         for (var draw4 = 0; draw4 < 4; draw4++) {
-          //Pushes main deck top cards into specified player 
           players["player" + (order[expectedPlayerInd] + 1)].push(
             mainDeck[draw4]
           );
         }
-        //Remove the cards from the main deck
         setMainDeck(mainDeck.slice(4, mainDeck.length));
-        // Re intialise the players array 
         setPlayers(players);
         // To Choose Colour
         if (expectedPlayerInd === 1) {
@@ -358,25 +377,25 @@ const Game = () => {
           console.log(n4um);
           setCurrent(current);
         }
-        console.log("draw 4 ended");
-        //Move turn?
+        // console.log("draw 4 ended");
         setTurn(order[expectedPlayerInd]);
         break;
 
       default:
-        console.log("default called");
+        // console.log("default called");
         // console.log(turn);
         // console.log(expectedPlayerInd);
         setTurn(order[expectedPlayerInd]);
         // console.log(turn);
-        console.log("default ended");
+        // console.log("default ended");
         break;
     }
 
     return player;
   };
+
   const dealCards = (cardarray) => {
-    console.log("dealing cards");
+    // console.log("dealing cards");
     // console.log(cardarray);
     var dealplayers = {
       player1: [],
@@ -391,16 +410,24 @@ const Game = () => {
       dealplayers.player4.push(cardarray[3]);
       cardarray = cardarray.slice(4, cardarray.length);
     }
+    // console.log(dealplayers.player1);
+    var player1playable = dealplayers.player1.filter(
+      (item) =>
+        item.color === cardarray[0].color ||
+        item.values === cardarray[0].values ||
+        item.color === "wild"
+    );
+    // console.log(player1playable);
 
-    console.log("dealt cards");
+    // console.log("dealt cards");
     // console.log(cardarray);
-    return [dealplayers, cardarray];
+    return [dealplayers, cardarray, player1playable];
   };
 
   const getCards = async () => {
-    console.log("retrieving cards");
+    // console.log("retrieving cards");
     try {
-      const response = await fetch("/getall");
+      const response = await fetch("https://uno-clone.herokuapp.com/getall");
       const jsonData = await response.json();
       var cards_retrieved = jsonData.cards;
       setCards(cards_retrieved);
@@ -408,10 +435,13 @@ const Game = () => {
       cards_retrieved = shuffleCards(cards_retrieved);
       var arr = dealCards(cards_retrieved);
       cards_retrieved = arr[1];
+      // console.log(arr[2]);
+      // console.log("tp[[[[[[[");
+      setPlayable(arr[2]);
       setPlayers(arr[0]);
-      console.log(cards_retrieved);
-      setMainDeck(cards_retrieved.slice(1, cards_retrieved.length));
+      // console.log(cards_retrieved);
       setCurrent(cards_retrieved[0]);
+      setMainDeck(cards_retrieved.slice(1, cards_retrieved.length));
     } catch (err) {
       console.error(err.message);
     }
@@ -440,22 +470,22 @@ const Game = () => {
         playable.push(drawnCard);
         setPlayable(playable);
       }
-      
+      setIfShow(true);
     };
     return (
       <div>
         <h1 onClick={drawCards}> Main Deck</h1>
-        
+        <div>{ifShow ? <PassTurnBtn /> : null}</div>
       </div>
     );
   };
 
+  let history = useHistory();
   useEffect(() => {
     getCards();
   }, []);
-
   useEffect(() => {
-    console.log("Now is player " + (turn + 1) + " turn");
+    // console.log("Now is player " + (turn + 1) + " turn");
     if (
       (players.player1.length === 0 ||
         players.player2.length === 0 ||
@@ -474,19 +504,38 @@ const Game = () => {
     } else {
       if (turn !== 0) {
         botplay(players["player" + (turn + 1)]);
+      } else {
+        var playable = players.player1.filter(
+          (item) =>
+            item.color === current.color ||
+            item.values === current.values ||
+            item.color === "wild"
+        );
+        setPlayable(playable);
       }
     }
   }, [turn]);
 
   return (
     <div className="container">
-      <MainDeck/>
-      <div>{ifShow ? <PassTurnBtn /> : null}</div>
+      {/* Button: Calling out NOU when 1 card left */}
+      <button
+        className="btn"
+        disabled={players.player1.length !== 1}
+        onClick={() => {
+          setUnoButtonPressed(!isUnoButtonPressed);
+          alert("Nuo has been pressed! You have 1 card remaining!");
+        }}
+      >
+        NUO
+      </button>
+
       {/* To activate Color Selector when wild or +4 wild is clicked */}
       <ChooseColorWild />
       <h4>Current Color: {current.color}</h4>
+
+      <MainDeck />
       <table class="table mt-5 text-center">
-        
         <tr>
           <th>
             <h4>Current card</h4>
@@ -564,6 +613,7 @@ const Game = () => {
           <Bot arr={players.player4} />
         </div>
       </div>
+
     </div>
   );
 };
