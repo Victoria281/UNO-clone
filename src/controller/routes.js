@@ -8,6 +8,7 @@ const config = require('../../config');
 const jwt = require('jsonwebtoken');
 
 
+const pool = require("../../db");
 //ROUTES//
 const Card = require("../model/card")
 const User = require("../model/user")
@@ -56,7 +57,7 @@ app.post('/login', function (req, res, next) {
 });
 
 // Register
-app.post('/register', printingRequestMessage, function (req, res, next) {
+app.post('/register', printingDebuggingInfo, function (req, res, next) {
     const uname = req.body.uname;
     const password = req.body.password;
     const email = req.body.email;
