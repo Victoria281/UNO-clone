@@ -18,6 +18,7 @@ const Game = () => {
   const [order, setOrder] = useState([0, 1, 2, 3]);
   const [selectColor, setSelectColor] = useState(false);
   const [turn, setTurn] = useState(order[0]);
+  const [playable, setPlayable] = useState([]);
   const [ifShow, setIfShow] = useState(false);
   const [selectColor, setSelectColor] = useState(false);
   const [play, setPlay] = useState({
@@ -62,24 +63,35 @@ const Game = () => {
     var r = Math.random();
     var cardplayed = {};
 
+    //Need to prioritise colour as well
+    //Split normal playable into colour and similar values 
+    //Pass in checks for colour playable and do the same as before
+    // (Maybe can even have increased chance to use same colour and same number before the rest )
+
+    //Check if there is playable cards
     if (wild_playable.length !== 0 && normal_playable.length !== 0) {
       if (r < 0.75) {
+        // 75% chance to play wild card
         cardplayed =
           wild_playable[Math.floor(Math.random() * wild_playable.length)];
       } else {
+        // 25% chance to play normal card 
         cardplayed =
           normal_playable[Math.floor(Math.random() * normal_playable.length)];
       }
       playCard(cardplayed, arr);
     } else if (wild_playable.length !== 0) {
+      // Run if there is no normal cards to play
       cardplayed =
         wild_playable[Math.floor(Math.random() * wild_playable.length)];
       playCard(cardplayed, arr);
     } else if (normal_playable.length !== 0) {
+      //Run if there is no wild card to play 
       cardplayed =
         normal_playable[Math.floor(Math.random() * normal_playable.length)];
       playCard(cardplayed, arr);
     } else {
+      //No card to pay at all
       console.log("no card to play");
       // console.log(turn + 1);
       var expectedPlayerInd = order.indexOf(turn);
@@ -324,11 +336,14 @@ const Game = () => {
       case "14":
         console.log("draw 4 called");
         for (var draw4 = 0; draw4 < 4; draw4++) {
+          //Pushes main deck top cards into specified player 
           players["player" + (order[expectedPlayerInd] + 1)].push(
             mainDeck[draw4]
           );
         }
+        //Remove the cards from the main deck
         setMainDeck(mainDeck.slice(4, mainDeck.length));
+        // Re intialise the players array 
         setPlayers(players);
         // To Choose Colour
         if (expectedPlayerInd === 1) {
@@ -344,6 +359,7 @@ const Game = () => {
           setCurrent(current);
         }
         console.log("draw 4 ended");
+        //Move turn?
         setTurn(order[expectedPlayerInd]);
         break;
 
@@ -401,6 +417,39 @@ const Game = () => {
     }
   };
 
+  const MainDeck = () => {
+    // console.log("main");
+    const drawCards = () => {
+      // console.log("drawing cards");
+      if (mainDeck.length === 1) {
+        // console.log("no more cards");
+        setMainDeck(shuffleCards(used));
+        setUsed([]);
+      } else {
+        setMainDeck(mainDeck.filter((item) => item !== mainDeck[0]));
+      }
+      var drawnCard = mainDeck[0];
+      players["player" + (turn + 1)].push(drawnCard);
+      setMainDeck(mainDeck.slice(1, mainDeck.length));
+      setPlayers(players);
+      if (
+        drawnCard.color === current.color ||
+        drawnCard.values === current.values ||
+        drawnCard.color === "wild"
+      ) {
+        playable.push(drawnCard);
+        setPlayable(playable);
+      }
+      
+    };
+    return (
+      <div>
+        <h1 onClick={drawCards}> Main Deck</h1>
+        
+      </div>
+    );
+  };
+
   useEffect(() => {
     getCards();
   }, []);
@@ -431,12 +480,13 @@ const Game = () => {
 
   return (
     <div className="container">
+      <MainDeck/>
       <div>{ifShow ? <PassTurnBtn /> : null}</div>
       {/* To activate Color Selector when wild or +4 wild is clicked */}
       <ChooseColorWild />
       <h4>Current Color: {current.color}</h4>
-
       <table class="table mt-5 text-center">
+        
         <tr>
           <th>
             <h4>Current card</h4>
