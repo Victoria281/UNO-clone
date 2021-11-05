@@ -16,8 +16,10 @@ const Game = () => {
   });
   // const [order, setOrder] = useState(shuffleCards([0, 1, 2, 3]));
   const [order, setOrder] = useState([0, 1, 2, 3]);
+  const [selectColor, setSelectColor] = useState(false);
   const [turn, setTurn] = useState(order[0]);
   const [playable, setPlayable] = useState([]);
+  const [ifShow, setIfShow] = useState(false);
   const [selectColor, setSelectColor] = useState(false);
   const [play, setPlay] = useState({
     player1: {
@@ -155,11 +157,79 @@ const Game = () => {
     );
   };
 
-  const playCard = (cardInfo, player) => {
-    console.log("played card");
-    console.log(cardInfo);
-    console.log(player);
+  const PassTurnBtn = () => (
+    <button
+      className="passTurn"
+      onClick={() => {
+        setTurn(turn + 1);
+        setIfShow(false);
+      }}
+    >
+      Next
+    </button>
 
+)
+  const ChooseColorWild = () => (
+    <div>
+      <Modal isOpen={selectColor} className="colorChoose">
+        <div className="header"> SELECT A COLOUR </div>
+        <div className="actions">
+          <button
+            className="RedBtn"
+            onClick={() => {
+              // console.log("modal closed ");
+              setSelectColor(false);
+              current.color = "red";
+              setCurrent(current);
+            }}
+          >
+            Color
+          </button>
+
+          <button
+            className="BlueBtn"
+            onClick={() => {
+              // console.log("modal closed ");
+              setSelectColor(false);
+              current.color = "blue";
+              setCurrent(current);
+            }}
+          >
+            Color
+          </button>
+
+          <button
+            className="YellowBtn"
+            onClick={() => {
+              // console.log("modal closed ");
+              setSelectColor(false);
+              current.color = "yellow";
+              setCurrent(current);
+            }}
+          >
+            Color
+          </button>
+
+          <button
+            className="GreenBtn"
+            onClick={() => {
+              // console.log("modal closed ");
+              setSelectColor(false);
+              current.color = "green";
+              setCurrent(current);
+            }}
+          >
+            Color
+          </button>
+        </div>
+      </Modal>
+    </div>
+  );
+
+  const playCard = (cardInfo, player) => {
+    
+
+    setIfShow(false);
     used.push(current);
     setUsed(used);
     setCurrent(cardInfo);
@@ -245,9 +315,19 @@ const Game = () => {
       //wild is 13
       case "13":
         console.log("wild called");
-        // console.log(selectColor);
-        // setSelectColor(true);
-        // console.log(selectColor);
+        // To Choose Colour
+        if (expectedPlayerInd === 1) {
+          setSelectColor(true);
+        } else {
+          var color = ["red", "blue", "yellow", "green"];
+          var num = Math.floor(Math.random() * (4 + 1));
+          current.color = color[num];
+          console.log("draw called");
+          console.log(color[num]);
+          console.log(color);
+          console.log(num);
+          setCurrent(current);
+        }
         console.log("wild ended");
         setTurn(order[expectedPlayerInd]);
         break;
@@ -265,6 +345,19 @@ const Game = () => {
         setMainDeck(mainDeck.slice(4, mainDeck.length));
         // Re intialise the players array 
         setPlayers(players);
+        // To Choose Colour
+        if (expectedPlayerInd === 1) {
+          setSelectColor(true);
+        } else {
+          var color4 = ["red", "blue", "yellow", "green"];
+          var n4um = Math.floor(Math.random() * (4 - 0 + 1)) + 0;
+          current.color = color4[n4um];
+          console.log("draw called");
+          console.log(color4[n4um]);
+          console.log(color4);
+          console.log(n4um);
+          setCurrent(current);
+        }
         console.log("draw 4 ended");
         //Move turn?
         setTurn(order[expectedPlayerInd]);
@@ -364,12 +457,20 @@ const Game = () => {
   useEffect(() => {
     console.log("Now is player " + (turn + 1) + " turn");
     if (
-      players.player1.length === 0 ||
-      players.player2.length === 0 ||
-      players.player3.length === 0 ||
-      players.player4.length === 0
+      (players.player1.length === 0 ||
+        players.player2.length === 0 ||
+        players.player3.length === 0 ||
+        players.player4.length === 0) &&
+      (mainDeck.length > 0 || used > 0)
     ) {
-      console.log("ended");
+      // console.log("HERERERERERERERER");
+      // console.log("SOMEONEEEEEEENDEDDDD");
+      history.push({
+        pathname: "/end",
+        state: {
+          players: players
+        }
+      });
     } else {
       if (turn !== 0) {
         botplay(players["player" + (turn + 1)]);
@@ -380,6 +481,10 @@ const Game = () => {
   return (
     <div className="container">
       <MainDeck/>
+      <div>{ifShow ? <PassTurnBtn /> : null}</div>
+      {/* To activate Color Selector when wild or +4 wild is clicked */}
+      <ChooseColorWild />
+      <h4>Current Color: {current.color}</h4>
       <table class="table mt-5 text-center">
         
         <tr>
