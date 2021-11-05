@@ -18,6 +18,7 @@ const Game = () => {
   const [order, setOrder] = useState([0, 1, 2, 3]);
   const [selectColor, setSelectColor] = useState(false);
   const [turn, setTurn] = useState(order[0]);
+  const [ifShow, setIfShow] = useState(false);
   const [selectColor, setSelectColor] = useState(false);
   const [play, setPlay] = useState({
     player1: {
@@ -144,6 +145,18 @@ const Game = () => {
     );
   };
 
+  const PassTurnBtn = () => (
+    <button
+      className="passTurn"
+      onClick={() => {
+        setTurn(turn + 1);
+        setIfShow(false);
+      }}
+    >
+      Next
+    </button>
+
+)
   const ChooseColorWild = () => (
     <div>
       <Modal isOpen={selectColor} className="colorChoose">
@@ -202,10 +215,9 @@ const Game = () => {
   );
 
   const playCard = (cardInfo, player) => {
-    console.log("played card");
-    console.log(cardInfo);
-    console.log(player);
+    
 
+    setIfShow(false);
     used.push(current);
     setUsed(used);
     setCurrent(cardInfo);
@@ -419,6 +431,7 @@ const Game = () => {
 
   return (
     <div className="container">
+      <div>{ifShow ? <PassTurnBtn /> : null}</div>
       {/* To activate Color Selector when wild or +4 wild is clicked */}
       <ChooseColorWild />
       <h4>Current Color: {current.color}</h4>
