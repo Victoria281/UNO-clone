@@ -17,6 +17,7 @@ const Game = () => {
   // const [order, setOrder] = useState(shuffleCards([0, 1, 2, 3]));
   const [order, setOrder] = useState([0, 1, 2, 3]);
   const [turn, setTurn] = useState(order[0]);
+  const [ifShow, setIfShow] = useState(false);
   const [selectColor, setSelectColor] = useState(false);
   const [play, setPlay] = useState({
     player1: {
@@ -143,11 +144,22 @@ const Game = () => {
     );
   };
 
-  const playCard = (cardInfo, player) => {
-    console.log("played card");
-    console.log(cardInfo);
-    console.log(player);
+  const PassTurnBtn = () => (
+    <button
+      className="passTurn"
+      onClick={() => {
+        setTurn(turn + 1);
+        setIfShow(false);
+      }}
+    >
+      Next
+    </button>
+  );
 
+  const playCard = (cardInfo, player) => {
+    
+
+    setIfShow(false);
     used.push(current);
     setUsed(used);
     setCurrent(cardInfo);
@@ -330,6 +342,7 @@ const Game = () => {
 
   return (
     <div className="container">
+      <div>{ifShow ? <PassTurnBtn /> : null}</div>
       <table class="table mt-5 text-center">
         <tr>
           <th>
