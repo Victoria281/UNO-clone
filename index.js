@@ -44,6 +44,7 @@ app.use((error, req, res, next) => {
 });
 
 app.get("*", (req, res) => {
+    console.log(req)
     res.sendFile(path.join(__dirname, "client/build/index.html"))
 })
 
