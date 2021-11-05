@@ -4,6 +4,8 @@ const cors = require("cors");
 const pool = require("./db");
 const path = require("path");
 const PORT = process.env.PORT || 5000;
+const createHttpErrors = require('http-errors');
+const ApiRouter = require('./src/controller/api');
 
 //process.env.PORT
 //process.env.NODE_ENV => production or undefined
@@ -12,7 +14,7 @@ const PORT = process.env.PORT || 5000;
 app.use(cors());
 app.use(express.json());
 
-if (process.env.NODE_ENV === "production"){
+if (process.env.NODE_ENV === "production") {
     //server static content
     //npm run build
     app.use(express.static(path.join(__dirname, "client/build")));
@@ -21,98 +23,30 @@ if (process.env.NODE_ENV === "production"){
 console.log(__dirname);
 console.log(path.join(__dirname, "client/build"));
 
-//ROUTES//
 
-//POST
-app.post('/postroute', function (req, res, next) {
-    const color = req.body.color;
-    const values = req.body.values;
-    const image_file = req.body.image_file;
-    return pool.query(
-        `INSERT INTO uno_cards (color, values, image_file) VALUES ($1, $2, $3)`,
-        [color, values, image_file],
-        function (error) {
-            if (error && error.code === '23505') {
-                return next(createHttpError(400, `Error`));
-            } else if (error) {
-                return next(error);
-            }
-            return res.sendStatus(201);
-        },
+
+// APIs
+app.use('/api', ApiRouter);
+
+// 404 Handler
+app.use((req, res, next) => {
+    next(
+        createHttpErrors(404, `Unknown Resource ${req.method} ${req.originalUrl}`),
     );
 });
 
-//GET
-app.get('/get/:id', function (req, res, next) {
-    const id = req.id;
-    return pool.query(
-        `SELECT * FROM uno_cards WHERE card_id = $1`,
-        [id],
-        function (error) {
-            if (error && error.code === '23505') {
-                return next(createHttpError(404, `Not found`));
-            } else if (error) {
-                return next(error);
-            }
-            return res.sendStatus(201);
-        },
-    );
-});
-
-//GETALL
-app.get('/getall', function (req, res, next) {
-    return pool.query(`SELECT * FROM uno_cards ORDER BY card_id;`, [], function (error, result) {
-        if (error) {
-            return next(error);
-        }
-        const cards = [];
-        for (let i = 0; i < result.rows.length; i++) {
-            const card = result.rows[i];
-            cards.push({
-                id: card.card_id,
-                color: card.color,
-                values: card.values,
-                image_file: card.image_file,
-            });
-        }
-        return res.json({ cards: cards });
+// Error Handler
+app.use((error, req, res, next) => {
+    console.error(error);
+    return res.status(error.status || 500).json({
+        error: error.message || `Unknown Error!`,
     });
 });
 
-//PUT
-app.put('/a/:moduleCode', function (req, res, next) {
-    const grade = req.body.grade;
-    const moduleCode = req.params.moduleCode;
-    // TODO: Use Parameterized query instead of string concatenation
-    return database.query(`UPDATE modules_tab SET grade = '${grade}' WHERE module_code = '${moduleCode}'`, [], function (
-        error,
-        result,
-    ) {
-        if (error) {
-            return next(error);
-        }
-        if (result.rowCount === 0) {
-            return next(createHttpError(404, `No such Module: ${moduleCode}`));
-        }
-        return res.sendStatus(200);
-    });
-});
-
-//DELETE
-app.delete('/d/:moduleCode', function (req, res, next) {
-    const moduleCode = req.params.moduleCode;
-    // TODO: Use Parameterized query instead of string concatenation
-    return database.query(`DELETE FROM modules_tab WHERE module_code = '${moduleCode}'`, [], function (error, result) {
-        if (error) {
-            return next(error);
-        }
-        return res.sendStatus(200);
-    });
-});
-
-app.get("*", (req, res)=> {
+app.get("*", (req, res) => {
     res.sendFile(path.join(__dirname, "client/build/index.html"))
 })
+
 app.listen(PORT, () => {
     console.log(`App running on port ${PORT}`)
 })
