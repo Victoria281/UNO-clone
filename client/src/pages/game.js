@@ -16,6 +16,7 @@ const Game = () => {
   });
   // const [order, setOrder] = useState(shuffleCards([0, 1, 2, 3]));
   const [order, setOrder] = useState([0, 1, 2, 3]);
+  const [isUnoButtonPressed, setUnoButtonPressed] = useState(false);
   const [turn, setTurn] = useState(order[0]);
   const [selectColor, setSelectColor] = useState(false);
   const [play, setPlay] = useState({
@@ -168,6 +169,15 @@ const Game = () => {
       expectedPlayerInd = Math.trunc(expectedPlayerInd / 4);
     }
     console.log("next player " + (order[expectedPlayerInd] + 1));
+
+    // To add 2 cards if player does not press "NUO"
+    // Only for player1 as bot is not dumb
+    if (players.player1.length === 0 && !isUnoButtonPressed) {
+      for (var penalty2 = 0; penalty2 < 2; penalty2++) {
+        players["player1"].push(mainDeck[penalty2]);
+      }
+      alert("You forgot to press NUO. 2 cards are drawn as penalty");
+    }
 
     switch (cardInfo.values) {
       //skip is 10
@@ -338,6 +348,17 @@ const Game = () => {
 
   return (
     <div className="container">
+      <button
+        className="btn"
+        disabled={players.player1.length !== 1}
+        onClick={() => {
+          setUnoButtonPressed(!isUnoButtonPressed);
+          alert("Nuo has been pressed! You have 1 card remaining!");
+        }}
+      >
+        NUO
+      </button>
+
       <table class="table mt-5 text-center">
         <tr>
           <th>
