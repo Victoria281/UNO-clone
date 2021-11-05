@@ -315,12 +315,20 @@ const Game = () => {
   useEffect(() => {
     console.log("Now is player " + (turn + 1) + " turn");
     if (
-      players.player1.length === 0 ||
-      players.player2.length === 0 ||
-      players.player3.length === 0 ||
-      players.player4.length === 0
+      (players.player1.length === 0 ||
+        players.player2.length === 0 ||
+        players.player3.length === 0 ||
+        players.player4.length === 0) &&
+      (mainDeck.length > 0 || used > 0)
     ) {
-      console.log("ended");
+      // console.log("HERERERERERERERER");
+      // console.log("SOMEONEEEEEEENDEDDDD");
+      history.push({
+        pathname: "/end",
+        state: {
+          players: players
+        }
+      });
     } else {
       if (turn !== 0) {
         botplay(players["player" + (turn + 1)]);
