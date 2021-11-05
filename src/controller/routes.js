@@ -21,7 +21,7 @@ const printingDebuggingInfo = require("../middlewares/printingRequest");
 //=====================================
 
 //findById
-app.get('/card/:id', verifyToken, function (req, res, next) {
+app.get('/card/:id', function (req, res, next) {
     console.log("herere")
     const id = req.params.id;
 
