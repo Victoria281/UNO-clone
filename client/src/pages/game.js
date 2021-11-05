@@ -44,6 +44,8 @@ const Game = () => {
       image_file: ""
     }
   });
+  const [playable, setPlayable] = useState([]);
+
   const botplay = (arr) => {
     console.log("Bot plays card");
     // console.log(arr);
@@ -114,22 +116,34 @@ const Game = () => {
     return (
       <ul>
         {turn === 0 &&
-          player.map((decks) => (
-            <li key={decks.id}>
-              <div
-                onClick={() => {
-                  playCard(decks, player);
-                }}
-              >
-                <img
-                  className="img-responsive"
-                  src={decks.image_file}
-                  alt={decks.values + " " + decks.color}
-                />
-                <p className="imageText">{decks.image_file}</p>
-              </div>
-            </li>
-          ))}
+          player.map((decks) => {
+            console.log(playable.includes(decks));
+            return (
+              <li key={decks.id}>
+                {playable.includes(decks) && (
+                  <div
+                    onClick={() => {
+                      playCard(decks, player);
+                    }}
+                  >
+                    <p className="imageText">{decks.image_file}</p>
+                    <p className="imageText">CanPlay</p>
+                  </div>
+                )}
+                {!playable.includes(decks) && (
+                  <div>
+                    {/* <img
+                      className="img-responsive"
+                      src="https://www.ultraboardgames.com/uno/gfx/skip.jpg"
+                      alt={decks.values + " " + decks.color}
+                    /> */}
+                    <p className="imageText">{decks.image_file}</p>
+                    <p className="imageText">CannotPlay</p>
+                  </div>
+                )}
+              </li>
+            );
+          })}
         {turn !== 0 &&
           player.map((decks) => (
             <li key={decks.id}>
@@ -282,16 +296,22 @@ const Game = () => {
       dealplayers.player4.push(cardarray[3]);
       cardarray = cardarray.slice(4, cardarray.length);
     }
+    var player1playable = dealplayers.player1.filter(
+      (item) =>
+        item.color === cardarray[0].color ||
+        item.values === cardarray[0].values ||
+        item.color === "wild"
+    );
 
     console.log("dealt cards");
     // console.log(cardarray);
-    return [dealplayers, cardarray];
+    return [dealplayers, cardarray, player1playable];
   };
 
   const getCards = async () => {
-    console.log("retrieving cards");
+    // console.log("retrieving cards");
     try {
-      const response = await fetch("/getall");
+      const response = await fetch("https://uno-clone.herokuapp.com/getall");
       const jsonData = await response.json();
       var cards_retrieved = jsonData.cards;
       setCards(cards_retrieved);
@@ -299,10 +319,13 @@ const Game = () => {
       cards_retrieved = shuffleCards(cards_retrieved);
       var arr = dealCards(cards_retrieved);
       cards_retrieved = arr[1];
+      // console.log(arr[2]);
+      // console.log("tp[[[[[[[");
+      setPlayable(arr[2]);
       setPlayers(arr[0]);
-      console.log(cards_retrieved);
-      setMainDeck(cards_retrieved.slice(1, cards_retrieved.length));
+      // console.log(cards_retrieved);
       setCurrent(cards_retrieved[0]);
+      setMainDeck(cards_retrieved.slice(1, cards_retrieved.length));
     } catch (err) {
       console.error(err.message);
     }
@@ -313,18 +336,18 @@ const Game = () => {
   }, []);
 
   useEffect(() => {
-    console.log("Now is player " + (turn + 1) + " turn");
-    if (
-      players.player1.length === 0 ||
-      players.player2.length === 0 ||
-      players.player3.length === 0 ||
-      players.player4.length === 0
-    ) {
-      console.log("ended");
+    // console.log("Now is player " + (turn + 1) + " turn");
+
+    if (turn !== 0) {
+      botplay(players["player" + (turn + 1)]);
     } else {
-      if (turn !== 0) {
-        botplay(players["player" + (turn + 1)]);
-      }
+      var playable = players.player1.filter(
+        (item) =>
+          item.color === current.color ||
+          item.values === current.values ||
+          item.color === "wild"
+      );
+      setPlayable(playable);
     }
   }, [turn]);
 
