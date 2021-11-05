@@ -1,7 +1,7 @@
 import React, { Fragment, useEffect, useState } from "react";
 import Modal from "react-modal";
 import shuffleCards from "../components/shuffle";
-import "../styles.css";
+import "../index.css";
 
 import { useHistory } from "react-router-dom";
 const Game = () => {

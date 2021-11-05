@@ -1,10 +1,11 @@
 import React, { Fragment, useEffect, useState } from "react";
 
 import shuffleCards from "../components/shuffle";
-import "../styles.css";
+import "../index.css";
+
 
 import { useHistory } from "react-router-dom";
-const End = () => {
+const End = (props) => {
   const [winner, setWinner] = useState("");
   const [cardsLeft, setCardsLeft] = useState({
     player1: 0,
