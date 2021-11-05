@@ -1,17 +1,43 @@
-const createHttpError = require('http-errors');
 
-const app = require('express').Router();
+//Middleware//
+const printingDebuggingInfo = require("../middlewares/printingRequest");
 
-const bcrypt = require('bcrypt');
-const config = require('../../config');
-const jwt = require('jsonwebtoken');
+//=====================================
+//  Card
+//=====================================
 
+//findById
+app.get('/card/:id', verifyToken, function (req, res, next) {
+    console.log("herere")
+    const id = req.params.id;
 
-//ROUTES//
-const Card = require("../model/card")
-const User = require("../model/user")
-const LeaderBoard = require("../model/leaderboard")
-const Auth = require("../model/auth")
+    Card.findByID(id, function (err, result) {
+        if (err) {
+            if (err.code === '23505') {
+                return next(createHttpError(404, `Not found`));
+            }
+            else {
+                return next(err);
+            }
+        } else {
+            return res.json({ card: result });
+        }
+    });
+});
 
+//findAll
+app.get('/cards', function (req, res, next) {
 
-module.exports = app;
+    Card.findAll(function (err, result) {
+        if (err) {
+            if (err.code === '23505') {
+                return next(createHttpError(404, `Not found`));
+            }
+            else {
+                return next(err);
+            }
+        } else {
+            return res.json({ cards: result });
+        }
+    });
+});
