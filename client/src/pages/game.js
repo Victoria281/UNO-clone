@@ -427,7 +427,7 @@ const Game = () => {
   const getCards = async () => {
     // console.log("retrieving cards");
     try {
-      const response = await fetch("https://uno-clone.herokuapp.com/getall");
+      const response = await fetch("https://uno-clone.herokuapp.com/api/uno/cards");
       const jsonData = await response.json();
       var cards_retrieved = jsonData.cards;
       setCards(cards_retrieved);

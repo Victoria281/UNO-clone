@@ -28,25 +28,25 @@ console.log(path.join(__dirname, "client/build"));
 // APIs
 app.use('/api', ApiRouter);
 
-// 404 Handler
-app.use((req, res, next) => {
-    next(
-        createHttpErrors(404, `Unknown Resource ${req.method} ${req.originalUrl}`),
-    );
-});
-
-// Error Handler
-app.use((error, req, res, next) => {
-    console.error(error);
-    return res.status(error.status || 500).json({
-        error: error.message || `Unknown Error!`,
-    });
-});
-
 app.get("*", (req, res) => {
     console.log(req)
     res.sendFile(path.join(__dirname, "client/build/index.html"))
 })
+
+// // 404 Handler
+// app.use((req, res, next) => {
+//     next(
+//         createHttpErrors(404, `Unknown Resource ${req.method} ${req.originalUrl}`),
+//     );
+// });
+
+// // Error Handler
+// app.use((error, req, res, next) => {
+//     console.error(error);
+//     return res.status(error.status || 500).json({
+//         error: error.message || `Unknown Error!`,
+//     });
+// });
 
 app.listen(PORT, () => {
     console.log(`App running on port ${PORT}`)
