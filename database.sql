@@ -6,3 +6,19 @@ CREATE TABLE uno_cards(
     values NUMERIC NOT NULL,
     image_file VARCHAR(255) NOT NULL
 );
+CREATE TABLE players(
+    userid SERIAL PRIMARY KEY NOT NULL,
+    username VARCHAR(45) NOT NULL,
+    email NUMERIC NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    created_by TIMESTAMP NOT NULL DEFAULT current_timestamp
+);
+CREATE TABLE uno_leaderboard(
+    id SERIAL PRIMARY KEY NOT NULL,
+    userid INT NOT NULL,
+    score NUMERIC NOT NULL,
+    created_by TIMESTAMP NOT NULL DEFAULT current_timestamp,
+    CONSTRAINT fk_userid 
+        FOREIGN KEY(userid)
+        REFERENCES players(userid)
+);

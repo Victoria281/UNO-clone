@@ -4,6 +4,7 @@ import React, { Fragment } from "react";
 import GamePage from "./pages/game";
 import HomePage from "./pages/home";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import EndPage from "./pages/end";
 
 export default function App() {
   return (
@@ -50,6 +51,7 @@ export default function App() {
             path="/game"
             render={(props) => <GamePage {...props} />}
           />
+          <Route exact path="/end" render={(props) => <EndPage {...props} />} />
           <Route
             exact
             path="/dashboard"
