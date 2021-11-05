@@ -16,7 +16,7 @@ const Game = () => {
   });
   // const [order, setOrder] = useState(shuffleCards([0, 1, 2, 3]));
   const [order, setOrder] = useState([0, 1, 2, 3]);
-  const [isUnoButtonPressed, setUnoButtonPressed] = useState(false);
+  const [selectColor, setSelectColor] = useState(false);
   const [turn, setTurn] = useState(order[0]);
   const [selectColor, setSelectColor] = useState(false);
   const [play, setPlay] = useState({
@@ -144,6 +144,63 @@ const Game = () => {
     );
   };
 
+  const ChooseColorWild = () => (
+    <div>
+      <Modal isOpen={selectColor} className="colorChoose">
+        <div className="header"> SELECT A COLOUR </div>
+        <div className="actions">
+          <button
+            className="RedBtn"
+            onClick={() => {
+              // console.log("modal closed ");
+              setSelectColor(false);
+              current.color = "red";
+              setCurrent(current);
+            }}
+          >
+            Color
+          </button>
+
+          <button
+            className="BlueBtn"
+            onClick={() => {
+              // console.log("modal closed ");
+              setSelectColor(false);
+              current.color = "blue";
+              setCurrent(current);
+            }}
+          >
+            Color
+          </button>
+
+          <button
+            className="YellowBtn"
+            onClick={() => {
+              // console.log("modal closed ");
+              setSelectColor(false);
+              current.color = "yellow";
+              setCurrent(current);
+            }}
+          >
+            Color
+          </button>
+
+          <button
+            className="GreenBtn"
+            onClick={() => {
+              // console.log("modal closed ");
+              setSelectColor(false);
+              current.color = "green";
+              setCurrent(current);
+            }}
+          >
+            Color
+          </button>
+        </div>
+      </Modal>
+    </div>
+  );
+
   const playCard = (cardInfo, player) => {
     console.log("played card");
     console.log(cardInfo);
@@ -169,15 +226,6 @@ const Game = () => {
       expectedPlayerInd = Math.trunc(expectedPlayerInd / 4);
     }
     console.log("next player " + (order[expectedPlayerInd] + 1));
-
-    // To add 2 cards if player does not press "NUO"
-    // Only for player1 as bot is not dumb
-    if (players.player1.length === 0 && !isUnoButtonPressed) {
-      for (var penalty2 = 0; penalty2 < 2; penalty2++) {
-        players["player1"].push(mainDeck[penalty2]);
-      }
-      alert("You forgot to press NUO. 2 cards are drawn as penalty");
-    }
 
     switch (cardInfo.values) {
       //skip is 10
@@ -243,9 +291,19 @@ const Game = () => {
       //wild is 13
       case "13":
         console.log("wild called");
-        // console.log(selectColor);
-        // setSelectColor(true);
-        // console.log(selectColor);
+        // To Choose Colour
+        if (expectedPlayerInd === 1) {
+          setSelectColor(true);
+        } else {
+          var color = ["red", "blue", "yellow", "green"];
+          var num = Math.floor(Math.random() * (4 + 1));
+          current.color = color[num];
+          console.log("draw called");
+          console.log(color[num]);
+          console.log(color);
+          console.log(num);
+          setCurrent(current);
+        }
         console.log("wild ended");
         setTurn(order[expectedPlayerInd]);
         break;
@@ -260,6 +318,19 @@ const Game = () => {
         }
         setMainDeck(mainDeck.slice(4, mainDeck.length));
         setPlayers(players);
+        // To Choose Colour
+        if (expectedPlayerInd === 1) {
+          setSelectColor(true);
+        } else {
+          var color4 = ["red", "blue", "yellow", "green"];
+          var n4um = Math.floor(Math.random() * (4 - 0 + 1)) + 0;
+          current.color = color4[n4um];
+          console.log("draw called");
+          console.log(color4[n4um]);
+          console.log(color4);
+          console.log(n4um);
+          setCurrent(current);
+        }
         console.log("draw 4 ended");
         setTurn(order[expectedPlayerInd]);
         break;
@@ -340,16 +411,9 @@ const Game = () => {
 
   return (
     <div className="container">
-      <button
-        className="btn"
-        disabled={players.player1.length !== 1}
-        onClick={() => {
-          setUnoButtonPressed(!isUnoButtonPressed);
-          alert("Nuo has been pressed! You have 1 card remaining!");
-        }}
-      >
-        NUO
-      </button>
+      {/* To activate Color Selector when wild or +4 wild is clicked */}
+      <ChooseColorWild />
+      <h4>Current Color: {current.color}</h4>
 
       <table class="table mt-5 text-center">
         <tr>
