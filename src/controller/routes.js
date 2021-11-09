@@ -1,4 +1,3 @@
-
 const createHttpError = require('http-errors');
 
 const app = require('express').Router();
@@ -8,12 +7,14 @@ const config = require('../../config');
 const jwt = require('jsonwebtoken');
 
 
-const pool = require("../../db");
 //ROUTES//
 const Card = require("../model/card")
+const User = require("../model/user")
 const LeaderBoard = require("../model/leaderboard")
+const Auth = require("../model/auth")
 
 //Middleware//
+const verifyToken = require("../middlewares/verifyToken");
 const printingDebuggingInfo = require("../middlewares/printingRequest");
 // Requiring modules
 const http = require("http");
@@ -89,115 +90,12 @@ app.get('/profile_icons/*', function (req, res, next) {
     });
 });
 
-// Check login
-app.post('/login', function (req, res, next) {
-    const uname = req.body.uname;
-    const password = req.body.password;
-   
-    return pool.query(`SELECT * FROM uno_userdetails WHERE username=$1 AND password=$2`,
-        [uname, password],
-        function (error, result) {
-            
-            console.log(result.rows)
-
-            // if (error) {
-            //     console.log("THERES AN ERROR!!")
-            //     return res.status(401).send("UNAUTHORIZED");
-            // }
-
-            // if(result.rows == null){
-            //     console.log("IN NULL AREA")
-            //     return res.status(500);
-            // } 
-
-            try{
-               if(result.rows[0].username == uname && result.rows[0].password == password){
-                    console.log("IN THE SUCCESS!!")
-                    return res.status(200).send("Authorized!");
-                }
-                    
-                
-            } catch(err){
-                console.log("THERES AN ERROR!!")
-                return res.status(401).send("UNAUTHORIZED");
-            }
-            
-            
-        },
-    );
-});
-
-// Register
-app.post('/register', printingDebuggingInfo, function (req, res, next) {
-    const uname = req.body.uname;
-    const password = req.body.password;
-    const email = req.body.email;
-   
-    return pool.query(`INSERT INTO uno_userdetails(username, password, email) VALUES ($1, $2, $3)`,
-        [uname, password, email],
-        function (error, result) {
-            // if (error) {
-            //     console.log("THERES AN ERROR!!")
-            //     return res.status(401).send("UNAUTHORIZED");
-            // }
-
-            // if(result.rows == null){
-            //     console.log("IN NULL AREA")
-            //     return res.status(500);
-            // } 
-
-            try{
-                console.log("SUCCESS!!")
-                console.log("The result is " + result);
-                return res.status(201).send("Successfully Inserted");
-
-            } catch(err){
-                console.log("THERES AN ERROR!!");
-                console.log("The error is " + error);
-                return res.status(401).send("UNAUTHORIZED");
-            }
-        },
-    );
-});
-
-
-
-// GET USER INFO
-app.get('/getUsers/:id', function (req, res, next) {
-    const userid = req.params.id;
-
-    return pool.query(`SELECT * FROM uno_userdetails WHERE user_id=$1`,
-        [userid],
-        function (error, result) {
-            console.log("IM HEREEEE")
-            console.log(result)
-
-            // if (error) {
-            //     console.log("THERES AN ERROR!!")
-            //     return res.status(401).send("UNAUTHORIZED");
-            // }
-
-            // if(result.rows == null){
-            //     console.log("IN NULL AREA")
-            //     return res.status(500);
-            // } 
-
-            if (error) {
-                console.log("ERROR IS HERE!!")
-                throw error
-            }
-            res.status(200).json(result.rows)
-            
-        },
-    );
-});
-
 //=====================================
 //  Card
 //=====================================
 
 //findById
-app.get('/card/:id', function (req, res, next) {
+app.get('/card/:id', verifyToken, function (req, res, next) {
     console.log("herere")
     const id = req.params.id;
 
@@ -231,6 +129,135 @@ app.get('/cards', function (req, res, next) {
         }
     });
 });
+
+//=====================================
+//  Auth
+//=====================================
+
+//login
+app.get('/login', printingDebuggingInfo, function (req, res, next) {
+
+    let email = req.body.email;
+    let password = req.body.password;
+    try {
+        Auth.login(email, function (error, results) {
+            if (error) {
+                return res.status(500).json({ message: 'Credentials are not valid.' });
+
+            } else {
+                if (results.length == 1) {
+                    if ((password == null) || (results[0] == null)) {
+                        return res.status(500).json({ message: 'login failed' });
+                    }
+                    if (bcrypt.compareSync(password, results[0].password) == true) {
+                        
+                        let data = {
+                            user_id: results[0].userid,
+                            token: jwt.sign({ id: results[0].userid }, config, {
+                                expiresIn: 86400
+                            })
+                        };
+                        return res.status(200).json(data);
+                    } else {
+                        return res.status(500).json({ message: error });
+                    }
+                }
+
+            }
+
+        })
+    } catch (error) {
+        return res.status(500).json({ message: error });
+    }
+});
+
+//register
+app.post('/register', printingDebuggingInfo, function (req, res, next) {
+    console.log('processRegister running.');
+    let userName = req.body.userName;
+    let email = req.body.email;
+    let password = req.body.password;
+
+
+    bcrypt.hash(password, 10, async(err, hash) => {
+        if (err) {
+            console.log('Error on hashing password');
+            return res.status(500).json({ statusMessage: 'Unable to complete registration' });
+        } else {
+                results = Auth.register(userName, email, hash, function(error, results){
+                  console.log(results)
+                    if (results!=null){
+                    return res.status(201).json({ statusMessage: 'Completed registration.' });
+                  }
+                  if (error) {
+                    return res.status(500).json({ statusMessage: 'Unable to complete registration' });
+                }
+                });//End of anonymous callback function
+     
+          
+        }
+    });
+
+});
+
+//=====================================
+//  User
+//=====================================
+
+//findByUserId
+app.get('/user/:id', printingDebuggingInfo, function (req, res, next) {
+    const id = req.params.id;
+
+    User.findByUserId(id, function (err, result) {
+        if (err) {
+            if (err.code === '23505') {
+                return next(createHttpError(404, `Not found`));
+            }
+            else {
+                return next(err);
+            }
+        } else {
+            return res.json({ card: result });
+        }
+    });
+});
+
+//updateUser
+app.get('/user/update/:id', printingDebuggingInfo, function (req, res, next) {
+    const id = req.params.id;
+
+    User.updateUser(id, function (err, result) {
+        if (err) {
+            if (err.code === '23505') {
+                return next(createHttpError(404, `Not found`));
+            }
+            else {
+                return next(err);
+            }
+        } else {
+            return res.json({ card: result });
+        }
+    });
+});
+
+//deleteUser
+app.get('/user/delete/:id', printingDebuggingInfo, function (req, res, next) {
+    const id = req.params.id;
+
+    User.deleteUser(id, function (err, result) {
+        if (err) {
+            if (err.code === '23505') {
+                return next(createHttpError(404, `Not found`));
+            }
+            else {
+                return next(err);
+            }
+        } else {
+            return res.json({ card: result });
+        }
+    });
+});
+
 
 //=====================================
 //  LeaderBoard
