@@ -8,10 +8,11 @@ const config = require('../../config');
 const jwt = require('jsonwebtoken');
 
 
-const pool = require("../../db");
 //ROUTES//
 const Card = require("../model/card")
+const User = require("../model/user")
 const LeaderBoard = require("../model/leaderboard")
+const Auth = require("../model/auth")
 
 //Middleware//
 const printingDebuggingInfo = require("../middlewares/printingRequest");
