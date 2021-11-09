@@ -21,8 +21,43 @@ const fs = require("fs");
 const path = require("path");
 const url = require("url");
 
-//retrieveImages
+//retrieveImagesForUno
 app.get('/images/*', function (req, res, next) {
+    var request = url.parse(req.url, true);
+    var action = request.pathname;
+    var filePath = path.join(__dirname, 
+            action).split("%20").join(" ");
+            console.log(action)
+            console.log(filePath)
+
+    fs.exists(filePath, function (exists) {
+
+        if (!exists) {
+            res.writeHead(404, { 
+                "Content-Type": "text/plain" });
+            res.end("404 Not Found");
+            return;
+        }
+
+        var ext = path.extname(action);
+        var contentType = "text/plain";
+
+        if (ext === ".png") {
+            contentType = "image/png";
+        }
+
+        res.writeHead(200, { 
+            "Content-Type": contentType });
+
+        fs.readFile(filePath, 
+            function (err, content) {
+                res.end(content);
+            });
+    });
+});
+
+//retrieveImagesForProfile
+app.get('/profile_icons/*', function (req, res, next) {
     var request = url.parse(req.url, true);
     var action = request.pathname;
     var filePath = path.join(__dirname, 
