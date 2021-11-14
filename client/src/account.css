@@ -1,0 +1,116 @@
+html {
+  background: #e1bbc9;
+}
+.App {
+  font-family: sans-serif;
+  text-align: center;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+.btn {
+  font-family: monospace;
+  font-size: 2rem;
+  letter-spacing: 0.2rem;
+  padding: 0.8rem 2rem;
+  border-radius: 0.6rem;
+  border: none;
+  background: #3772ff;
+  color: white;
+  transition: box-shadow 0.3s ease-in-out;
+}
+.btn:hover {
+  box-shadow: 1px 2px 6px 0 #91b2ff, -1px -1px 6px 0 #91b2ff;
+}
+p {
+  letter-spacing: 2px;
+}
+
+.popup {
+  background: black;
+  color: white;
+  position: absolute;
+  top: 80px;
+  right: 800px;
+  width: 200px;
+  height: 100px;
+  border: 3px solid #73ad21;
+}
+
+.imageText {
+  font-size: 13px;
+}
+
+.colorChoose {
+  height: 30%;
+  width: 30%;
+  background-color: black;
+  border-radius: 0.6rem;
+  border: none;
+  margin-left: 35%;
+  margin-top: 15%;
+}
+
+.header {
+  color: white;
+  font-size: 35px;
+  text-align: center;
+  padding-top: 5%;
+}
+
+.GreenBtn {
+  border-radius: 20%;
+  background-color: #3cb371;
+  font-size: 30px;
+  border: none;
+  color: #3cb371;
+  margin-left: 2%;
+}
+
+.BlueBtn {
+  border-radius: 20%;
+  background-color: #1e90ff;
+  font-size: 30px;
+  border: none;
+  color: #1e90ff;
+  margin-left: 2%;
+}
+
+.YellowBtn {
+  border-radius: 20%;
+  background-color: #f0e68c;
+  font-size: 30px;
+  border: none;
+  color: #f0e68c;
+  margin-left: 2%;
+}
+
+.RedBtn {
+  border-radius: 20%;
+  background-color: #dc143c;
+  font-size: 30px;
+  border: none;
+  color: #dc143c;
+  margin-left: 2%;
+}
+
+.actions {
+  margin-left: 10%;
+  margin-top: 8%;
+}
+
+.column {
+  float: left;
+  width: 50%;
+}
+
+.error-msg {
+  font-size: "12px";
+  width: "100%";
+  color: "red";
+}
+
+.success-msg {
+  width: 100%;
+}
