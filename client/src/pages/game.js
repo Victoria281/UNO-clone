@@ -2,8 +2,15 @@ import React, { Fragment, useEffect, useState } from "react";
 import Modal from "react-modal";
 import shuffleCards from "../components/shuffle";
 import "../index.css";
-
 import { useHistory } from "react-router-dom";
+// const images = importAll(require.context('../cards', false, '/\.png/'));
+
+// function importAll(r) {
+//   let images = {};
+//   r.keys().map(item => { images[item.replace('./', '')] = r(item); });
+//   return images;
+// }
+
 const Game = () => {
   const [cards, setCards] = useState([]);
   const [mainDeck, setMainDeck] = useState([]);
@@ -24,6 +31,7 @@ const Game = () => {
   const [isUnoButtonPressed, setUnoButtonPressed] = useState(false);
   const [selectColor, setSelectColor] = useState(false);
   const [ifShow, setIfShow] = useState(false);
+  const [turnModal, setTurnModal] = useState(false);
   const [order, setOrder] = useState([0, 1, 2, 3]);
   const [playable, setPlayable] = useState([]);
   const [turn, setTurn] = useState(order[0]);
@@ -105,6 +113,11 @@ const Game = () => {
       } else if (expectedPlayerInd > 4) {
         expectedPlayerInd = Math.trunc(expectedPlayerInd / 4);
       }
+        // const timer = setTimeout(
+        //   botplay(players["player" + (turn + 1)]),
+        //   10000
+        // );
+        // return () => clearTimeout(timer);
       // console.log(order[expectedPlayerInd] + 1);
       setTurn(order[expectedPlayerInd]);
     }
@@ -112,60 +125,79 @@ const Game = () => {
 
   const Bot = (arr) => {
     return (
-      <ul>
-        {arr.arr.map((decks) => (
-          <li key={decks.id}>
-            <div>
-              <p className="imageText">{decks.image_file}</p>
-            </div>
-          </li>
-        ))}
-      </ul>
+      // <ul className="list-inline">
+        <div className="row">
+          {arr.arr.map((decks) => (
+           // <li className="list-inline-item" key={decks.id}>
+                <div className="col">
+                  <img
+                          className="img-responsive"
+                          style={{height: 150 ,width : 100}}
+                          src={"https://uno-clone.herokuapp.com/api/uno/images/Deck.png"}
+                          //src={"https://uno-clone.herokuapp.com/api/uno/images/" + decks.image_file.slice(8)}
+                          alt={decks.values + " " + decks.color}
+                          />  
+                <div>
+                  {/* <p className="imageText">{decks.image_file.slice(8)}</p> */}
+                </div>
+                </div>
+           // </li>
+          ))}
+        </div>
+      //</ul>
     );
   };
 
   const Player = ({ player }) => {
     return (
-      <ul>
+      <div className="row">
         {turn === 0 &&
           player.map((decks) => {
             console.log(playable.includes(decks));
             return (
-              <li key={decks.id}>
+              <div className="col" key={decks.id}>
                 {playable.includes(decks) && (
                   <div
                     onClick={() => {
                       playCard(decks, player);
                     }}
                   >
-                    <p className="imageText">{decks.image_file}</p>
+                    <img
+                      className="img-responsive"
+                      style={{height: 150 ,width : 100}}
+                      src={"https://uno-clone.herokuapp.com/api/uno/images/" + decks.image_file.slice(8)}
+                      alt={decks.values + " " + decks.color}
+                      />  
+                    {/* <p className="imageText">{decks.image_file}</p> */}
                     <p className="imageText">CanPlay</p>
                   </div>
                 )}
                 {!playable.includes(decks) && (
                   <div>
-                    {/* <img
+                       <img
                       className="img-responsive"
-                      src="https://www.ultraboardgames.com/uno/gfx/skip.jpg"
+                      style={{height: 150 ,width : 100}}
+                      src={"https://uno-clone.herokuapp.com/api/uno/images/" + decks.image_file.slice(8)}
                       alt={decks.values + " " + decks.color}
-                    /> */}
-                    <p className="imageText">{decks.image_file}</p>
+                      />  
+                    {/* <p className="imageText">{"." + decks.image_file}</p> */}
                     <p className="imageText">CannotPlay</p>
                   </div>
                 )}
-              </li>
+              </div>
             );
           })}
         {turn !== 0 &&
           player.map((decks) => (
-            <li key={decks.id}>
+            <div className="col" key={decks.id}>
               <div>
                 <p>{decks.values}</p>
                 <p>{decks.color}</p>
               </div>
-            </li>
+            </div>
           ))}
-      </ul>
+        
+      </div>
     );
   };
 
@@ -228,7 +260,7 @@ const Game = () => {
 
   const PassTurnBtn = () => (
     <button
-      className="passTurn"
+      className="passTurn nextbtn"
       onClick={() => {
         setTurn(turn + 1);
         setIfShow(false);
@@ -237,6 +269,26 @@ const Game = () => {
       Next
     </button>
   );
+
+   //Turn Modal Functions Start
+   const PlayerTurnModal = () => (
+    <div>
+      <Modal isOpen={turnModal} className="playerTurn">
+        <div className="playerHeader">Player {turn + 1} Turn</div>
+      </Modal>
+    </div>
+  );
+
+  
+  const modalOpen = () => {
+    console.log("Modal Open----------");
+    setTurnModal(true);
+    setTimeout(() => {
+      console.log("Modal Close---------");
+      setTurnModal(false);
+    }, 3000);
+    return true;
+  };
 
   const playCard = (cardInfo, player) => {
     // console.log("played card");
@@ -472,10 +524,13 @@ const Game = () => {
       }
       setIfShow(true);
     };
+
     return (
-      <div>
-        <h1 onClick={drawCards}> Main Deck</h1>
-        <div>{ifShow ? <PassTurnBtn /> : null}</div>
+      <div className="d-inline-flex">
+        <div>
+            <img className="deck" src={"https://uno-clone.herokuapp.com/api/uno/images/Deck.png"} style={{height:150, width:100}} onClick={drawCards}></img>
+        </div>
+        <div className="m-auto">{ifShow ? <PassTurnBtn />  : null}</div>
       </div>
     );
   };
@@ -502,9 +557,18 @@ const Game = () => {
         }
       });
     } else {
+      console.log("Before Each Turn----------------------");
+
       if (turn !== 0) {
-        botplay(players["player" + (turn + 1)]);
+        setTurnModal(true);
+        setTimeout(() => {
+          setTurnModal(false);
+          setTimeout(() => {
+            botplay(players["player" + (turn + 1)]);
+          }, 3000);
+        }, 3000);
       } else {
+        modalOpen();
         var playable = players.player1.filter(
           (item) =>
             item.color === current.color ||
@@ -518,28 +582,8 @@ const Game = () => {
 
   return (
     <div className="container">
-      {/* Button: Calling out NOU when 1 card left */}
-      <button
-        className="btn"
-        disabled={players.player1.length !== 1}
-        onClick={() => {
-          setUnoButtonPressed(!isUnoButtonPressed);
-          alert("Nuo has been pressed! You have 1 card remaining!");
-        }}
-      >
-        NUO
-      </button>
-
-      {/* To activate Color Selector when wild or +4 wild is clicked */}
-      <ChooseColorWild />
-      <h4>Current Color: {current.color}</h4>
-
-      <MainDeck />
-      <table class="table mt-5 text-center">
+      {/* <table class="table mt-5 text-center">
         <tr>
-          <th>
-            <h4>Current card</h4>
-          </th>
           <th>
             <h4>Order</h4>
           </th>
@@ -551,9 +595,6 @@ const Game = () => {
           </th>
         </tr>
         <tr>
-          <td>
-            {current.color} {current.values}
-          </td>
           <td>{order}</td>
           <td>Player {turn + 1}</td>
           <td>{selectColor && <p>Choose a color</p>}</td>
@@ -593,28 +634,60 @@ const Game = () => {
             <p className="imageText">{play.player4.image_file}</p>
           </td>
         </tr>
-      </table>
+      </table> */}
 
-      <div class="row">
-        <div class="col-sm-3">
-          <h5>Player 1</h5>
+    <div>
+        <div className="row my-3 p-0">
+            <h5 className="m-4">Bot 2</h5>
+            <Bot arr={players.player3}/>
+        </div>
+
+        <div className="row my-3">
+
+          <div className="col-3 p-0">
+          <h5 className="m-4">Bot 1</h5>
+            <Bot arr={players.player2} />
+          </div>
+
+          <div className="col-6 m-auto">
+            <div className="d-flex justify-content-center">
+              {/* Button: Calling out NOU when 1 card left */}
+             <button
+              className="btn"
+              hidden={players.player1.length !== 1}
+              onClick={() => {
+                setUnoButtonPressed(!isUnoButtonPressed);
+                alert("Nuo has been pressed! You have 1 card remaining!");
+              }}
+            >
+              NUO
+            </button>
+      
+            {/* To activate Color Selector when wild or +4 wild is clicked */}
+            <ChooseColorWild />
+            {/* <h4>Current Color: {current.color}</h4> */}
+              <PlayerTurnModal/>
+            <img 
+              className="img-responsive"
+              style={{height: 150 ,width : 100}} 
+              src={"https://uno-clone.herokuapp.com/api/uno/images/" + current.image_file.slice(8)}></img>
+      
+            <MainDeck />
+            </div>
+          </div>
+
+          <div className="col-3 p-0">
+            <h5 className="m-4">Bot 3</h5>
+            <Bot arr={players.player4} />
+            </div>
+        </div>
+          
+        <div className="row my-3 p-0">
+          <h5 className="m-4">Plyr 1</h5>
           <Player player={players.player1} type="human" />
         </div>
-        <div class="col-sm-3">
-          <h5>Bot 1</h5>
-          <Bot arr={players.player2} />
-        </div>
-        <div class="col-sm-3">
-          <h5>Bot 2</h5>
-          <Bot arr={players.player3} />
-        </div>
-        <div class="col-sm-3">
-          <h5>Bot 3</h5>
-          <Bot arr={players.player4} />
-        </div>
-      </div>
-
-    </div>
+    </div> 
+  </div>
   );
 };
 
