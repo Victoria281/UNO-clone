@@ -12,50 +12,72 @@ var User = {
 
     findByUserID: function (id, callback) {
         const query = {
-            name: 'fetch-user',
-            text: 'SELECT * FROM uno_cards WHERE card_id = $1',
+            name: 'findByUserID',
+            text: 'SELECT p.username, p.email, l.score FROM players AS p LEFT JOIN uno_leaderboard AS l ON p.userid = l.userid WHERE p.userid =$1',
             values: [id],
         }
 
         return pool.query(query, function (error, result) {
-            console.log(error)
-            console.log(result)
             if (error) {
                 callback(error, null);
                 return;
             } else {
-                console.log(result.rows)
-                return callback(null, result.rows);
+                if (result.rows.length == 0){
+                    callback("404", null);
+                } else {
+                    console.log(result.rows)
+                return callback(null, result.rows[0]);
+                }
+                
             }
         },
         );
     },
 
-    updateUser: function (id, callback) {
+    checkPassword: function (id, callback) {
+        try {
+            const query = {
+                name: 'checkPassword',
+                text: 'SELECT password FROM players WHERE userid=$1;',
+                values: [id],
+            }
+
+            return pool.query(query, function (error, result) {
+                console.log(result)
+                if (error) {
+                    callback(error, null);
+                    return;
+                } else {
+                    return callback(null, [result.rows[0]]);
+                }
+            });
+        } catch (error) {
+            return callback(error, null);;
+        }
+
+    },
+
+    updateUserPassword: function (userid, password, callback) {
         const query = {
-            name: 'fetch-user',
-            text: 'SELECT * FROM uno_cards WHERE card_id = $1',
-            values: [id],
+            name: 'updateUserPassword',
+            text: 'UPDATE players SET password=$1 WHERE userid=$2',
+            values: [password, userid],
         }
 
         return pool.query(query, function (error, result) {
-            console.log(error)
-            console.log(result)
             if (error) {
                 callback(error, null);
                 return;
             } else {
-                console.log(result.rows)
-                return callback(null, result.rows);
+                return callback(null, result.rowCount);
             }
-        },
-        );
+        });
     },
 
     deleteUser: function (id, callback) {
         const query = {
-            name: 'fetch-user',
-            text: 'SELECT * FROM uno_cards WHERE card_id = $1',
+            name: 'deleteUser',
+            text: 'DELETE FROM players WHERE userid = $1',
             values: [id],
         }
 
