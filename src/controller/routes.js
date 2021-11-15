@@ -26,16 +26,17 @@ const url = require("url");
 app.get('/images/*', function (req, res, next) {
     var request = url.parse(req.url, true);
     var action = request.pathname;
-    var filePath = path.join(__dirname, 
-            action).split("%20").join(" ");
-            console.log(action)
-            console.log(filePath)
+    var filePath = path.join(__dirname,
+        action).split("%20").join(" ");
+    console.log(action)
+    console.log(filePath)
 
     fs.exists(filePath, function (exists) {
 
         if (!exists) {
-            res.writeHead(404, { 
-                "Content-Type": "text/plain" });
+            res.writeHead(404, {
+                "Content-Type": "text/plain"
+            });
             res.end("404 Not Found");
             return;
         }
@@ -47,10 +48,11 @@ app.get('/images/*', function (req, res, next) {
             contentType = "image/png";
         }
 
-        res.writeHead(200, { 
-            "Content-Type": contentType });
+        res.writeHead(200, {
+            "Content-Type": contentType
+        });
 
-        fs.readFile(filePath, 
+        fs.readFile(filePath,
             function (err, content) {
                 res.end(content);
             });
@@ -61,14 +63,15 @@ app.get('/images/*', function (req, res, next) {
 app.get('/profile_icons/*', function (req, res, next) {
     var request = url.parse(req.url, true);
     var action = request.pathname;
-    var filePath = path.join(__dirname, 
-            action).split("%20").join(" ");
+    var filePath = path.join(__dirname,
+        action).split("%20").join(" ");
 
     fs.exists(filePath, function (exists) {
 
         if (!exists) {
-            res.writeHead(404, { 
-                "Content-Type": "text/plain" });
+            res.writeHead(404, {
+                "Content-Type": "text/plain"
+            });
             res.end("404 Not Found");
             return;
         }
@@ -80,10 +83,11 @@ app.get('/profile_icons/*', function (req, res, next) {
             contentType = "image/png";
         }
 
-        res.writeHead(200, { 
-            "Content-Type": contentType });
+        res.writeHead(200, {
+            "Content-Type": contentType
+        });
 
-        fs.readFile(filePath, 
+        fs.readFile(filePath,
             function (err, content) {
                 res.end(content);
             });
@@ -150,7 +154,7 @@ app.get('/login', printingDebuggingInfo, function (req, res, next) {
                         return res.status(500).json({ message: 'login failed' });
                     }
                     if (bcrypt.compareSync(password, results[0].password) == true) {
-                        
+
                         let data = {
                             user_id: results[0].userid,
                             token: jwt.sign({ id: results[0].userid }, config, {
@@ -179,22 +183,22 @@ app.post('/register', printingDebuggingInfo, function (req, res, next) {
     let password = req.body.password;
 
 
-    bcrypt.hash(password, 10, async(err, hash) => {
+    bcrypt.hash(password, 10, async (err, hash) => {
         if (err) {
             console.log('Error on hashing password');
             return res.status(500).json({ statusMessage: 'Unable to complete registration' });
         } else {
-                results = Auth.register(userName, email, hash, function(error, results){
-                  console.log(results)
-                    if (results!=null){
+            results = Auth.register(userName, email, hash, function (error, results) {
+                console.log(results)
+                if (results != null) {
                     return res.status(201).json({ statusMessage: 'Completed registration.' });
-                  }
-                  if (error) {
+                }
+                if (error) {
                     return res.status(500).json({ statusMessage: 'Unable to complete registration' });
                 }
-                });//End of anonymous callback function
-     
-          
+            });//End of anonymous callback function
+
+
         }
     });
 
@@ -208,40 +212,68 @@ app.post('/register', printingDebuggingInfo, function (req, res, next) {
 app.get('/user/:id', printingDebuggingInfo, function (req, res, next) {
     const id = req.params.id;
 
-    User.findByUserId(id, function (err, result) {
+    User.findByUserID(id, function (err, result) {
         if (err) {
-            if (err.code === '23505') {
+            if (err === "404") {
                 return next(createHttpError(404, `Not found`));
             }
             else {
                 return next(err);
             }
         } else {
-            return res.json({ card: result });
+            return res.json({ user: result });
         }
     });
 });
 
-//updateUser
-app.get('/user/update/:id', printingDebuggingInfo, function (req, res, next) {
+//updateUserPassword
+app.put('/user/update/:id', printingDebuggingInfo, function (req, res, next) {
     const id = req.params.id;
+    const old_password = req.body.old_password;
+    const new_password = req.body.new_password;
 
-    User.updateUser(id, function (err, result) {
-        if (err) {
-            if (err.code === '23505') {
-                return next(createHttpError(404, `Not found`));
+    try {
+        User.checkPassword(id, function (error, results) {
+            if (error) {
+                return res.status(404).json({ message: 'User does not exist' });
+            } else {
+                console.log(results)
+                if (results.length == 1) {
+                    if ((old_password == null) || (results[0] == null)) {
+                        return res.status(500).json({ message: 'No password placed' });
+                    }
+                    if (bcrypt.compareSync(old_password, results[0].password) == true) {
+                        bcrypt.hash(new_password, 10, async (err, hash) => {
+                            if (err) {
+                                return res.status(500).json({ statusMessage: 'Unable to complete update' });
+                            } else {
+                                results = User.updateUserPassword(id, hash, function (error, results) {
+                                    console.log(results)
+                                    if (results != null) {
+                                        return res.status(204).json({ statusMessage: 'Completed update.' });
+                                    }
+                                    if (error) {
+                                        return res.status(500).json({ statusMessage: 'Unable to complete update' });
+                                    }
+                                });
+                            }
+                        });
+                    } else {
+                        return res.status(500).json({ message: "Wrong password" });
+                    }
+                }
+
             }
-            else {
-                return next(err);
-            }
-        } else {
-            return res.json({ card: result });
-        }
-    });
+
+        })
+    } catch (error) {
+        return next(err);
+    }
+
 });
 
 //deleteUser
-app.get('/user/delete/:id', printingDebuggingInfo, function (req, res, next) {
+app.delete('/user/delete/:id', printingDebuggingInfo, function (req, res, next) {
     const id = req.params.id;
 
     User.deleteUser(id, function (err, result) {
@@ -253,7 +285,7 @@ app.get('/user/delete/:id', printingDebuggingInfo, function (req, res, next) {
                 return next(err);
             }
         } else {
-            return res.json({ card: result });
+            return res.status(204).json({ message: "deleted" });
         }
     });
 });
@@ -330,7 +362,7 @@ app.get('/leaderboard/update/:id', printingDebuggingInfo, function (req, res, ne
                 return next(err);
             }
         } else {
-            return res.status(201).send({result: "Created"});
+            return res.status(201).send({ result: "Created" });
         }
     });
 });
@@ -349,7 +381,7 @@ app.post('/leaderboard/insert/:id', printingDebuggingInfo, function (req, res, n
                 return next(err);
             }
         } else {
-            return res.status(201).send({result: "Created"});
+            return res.status(201).send({ result: "Created" });
         }
     });
 });
