@@ -2,7 +2,7 @@ import React, { Fragment, useEffect, useState } from "react";
 
 import axios from "axios";
 import { useHistory } from "react-router-dom";
-import "../register.css";
+import "../css/register.css";
 import e from "cors";
 
 export default function App() {

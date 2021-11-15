@@ -1,7 +1,7 @@
 import React, { Fragment, useEffect, useState } from "react";
 
 import { useHistory } from "react-router-dom";
-import "../account.css";
+import "../css/account.css";
 // import { response } from "express";
 import axios from "axios";
 
