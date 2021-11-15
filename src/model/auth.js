@@ -40,6 +40,7 @@ var Auth = {
         }
 
         return pool.query(query, function (error, result) {
+            console.log(error)
             if (error) {
                 callback(error, null);
                 return;

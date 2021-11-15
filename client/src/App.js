@@ -5,6 +5,8 @@ import GamePage from "./pages/game";
 import HomePage from "./pages/home";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import EndPage from "./pages/end";
+import AccountPage from "./pages/account";
+import RegisterPage from "./pages/register";
 
 export default function App() {
   return (
@@ -40,6 +42,11 @@ export default function App() {
                   <Link to="/account">Account</Link>
                 </p>
               </li>
+              <li className="nav-item active">
+                <p className="nav-link">
+                  <Link to="/register">Register</Link>
+                </p>
+              </li>
             </ul>
           </div>
         </nav>
@@ -52,6 +59,8 @@ export default function App() {
             render={(props) => <GamePage {...props} />}
           />
           <Route exact path="/end" render={(props) => <EndPage {...props} />} />
+          <Route exact path="/account" render={(props) => <AccountPage {...props} />} />
+          <Route exact path="/register" render={(props) => <RegisterPage {...props} />} />
           <Route
             exact
             path="/dashboard"
