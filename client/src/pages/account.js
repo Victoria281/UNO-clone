@@ -28,6 +28,7 @@ export default function App() {
       .then((response) => {
         console.log(response)
         localStorage.setItem('Bearer token', response.data.token)
+        localStorage.setItem('userid', response.data.user_id)
         alert("Login successful!")
       })
       .catch((error) => {
