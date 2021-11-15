@@ -198,8 +198,22 @@ app.post('/register', printingDebuggingInfo, function (req, res, next) {
                 results = Auth.register(userName, email, hash, function(error, results){
                   console.log("RESULTS: " + results)
                 if (results!=null){
-                    console.log("Successful Registration!!!!!!!!!!!!!!!!!!!!!!")
-                    return res.status(201).json({ statusMessage: 'Completed registration.' });
+                    LeaderBoard.insertNewScore(results[0].userid, 0, function (err, result) {
+                        console.log(results)
+                        console.log(results[0].userid)
+                        if (err) {
+                            if (err.code === '23505') {
+                                return next(createHttpError(404, `Not found`));
+                            }
+                            else {
+                                return next(err);
+                            }
+                        } else {
+                            return res.status(201).json({ statusMessage: 'Completed registration.' });
+                        }
+                    });
+
+                    
                 }
                 console.log("IM HEREEEEEEEEEEEEEEEE and the error here is " + error )
                 if (error) {
