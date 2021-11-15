@@ -13,7 +13,7 @@ var User = {
     findByUserID: function (id, callback) {
         const query = {
             name: 'findByUserID',
-            text: 'SELECT p.username, p.email, l.score FROM players AS p LEFT JOIN uno_leaderboard AS l ON p.userid = l.userid WHERE p.userid =$1',
+            text: 'SELECT p.username, p.email, p.profileicon, l.score, l.created_by FROM players AS p LEFT JOIN uno_leaderboard AS l ON p.userid = l.userid WHERE p.userid =$1',
             values: [id],
         }
 
@@ -62,6 +62,23 @@ var User = {
             name: 'updateUserPassword',
             text: 'UPDATE players SET password=$1 WHERE userid=$2',
             values: [password, userid],
+        }
+
+        return pool.query(query, function (error, result) {
+            if (error) {
+                callback(error, null);
+                return;
+            } else {
+                return callback(null, result.rowCount);
+            }
+        });
+    },
+
+    updateUserIcon: function (userid, icon, callback) {
+        const query = {
+            name: 'updateUserPassword',
+            text: 'UPDATE players SET profileicon=$1 WHERE userid=$2',
+            values: [icon, userid],
         }
 
         return pool.query(query, function (error, result) {

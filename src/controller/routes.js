@@ -22,6 +22,12 @@ const fs = require("fs");
 const path = require("path");
 const url = require("url");
 
+
+
+//=====================================
+//  Images
+//=====================================
+
 //retrieveImagesForUno
 app.get('/images/*', function (req, res, next) {
     var request = url.parse(req.url, true);
@@ -227,6 +233,26 @@ app.get('/user/:id', printingDebuggingInfo, function (req, res, next) {
             return res.json({ user: result });
         }
     });
+});
+
+//updateUserIcon
+app.put('/user/icon/:id', printingDebuggingInfo, function (req, res, next) {
+    const id = req.params.id;
+    const icon = req.body.icon;
+
+    User.updateUserIcon(id, icon, function (err, result) {
+        if (err) {
+            if (err === "404") {
+                return next(createHttpError(404, `Not found`));
+            }
+            else {
+                return next(err);
+            }
+        } else {
+            return res.status(204).json({ statusMessage: 'Completed update.' });
+        }
+    });
+
 });
 
 //updateUserPassword
