@@ -31,6 +31,7 @@ const Game = () => {
   const [isUnoButtonPressed, setUnoButtonPressed] = useState(false);
   const [selectColor, setSelectColor] = useState(false);
   const [ifShow, setIfShow] = useState(false);
+  const [ifDraw,setIfDraw] = useState(false);
   const [turnModal, setTurnModal] = useState(false);
   const [order, setOrder] = useState([0, 1, 2, 3]);
   const [playable, setPlayable] = useState([]);
@@ -71,11 +72,6 @@ const Game = () => {
       (item) => item.color === current.color || item.values === current.values
     );
     var wild_playable = arr.filter((item) => item.color === "wild");
-
-    // console.log("Bot can play");
-    // console.log(normal_playable);
-    // console.log(wild_playable);
-
     var r = Math.random();
     var cardplayed = {};
 
@@ -113,12 +109,7 @@ const Game = () => {
       } else if (expectedPlayerInd > 4) {
         expectedPlayerInd = Math.trunc(expectedPlayerInd / 4);
       }
-        // const timer = setTimeout(
-        //   botplay(players["player" + (turn + 1)]),
-        //   10000
-        // );
-        // return () => clearTimeout(timer);
-      // console.log(order[expectedPlayerInd] + 1);
+
       setTurn(order[expectedPlayerInd]);
     }
   };
@@ -131,12 +122,12 @@ const Game = () => {
            // <li className="list-inline-item" key={decks.id}>
                 <div className="col">
                   <img
-                          className="img-responsive"
-                          style={{height: 150 ,width : 100}}
-                          src={"https://uno-clone.herokuapp.com/api/uno/images/Deck.png"}
-                          //src={"https://uno-clone.herokuapp.com/api/uno/images/" + decks.image_file.slice(8)}
-                          alt={decks.values + " " + decks.color}
-                          />  
+                       className="img-responsive"
+                      style={{height: 150 ,width : 100}}
+                      src={"https://uno-clone.herokuapp.com/api/uno/images/Deck.png"}
+                      //src={"https://uno-clone.herokuapp.com/api/uno/images/" + decks.image_file.slice(8)}
+                      alt={decks.values + " " + decks.color}
+                      />  
                 <div>
                   {/* <p className="imageText">{decks.image_file.slice(8)}</p> */}
                 </div>
@@ -174,7 +165,7 @@ const Game = () => {
                 )}
                 {!playable.includes(decks) && (
                   <div>
-                       <img
+                      <img
                       className="img-responsive"
                       style={{height: 150 ,width : 100}}
                       src={"https://uno-clone.herokuapp.com/api/uno/images/" + decks.image_file.slice(8)}
@@ -191,8 +182,12 @@ const Game = () => {
           player.map((decks) => (
             <div className="col" key={decks.id}>
               <div>
-                <p>{decks.values}</p>
-                <p>{decks.color}</p>
+              <img
+                  className="img-responsive"
+                  style={{height: 150 ,width : 100}}
+                  src={"https://uno-clone.herokuapp.com/api/uno/images/" + decks.image_file.slice(8)}
+                  alt={decks.values + " " + decks.color}
+                  />  
               </div>
             </div>
           ))}
@@ -264,21 +259,21 @@ const Game = () => {
       onClick={() => {
         setTurn(turn + 1);
         setIfShow(false);
+        setIfDraw(false);
       }}
     >
       Next
     </button>
   );
 
-   //Turn Modal Functions Start
-   const PlayerTurnModal = () => (
+  //Turn Modal Functions Start
+  const PlayerTurnModal = () => (
     <div>
       <Modal isOpen={turnModal} className="playerTurn">
         <div className="playerHeader">Player {turn + 1} Turn</div>
       </Modal>
     </div>
   );
-
   
   const modalOpen = () => {
     console.log("Modal Open----------");
@@ -289,12 +284,14 @@ const Game = () => {
     }, 3000);
     return true;
   };
+  //Turn Modal Functions End
 
   const playCard = (cardInfo, player) => {
     // console.log("played card");
     // console.log(cardInfo);
     // console.log(player);
     setIfShow(false);
+    setIfDraw(false);
     used.push(current);
     setUsed(used);
     setCurrent(cardInfo);
@@ -317,13 +314,30 @@ const Game = () => {
     // console.log("next player " + (order[expectedPlayerInd] + 1));
 
     // To add 2 cards if player does not press "NUO"
-    // Only for player1 as bot is not dumb
+    // Only for player1 as bot is not dumb 
     if (players.player1.length === 0 && !isUnoButtonPressed) {
       for (var penalty2 = 0; penalty2 < 2; penalty2++) {
         players["player1"].push(mainDeck[penalty2]);
       }
       alert("You forgot to press NUO. 2 cards are drawn as penalty");
+    } 
+
+    if(players["player" + (turn + 1)].length === 1){
+      console.log("bot has only"+ players["player" + (turn + 1)][0]+ " last card left");
+      var random = Math.random();
+      if(random < 0.8){
+        console.log("NOU called");
+        alert("PlayerBot " + (turn + 1) +  "pressed NOU");
+      } else {
+        for (var penalty2 = 0; penalty2 < 2; penalty2++) {
+          players["player" + (turn + 1)].push(mainDeck[penalty2]);
+        }
+        setMainDeck(mainDeck.slice(2, mainDeck.length));
+        setPlayers(players);
+        alert("Bot forgot to press NUO. 2 cards are drawn as penalty");
+      }
     }
+
 
     switch (cardInfo.values) {
       //skip is 10
@@ -523,12 +537,13 @@ const Game = () => {
         setPlayable(playable);
       }
       setIfShow(true);
+      setIfDraw(true);
     };
 
     return (
       <div className="d-inline-flex">
         <div>
-            <img className="deck" src={"https://uno-clone.herokuapp.com/api/uno/images/Deck.png"} style={{height:150, width:100}} onClick={drawCards}></img>
+          <input type="image" disabled={ifDraw} className="deck" src={"https://uno-clone.herokuapp.com/api/uno/images/Deck.png"} style={{height:150, width:100}} onClick={drawCards}></input>
         </div>
         <div className="m-auto">{ifShow ? <PassTurnBtn />  : null}</div>
       </div>
@@ -565,8 +580,8 @@ const Game = () => {
           setTurnModal(false);
           setTimeout(() => {
             botplay(players["player" + (turn + 1)]);
-          }, 3000);
-        }, 3000);
+          }, 2000);
+        }, 1500);
       } else {
         modalOpen();
         var playable = players.player1.filter(
