@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useState, useEffect } from "react";
 
 //components
 import GamePage from "./pages/game";
@@ -11,7 +11,15 @@ import ProfilePage from "./pages/profile";
 import LeaderboardPage from "./pages/leaderboard";
 import { NavLink } from 'react-router-dom'
 
-export default function App() {
+const App=() =>{
+  const [loggedIn, setLoggedIn] = useState(localStorage.getItem("userid"));
+  useEffect(() => {
+        setInterval(() => {
+            const userid = localStorage.getItem("userid");
+            setLoggedIn(userid);
+            }, [])
+    }, 5000);
+
   return (
     <Router>
       <div>
@@ -57,11 +65,7 @@ export default function App() {
 
               </li>
               <li className="nav-item active navbarDesign" style={{ background: '#F5F93C' }}>
-
-                <NavLink to="/login" exact activeClassName="activeIcon"><div className="borderHover" style={{ borderColor: '#F5F93C' }}><p className="nav-link navBarWord">
-                  Login
-                </p></div></NavLink>
-
+                <Account isLoggedIn={loggedIn}/>
               </li>
             </ul>
           </div>
@@ -75,16 +79,32 @@ export default function App() {
           <Route exact path="/register" render={(props) => <RegisterPage {...props} />} />
           <Route exact path="/profile" render={(props) => <ProfilePage {...props} />} />
           <Route exact path="/leaderboard" render={(props) => <LeaderboardPage {...props} />} />
-          <Route exact path="/logout" render={(props) => <Home {...props} />} />
+          <Route exact path="/logout" render={(props) => <Logout />} />
         </Switch>
       </div>
     </Router>
   );
 }
-function Home() {
-  return (
-    <div>
-      <h2>Home</h2>
-    </div>
-  );
+function Logout() {
+  localStorage.removeItem("userid");
+  localStorage.removeItem("token");
+  window.location = '/';
 }
+function Account(props) {
+  if (props.isLoggedIn !== null) {
+    return (
+      <NavLink to="/logout" exact activeClassName="activeIcon"><div className="borderHover" style={{ borderColor: '#F5F93C' }}><p className="nav-link navBarWord">
+        Logout
+      </p></div></NavLink>
+    );
+  } else {
+    return (
+      <NavLink to="/login" exact activeClassName="activeIcon"><div className="borderHover" style={{ borderColor: '#F5F93C' }}><p className="nav-link navBarWord">
+        Login
+      </p></div></NavLink>
+    );
+  }
+}
+
+
+export default App;

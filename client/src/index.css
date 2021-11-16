@@ -104,6 +104,10 @@ a:hover {
   border-radius: 20px;
 }
 
+.borderHover:hover > .navBarWord {
+  transform: rotate(-8deg) translateY(-10px);
+}
+
 .borderHover{
   width: 0%;
   height: 0%;;
@@ -124,6 +128,10 @@ a:hover {
   border-radius: 20px;
 }
 
+.activeIcon > .borderHover > .navBarWord {
+  transform: rotate(-8deg) translateY(-10px);
+}
+
 .navbarDesign {
   width: 100px;
   height: 40px;
@@ -142,7 +150,7 @@ a:hover {
   color: white;
     -webkit-text-stroke: 0.4px white;
     -webkit-text-fill-color: black;
-  transform: rotate(-15deg) translateY(-10px) translateX(-5px);
+  transform: rotate(-15deg) translateY(10px) translateX(-5px);
 }
 
 body {
