@@ -22,6 +22,12 @@ const fs = require("fs");
 const path = require("path");
 const url = require("url");
 
+
+
+//=====================================
+//  Images
+//=====================================
+
 //retrieveImagesForUno
 app.get('/images/*', function (req, res, next) {
     var request = url.parse(req.url, true);
@@ -139,7 +145,7 @@ app.get('/cards', function (req, res, next) {
 //=====================================
 
 //login
-app.get('/login', printingDebuggingInfo, function (req, res, next) {
+app.post('/login', printingDebuggingInfo, function (req, res, next) {
 
     let email = req.body.email;
     let password = req.body.password;
@@ -154,7 +160,7 @@ app.get('/login', printingDebuggingInfo, function (req, res, next) {
                         return res.status(500).json({ message: 'login failed' });
                     }
                     if (bcrypt.compareSync(password, results[0].password) == true) {
-
+                        
                         let data = {
                             user_id: results[0].userid,
                             token: jwt.sign({ id: results[0].userid }, config, {
@@ -182,23 +188,40 @@ app.post('/register', printingDebuggingInfo, function (req, res, next) {
     let email = req.body.email;
     let password = req.body.password;
 
-
-    bcrypt.hash(password, 10, async (err, hash) => {
+    
+    bcrypt.hash(password, 10, async(err, hash) => {
         if (err) {
             console.log('Error on hashing password');
-            return res.status(500).json({ statusMessage: 'Unable to complete registration' });
+            
+            return res.status(500).json({ statusMessage: 'Unable to complete registration with error!' });
         } else {
-            results = Auth.register(userName, email, hash, function (error, results) {
-                console.log(results)
-                if (results != null) {
-                    return res.status(201).json({ statusMessage: 'Completed registration.' });
+                results = Auth.register(userName, email, hash, function(error, results){
+                  console.log("RESULTS: " + results)
+                if (results!=null){
+                    LeaderBoard.insertNewScore(results[0].userid, 0, function (err, result) {
+                        console.log(results)
+                        console.log(results[0].userid)
+                        if (err) {
+                            if (err.code === '23505') {
+                                return next(createHttpError(404, `Not found`));
+                            }
+                            else {
+                                return next(err);
+                            }
+                        } else {
+                            return res.status(201).json({ statusMessage: 'Completed registration.' });
+                        }
+                    });
+
+                    
                 }
+                console.log("IM HEREEEEEEEEEEEEEEEE and the error here is " + error )
                 if (error) {
-                    return res.status(500).json({ statusMessage: 'Unable to complete registration' });
+                    console.log("ERROR CODE:---------------------------- " + error)
+                    
+                    return res.status(500).json({ statusMessage: 'Unable to complete registration due to duplicate field(s)' });
                 }
-            });//End of anonymous callback function
-
-
+                });
         }
     });
 
@@ -224,6 +247,26 @@ app.get('/user/:id', printingDebuggingInfo, function (req, res, next) {
             return res.json({ user: result });
         }
     });
+});
+
+//updateUserIcon
+app.put('/user/icon/:id', printingDebuggingInfo, function (req, res, next) {
+    const id = req.params.id;
+    const icon = req.body.icon;
+
+    User.updateUserIcon(id, icon, function (err, result) {
+        if (err) {
+            if (err === "404") {
+                return next(createHttpError(404, `Not found`));
+            }
+            else {
+                return next(err);
+            }
+        } else {
+            return res.status(204).json({ statusMessage: 'Completed update.' });
+        }
+    });
+
 });
 
 //updateUserPassword

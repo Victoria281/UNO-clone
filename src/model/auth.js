@@ -38,6 +38,11 @@ var Auth = {
             text: 'INSERT INTO players("username", "email", "password") VALUES($1, $2, $3);',
             values: [username, email, password],
         }
+        const query2 = {
+            name: 'getUserid',
+            text: 'SELECT userid FROM players WHERE username=$1;',
+            values: [username],
+        }
 
         return pool.query(query, function (error, result) {
             console.log(error)
@@ -45,7 +50,15 @@ var Auth = {
                 callback(error, null);
                 return;
             } else {
-                return callback(null, result.rowCount);
+                return pool.query(query2, function (error, result) {
+                    console.log(error)
+                    if (error) {
+                        callback(error, null);
+                        return;
+                    } else {
+                        return callback(null, result.rows);
+                    }
+                });
             }
         });
     },

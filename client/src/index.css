@@ -1,7 +1,13 @@
 html {
-  background-color: #e1bbc9;
-  /* background: radial-gradient(circle at center,#FFFFFF,#C3DAEF,#DDAAE9); */
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(48.15% 48.15% at 50% 51.85%, #FFFFFF 8.85%, rgba(132, 187, 238, 0.46) 61.46%, rgba(213, 111, 238, 0.5) 100%);
 }
+
+body {
+  background-color: transparent;
+}
+
 .App {
   font-family: sans-serif;
   text-align: center;
@@ -10,6 +16,7 @@ html {
   left: 50%;
   transform: translate(-50%, -50%);
 }
+
 .btn {
   font-family: monospace;
   font-size: 2rem;
@@ -21,6 +28,7 @@ html {
   color: white;
   transition: box-shadow 0.3s ease-in-out;
 }
+
 .btn:hover {
   box-shadow: 1px 2px 6px 0 #91b2ff, -1px -1px 6px 0 #91b2ff;
 }
@@ -65,9 +73,10 @@ p {
 } */
 
 .container {
-  background: radial-gradient(circle at center,#FFFFFF,#C3DAEF,#DDAAE9);
+  background: radial-gradient(circle at center, #FFFFFF, #C3DAEF, #524555);
 }
-.playerTurn{
+
+.playerTurn {
   height: 30%;
   width: 30%;
   background-color: #FFC825;
@@ -78,12 +87,12 @@ p {
   margin-top: 15%;
   text-align: center;
   overflow: hidden;
-  border-radius: 0.6rem; 
+  border-radius: 0.6rem;
   border-width: 0 5rem;
-  border:solid #ffffff;
+  border: solid #ffffff;
 }
 
-.playerHeader{
+.playerHeader {
   color: black;
   font-size: 35px;
   font-weight: bold;
@@ -108,44 +117,7 @@ p {
   padding-top: 5%;
 }
 
-.GreenBtn {
-  border-radius: 20%;
-  background-color: #3cb371;
-  font-size: 30px;
-  border: none;
-  color: #3cb371;
-  margin-left: 2%;
-}
-
-.BlueBtn {
-  border-radius: 20%;
-  background-color: #1e90ff;
-  font-size: 30px;
-  border: none;
-  color: #1e90ff;
-  margin-left: 2%;
-}
-
-.YellowBtn {
-  border-radius: 20%;
-  background-color: #f0e68c;
-  font-size: 30px;
-  border: none;
-  color: #f0e68c;
-  margin-left: 2%;
-}
-
-.RedBtn {
-  border-radius: 20%;
-  background-color: #dc143c;
-  font-size: 30px;
-  border: none;
-  color: #dc143c;
-  margin-left: 2%;
-}
-
 .actions {
   margin-left: 10%;
   margin-top: 8%;
 }
-
