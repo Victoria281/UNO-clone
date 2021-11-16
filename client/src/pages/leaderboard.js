@@ -10,7 +10,7 @@ const Leaderboard = () => {
     const getPlayers = async () => {
         try {
             const response = await fetch(
-                "http://localhost:5000/api/uno/leaderboard/30"
+                "https://uno-clone.herokuapp.com/api/uno/leaderboard/30"
             );
             const jsonData = await response.json();
             var user_leaderboard = jsonData.scores;

@@ -151,7 +151,7 @@ export default function App() {
     if(status){
 
       axios
-        .post("http://localhost:5000/api/uno/register", {
+        .post("https://uno-clone.herokuapp.com/api/uno/register", {
           userName: username,
           email: email,
           password: password

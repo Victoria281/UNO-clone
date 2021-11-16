@@ -8,7 +8,7 @@ const Profile = () => {
     try {
       const uid = localStorage.getItem('userid')
       const response = await fetch(
-        `http://localhost:5000/api/uno/user/${uid}`
+        `https://uno-clone.herokuapp.com/api/uno/user/${uid}`
       );
       const jsonData = await response.json();
       var userInformation = jsonData.user;
@@ -33,7 +33,7 @@ const Profile = () => {
       } else {
         try {
           const uid = localStorage.getItem('userid')
-          const response = await fetch(`http://localhost:5000/api/uno/user/icon/${uid}`, {
+          const response = await fetch(`https://uno-clone.herokuapp.com/api/uno/user/icon/${uid}`, {
             method: 'PUT',
             headers: {
               'Content-Type': 'application/json',
@@ -122,7 +122,7 @@ const Profile = () => {
       } else {
         try {
           const uid = localStorage.getItem('userid')
-          const response = await fetch(`http://localhost:5000/api/uno/user/update/${uid}`, {
+          const response = await fetch(`https://uno-clone.herokuapp.com/api/uno/user/update/${uid}`, {
             method: 'PUT',
             headers: {
               'Content-Type': 'application/json',

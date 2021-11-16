@@ -21,7 +21,7 @@ export default function App() {
   // Function called when login button is clicked
   function createPost() {
     axios
-      .post("http://localhost:5000/api/uno/login", {
+      .post("https://uno-clone.herokuapp.com/api/uno/login", {
         email: email,
         password: password
       })
