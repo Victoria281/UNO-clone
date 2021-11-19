@@ -1,0 +1,60 @@
+/* End Game */
+.gameScreen {
+    height: 60%;
+    width: 60%;
+    background-color: black;
+    border-radius: 0.6rem;
+    border: none;
+    margin-left: 20%;
+    margin-top: 10%;
+}
+  
+.trophy {
+    height: 80%;
+    width: 70%;
+    margin-top: 40%;
+    margin-left: 70%;
+}
+  
+.headerW {
+    color: white;
+    font-size: 50px;
+    text-align: center;
+    margin-top: 13%;
+    margin-right: 10%;
+}
+  
+.actionsW {
+    color: #ffb967;
+    font-size: 30px;
+    text-align: center;
+    margin-right: 10%;
+  }
+  
+.btns {
+    margin-top: 7%;
+}
+  
+.HomeBtn {
+    background-color: #ffb967;
+    border: none;
+    border-radius: 50%;
+    color: white;
+    padding: 12px 16px;
+    font-size: 30px;
+    margin-left: 15%;
+}
+  
+.RetryBtn {
+    background-color: #ffb967;
+    border: none;
+    border-radius: 50%;
+    color: white;
+    padding: 12px 16px;
+    font-size: 30px;
+    margin-left: 30%;
+}
+  
+.logoStyle {
+    height: 50px;
+}

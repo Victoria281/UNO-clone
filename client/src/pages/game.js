@@ -468,7 +468,7 @@ const Game = () => {
       player3: [],
       player4: []
     };
-    for (var start = 0; start < 8; start++) {
+    for (var start = 0; start < 1; start++) {
       dealplayers.player1.push(cardarray[0]);
       dealplayers.player2.push(cardarray[1]);
       dealplayers.player3.push(cardarray[2]);

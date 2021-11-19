@@ -9,7 +9,8 @@ import AccountPage from "./pages/account";
 import RegisterPage from "./pages/register";
 import ProfilePage from "./pages/profile";
 import LeaderboardPage from "./pages/leaderboard";
-import { NavLink } from 'react-router-dom'
+import { NavLink } from 'react-router-dom';
+import EndGame from "./EndGame";
 
 const App=() =>{
   const [loggedIn, setLoggedIn] = useState(localStorage.getItem("userid"));
@@ -72,19 +73,31 @@ const App=() =>{
         </nav>
 
         <Switch>
-          <Route exact path="/" render={(props) => <HomePage {...props} />} />
+          {/* <Route exact path="/" render={(props) => <HomePage {...props} />} />
           <Route exact path="/game" render={(props) => <GamePage {...props} />} />
           <Route exact path="/end" render={(props) => <EndPage {...props} />} />
           <Route exact path="/login" render={(props) => <AccountPage {...props} />} />
           <Route exact path="/register" render={(props) => <RegisterPage {...props} />} />
           <Route exact path="/profile" render={(props) => <ProfilePage {...props} />} />
           <Route exact path="/leaderboard" render={(props) => <LeaderboardPage {...props} />} />
-          <Route exact path="/logout" render={(props) => <Logout />} />
+          <Route exact path="/logout" render={(props) => <Logout />} /> */}
+
+          <EndGame exact path="/" component={HomePage}/>
+          <EndGame exact path="/game" component={GamePage}/>
+          <EndGame exact path="/end" component={EndPage}/>
+          <EndGame exact path="/profile" component={ProfilePage}/>
+          <EndGame exact path="/leaderboard" component={LeaderboardPage}/>
+
+          <Route exact path="/login" component={AccountPage}/>
+          <Route exact path="/register" component={RegisterPage}/>
+          <Route exact path="/logout" component={Logout}/>
+
         </Switch>
       </div>
     </Router>
   );
 }
+
 function Logout() {
   localStorage.removeItem("userid");
   localStorage.removeItem("token");
