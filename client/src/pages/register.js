@@ -127,6 +127,16 @@ export default function App() {
       }else{
         status = true;
         setPasswordError("");
+        // Regex must contain 1 lowercase, 1 uppercase, 1 number, 1 special character (escapes reserved RegEx in case of conflict),
+        // string must be 8 chars or longer
+        const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/;
+        if(passwordRegex.test(password)){
+          status = true;
+          setPasswordError("");
+        }else{
+          status = false;
+          setPasswordError("Must have at least 8 characters and follow the format")
+        }
       }
     }
     
@@ -139,6 +149,8 @@ export default function App() {
         if(confirmpassword == password){
           status = true;
           setPasswordCfmError("");
+          
+          
         }else{
           status = false;
           setPasswordCfmError("Password does not match confirm password");
@@ -151,7 +163,7 @@ export default function App() {
     if(status){
 
       axios
-        .post("https://uno-clone.herokuapp.com/api/uno/register", {
+        .post("http://localhost:5000/api/uno/register", {
           userName: username,
           email: email,
           password: password
@@ -189,71 +201,78 @@ export default function App() {
   return (
     <div className="App">
       <div className="wrapper">
-        <h3>
-          <b>Register</b>
-        </h3>
+        <h1><b id="registerTxt" className="p-3">Register</b></h1>
+          
+        
+        <div id="registerSection" className="p-5">
+        
         {duplicateMsg && <div className="error-msg">{duplicateMsg}</div>}
-        <form
-          className="form-group form"
-          autoComplete="off"
-          onSubmit={handleFormSubmit}
-        >
-          {successMsg && <div className="success-msg">{successMsg}</div>}
-          <label style={{ marginRight: 365, marginTop: 10 }}>Username:</label>
-          <input
-            type="text"
-            className="form-control"
-            placeholder="Enter your username"
-            onChange={handleUsernameChange}
-            value={username}
-          />
-          {usernameError && <div className="error-msg">{usernameError}</div>}
-
-          <label style={{ marginRight: 400, marginTop: 10 }}>Email:</label>
-          <input
-            type="text"
-            className="form-control"
-            placeholder="Enter your email"
-            onChange={handleEmailChange}
-            value={email}
-          />
-          {emailError && <div className="error-msg">{emailError}</div>}
-
-          <label style={{ marginRight: 370, marginTop: 10 }}>Password:</label>
-          <input
-            type="password"
-            className="form-control"
-            placeholder="Enter your password"
-            onChange={handlePasswordChange}
-            value={password}
-          />
-          {passwordError && <div className="error-msg">{passwordError}</div>}
-
-          <label style={{ marginRight: 310, marginTop: 10 }}>
-            Confirm Password:
-          </label>
-          <input
-            type="password"
-            className="form-control"
-            placeholder="Confirm your password"
-            onChange={handleCfmPasswordChange}
-            value={confirmpassword}
-          />
-          {passwordCfmError && (
-            <div className="error-msg">{passwordCfmError}</div>
-          )}
-
-          <button
-            id="registerBtn"
-            type="submit"
-            className="btn btn-success btn-lg"
-            style={{ width: "35%", marginTop: 30, height: 50}}
-            onClick={createPost}
-            
+          <form
+            className="form-group form"
+            autoComplete="off"
+            onSubmit={handleFormSubmit}
           >
-          <p style={{fontSize: 15}}>Register</p>
-          </button>
-        </form>
+            {successMsg && <div className="success-msg">{successMsg}</div>}
+            <label style={{ marginRight: 365, marginTop: 10 }}>Username:</label>
+            
+
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <span class="input-group-text"><i class="fa fa-user fa-lg fa-fw" aria-hidden="true"></i></span>
+              </div>
+              <input type="text" className="form-control" placeholder="Username" onChange={handleUsernameChange} value={username} />
+            </div>
+
+            {usernameError && <div className="error-msg">{usernameError}</div>}
+
+            <label style={{ marginRight: 400, marginTop: 10 }}>Email:</label>
+            
+
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <span class="input-group-text"><i class="fa fa-envelope fa-lg fa-fw" aria-hidden="true"></i></span>
+              </div>
+              <input type="text" className="form-control" placeholder="Email" onChange={handleEmailChange} value={email} />
+            </div>
+
+            {emailError && <div className="error-msg">{emailError}</div>}
+
+            <label style={{ marginRight: 370, marginTop: 10 }}>Password:</label>
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <span class="input-group-text"><i class="fa fa-lock fa-lg fa-fw" aria-hidden="true"></i></span>
+              </div>
+              <input type="password" className="form-control" placeholder="Password" onChange={handlePasswordChange} value={password} />
+            </div>
+
+            {passwordError && <div className="error-msg">{passwordError}</div>}
+
+            <label style={{ marginRight: 310, marginTop: 10 }}>
+              Confirm Password:
+            </label>
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <span class="input-group-text"><i class="fa fa-lock fa-lg fa-fw" aria-hidden="true"></i></span>
+              </div>
+              <input type="password" className="form-control" placeholder="Confirm Password" onChange={handleCfmPasswordChange} value={confirmpassword} />
+            </div>
+
+            {passwordCfmError && (
+              <div className="error-msg">{passwordCfmError}</div>
+            )}
+
+            <button
+              id="registerBtn"
+              type="submit"
+              className="btn btn-success btn-lg"
+              style={{ width: "40%", marginTop: 30, height: 50, backgroundColor: '#45BDF8', borderRadius: '50%'}}
+              onClick={createPost}
+              
+            >
+            <p id="registerBtnTxt" style={{ fontSize: 42, fontWeight: 'bolder' , fontFamily: 'Rubik Mono One', color:'black', marginTop: -20}}>Register</p>
+            </button>
+          </form>
+        </div>
       </div>
     </div>
   );
