@@ -1,5 +1,5 @@
 import React, { Fragment, useEffect, useState } from "react";
-import music from "../sounds/Kahoot_Lobby_Music.mp3"
+import music from "../audio/Kahoot_Lobby_Music.mp3"
 
 const Music = () => {
     const [isPlaying, setisPlaying] = useState(false);

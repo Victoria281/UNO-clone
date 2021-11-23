@@ -165,7 +165,8 @@ app.post('/login', printingDebuggingInfo, function (req, res, next) {
                             user_id: results[0].userid,
                             token: jwt.sign({ id: results[0].userid }, config, {
                                 expiresIn: 86400
-                            })
+                            }),
+                            username: results[0].username
                         };
                         return res.status(200).json(data);
                     } else {

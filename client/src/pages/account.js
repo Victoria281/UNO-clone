@@ -30,6 +30,7 @@ export default function App() {
         console.log(response)
         localStorage.setItem('token', 'Bearer '+response.data.token)
         localStorage.setItem('userid', response.data.user_id)
+        localStorage.setItem('username', response.data.username)
         setCredWrong("");
         window.location.replace("https://uno-clone.herokuapp.com")
         alert("Login successful!")

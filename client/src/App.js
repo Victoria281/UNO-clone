@@ -12,7 +12,7 @@ import LeaderboardPage from "./pages/leaderboard";
 import Music from "./components/Music";
 import Room from "./pages/multiplayer/room";
 import MultiPlayer from "./pages/multiplayer/multiplayer";
-
+import PageRestriction from "./PageRestriction"
 
 import { NavLink } from 'react-router-dom'
 import io from "socket.io-client";
@@ -98,20 +98,16 @@ const App=() =>{
         </nav>
 
         <Switch>
-          <Route exact path="/" render={(props) => <HomePage {...props} />} />
-          <Route exact path="/game" render={(props) => <GamePage {...props} />} />
-          <Route exact path="/end" render={(props) => <EndPage {...props} />} />
-          <Route exact path="/login" render={(props) => <AccountPage {...props} />} />
-          <Route exact path="/register" render={(props) => <RegisterPage {...props} />} />
-          <Route exact path="/profile" render={(props) => <ProfilePage {...props} />} />
-          <Route exact path="/leaderboard" render={(props) => <LeaderboardPage {...props} />} />
-          <Route exact path="/logout" render={(props) => <Logout />} />
-          <Route exact path="/createroom" render={() => {
-            // console.log("socket");
-            // console.log(socket);
-            return (<Room socket={socket} />)
-          }} />
-          <Route path="/multiplayer/:roomname/:username" component={Appmain} />
+          <PageRestriction exact path="/" component={HomePage} />
+          <PageRestriction exact path="/game" component={GamePage} />
+          <PageRestriction exact path="/end" component={EndPage} />
+          <Route exact path="/login" component={AccountPage} />
+          <Route exact path="/register" component={RegisterPage} />
+          <PageRestriction exact path="/profile" component={ProfilePage} />
+          <PageRestriction exact path="/leaderboard" component={LeaderboardPage} />
+          <Route exact path="/logout" component={Logout} />
+          <PageRestriction exact path="/createroom" component={Room} socket={socket}/>
+          <PageRestriction path="/multiplayer/:roomname/:username" component={Appmain} socket={socket}/>
         </Switch>
       </div>
     </Router>

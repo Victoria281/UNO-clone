@@ -1,12 +1,14 @@
 import React from "react";
 import { Route, Redirect } from "react-router-dom";
 
-const EndGame = ({ component: Component, ...props }) => (
+const Restrict = ({ component: Component, socket, ...props }) => (
   <Route
     {...props}
     render={(routeProps) => {
       const id = localStorage.getItem("userid");
+      console.log("pagerestriction");
       console.log(id);
+      console.log(socket);
 
       if (id) {
         console.log("render component");
@@ -16,7 +18,7 @@ const EndGame = ({ component: Component, ...props }) => (
       }
 
       return id !== null ? (
-        <Component {...routeProps} />
+        <Component socket={socket} {...routeProps} />
       ) : (
         <Redirect to="/login" />
       );
@@ -24,4 +26,4 @@ const EndGame = ({ component: Component, ...props }) => (
   />
 );
 
-export default EndGame;
+export default Restrict;

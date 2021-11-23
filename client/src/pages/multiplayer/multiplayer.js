@@ -10,6 +10,10 @@ import ChatIcon from "../../icons/chatLogo.png"
 
 //gets the data from the action object and reducers defined earlier
 const MultiPlayer = ({ username, roomname, socket }) => {
+  console.log("herere")
+  console.log(username)
+  console.log(roomname)
+  console.log(socket)
   const [whoami, setWhoami] = useState();
   const [usersInRoom, setUsersInRoom] = useState();
   const [cards, setCards] = useState([]);

@@ -14,7 +14,7 @@ var Auth = {
         try {
             const query = {
                 name: 'login',
-                text: 'SELECT * FROM players WHERE email=$1;',
+                text: 'SELECT userid, username FROM players WHERE email=$1;',
                 values: [email],
             }
 
@@ -23,6 +23,7 @@ var Auth = {
                     callback(error, null);
                     return;
                 } else {
+                    console.log(result.rows)
                     return callback(null, [result.rows[0]]);
                 }
             });

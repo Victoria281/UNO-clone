@@ -2,18 +2,23 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import "../../css/room.css"
 function RoomPage({ socket }) {
+  console.log("socket")
   console.log(socket)
 
-  const [username, setusername] = useState("");
+  const [username, setusername] = useState(localStorage.getItem("username"));
   const [roomname, setroomname] = useState("");
   //activates joinRoom function defined on the backend
   const sendData = () => {
-    if (username !== "" && roomname !== "") {
-      socket.emit("joinRoom", { username, roomname });
-      //if empty error message pops up and returns to the same page
+    if (username === "") {
+      alert("Error Occured. You should login again")
     } else {
-      alert("username and roomname are must !");
-      window.location.reload();
+      if (roomname !== "") {
+        socket.emit("joinRoom", { username, roomname });
+        //if empty error message pops up and returns to the same page
+      } else {
+        alert("Please enter room name!");
+        window.location.reload();
+      }
     }
   };
 
@@ -72,11 +77,11 @@ function RoomPage({ socket }) {
         <Link to={`/multiplayer/${roomname}/${username}`}>
           <button class="roomBtn" onClick={sendData}><p>Start</p></button>
         </Link></div>
-      <input
+      {/* <input
         placeholder="Input your user name"
         value={username}
         onChange={(e) => setusername(e.target.value)}
-      ></input>
+      ></input> */}
 
     </div>
   );
