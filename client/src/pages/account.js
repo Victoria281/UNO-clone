@@ -28,7 +28,7 @@ export default function App() {
       })
       .then((response) => {
         console.log(response)
-        localStorage.setItem('Bearer token', response.data.token)
+        localStorage.setItem('token', 'Bearer '+response.data.token)
         localStorage.setItem('userid', response.data.user_id)
         setCredWrong("");
         window.location.replace("https://uno-clone.herokuapp.com")

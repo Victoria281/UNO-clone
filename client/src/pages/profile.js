@@ -113,11 +113,11 @@ const Profile = () => {
     const [newpassword, setNewPassword] = useState('');
     const [checkpassword, setCheckPassword] = useState('');
 
-    const handlePasswordChange = async ()=>{
+    const handlePasswordChange = async () => {
       console.log(oldpassword)
       console.log(newpassword)
       console.log(checkpassword)
-      if (newpassword!== checkpassword || newpassword===" " || newpassword==="" || checkpassword===" " || checkpassword===""){
+      if (newpassword !== checkpassword || newpassword === " " || newpassword === "" || checkpassword === " " || checkpassword === "") {
         alert("Password is not similar")
       } else {
         try {
@@ -146,39 +146,39 @@ const Profile = () => {
     }
     return (
       <div>
-      <h6>Change Password</h6>
-      <br />
-      <p>
-        <input
-          type="password"
-          placeholder="Enter Old Password"
-          id="p1"
-          class="password"
-          onChange={(e) => {setOldPassword(e.target.value)}}
-        />
-      </p>
-      <p>
-        <input
-          type="password"
-          placeholder="Enter New Password"
-          id="p2"
-          class="password"
-          onChange={(e) => {setNewPassword(e.target.value)}}
-        />
-      </p>
-      <p>
-        <input
-          type="password"
-          placeholder="Confirm Password"
-          id="p3"
-          class="password"
-          onChange={(e) => {setCheckPassword(e.target.value)}}
-        />
-      </p>
-      <input type="submit" onClick={handlePasswordChange} />
-      <br />
-      <br />
-    </div>
+        <h6>Change Password</h6>
+        <br />
+        <p>
+          <input
+            type="password"
+            placeholder="Enter Old Password"
+            id="p1"
+            class="password"
+            onChange={(e) => { setOldPassword(e.target.value) }}
+          />
+        </p>
+        <p>
+          <input
+            type="password"
+            placeholder="Enter New Password"
+            id="p2"
+            class="password"
+            onChange={(e) => { setNewPassword(e.target.value) }}
+          />
+        </p>
+        <p>
+          <input
+            type="password"
+            placeholder="Confirm Password"
+            id="p3"
+            class="password"
+            onChange={(e) => { setCheckPassword(e.target.value) }}
+          />
+        </p>
+        <input type="submit" onClick={handlePasswordChange} />
+        <br />
+        <br />
+      </div>
     )
   }
 
@@ -190,9 +190,11 @@ const Profile = () => {
           <br />
 
           <ProfileModal />
-          <div class="row no-gutters">
-            <div class="col-6">
-              <div class="gameProfile shadowing">
+
+          <div class="gameProfile shadowing">
+            <div className="row">
+
+              <div className="col-4">
                 <div
                   class="mainIconBorder"
                   data-toggle="modal"
@@ -207,8 +209,12 @@ const Profile = () => {
                     <div class="text">Edit</div>
                   </div>
                 </div>
+
+              </div>
+              <div className="col-8">
                 <p class="username">{userInfo.username}</p>
                 <p class="email">{userInfo.email}</p>
+                {/* What is this */}
                 <div class="changeInfo">
                   <input
                     type="password"
@@ -222,25 +228,37 @@ const Profile = () => {
                 </div>
               </div>
             </div>
-            <br />
-            <div class="col-6">
-              <div class="row no-gutters">
-                <div id="box" class="shadowing">
-                  <br />
+          </div>
+
+          <div class="row no-gutters">
+            <div id="accordion" className="w-100">
+              {/* Change Password */}
+              <div class="card">
+                <div class="card-header">
+                  <a class="collapsed card-link text-dark" data-toggle="collapse" href="#collapseTwo">
+                  <i class="fa fa-lock"></i>    Security
+                  </a>
+                </div>
+                <div id="collapseTwo" class="collapse" data-parent="#accordion">
+                  <div class="card-body">
                   <ChangePassword />
-                  
+                  </div>
                 </div>
               </div>
-              <div class="row no-gutters">
-                <div id="scorebox" class="shadowing">
-                  <div class="row no-gutters">
-                    <div class="col-6">
-                      <div class="scoreBorder">
+
+              {/* Game Statistics */}
+              <div class="card">
+                <div class="card-header">
+                  <a class="collapsed card-link text-dark" data-toggle="collapse" href="#collapseThree">
+                  <i class="fa fa-line-chart"></i>    Game Statistics
+                  </a>
+                </div>
+                <div id="collapseThree" class="collapse" data-parent="#accordion">
+                  <div class="card-body">
+                  <h6>Highest Score</h6>
+                    <div class="scoreBorder">
                         <p>{userInfo.score}</p>
-                      </div>
-                    </div>
-                    <div class="col-6">
-                      <p>
+                        <p>
                         Highest score attained at <br /> {userInfo.created_by}
                       </p>
                     </div>
