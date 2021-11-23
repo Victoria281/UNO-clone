@@ -14,6 +14,7 @@
     box-shadow: 1px 2px #888888;
     background-color: white;
     margin-top: 10%;
+ 
   }
 
 
@@ -39,3 +40,15 @@
   #registerBtn{
     transform: rotate(8deg);
   }
+
+  label {
+    text-align: left;
+    display: inline-block;
+    width:100%;
+  }
+
+  .form-control{
+    display: inline-block;
+    padding-right: 200px;
+  }
+

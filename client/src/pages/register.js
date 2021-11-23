@@ -135,7 +135,7 @@ export default function App() {
           setPasswordError("");
         }else{
           status = false;
-          setPasswordError("Must have at least 8 characters and follow the format")
+          setPasswordError("Criteria: Upper and Lowercase, Number, Special Char")
         }
       }
     }
@@ -213,19 +213,19 @@ export default function App() {
             onSubmit={handleFormSubmit}
           >
             {successMsg && <div className="success-msg">{successMsg}</div>}
-            <label style={{ marginRight: 365, marginTop: 10 }}>Username:</label>
+            <label className="mt-2">Username:</label>
             
 
             <div class="input-group mb-3">
               <div class="input-group-prepend">
                 <span class="input-group-text"><i class="fa fa-user fa-lg fa-fw" aria-hidden="true"></i></span>
               </div>
-              <input type="text" className="form-control" placeholder="Username" onChange={handleUsernameChange} value={username} />
+              <input type="text" className="form-control pr-5" placeholder="Username" onChange={handleUsernameChange} value={username} />
             </div>
 
             {usernameError && <div className="error-msg">{usernameError}</div>}
 
-            <label style={{ marginRight: 400, marginTop: 10 }}>Email:</label>
+            <label >Email:</label>
             
 
             <div class="input-group mb-3">
@@ -237,8 +237,8 @@ export default function App() {
 
             {emailError && <div className="error-msg">{emailError}</div>}
 
-            <label style={{ marginRight: 370, marginTop: 10 }}>Password:</label>
-            <div class="input-group mb-3">
+            <label>Password (must be 8 characters):</label>
+            <div class="input-group mb-">
               <div class="input-group-prepend">
                 <span class="input-group-text"><i class="fa fa-lock fa-lg fa-fw" aria-hidden="true"></i></span>
               </div>
@@ -247,7 +247,7 @@ export default function App() {
 
             {passwordError && <div className="error-msg">{passwordError}</div>}
 
-            <label style={{ marginRight: 310, marginTop: 10 }}>
+            <label className="mt-3">
               Confirm Password:
             </label>
             <div class="input-group mb-3">
