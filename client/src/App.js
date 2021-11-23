@@ -9,17 +9,16 @@ import AccountPage from "./pages/account";
 import RegisterPage from "./pages/register";
 import ProfilePage from "./pages/profile";
 import LeaderboardPage from "./pages/leaderboard";
-import Music from "./components/Music";
 import { NavLink } from 'react-router-dom'
 
-const App = () => {
+const App=() =>{
   const [loggedIn, setLoggedIn] = useState(localStorage.getItem("userid"));
   useEffect(() => {
-    setInterval(() => {
-      const userid = localStorage.getItem("userid");
-      setLoggedIn(userid);
-    }, [])
-  }, 5000);
+        setInterval(() => {
+            const userid = localStorage.getItem("userid");
+            setLoggedIn(userid);
+            }, [])
+    }, 5000);
 
   return (
     <Router>
@@ -66,12 +65,7 @@ const App = () => {
 
               </li>
               <li className="nav-item active navbarDesign" style={{ background: '#F5F93C' }}>
-                <Account isLoggedIn={loggedIn} />
-              </li>
-              <li className="nav-item active navbarDesign" style={{ background: '#FFB967' }}>
-                <div className="borderHover" style={{ borderColor: '#FFB967' }}><p className="nav-link navBarWord">
-                  <Music />
-                </p></div>
+                <Account isLoggedIn={loggedIn}/>
               </li>
             </ul>
           </div>
