@@ -9,8 +9,10 @@ import AccountPage from "./pages/account";
 import RegisterPage from "./pages/register";
 import ProfilePage from "./pages/profile";
 import LeaderboardPage from "./pages/leaderboard";
+import Music from "./components/Music";
 import Room from "./pages/multiplayer/room";
 import MultiPlayer from "./pages/multiplayer/multiplayer";
+
 
 import { NavLink } from 'react-router-dom'
 import io from "socket.io-client";
@@ -85,6 +87,11 @@ const App=() =>{
               </li>
               <li className="nav-item active navbarDesign" style={{ background: '#F5F93C' }}>
                 <Account isLoggedIn={loggedIn}/>
+              </li>
+              <li className="nav-item active navbarDesign" style={{ background: '#FFB967' }}>
+                <div className="borderHover" style={{ borderColor: '#FFB967' }}><p className="nav-link navBarWord">
+                <Music/>
+                </p></div>
               </li>
             </ul>
           </div>
