@@ -273,3 +273,10 @@ button {
   margin-right: 15%;
   overflow: hidden;
 }
+
+.gamecolorNow{
+  width: 10px;
+  height: 30px;
+  margin-left: 10px;
+  border-radius: 10px;
+}
