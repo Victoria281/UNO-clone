@@ -2,6 +2,7 @@ import React, { Fragment, useEffect, useState } from "react";
 import Modal from "react-modal";
 import shuffleCards from "../components/shuffle";
 import "../index.css";
+import "../css/card.css";
 import { useHistory } from "react-router-dom";
 // const images = importAll(require.context('../cards', false, '/\.png/'));
 
@@ -31,7 +32,8 @@ const Game = () => {
   const [isUnoButtonPressed, setUnoButtonPressed] = useState(false);
   const [selectColor, setSelectColor] = useState(false);
   const [ifShow, setIfShow] = useState(false);
-  const [ifDraw,setIfDraw] = useState(false);
+  const [ifDraw, setIfDraw] = useState(false);
+  const [playedDraw, setPlayedDraw] = useState(false);
   const [turnModal, setTurnModal] = useState(false);
   const [order, setOrder] = useState([0, 1, 2, 3]);
   const [playable, setPlayable] = useState([]);
@@ -116,37 +118,28 @@ const Game = () => {
 
   const Bot = (arr) => {
     return (
-      // <ul className="list-inline">
-        <div className="row">
-          {arr.arr.map((decks) => (
-           // <li className="list-inline-item" key={decks.id}>
-                <div className="col">
-                  <img
-                       className="img-responsive"
-                      style={{height: 150 ,width : 100}}
-                      src={"https://uno-clone.herokuapp.com/api/uno/images/Deck.png"}
-                      //src={"https://uno-clone.herokuapp.com/api/uno/images/" + decks.image_file.slice(8)}
-                      alt={decks.values + " " + decks.color}
-                      />  
-                <div>
-                  {/* <p className="imageText">{decks.image_file.slice(8)}</p> */}
-                </div>
-                </div>
-           // </li>
-          ))}
-        </div>
-      //</ul>
+      <div class={"botcards" + arr.no}>
+        {arr.arr.map((decks) => (
+          <div class={"cards" + arr.no}>
+            <img
+              className="img-responsive allcards"
+              src={"https://uno-clone.herokuapp.com/api/uno/images/Deck.png"}
+              alt={decks.values + " " + decks.color}
+            />
+          </div>
+        ))}
+      </div>
     );
   };
 
   const Player = ({ player }) => {
     return (
-      <div className="row">
+      <div className="playercards">
         {turn === 0 &&
           player.map((decks) => {
             console.log(playable.includes(decks));
             return (
-              <div className="col" key={decks.id}>
+              <div className="pcards" key={decks.id}>
                 {playable.includes(decks) && (
                   <div
                     onClick={() => {
@@ -155,24 +148,22 @@ const Game = () => {
                   >
                     <img
                       className="img-responsive"
-                      style={{height: 150 ,width : 100}}
+                      style={{ width: 80 }}
                       src={"https://uno-clone.herokuapp.com/api/uno/images/" + decks.image_file.slice(8)}
                       alt={decks.values + " " + decks.color}
-                      />  
-                    {/* <p className="imageText">{decks.image_file}</p> */}
-                    <p className="imageText">CanPlay</p>
+                    />
+                    <p className="imageText">Yes</p>
                   </div>
                 )}
                 {!playable.includes(decks) && (
                   <div>
-                      <img
+                    <img
                       className="img-responsive"
-                      style={{height: 150 ,width : 100}}
+                      style={{ width: 80 }}
                       src={"https://uno-clone.herokuapp.com/api/uno/images/" + decks.image_file.slice(8)}
                       alt={decks.values + " " + decks.color}
-                      />  
-                    {/* <p className="imageText">{"." + decks.image_file}</p> */}
-                    <p className="imageText">CannotPlay</p>
+                    />
+                    <p className="imageText">No</p>
                   </div>
                 )}
               </div>
@@ -180,101 +171,101 @@ const Game = () => {
           })}
         {turn !== 0 &&
           player.map((decks) => (
-            <div className="col" key={decks.id}>
+            <div className="pcards" key={decks.id}>
               <div>
-              <img
+                <img
                   className="img-responsive"
-                  style={{height: 150 ,width : 100}}
+                  style={{ width: 80 }}
                   src={"https://uno-clone.herokuapp.com/api/uno/images/" + decks.image_file.slice(8)}
                   alt={decks.values + " " + decks.color}
-                  />  
+                />
               </div>
             </div>
           ))}
-        
+
       </div>
     );
   };
 
-  const ChooseColorWild = () => (
-    <div>
-      <Modal isOpen={selectColor} className="colorChoose">
-        <div className="header"> SELECT A COLOUR </div>
-        <div className="actions">
-          <button
-            className="RedBtn"
-            onClick={() => {
-              // console.log("modal closed ");
-              setSelectColor(false);
-              current.color = "red";
-              setCurrent(current);
-            }}
-          >
-            Color
-          </button>
+  const ChooseColorWild = () => {
+    const changeColor = (clr) => {
+      setSelectColor(false);
+      current.color = clr;
+      setCurrent(current);
+      setTurn(order[1]);
+    }
+    return (
+      <div>
+        <Modal isOpen={selectColor} className="colorChoose">
+          <div className="header"> Select Color </div><br /><br />
+          <div className="">
+            <button
+              className="RedBtn"
+              onClick={() => { changeColor('red') }}
+            >
+              Color
+            </button>
 
-          <button
-            className="BlueBtn"
-            onClick={() => {
-              // console.log("modal closed ");
-              setSelectColor(false);
-              current.color = "blue";
-              setCurrent(current);
-            }}
-          >
-            Color
-          </button>
+            <button
+              className="BlueBtn"
+              onClick={() => { changeColor('blue') }}
 
-          <button
-            className="YellowBtn"
-            onClick={() => {
-              // console.log("modal closed ");
-              setSelectColor(false);
-              current.color = "yellow";
-              setCurrent(current);
-            }}
-          >
-            Color
-          </button>
+            >
+              Color
+            </button>
 
-          <button
-            className="GreenBtn"
-            onClick={() => {
-              // console.log("modal closed ");
-              setSelectColor(false);
-              current.color = "green";
-              setCurrent(current);
-            }}
-          >
-            Color
-          </button>
-        </div>
-      </Modal>
-    </div>
-  );
+            <button
+              className="YellowBtn" onClick={() => { changeColor('yellow') }}
 
-  const PassTurnBtn = () => (
-    <button
-      className="passTurn nextbtn"
-      onClick={() => {
-        setTurn(turn + 1);
-        setIfShow(false);
-        setIfDraw(false);
-      }}
-    >
-      Next
-    </button>
-  );
+            >
+              Color
+            </button>
 
-  //Turn Modal Functions Start
+            <button
+              className="GreenBtn"
+              onClick={() => { changeColor('green') }}
+
+            >
+              Color
+            </button>
+          </div>
+        </Modal>
+      </div>
+    );
+  }
+
   const PlayerTurnModal = () => (
     <div>
       <Modal isOpen={turnModal} className="playerTurn">
+        <div className="playerHeader">Card Played:</div>
+        <img
+          className="img-responsive"
+          style={{ width: 90 }}
+          src={"https://uno-clone.herokuapp.com/api/uno/images/" + current.image_file.slice(8)}></img>
+
         <div className="playerHeader">Player {turn + 1} Turn</div>
       </Modal>
     </div>
   );
-  
+
+  const AddCardModal = () => {
+    var ind = order.indexOf(turn);
+    ind += 1;
+    if (ind === 4) {
+      ind = 0;
+    } else if (ind > 4) {
+      ind = Math.trunc(ind / 4);
+    }
+    return (
+      <div>
+        <Modal isOpen={playedDraw} className="drawCard">
+          <div className="drawHeader">Player {(order[ind] + 1)}</div>
+          <div className="drawHeader2">Draw Card</div>
+        </Modal>
+      </div>
+    );
+  }
+
   const modalOpen = () => {
     console.log("Modal Open----------");
     setTurnModal(true);
@@ -320,14 +311,14 @@ const Game = () => {
         players["player1"].push(mainDeck[penalty2]);
       }
       alert("You forgot to press NUO. 2 cards are drawn as penalty");
-    } 
+    }
 
-    if(players["player" + (turn + 1)].length === 1){
-      console.log("bot has only"+ players["player" + (turn + 1)][0]+ " last card left");
+    if (players["player" + (turn + 1)].length === 1) {
+      console.log("bot has only" + players["player" + (turn + 1)][0] + " last card left");
       var random = Math.random();
-      if(random < 0.8){
+      if (random < 0.8) {
         console.log("NOU called");
-        alert("PlayerBot " + (turn + 1) +  "pressed NOU");
+        alert("PlayerBot " + (turn + 1) + "pressed NOU");
       } else {
         for (var penalty2 = 0; penalty2 < 2; penalty2++) {
           players["player" + (turn + 1)].push(mainDeck[penalty2]);
@@ -397,7 +388,12 @@ const Game = () => {
         setMainDeck(mainDeck.slice(2, mainDeck.length));
         setPlayers(players);
         // console.log("draw 2 ended");
-        setTurn(order[expectedPlayerInd]);
+
+        setPlayedDraw(true);
+        setTimeout(() => {
+          setPlayedDraw(false);
+          setTurn(order[expectedPlayerInd]);
+        }, 1500);
         break;
 
       //wild is 13
@@ -410,14 +406,11 @@ const Game = () => {
           var color = ["red", "blue", "yellow", "green"];
           var num = Math.floor(Math.random() * (4 + 1));
           current.color = color[num];
-          console.log("draw called");
-          console.log(color[num]);
-          console.log(color);
-          console.log(num);
           setCurrent(current);
+          setTurn(order[expectedPlayerInd]);
         }
         // console.log("wild ended");
-        setTurn(order[expectedPlayerInd]);
+
         break;
 
       //+4 is 14
@@ -431,20 +424,26 @@ const Game = () => {
         setMainDeck(mainDeck.slice(4, mainDeck.length));
         setPlayers(players);
         // To Choose Colour
+
         if (expectedPlayerInd === 1) {
-          setSelectColor(true);
+          setPlayedDraw(true);
+          setTimeout(() => {
+            setPlayedDraw(false);
+            setSelectColor(true);
+          }, 1500);
+          
         } else {
           var color4 = ["red", "blue", "yellow", "green"];
           var n4um = Math.floor(Math.random() * (4 - 0 + 1)) + 0;
           current.color = color4[n4um];
-          console.log("draw called");
-          console.log(color4[n4um]);
-          console.log(color4);
-          console.log(n4um);
           setCurrent(current);
+          setPlayedDraw(true);
+          setTimeout(() => {
+            setPlayedDraw(false);
+            setTurn(order[expectedPlayerInd]);
+          }, 1500);
         }
         // console.log("draw 4 ended");
-        setTurn(order[expectedPlayerInd]);
         break;
 
       default:
@@ -505,7 +504,6 @@ const Game = () => {
       // console.log("tp[[[[[[[");
       setPlayable(arr[2]);
       setPlayers(arr[0]);
-      // console.log(cards_retrieved);
       setCurrent(cards_retrieved[0]);
       setMainDeck(cards_retrieved.slice(1, cards_retrieved.length));
     } catch (err) {
@@ -540,12 +538,40 @@ const Game = () => {
       setIfDraw(true);
     };
 
+    const PassTurn = () => {
+      if (turn !== 0) {
+        return (
+          <button
+            className="nextbtn"
+            style={{ background: 'black' }}
+          >
+            <p>Skip?</p>
+          </button>
+        )
+      } else {
+        return (
+          <button
+            className="nextbtn"
+            style={{ background: '#6C01AD' }}
+            onClick={() => {
+              setTurn(turn + 1);
+              setIfShow(false);
+              setIfDraw(false);
+            }}
+          >
+            <p>Skip?</p>
+          </button>
+        )
+      }
+    }
+
     return (
-      <div className="d-inline-flex">
+      <div className="maindeck">
         <div>
-          <input type="image" disabled={ifDraw} className="deck" src={"https://uno-clone.herokuapp.com/api/uno/images/Deck.png"} style={{height:150, width:100}} onClick={drawCards}></input>
+          <input type="image" disabled={ifDraw} className="deck" src={"https://uno-clone.herokuapp.com/api/uno/images/Deck.png"} style={{ width: 90 }} onClick={drawCards}></input>
         </div>
-        <div className="m-auto">{ifShow ? <PassTurnBtn />  : null}</div>
+        <div className="m-auto skipBtn"><PassTurn />
+        </div>
       </div>
     );
   };
@@ -596,113 +622,73 @@ const Game = () => {
   }, [turn]);
 
   return (
-    <div className="container">
-      {/* <table class="table mt-5 text-center">
-        <tr>
-          <th>
-            <h4>Order</h4>
-          </th>
-          <th>
-            <h4>Turn</h4>
-          </th>
-          <th>
-            <h4>Special</h4>
-          </th>
-        </tr>
-        <tr>
-          <td>{order}</td>
-          <td>Player {turn + 1}</td>
-          <td>{selectColor && <p>Choose a color</p>}</td>
-        </tr>
-      </table>
 
-      <table class="table mt-5 text-center">
-        <tr>
-          <th>
-            <h6>P1</h6>
-          </th>
-          <th>
-            <h6>B1</h6>
-          </th>
-          <th>
-            <h6>B2</h6>
-          </th>
-          <th>
-            <h6>B3</h6>
-          </th>
-        </tr>
-        <tr>
-          <td>
-            <p>{play.player1.values + " " + play.player1.color}</p>
-            <p className="imageText">{play.player1.image_file}</p>
-          </td>
-          <td>
-            <p>{play.player2.values + " " + play.player2.color}</p>
-            <p className="imageText">{play.player2.image_file}</p>
-          </td>
-          <td>
-            <p>{play.player3.values + " " + play.player3.color}</p>
-            <p className="imageText">{play.player3.image_file}</p>
-          </td>
-          <td>
-            <p>{play.player4.values + " " + play.player4.color}</p>
-            <p className="imageText">{play.player4.image_file}</p>
-          </td>
-        </tr>
-      </table> */}
+    <div class="gamePage">
 
-    <div>
-        <div className="row my-3 p-0">
-            <h5 className="m-4">Bot 2</h5>
-            <Bot arr={players.player3}/>
+      <ChooseColorWild />
+      <PlayerTurnModal />
+      <AddCardModal />
+
+      <div className="row my-3">
+
+        <div className="col-2 p-0" id="bot-left">
+          <Bot arr={players.player2} no={"left"} />
         </div>
 
-        <div className="row my-3">
-
-          <div className="col-3 p-0">
-          <h5 className="m-4">Bot 1</h5>
-            <Bot arr={players.player2} />
+        <div className="col-8">
+          <div className="row my-3 p-0">
+            <Bot arr={players.player3} no={["top"]} />
           </div>
 
-          <div className="col-6 m-auto">
-            <div className="d-flex justify-content-center">
-              {/* Button: Calling out NOU when 1 card left */}
-             <button
-              className="btn"
-              hidden={players.player1.length !== 1}
-              onClick={() => {
-                setUnoButtonPressed(!isUnoButtonPressed);
-                alert("Nuo has been pressed! You have 1 card remaining!");
-              }}
-            >
-              NUO
-            </button>
-      
-            {/* To activate Color Selector when wild or +4 wild is clicked */}
-            <ChooseColorWild />
-            {/* <h4>Current Color: {current.color}</h4> */}
-              <PlayerTurnModal/>
-            <img 
-              className="img-responsive"
-              style={{height: 150 ,width : 100}} 
-              src={"https://uno-clone.herokuapp.com/api/uno/images/" + current.image_file.slice(8)}></img>
-      
-            <MainDeck />
+          <div className="row" id="middle">
+
+            <div className="col-6 currentcards">
+              <img
+                className="img-responsive currentcard"
+                style={{ width: 90 }}
+                src={"https://uno-clone.herokuapp.com/api/uno/images/" + current.image_file.slice(8)}></img>
             </div>
+            <div className="col-5" >
+              <MainDeck />
+            </div>
+            <div className="col-1" >
+              {current.color}
+            </div>
+
+
           </div>
 
-          <div className="col-3 p-0">
-            <h5 className="m-4">Bot 3</h5>
-            <Bot arr={players.player4} />
-            </div>
+
         </div>
-          
-        <div className="row my-3 p-0">
-          <h5 className="m-4">Plyr 1</h5>
+
+        <div className="col-2 p-0">
+          <Bot arr={players.player4} no={"right"} />
+        </div>
+      </div>
+      <div className="row my-3 p-0 bottomRow">
+        <div class="col-3">
+
+        </div>
+        <div class="col-6">
           <Player player={players.player1} type="human" />
         </div>
-    </div> 
-  </div>
+        <div class="col-3">
+          <button
+            className="nouBtn"
+            onClick={() => {
+              if (players.player1.length === 1) {
+                setUnoButtonPressed(!isUnoButtonPressed);
+                alert("Nuo has been pressed! You have 1 card remaining!");
+              }
+            }}
+          >
+            <p>NOU!</p>
+          </button>
+        </div>
+
+      </div>
+
+    </div>
   );
 };
 

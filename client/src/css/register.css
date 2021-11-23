@@ -1,39 +1,4 @@
 
-  .GreenBtn {
-    border-radius: 20%;
-    background-color: #3cb371;
-    font-size: 30px;
-    border: none;
-    color: #3cb371;
-    margin-left: 2%;
-  }
-  
-  .BlueBtn {
-    border-radius: 20%;
-    background-color: #1e90ff;
-    font-size: 30px;
-    border: none;
-    color: #1e90ff;
-    margin-left: 2%;
-  }
-  
-  .YellowBtn {
-    border-radius: 20%;
-    background-color: #f0e68c;
-    font-size: 30px;
-    border: none;
-    color: #f0e68c;
-    margin-left: 2%;
-  }
-  
-  .RedBtn {
-    border-radius: 20%;
-    background-color: #dc143c;
-    font-size: 30px;
-    border: none;
-    color: #dc143c;
-    margin-left: 2%;
-  }
   .error-msg {
     font-size: "12px";
     width: "100%";
