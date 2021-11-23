@@ -1,0 +1,15 @@
+
+.column {
+  float: left;
+  width: 50%;
+}
+
+.error-msg {
+  font-size: "12px";
+  width: "100%";
+  color: "red";
+}
+
+.success-msg {
+  width: 100%;
+}

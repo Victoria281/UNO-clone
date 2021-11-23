@@ -20,5 +20,10 @@ CREATE TABLE uno_leaderboard(
     created_by TIMESTAMP NOT NULL DEFAULT current_timestamp,
     CONSTRAINT fk_userid 
         FOREIGN KEY(userid)
-        REFERENCES players(userid)
+        REFERENCES players(userid) ON DELETE CASCADE
 );
+
+ALTER TABLE uno_leaderboard DROP CONSTRAINT fk_userid;
+ALTER TABLE uno_leaderboard ADD CONSTRAINT  fk_userid
+uno_clone-#         FOREIGN KEY(userid)
+uno_clone-#         REFERENCES players(userid) ON DELETE CASCADE;
