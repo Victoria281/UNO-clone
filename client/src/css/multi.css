@@ -1,0 +1,126 @@
+.player1cards {
+    width: 30%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 0%;
+    justify-content: center;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(10px, max-content));
+}
+
+.p1cards {
+    filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+}
+
+.player2cards {
+    width: 30%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 2%;
+    justify-content: center;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(10px, max-content));
+}
+
+.p2cards {
+    filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+}
+
+
+.multicurrent {
+    align-self: space-between;
+}
+
+.middleArea {
+    display: flex;
+    justify-content: center;
+    padding-top: 76px;
+    padding-bottom: 60px;
+}
+
+.deckArea {
+    position: absolute;
+    top: 15%;
+    left: 32%;
+    background-color: lightgrey;
+    width: 35%;
+    height: 80%;
+    border-radius: 175px;
+    filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+    z-index: -9;
+}
+
+.colorNow {
+    width: 40px;
+    height: 30px;
+    margin-left: 10px;
+    border-radius: 10px;
+}
+
+button:focus {
+    outline: none;
+}
+
+button {
+    border: none;
+}
+
+
+.mskipBtn {
+    position: absolute;
+    bottom: 0;
+    left: -50%;
+}
+
+.mnextbtn {
+    width: 100px;
+    height: 40px;
+    margin: 10px 20px;
+    -moz-border-radius: 100px / 50px;
+    -webkit-border-radius: 100px / 50px;
+    border-radius: 100px / 50px;
+    transform: matrix(0.99, 0.11, -0.14, 0.99, 0, 0);
+}
+
+.mnextbtn>p {
+    font-family: "RubikOne";
+    font-size: 25px;
+    color: black;
+    -webkit-text-stroke: 0.4px black;
+    -webkit-text-fill-color: white;
+    transform: rotate(-15deg);
+}
+
+
+.mmainnou {
+    position: absolute;
+    bottom: 0;
+    right: 0%;
+}
+
+.mnouBtn {
+    position: absolute;
+    bottom: 30%;
+    left: -10%;
+    width: 100px;
+    height: 40px;
+    margin: 10px 20px;
+    -moz-border-radius: 100px / 50px;
+    -webkit-border-radius: 100px / 50px;
+    border-radius: 100px / 50px;
+    background: #EA323C;
+    transform: matrix(0.99, 0.11, -0.14, 0.99, 0, 0);
+}
+
+.mnouBtn>p {
+    font-family: "RubikOne";
+    font-size: 25px;
+    color: black;
+    -webkit-text-stroke: 0.4px black;
+    -webkit-text-fill-color: white;
+    transform: rotate(-15deg);
+}
+
+.isplayable:hover{
+    border: 3px solid black
+}
