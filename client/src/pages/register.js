@@ -46,44 +46,6 @@ export default function App() {
   const handleFormSubmit = (e) => {
     e.preventDefault();
 
-    // if (username != "") {
-    //   // If username is not empty
-    //   setUsernameError("");
-      
-    //   if (email !== "") {
-    //     const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
-    //     if (emailRegex.test(email)) {
-    //       setEmailError("");
-    //       if (password !== "") {
-    //         setPasswordError("");
-    //         if (confirmpassword !== "") {
-    //           setPasswordCfmError("");
-    //           if (confirmpassword !== password) {
-    //             setPasswordCfmError("Password does not match!");
-    //           } else {
-    //             setSuccessMsg("Successfully Created!");
-    //           }
-    //         } else {
-    //           setPasswordCfmError("Confirm Password Required");
-    //         }
-    //       } else {
-    //         setPasswordError("Password Required");
-            
-    //       }
-    //     } else {
-    //       setEmailError("Not a valid format!");
-    //     }
-    //   } else {
-    //     setEmailError("Email Required");
-    //     // document.getElementById("registerBtn").disabled=true;
-    //   }
-    // } else {
-    //   // If username is empty
-    //   setUsernameError("Username Required");
-    // }
-    // console.log((emailError == "") && (usernameError == "") && (passwordError == "" ) && (passwordCfmError == ""))
-    // return((emailError == "") && (usernameError == "") && (passwordError == "" ) && (passwordCfmError == ""));
-
   };
 
   // Function called when register button is clicked
@@ -172,14 +134,10 @@ export default function App() {
           console.log(response)
           // If no duplicates, set error to empty
           setDuplicateMsg("");
-          alert("Register successful!")
+          window.location = "/login"
         })
         .catch((error) => {
           if(error.response){
-            console.log("ERROR RESPONSESSSSSSSSS")
-            console.log(error.response.data)
-            console.log(error.response.status);
-            console.log(error.response.headers);
             // Set state of duplicate msg
             setDuplicateMsg("There is a duplicate of either username or email. Please change.")
           }else if (error.request) {
@@ -204,7 +162,7 @@ export default function App() {
         <h1><b id="registerTxt" className="p-3">Register</b></h1>
           
         
-        <div id="registerSection" className="p-5">
+        <div id="registerSection" className="pt-5 pl-5 pr-5 pb-2">
         
         {duplicateMsg && <div className="error-msg">{duplicateMsg}</div>}
           <form
@@ -213,10 +171,10 @@ export default function App() {
             onSubmit={handleFormSubmit}
           >
             {successMsg && <div className="success-msg">{successMsg}</div>}
-            <label style={{ marginRight: 365, marginTop: 10 }}>Username:</label>
+            <label style={{ marginRight: 365, marginTop: 1 }}>Username:</label>
             
 
-            <div class="input-group mb-3">
+            <div class="input-group mb-2">
               <div class="input-group-prepend">
                 <span class="input-group-text"><i class="fa fa-user fa-lg fa-fw" aria-hidden="true"></i></span>
               </div>
@@ -225,10 +183,10 @@ export default function App() {
 
             {usernameError && <div className="error-msg">{usernameError}</div>}
 
-            <label style={{ marginRight: 400, marginTop: 10 }}>Email:</label>
+            <label style={{ marginRight: 400, marginTop: 1 }}>Email:</label>
             
 
-            <div class="input-group mb-3">
+            <div class="input-group mb-2">
               <div class="input-group-prepend">
                 <span class="input-group-text"><i class="fa fa-envelope fa-lg fa-fw" aria-hidden="true"></i></span>
               </div>
@@ -237,8 +195,8 @@ export default function App() {
 
             {emailError && <div className="error-msg">{emailError}</div>}
 
-            <label style={{ marginRight: 370, marginTop: 10 }}>Password:</label>
-            <div class="input-group mb-3">
+            <label style={{ marginRight: 370, marginTop: 1 }}>Password:</label>
+            <div class="input-group mb-2">
               <div class="input-group-prepend">
                 <span class="input-group-text"><i class="fa fa-lock fa-lg fa-fw" aria-hidden="true"></i></span>
               </div>
@@ -247,10 +205,10 @@ export default function App() {
 
             {passwordError && <div className="error-msg">{passwordError}</div>}
 
-            <label style={{ marginRight: 310, marginTop: 10 }}>
+            <label style={{ marginRight: 310, marginTop: 1 }}>
               Confirm Password:
             </label>
-            <div class="input-group mb-3">
+            <div class="input-group mb-2">
               <div class="input-group-prepend">
                 <span class="input-group-text"><i class="fa fa-lock fa-lg fa-fw" aria-hidden="true"></i></span>
               </div>

@@ -2,12 +2,14 @@ const c_users = [];
 
 function join_User(id, username, room) {
     const p_user = { id, username, room };
-
     c_users.push(p_user)
+    const playerRooms = c_users.filter(player => player.room === room);
+    
 
-    for (var i = 0; i < c_users.length; i++) {
+    for (var i = 0; i < playerRooms.length; i++) {
         var temp = i;
-        c_users[i]["playerNum"] = temp + 1;
+        playerRooms[i]["playerNum"] = temp + 1;
+        c_users[c_users.indexOf(playerRooms[i])]["playerNum"] = temp + 1;
     }
 
 

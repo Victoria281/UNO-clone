@@ -65,15 +65,15 @@ app.use((error, req, res, next) => {
 });
 
 
-const activeUsers = new Set();
-
-
 io.on("connection", (socket) => {
     socket.on("joinRoom", ({ username, roomname }) => {
         const clients = io.sockets.adapter.rooms.get(roomname);
-
+        console.log(clients)
         if (clients != undefined) {
+            console.log(clients.size )
+
             if (clients.size >= 2) {
+                console.log("user exceeds")
                 socket.emit("tooMuchUsers", {
                     message: "Room is Full"
                 });

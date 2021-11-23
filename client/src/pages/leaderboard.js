@@ -1,9 +1,7 @@
 import React, { Fragment, useEffect, useState } from "react";
 import "../css/leaderboard.css";
-import crownImage from "../img/pepicons_crown.png";
+import crownImage from "../icons/pepicons_crown.png";
 import Confetti from 'react-confetti';
-// import medalImage2 from "../img/2nd-place-medal.png";
-// import medalImage3 from "../img/3rd-place-medal.png";
 
 const Leaderboard = () => {
     const [users, setUsers] = useState([]);    

@@ -11,7 +11,6 @@ import ProfilePage from "./pages/profile";
 import LeaderboardPage from "./pages/leaderboard";
 import Room from "./pages/multiplayer/room";
 import MultiPlayer from "./pages/multiplayer/multiplayer";
-import Process from "./pages/multiplayer/process";
 
 import { NavLink } from 'react-router-dom'
 import io from "socket.io-client";
@@ -21,16 +20,11 @@ const socket = io.connect('http://localhost:5000');
 function Appmain(props) {
   return (
     <React.Fragment>
-      <div className="right">
         <MultiPlayer
           username={props.match.params.username}
           roomname={props.match.params.roomname}
           socket={socket}
         />
-      </div>
-      <div className="left">
-        <Process />
-      </div>
     </React.Fragment>
   );
 }
