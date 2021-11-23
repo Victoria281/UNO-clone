@@ -146,8 +146,6 @@ const Profile = () => {
     }
     return (
       <div>
-        <h6>Change Password</h6>
-        <br />
         <p>
           <input
             type="password"
@@ -169,13 +167,13 @@ const Profile = () => {
         <p>
           <input
             type="password"
-            placeholder="Confirm Password"
+            placeholder="Confirm New Password"
             id="p3"
             class="password"
             onChange={(e) => { setCheckPassword(e.target.value) }}
           />
         </p>
-        <input type="submit" onClick={handlePasswordChange} />
+        <input className="btn btn-danger" type="submit" onClick={handlePasswordChange} />
         <br />
         <br />
       </div>
@@ -184,90 +182,99 @@ const Profile = () => {
 
   return (
     <Fragment>
-      <div id="root">
-        <div class="gameProfileBody">
-          <h2>Profile</h2>
-          <br />
-
-          <ProfileModal />
-
-          <div class="gameProfile shadowing">
-            <div className="row">
-
-              <div className="col-4">
-                <div
-                  class="mainIconBorder"
-                  data-toggle="modal"
-                  data-target="#myModal"
-                >
-                  <img
-                    class="img-responsive mainIcon"
-                    src={"https://uno-clone.herokuapp.com/api/uno/profile_icons/" + userInfo.profileicon + ".png"}
-                  />
-
-                  <div class="middle">
-                    <div class="text">Edit</div>
-                  </div>
-                </div>
-
-              </div>
-              <div className="col-8">
-                <p class="username">{userInfo.username}</p>
-                <p class="email">{userInfo.email}</p>
-                {/* What is this */}
-                <div class="changeInfo">
-                  <input
-                    type="password"
-                    value=""
-                    placeholder="Enter Password"
-                    id="p"
-                    class="password"
-                    hidden
-                  />
-                  <input type="submit" hidden />
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="row no-gutters">
-            <div id="accordion" className="w-100">
-              {/* Change Password */}
-              <div class="card">
-                <div class="card-header">
-                  <a class="collapsed card-link text-dark" data-toggle="collapse" href="#collapseTwo">
-                  <i class="fa fa-lock"></i>    Security
-                  </a>
-                </div>
-                <div id="collapseTwo" class="collapse" data-parent="#accordion">
-                  <div class="card-body">
-                  <ChangePassword />
-                  </div>
-                </div>
-              </div>
-
-              {/* Game Statistics */}
-              <div class="card">
-                <div class="card-header">
-                  <a class="collapsed card-link text-dark" data-toggle="collapse" href="#collapseThree">
-                  <i class="fa fa-line-chart"></i>    Game Statistics
-                  </a>
-                </div>
-                <div id="collapseThree" class="collapse" data-parent="#accordion">
-                  <div class="card-body">
-                  <h6>Highest Score</h6>
-                    <div class="scoreBorder">
-                        <p>{userInfo.score}</p>
-                        <p>
-                        Highest score attained at <br /> {userInfo.created_by}
-                      </p>
+      <div id="root">      
+          <div class="gameProfileBody py-4">
+              <ProfileModal />
+              <div class="row no-gutters">
+                <div id="accordion" className="w-100">
+                  {/* Profile */}
+                  <div class="card my-3">
+                    <div id="headerOne" class="card-header d-flex justify-content-between" data-toggle="collapse" href="#collapseOne">
+                      <a class="collapsed card-link text-dark">
+                        <i class="fa fa-address-card-o"></i>    Profile
+                      </a>
+                      <i class="fa fa-arrow-down p-1"></i>
+                    </div>
+                    <div id="collapseOne" class="collapse show" data-parent="#accordion">
+                      <div  id="bodyOne" class="card-body">
+                <div className="row">
+                  <div className="col-4">
+                    <div
+                      class="mainIconBorder"
+                      data-toggle="modal"
+                      data-target="#myModal"
+                    >
+                      <img
+                        class="img-responsive mainIcon"
+                        src={"https://uno-clone.herokuapp.com/api/uno/profile_icons/" + userInfo.profileicon + ".png"}
+                      />
+    
+                      <div class="middle">
+                        <div class="text">Edit</div>
+                      </div>
                     </div>
                   </div>
+                  <div className="col-8 py-2">
+                    <div className="my-auto">
+                      <h5>Username:</h5><p class="username"> {userInfo.username}</p>
+                      <h5>Email:</h5><p class="email">{userInfo.email}</p>
+                    </div>
+                    {/* What is this */}
+                    <div class="changeInfo">
+                      <input
+                        type="password"
+                        value=""
+                        placeholder="Enter Password"
+                        id="p"
+                        class="password"
+                        hidden
+                      />
+                      <input type="submit" hidden />
+                    </div>
                 </div>
               </div>
+                      </div>
+                    </div>
+                  </div>
+    
+                  {/* Change Password */}
+                  <div class="card my-3">
+                    <div id="headerTwo" class="card-header d-flex justify-content-between" data-toggle="collapse" href="#collapseTwo">
+                      <a class="collapsed card-link text-dark" >
+                      <i class="fa fa-lock"></i>    Change Password
+                      </a>
+                      <i class="fa fa-arrow-down p-1"></i>
+                    </div>
+                    <div id="collapseTwo" class="changePassword collapse" data-parent="#accordion">
+                      <div id="bodyTwo" class="card-body">
+                      <ChangePassword />
+                      </div>
+                    </div>
+                  </div>
+    
+                  {/* Game Statistics */}
+                  <div class="card my-3">
+                    <div id="headerThree" class="card-header d-flex justify-content-between" data-toggle="collapse" href="#collapseThree">
+                      <a class="collapsed card-link text-dark" >
+                      <i class="fa fa-line-chart"></i>    Game Statistics
+                      </a>
+                      <i class="fa fa-arrow-down p-1"></i>
+                    </div>
+                    <div id="collapseThree" class="collapse" data-parent="#accordion">
+                      <div id="bodyThree" class="card-body">
+                      <h6>Highest Score</h6>
+                        <div class="scoreBorder">
+                            <p>{userInfo.score}</p>
+                            <p>
+                            Highest score attained at <br /> {userInfo.created_by}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+            </div> 
             </div>
           </div>
-        </div>
       </div>
     </Fragment>
   );
