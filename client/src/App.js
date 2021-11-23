@@ -1,16 +1,30 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useState, useEffect } from "react";
 
 //components
 import GamePage from "./pages/game";
 import HomePage from "./pages/home";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import EndPage from "./pages/end";
+import AccountPage from "./pages/account";
+import RegisterPage from "./pages/register";
+import ProfilePage from "./pages/profile";
+import LeaderboardPage from "./pages/leaderboard";
+import Music from "./components/Music";
+import { NavLink } from 'react-router-dom'
 
-export default function App() {
+const App=() =>{
+  const [loggedIn, setLoggedIn] = useState(localStorage.getItem("userid"));
+  useEffect(() => {
+        setInterval(() => {
+            const userid = localStorage.getItem("userid");
+            setLoggedIn(userid);
+            }, [])
+    }, 5000);
+
   return (
     <Router>
       <div>
-        <nav className="navbar navbar-expand-lg navbar-light bg-light">
+        <nav className="navbar navbar-expand-sm navbar-light">
           <button
             className="navbar-toggler"
             type="button"
@@ -22,23 +36,42 @@ export default function App() {
           >
             <span className="navbar-toggler-icon"></span>
           </button>
-          <p className="brand">UNO Clone</p>
+          <p className="brand d-none d-sm-block">
+            <div class="card1"></div>
+            <div class="card2"></div>
+            <p class="logomain">NOU</p>
+            <p class="logosub">uno-clone</p>
+          </p>
           <div className="collapse navbar-collapse" id="navbarTogglerDemo03">
-            <ul className="navbar-nav mr-auto mt-2 mt-lg-0">
-              <li className="nav-item active">
-                <p className="nav-link">
-                  <Link to="/">Home</Link>
-                </p>
+            <ul className="navbar-nav ml-auto mt-2 mt-lg-0">
+              <li className="nav-item active navbarDesign" style={{ background: '#e71e1e' }}>
+
+                <NavLink to="/leaderboard" exact activeClassName="activeIcon"> <div className="borderHover" style={{ borderColor: '#e71e1e' }}><p className="nav-link navBarWord">
+                  Ranks
+                </p></div></NavLink>
+
               </li>
-              <li className="nav-item active">
-                <p className="nav-link">
-                  <Link to="/leaderboard">Leaderboard</Link>
-                </p>
+              <li className="nav-item active navbarDesign" style={{ background: '#1E9FE7' }}>
+
+                <NavLink to="/" exact activeClassName="activeIcon"><div className="borderHover" style={{ borderColor: '#1E9FE7' }}><p className="nav-link navBarWord">
+                  Game
+                </p></div></NavLink>
+
               </li>
-              <li className="nav-item active">
-                <p className="nav-link">
-                  <Link to="/account">Account</Link>
-                </p>
+              <li className="nav-item active navbarDesign" style={{ background: '#46E71E' }}>
+
+                <NavLink to="/profile" exact activeClassName="activeIcon"><div className="borderHover" style={{ borderColor: '#46E71E' }}><p className="nav-link navBarWord">
+                  Profile
+                </p></div></NavLink>
+
+              </li>
+              <li className="nav-item active navbarDesign" style={{ background: '#F5F93C' }}>
+                <Account isLoggedIn={loggedIn}/>
+              </li>
+              <li className="nav-item active navbarDesign" style={{ background: '#FFB967' }}>
+                <div className="borderHover" style={{ borderColor: '#FFB967' }}><p className="nav-link navBarWord">
+                <Music/>
+                </p></div>
               </li>
             </ul>
           </div>
@@ -46,29 +79,38 @@ export default function App() {
 
         <Switch>
           <Route exact path="/" render={(props) => <HomePage {...props} />} />
-          <Route
-            exact
-            path="/game"
-            render={(props) => <GamePage {...props} />}
-          />
+          <Route exact path="/game" render={(props) => <GamePage {...props} />} />
           <Route exact path="/end" render={(props) => <EndPage {...props} />} />
-          <Route
-            exact
-            path="/dashboard"
-            render={(props) => <Home {...props} />}
-          />
-          <Route exact path="/login" render={(props) => <Home {...props} />} />
-          <Route exact path="/signup" render={(props) => <Home {...props} />} />
-          <Route exact path="/logout" render={(props) => <Home {...props} />} />
+          <Route exact path="/login" render={(props) => <AccountPage {...props} />} />
+          <Route exact path="/register" render={(props) => <RegisterPage {...props} />} />
+          <Route exact path="/profile" render={(props) => <ProfilePage {...props} />} />
+          <Route exact path="/leaderboard" render={(props) => <LeaderboardPage {...props} />} />
+          <Route exact path="/logout" render={(props) => <Logout />} />
         </Switch>
       </div>
     </Router>
   );
 }
-function Home() {
-  return (
-    <div>
-      <h2>Home</h2>
-    </div>
-  );
+function Logout() {
+  localStorage.removeItem("userid");
+  localStorage.removeItem("token");
+  window.location = '/';
 }
+function Account(props) {
+  if (props.isLoggedIn !== null) {
+    return (
+      <NavLink to="/logout" exact activeClassName="activeIcon"><div className="borderHover" style={{ borderColor: '#F5F93C' }}><p className="nav-link navBarWord">
+        Logout
+      </p></div></NavLink>
+    );
+  } else {
+    return (
+      <NavLink to="/login" exact activeClassName="activeIcon"><div className="borderHover" style={{ borderColor: '#F5F93C' }}><p className="nav-link navBarWord">
+        Login
+      </p></div></NavLink>
+    );
+  }
+}
+
+
+export default App;
