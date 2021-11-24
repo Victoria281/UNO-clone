@@ -47,83 +47,8 @@ const MultiPlayer = ({ username, roomname, socket }) => {
   const dispatchProcess = (encrypt, msg, cipher) => {
     dispatch(secure_action(encrypt, msg, cipher));
   };
-  const changeInput = (e) => {
-    setTextingMsg(e.target.value)
-  }
-  const ChatRoom = () => {
 
-    return (
-      <div>
-        <div className="chatOpenModal" onClick={() => { setChatOpen(true);}}>
-        <img
-                className="img-responsive"
-                style={{ width: 100 }}
-                src={ChatIcon}
-                alt="logo"
-              />
-        </div>
-        <Modal
-          isOpen={chatOpen}
-          className="chatroom"
-        >
-          <div class="row no-gutters chatheader">
-            <div class="col-2">
-              <img
-                className="img-responsive"
-                style={{ width: 40 }}
-                src={ProfileIcon}
-                alt="logo"
-              />
-            </div>
-            <div class="col-8">
-              <p>{username} in {roomname}</p>
-            </div>
-            <div class="col-2">
-              <button style={{backgroundColor: "#1B7CB1"}} onClick={() => { setChatOpen(false); }}>Close</button>
-            </div>
-          </div>
-          <div className="chatbody">
-            {messages.map((i) => {
-              if (i.username === username) {
-                return (
-                  <div className="mymessage">
-                    <p>{i.text}</p>
-                  </div>
-                );
-              } else if (i.username === "system") {
-                return (
-                  <div className="systemMessage">
-                    <p>{i.text}</p>
-                  </div>
-                );
-              } else {
-                return (
-                  <div className="othermessage">
-                    <p>{i.text} </p>
-                  </div>
-                );
-              }
-            })}
-            <div ref={messagesEndRef} />
-          </div>
-          <div className="chatsend">
 
-            <input
-              key="inputbutton"
-              placeholder="Type a message"
-              value={textingMsg}
-              onChange={(e) => changeInput(e)}
-              onKeyPress={(e) => {
-                if (e.key === "Enter") {
-                  sendData();
-                }
-              }}
-            ></input>
-            <button onClick={sendData}>&gt;&gt;</button>
-          </div>
-        </Modal></div>
-    )
-  }
 
   const sendData = () => {
     if (textingMsg !== "") {
@@ -397,7 +322,7 @@ const MultiPlayer = ({ username, roomname, socket }) => {
         break;
     }
 
-    if (cardInfo.values !== "13" || cardInfo.values !== "14") {
+    if (cardInfo.values !== "13" && cardInfo.values !== "14") {
       socket.emit('updateGameInfo', {
         mainDeck: nmaindeck,
         used: used,
@@ -573,7 +498,7 @@ const MultiPlayer = ({ username, roomname, socket }) => {
                 unoBtn: pressUnoBtn,
                 playerdeck: players,
                 current: current,
-                
+
               })
             }
 
@@ -585,7 +510,7 @@ const MultiPlayer = ({ username, roomname, socket }) => {
     }
   };
 
-  const MainDeck = () => {
+  const MainDeck = ({ identity }) => {
     const drawCards = () => {
       var drawmaindeck = mainDeck
       var newused = used;
@@ -611,14 +536,25 @@ const MultiPlayer = ({ username, roomname, socket }) => {
     return (
       <div className="multimain">
         <div className="row no-gutters">
+          {turn !== identity &&
           <input
             type="image"
             disabled={ifDraw}
             className="col-8"
             src={"https://uno-clone.herokuapp.com/api/uno/images/Deck.png"}
             style={{ width: 90 }}
-            onClick={drawCards}
           ></input>
+  }
+  {turn === identity &&
+  <input
+    type="image"
+    disabled={ifDraw}
+    className="col-8"
+    src={"https://uno-clone.herokuapp.com/api/uno/images/Deck.png"}
+    style={{ width: 90 }}
+    onClick={drawCards}
+  ></input>
+}
 
           <div className="col-4">
             <div className="row no-gutters">
@@ -650,6 +586,10 @@ const MultiPlayer = ({ username, roomname, socket }) => {
       });
       setMessages([...temp]);
     });
+    socket.on("test", (data) => {
+      console.log("it workedddd")
+      console.log(data)
+    });
 
     socket.on("userNotFound", (data) => {
       alert("Unable to find User")
@@ -665,15 +605,15 @@ const MultiPlayer = ({ username, roomname, socket }) => {
       console.log(data)
       for (var i = 0; i < data.length; i++) {
         console.log(data[i])
-        if (data[i].username === username){
+        if (data[i].username === username) {
           setWhoami(data[i].playerNum);
           break
         }
-    }
+      }
     });
 
     socket.on("changePlayer", (data) => {
-          setWhoami(data.playerNum);
+      setWhoami(data.playerNum);
     });
 
     socket.on('startGame', ({ mainDeck, used, current, playerdeck, turn, usersInRoom }) => {
@@ -760,7 +700,7 @@ const MultiPlayer = ({ username, roomname, socket }) => {
       {usersInRoom >= 2 &&
 
         <div className="multiPlay">
-          <h3 style={{margin: 0}}>You are Player {whoami}</h3>
+          <h3 style={{ margin: 0 }}>You are Player {whoami}</h3>
           <ChooseColorWild />
           <div className="">
 
@@ -787,7 +727,7 @@ const MultiPlayer = ({ username, roomname, socket }) => {
                   current.image_file.slice(8)
                 }
               ></img>
-              <MainDeck />
+              <MainDeck identity={whoami} />
               <div class="deckArea"></div>
             </div>
 
@@ -810,7 +750,78 @@ const MultiPlayer = ({ username, roomname, socket }) => {
 
 
       }
-      <ChatRoom />
+
+
+      <div>
+        <div className="chatOpenModal" onClick={() => { setChatOpen(true); }}>
+          <img
+            className="img-responsive"
+            style={{ width: 100 }}
+            src={ChatIcon}
+            alt="logo"
+          />
+        </div>
+        <Modal
+          ariaHideApp={false}
+          isOpen={chatOpen}
+          className="chatroom"
+        >
+          <div class="row no-gutters chatheader">
+            <div class="col-2">
+              <img
+                className="img-responsive"
+                style={{ width: 40 }}
+                src={ProfileIcon}
+                alt="logo"
+              />
+            </div>
+            <div class="col-8">
+              <p>{username} in {roomname}</p>
+            </div>
+            <div class="col-2">
+              <button style={{ backgroundColor: "#1B7CB1" }} onClick={() => { setChatOpen(false); }}>Close</button>
+            </div>
+          </div>
+          <div className="chatbody">
+            {messages.map((i, index) => {
+              if (i.username === username) {
+                return (
+                  <div key={'p1' + index} className="mymessage">
+                    <p>{i.text}</p>
+                  </div>
+                );
+              } else if (i.username === "system") {
+                return (
+                  <div key={'sys' + index} className="systemMessage">
+                    <p>{i.text}</p>
+                  </div>
+                );
+              } else {
+                return (
+                  <div key={'other' + index} className="othermessage">
+                    <p>{i.text} </p>
+                  </div>
+                );
+              }
+            })}
+            <div ref={messagesEndRef} />
+          </div>
+          <div className="chatsend">
+
+            <input
+          key="inputbutton"
+          placeholder="Type a message"
+          value={textingMsg}
+          onChange={(e) => setTextingMsg(e.target.value)}
+          onKeyPress={(e) => {
+            if (e.key === "Enter") {
+              sendData();
+            }
+          }}
+        ></input>
+            <button onClick={sendData}>&gt;&gt;</button>
+          </div>
+        </Modal></div>
 
 
 

@@ -5,18 +5,36 @@ function join_User(id, username, room) {
     c_users.push(p_user)
     const playerRooms = c_users.filter(player => player.room === room);
     
+    if (playerRooms.length >=3){
+        playerRooms = playerRooms.slice(0,2);
+    }
 
+    var userExists = false;
     for (var i = 0; i < playerRooms.length; i++) {
         var temp = i;
         playerRooms[i]["playerNum"] = temp + 1;
         c_users[c_users.indexOf(playerRooms[i])]["playerNum"] = temp + 1;
+        if (playerRooms[i]["username"] === username){
+            userExists = true
+        }
     }
 
+    if (userExists === false){
+        p_user = "full"
+    }
 
     console.log(c_users, "users");
-    p_user["playerNum"] = c_users[c_users.length - 1]["playerNum"]
-
     return p_user;
+}
+
+function get_Excess_Players(room){
+    const playerRooms = c_users.filter(player => player.room === room);
+    return playerRooms.slice(2, playerRooms.length);
+}
+
+function get_Users_In_Room(room){
+    const playerRooms = c_users.filter(player => player.room === room);
+    return playerRooms.length;
 }
 
 console.log("user out", c_users);
@@ -51,4 +69,6 @@ module.exports = {
     get_Current_User,
     user_Disconnect,
     get_All_Users,
+    get_Excess_Players,
+    get_Users_In_Room
 };
