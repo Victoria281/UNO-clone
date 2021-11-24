@@ -3,7 +3,7 @@
     height: 60%;
     width: 60%;
     background-color: black;
-    border-radius: 0.6rem;
+    border-radius: 5rem;
     border: none;
     margin-left: 20%;
     margin-top: 10%;
@@ -13,6 +13,13 @@
     height: 80%;
     width: 70%;
     margin-top: 40%;
+    margin-left: 70%;
+}
+
+.loseicon{
+    height: 95%;
+    width: 85%;
+    margin-top: 25%;
     margin-left: 70%;
 }
   
@@ -36,12 +43,12 @@
 }
   
 .HomeBtn {
-    background-color: #ffb967;
+    background-color: whitesmoke;
     border: none;
     border-radius: 50%;
     color: white;
     padding: 12px 16px;
-    font-size: 30px;
+    font-size: 40px;
     margin-left: 15%;
 }
   
@@ -51,10 +58,10 @@
     border-radius: 50%;
     color: white;
     padding: 12px 16px;
-    font-size: 30px;
+    font-size: 40px;
     margin-left: 30%;
 }
   
 .logoStyle {
-    height: 50px;
+    height: 70px;
 }
