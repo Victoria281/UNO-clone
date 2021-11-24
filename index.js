@@ -9,7 +9,6 @@ const ApiRouter = require('./src/controller/api');
 const http = require("http");
 const socketio = require("socket.io");
 const { get_Current_User, user_Disconnect, join_User, get_All_Users } = require("./users");
-const { Console } = require('console');
 
 
 
@@ -24,7 +23,7 @@ app.use(express.json());
 const server = http.createServer(app);
 const io = socketio(server, {
     cors: {
-        origin: "https://uno-clone.herokuapp.com",
+        origin: "http://localhost:3000",
         methods: ["GET", "POST"],
         credentials: true
     }
@@ -167,6 +166,6 @@ io.on("connection", (socket) => {
     });
 });
 
-server.listen(PORT, () => {
+server.listen(process.env.PORT || PORT, () => {
     console.log(`App running on port ${PORT}`)
 })
