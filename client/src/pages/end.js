@@ -1,10 +1,12 @@
 import React, { Fragment, useEffect, useState } from "react";
+import Modal from "react-modal";
+import "../css/end.css";
+import Trophy from "../endGameImages/trophy.png";
+import Lose from "../endGameImages/loseicon.png";
+import Retry from "../endGameImages/retry.jpg";
+import Home from "../endGameImages/home.png";
 
-import shuffleCards from "../components/shuffle";
-import "../styles.css";
-
-import { useHistory } from "react-router-dom";
-const End = () => {
+const End = (props) => {
   const [winner, setWinner] = useState("");
   const [cardsLeft, setCardsLeft] = useState({
     player1: 0,
@@ -14,6 +16,72 @@ const End = () => {
   });
   const [points, setPoints] = useState(0);
   console.log(props.location.state);
+  const [gameresult, setGameResult] = useState(false);
+
+  const [userHighestScores, setuserHighestScores] = useState([]);
+  const [player1win, setWin] = useState(false);
+
+  const EndGameScreen = () => (
+    <div>
+      <Modal isOpen={gameresult} className="gameScreen">
+        <div className="row">
+          <div className="col-3">
+            {player1win ? <img
+              className="trophy"
+            src={Trophy}
+            />
+              :<img
+              className="loseicon"
+            src={Lose}
+            />
+            }
+          </div>
+          <div className="col-9">
+            {player1win ? <div className="headerW">You Won</div>
+              : <div className="headerW">You Lose</div>
+            }
+            {player1win ? <div className="actionsW">+{points} Points</div>
+              : <div className="actionsW">Current HighScore: {userHighestScores[0]}</div>
+            }
+            {player1win ? <div className="actionsW">New HighScore: {points}</div>
+              : <div className="actionsW">Try Again...</div>
+            }
+          </div>
+        </div>
+
+        <div className="row btns">
+          <a
+            className="RetryBtn"
+            href="./game"
+            onClick={() => {
+              setGameResult(false);
+            }}
+          >
+            <img
+              className="logoStyle"
+              src={Retry}
+              alt="logo"
+            ></img>
+          </a>
+
+          <a
+            className="HomeBtn"
+            href="./"
+            onClick={() => {
+              setGameResult(false);
+            }}
+          >
+            <img
+              className="logoStyle"
+              src={Home}
+              alt="logo"
+            ></img>
+          </a>
+        </div>
+      </Modal>
+    </div>
+  );
+
   const getWinner = () => {
     const players = props.location.state.players;
     var win = "";
@@ -31,16 +99,82 @@ const End = () => {
     setCardsLeft(cardsLeft);
     setPoints(tempPts);
     setWinner(win);
+    setGameResult(true);
+    if(winner=="player1"){
+      setWin(true);
+    }
   };
+
+  // Update to highest Score for Players
+  const updatePlayerHighestScore = async () => {
+    try {
+      const userid = localStorage.getItem('userid')
+      const response = await fetch(
+        `https://uno-clone.herokuapp.com/api/uno/leaderboard/update/${userid}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          score: points
+        })
+      });
+    } catch (err) {
+      console.error(err.message);
+    }
+  };
+
+  // Insert score if user has no prev score
+  const insertNewScore = async () => {
+    try {
+      const userid = localStorage.getItem('userid')
+      const response = await fetch(
+        `https://uno-clone.herokuapp.com/api/uno/leaderboard/insert/${userid}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          score: points
+        })
+      });
+    } catch (err) {
+      console.error(err.message);
+    }
+  };
+
+  // Get User Highest Score
+  const userHighestScore = async () => {
+    try {
+      const uid = localStorage.getItem('userid')
+      const response = await fetch(
+        `https://uno-clone.herokuapp.com/api/uno/leaderboard/user/${uid}`
+      );
+      const jsonData = await response.json();
+      var userHighScore = jsonData.score;
+      console.log(userHighScore)
+      setuserHighestScores(userHighScore[0]);
+
+      if(userHighScore[0].score<points){
+        updatePlayerHighestScore();
+        console.log("Update")
+      }else if(userHighScore[0].score==null){
+        insertNewScore();
+        console.log("Added")
+      }
+    } catch (err) {
+      console.error(err.message);
+    }
+  };
+
   useEffect(() => {
     getWinner();
-  }, []);
+    userHighestScore();
+  }, [points]);
+
   return (
     <div className="container">
-      <h1>Winner</h1>
-      <p>{winner}</p>
-      <h1>Points</h1>
-      <p>{points}</p>
+      <EndGameScreen />
     </div>
   );
 };
