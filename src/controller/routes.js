@@ -276,7 +276,7 @@ app.put('/user/updateinfo/:id', printingDebuggingInfo, function (req, res, next)
     const newusername = req.body.username;
     const newemail= req.body.email;
 
-    User.updateUserIcon(id,newusername,newemail, function (err, result) {
+    User.updateUserInfo(id, newusername, newemail, function (err, result) {
         if (err) {
             if (err === "404") {
                 return next(createHttpError(404, `Not found`));
