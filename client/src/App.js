@@ -17,6 +17,7 @@ import PageRestriction from "./PageRestriction"
 import { NavLink } from 'react-router-dom'
 import io from "socket.io-client";
 
+// const socket = io.connect('https://uno-clone.herokuapp.com');
 const socket = io.connect('http://localhost:5000');
 
 function Appmain(props) {

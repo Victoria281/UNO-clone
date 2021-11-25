@@ -14,7 +14,7 @@ var Auth = {
         try {
             const query = {
                 name: 'login',
-                text: 'SELECT userid, username FROM players WHERE email=$1;',
+                text: 'SELECT * FROM players WHERE email=$1;',
                 values: [email],
             }
 
