@@ -96,9 +96,6 @@
   }
   
   .username {
-    /* width: 60%; */
-    margin-right: 40%;
-    /* margin-top: 5%; */
     border-bottom: 2px solid black;
     font-size: 20px;
   }
@@ -108,10 +105,6 @@
   } */
   
   .email {
-    /* width: 80%; */
-    margin-right: 40%;
-    /* margin-top: 5%;
-    margin-bottom: 5%; */
     border-bottom: 2px solid black;
     font-size: 20px;
   }
@@ -125,9 +118,6 @@
   } */
   
   .changeInfo > input {
-    /* width: 80%; */
-    /* margin-left: 10%;
-    margin-right: 10%; */
     margin-top: 2%;
     border: 0;
     border-bottom: 2px solid black;
