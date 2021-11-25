@@ -10,10 +10,6 @@ import ChatIcon from "../../icons/chatLogo.png"
 
 //gets the data from the action object and reducers defined earlier
 const MultiPlayer = ({ username, roomname, socket }) => {
-  console.log("herere")
-  console.log(username)
-  console.log(roomname)
-  console.log(socket)
   const [whoami, setWhoami] = useState();
   const [usersInRoom, setUsersInRoom] = useState();
   const [cards, setCards] = useState([]);
@@ -596,24 +592,26 @@ const MultiPlayer = ({ username, roomname, socket }) => {
       window.location = "/";
     });
 
+    socket.on("alreadyConnected", (data) => {
+      alert(data.message)
+      window.location = "/";
+    });
+
     socket.on("tooMuchUsers", (data) => {
       alert("The room is full")
       window.location = "/";
     });
 
     socket.on("getUserPlayerNum", (data) => {
-      console.log(data)
-      for (var i = 0; i < data.length; i++) {
-        console.log(data[i])
-        if (data[i].username === username) {
-          setWhoami(data[i].playerNum);
+      console.log("Received update to change player number")
+      console.log(data.users)
+      for (var i = 0; i < data.users.length; i++) {
+        console.log(data.users[i])
+        if (data.users[i].username === username) {
+          setWhoami(data.users[i].playerNum);
           break
         }
       }
-    });
-
-    socket.on("changePlayer", (data) => {
-      setWhoami(data.playerNum);
     });
 
     socket.on('startGame', ({ mainDeck, used, current, playerdeck, turn, usersInRoom }) => {

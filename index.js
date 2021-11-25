@@ -65,7 +65,10 @@ app.use((error, req, res, next) => {
 
 
 io.on("connection", (socket) => {
+
+    //user has joined a room
     socket.on("joinRoom", ({ username, roomname }) => {
+        //check if there are already 2 ppl in the room
         const clients = get_Users_In_Room(roomname);
         console.log(clients)
         if (clients >= 2) {
@@ -73,42 +76,48 @@ io.on("connection", (socket) => {
             socket.emit("tooMuchUsers", {
                 message: "Room is Full"
             });
-        }
-
-        const p_user = join_User(socket.id, username, roomname);
-        if (p_user === "full") {
-            socket.emit("tooMuchUsers", {
-                message: "Room is Full"
-            });
         } else {
-            socket.emit("message", {
-                userId: p_user.id,
-                username: "system",
-                text: `Welcome ${p_user.username}`,
-            });
+            //add user to the list of users
+            const p_user = join_User(socket.id, username, roomname);
+            console.log(typeof p_user)
+            if (typeof p_user !== 'object') {
+                socket.emit("alreadyConnected", {
+                    message: "You are connected to another Room! Please try again!"
+                });
+                const c_user = get_All_Users(p_user);
+                if (c_user) {
+                    console.log("p_user")
+                    console.log(p_user)
+                    console.log(c_user)
+                    socket.to(p_user).emit("getUserPlayerNum", {users: c_user});
+                }
 
+            } else {
+                //show message to room
+                socket.emit("message", {
+                    userId: p_user.id,
+                    username: "system",
+                    text: `Welcome ${p_user.username}`,
+                });
+
+                socket.join(p_user.room);
+
+                const c_user = get_All_Users(p_user);
+                if (c_user) {
+                    console.log("start update")
+                    console.log(p_user)
+                    console.log(c_user)
+                    socket.to(p_user.room).emit("getUserPlayerNum", {users: c_user});
+                }
+
+                socket.broadcast.to(p_user.room).emit("message", {
+                    userId: p_user.id,
+                    username: "system",
+                    newuser: p_user.username,
+                    text: `${p_user.username} has joined the chat`,
+                });
+            }
         }
-
-
-        socket.join(p_user.room);
-
-        socket.emit("message", {
-            userId: p_user.id,
-            username: "system",
-            text: `Welcome ${p_user.username}`,
-        });
-
-        const c_user = get_All_Users();
-        if (c_user)
-            socket.emit('getUserPlayerNum', c_user)
-
-
-        socket.broadcast.to(p_user.room).emit("message", {
-            userId: p_user.id,
-            username: "system",
-            newuser: p_user.username,
-            text: `${p_user.username} has joined the chat`,
-        });
     });
 
 
@@ -119,6 +128,9 @@ io.on("connection", (socket) => {
 
 
         if (p_user) {
+            const c_user = get_All_Users(p_user.room);
+            if (c_user)
+                socket.emit('getUserPlayerNum', {users: c_user})
 
             const clients = get_Users_In_Room(p_user.room);
             console.log("clients")
@@ -128,18 +140,8 @@ io.on("connection", (socket) => {
             const excess_players = get_Excess_Players(p_user.room);
             console.log(excess_players)
             if (excess_players.length === 0) {
-                console.log("start")
-                console.log(p_user.room === 'qwe')
-                console.log(p_user.room)
-                socket.emit('test', { hi: "hi" })
-                socket.to(p_user.room).emit('test', { hi: "hi" })
-                io.to('qwe').emit('test', { hi: "hi" })
-                io.to('qwe').emit('test', { hi: "next" })
-                io.to(p_user.room).emit('test', { hi: "third" })
                 io.to(p_user.room).emit('startGame', newState)
-                console.log("why")
             } else {
-                console.log("its not here")
                 const checkExtra = excess_players.filter(player => player.username === p_user.username);
                 if (checkExtra.length === 1) {
                     socket.emit("tooMuchUsers", {
@@ -164,10 +166,7 @@ io.on("connection", (socket) => {
 
 
 
-    //user sending message
     socket.on("chat", (text) => {
-        //gets the room user and the message sent
-        console.log("reached here")
         const p_user = get_Current_User(socket.id);
         console.log(p_user)
         io.to(p_user.room).emit("message", {
@@ -177,7 +176,7 @@ io.on("connection", (socket) => {
         });
     });
 
-    //when the user exits the room
+    //when the user gone
     socket.on("disconnect", () => {
         console.log("disconnected")
         const p_user = user_Disconnect(socket.id);
@@ -188,9 +187,9 @@ io.on("connection", (socket) => {
                 username: p_user.username,
                 text: `${p_user.username} has left the room`,
             });
-            io.to(p_user.room).emit("changePlayer", {
-                playerNum: p_user.playerNum,
-            });
+            const c_user = get_All_Users(p_user.room);
+            if (c_user)
+                socket.to(p_user.room).emit('getUserPlayerNum', {users: c_user})
         }
     });
 
