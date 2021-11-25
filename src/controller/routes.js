@@ -392,7 +392,7 @@ app.get('/leaderboard/:num', printingDebuggingInfo, function (req, res, next) {
 });
 
 //updateHighestScore
-app.get('/leaderboard/update/:id', printingDebuggingInfo, function (req, res, next) {
+app.put('/leaderboard/update/:id', printingDebuggingInfo, function (req, res, next) {
     const id = req.params.id;
     const score = req.body.score;
 
