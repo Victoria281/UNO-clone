@@ -71,7 +71,7 @@ var LeaderBoard = {
     updateHighestScore: function (score, id, callback) {
         const query = {
             name: 'fetch-user',
-            text: 'UPDATE uno_leaderboard SET score = $1 WHERE userid = $2;',
+            text: 'UPDATE uno_leaderboard SET score = $1, created_by = NOW() WHERE userid = $2;',
             values: [score, id],
         }
 

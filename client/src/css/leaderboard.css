@@ -6,7 +6,7 @@
 
 .leaderboard_body {
     padding: 2%;
-    height: 500px;
+    height: 30%;
     overflow-x: hidden;
     overflow-y: scroll;
 }
@@ -20,30 +20,34 @@
 }
 
 .leaderboard_body::-webkit-scrollbar-thumb {
-    background-color: darkgrey;
+    background-color: rgb(0, 0, 0);
     outline: 1px solid slategrey;
 }
 
 .leaderboard_row {
     border: 1px solid black;
-    background-color: black;
-    color: white;
-    margin-bottom: 30px;
+    background-color: #ffc82580;
+    border-radius: 5px;
+    overflow: hidden;
+    color: black;
+    margin-bottom: 15px;
 }
 
 .leaderboard_row:hover {
     border: 1px solid white;
-    background-color: grey;
+    background-color: #FFC825;
     -webkit-box-shadow: 0 0.5rem 1rem rgba(0, 0, 16, 0.19), 0 0.3rem 0.3rem rgba(0, 0, 16, 0.23);
     box-shadow: 0 0.5rem 1rem rgba(0, 0, 16, 0.19), 0 0.3rem 0.3rem rgba(0, 0, 16, 0.23);
 }
 
 .leaderboard_player {
-    border: 1px solid black;
+    /* border: 1px solid black; */
+    border-radius: 5px;
+    overflow: hidden;
     margin-bottom: 30px;
     -webkit-box-shadow: 0 0.5rem 1rem rgba(0, 0, 16, 0.19), 0 0.3rem 0.3rem rgba(0, 0, 16, 0.23);
     box-shadow: 0 0.5rem 1rem rgba(0, 0, 16, 0.19), 0 0.3rem 0.3rem rgba(0, 0, 16, 0.23);
-    background-image: radial-gradient(red, orange, black);
+    background-color: #FFC825;
 }
 
 .lb1Icons {
@@ -58,13 +62,13 @@
     width: 105px;
     padding: 15px;
     border-radius: 75px;
-    border: 3px solid grey;
+    border: 3px solid gold;
     margin-right: auto;
     margin-left: auto;
 }
 
 .lb2IconBorder {
-    width: 75px;
+    width: 105px;
     padding: 15px;
     border-radius: 75px;
     border: 3px solid grey;
@@ -72,15 +76,43 @@
     margin-left: auto;
 }
 
-.lbuser {
-    text-align: center;
-    font-weight: bold;
+.lb3IconBorder {
+    width: 105px;
+    padding: 15px;
+    border-radius: 75px;
+    border: 3px solid #CD7F32;
+    margin-right: auto;
+    margin-left: auto;
 }
 
-.borderDesign {
-    border: 1px solid black;
-    padding: 10px 5px;
-    width: 50%;
+.lbuserheader {
+    margin-top: -25px;
+    text-align:center;
+    font-weight: bold;
+    color: black;
+}
+
+.lbuser {
+    margin-top: -20px;
+    text-align:center;
+    font-weight: bold;
+    color: black;
+}
+
+#podiumPillar1{
+    position: absolute;
+    bottom:65px; 
+    animation: growth1 3s 1;
+    height: 100%;
+    width: 100%
+}
+
+
+.borderDesign1 {
+    overflow: hidden;
+    border-radius: 10px;
+    background-color: white;
+    height: 100%;
     margin-right: auto;
     margin-left: auto;
     margin-bottom: 10px;
@@ -89,12 +121,106 @@
     box-shadow: 0 0.5rem 1rem rgba(0, 0, 16, 0.19), 0 0.3rem 0.3rem rgba(0, 0, 16, 0.23);
 }
 
-.borderDesign1 {
-    border: 1px solid black;
-    padding: 20px 10px;
-    width: 40%;
+#podiumPillar2{
+    position: absolute;
+    bottom:0px; 
+    animation: growth2 3s 1;
+    height: 75%;
+    width: 100%
+}
+
+.borderDesign2 {
+    overflow: hidden;
+    border-radius: 10px;
+    background-color: white;
+    height: 100%;
     margin-right: auto;
     margin-left: auto;
+    margin-bottom: 10px;
+    margin-top: 10px;
     -webkit-box-shadow: 0 0.5rem 1rem rgba(0, 0, 16, 0.19), 0 0.3rem 0.3rem rgba(0, 0, 16, 0.23);
     box-shadow: 0 0.5rem 1rem rgba(0, 0, 16, 0.19), 0 0.3rem 0.3rem rgba(0, 0, 16, 0.23);
+}
+
+#podiumPillar3{
+    position: absolute;
+    bottom:0px; 
+    animation: growth3 3s 1;
+    height: 50%;
+    width: 100%
+}
+
+.borderDesign3 {
+    overflow: hidden;
+    border-radius: 10px;
+    background-color: white;
+    height: 100%;
+    margin-right: auto;
+    margin-left: auto;
+    margin-bottom: 10px;
+    margin-top: 10px;
+    -webkit-box-shadow: 0 0.5rem 1rem rgba(0, 0, 16, 0.19), 0 0.3rem 0.3rem rgba(0, 0, 16, 0.23);
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 16, 0.19), 0 0.3rem 0.3rem rgba(0, 0, 16, 0.23);
+}
+
+#triangle1{
+    background-color: gold;
+    height:70px;
+    width:80%;
+    clip-path: polygon(0 0, 100% 100%, 100% 0);
+}
+#triangle2{
+    background-color: grey;
+    height:70px;
+    width:80%;
+    clip-path: polygon(0 0, 100% 100%, 100% 0);
+}
+#triangle3{
+    background-color: #CD7F32;
+    height:70px;
+    width:80%;
+    clip-path: polygon(0 0, 100% 100%, 100% 0);
+}
+
+@keyframes growth1{
+    from {
+        height :0px
+    } to {
+        height: 100%
+    }
+}
+
+@keyframes growth2{
+    from {
+        height :0px
+    } to {
+        height: 75%
+    }
+}
+
+@keyframes growth3{
+    from {
+        height :0px
+    } to {
+        height: 50%
+    }
+}
+
+#crown{
+    margin-bottom: -15px;
+    width: 80px;
+}
+/* 
+#medal2{
+    width: 80px;
+} */
+
+/*
+#medal3{
+    margin-bottom: -15px;
+    width: 80px;
+} */
+
+#podium {
+    height: 10%;
 }

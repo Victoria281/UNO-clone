@@ -165,7 +165,8 @@ app.post('/login', printingDebuggingInfo, function (req, res, next) {
                             user_id: results[0].userid,
                             token: jwt.sign({ id: results[0].userid }, config, {
                                 expiresIn: 86400
-                            })
+                            }),
+                            username: results[0].username
                         };
                         return res.status(200).json(data);
                     } else {
@@ -255,6 +256,27 @@ app.put('/user/icon/:id', printingDebuggingInfo, function (req, res, next) {
     const icon = req.body.icon;
 
     User.updateUserIcon(id, icon, function (err, result) {
+        if (err) {
+            if (err === "404") {
+                return next(createHttpError(404, `Not found`));
+            }
+            else {
+                return next(err);
+            }
+        } else {
+            return res.status(204).json({ statusMessage: 'Completed update.' });
+        }
+    });
+
+});
+
+//updateUserInfo
+app.put('/user/updateinfo/:id', printingDebuggingInfo, function (req, res, next) {
+    const id = req.params.id;
+    const newusername = req.body.username;
+    const newemail= req.body.email;
+
+    User.updateUserIcon(id,newusername,newemail, function (err, result) {
         if (err) {
             if (err === "404") {
                 return next(createHttpError(404, `Not found`));
@@ -392,7 +414,7 @@ app.get('/leaderboard/:num', printingDebuggingInfo, function (req, res, next) {
 });
 
 //updateHighestScore
-app.get('/leaderboard/update/:id', printingDebuggingInfo, function (req, res, next) {
+app.put('/leaderboard/update/:id', printingDebuggingInfo, function (req, res, next) {
     const id = req.params.id;
     const score = req.body.score;
 

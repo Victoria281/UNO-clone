@@ -1,0 +1,312 @@
+html, body {
+  margin: 0;
+  height: 100%;
+  overflow: hidden;
+}
+
+.gamePage {
+  height: 100%;
+}
+
+.allcards {
+  width: 100%;
+}
+
+.botTxttop{
+  transform: rotate(180deg) translateX(20%);
+}
+
+.cardsWidthtop{
+  width: 100%;
+}
+
+.botcardstop {
+  width: 40%;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 2%;
+  justify-content: center;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(10px, max-content));
+}
+
+.cardstop {
+  width: 5em;
+  height: 2.4em;
+  padding: 3px;
+  margin: 2px;
+  transform: rotate(183deg);
+}
+
+.botTxtleft{
+  transform: rotate(90deg) translateY(-70px) translateX(-90%);
+}
+
+.botcardsleft {
+  margin-top: 20%;
+  width: 60%;
+  height: 20%;
+  margin-right: 0;
+  margin-left: auto;
+}
+
+.cardsleft {
+  width: 5em;
+  height: 3em;
+  padding: 3px;
+  margin: 2px;
+  transform: rotate(93deg);
+}
+
+.botTxtright{
+  transform: rotate(-90deg) translateY(-100px) translateX(60%);
+}
+
+.botcardsright {
+  margin-top: 20%;
+  width: 60%;
+  height: 20%;
+  margin-left: auto;
+  margin-right: 50px;
+}
+
+.cardsright {
+  width: 5em;
+  height: 3em;
+  padding: 3px;
+  margin: 2px;
+  transform: rotate(-87deg);
+}
+
+#middle {
+  width: 40%;
+  margin: auto;
+  border: 2px solid black;
+  padding: 15px;
+  border-radius: 175px;
+  border: 3px solid grey;
+  filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+}
+
+.currentcard:first-child {
+  transform: rotate(-10deg);
+  z-index: -9;
+}
+
+.currentcards {
+  width: 90px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 2%;
+  justify-content: center;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(10px, max-content));
+}
+
+
+
+.maindeck {
+  margin-right: 20%;
+  margin-top: 20%;
+}
+
+.skipBtn {
+  position: absolute;
+  bottom: -40%;
+  right: -60%;
+}
+
+.nextbtn {
+  width: 100px;
+  height: 40px;
+  margin: 10px 20px;
+  -moz-border-radius: 100px / 50px;
+  -webkit-border-radius: 100px / 50px;
+  border-radius: 100px / 50px;
+  transform: matrix(0.99, 0.11, -0.14, 0.99, 0, 0);
+}
+
+.nextbtn>p {
+  font-family: "RubikOne";
+  font-size: 25px;
+  color: black;
+  -webkit-text-stroke: 0.4px black;
+  -webkit-text-fill-color: white;
+  transform: rotate(-15deg);
+}
+
+.noskip {
+  color: black;
+}
+
+button:focus {
+  outline: none;
+}
+
+button {
+  border: none;
+}
+
+.bottomRow {
+  position: sticky;
+  bottom: 0;
+}
+
+.playercards {
+  width: 70%;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 2%;
+  justify-content: center;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(10px, max-content));
+}
+
+.pcards {
+  filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+}
+
+.nouBtn {
+  position: absolute;
+  bottom: 30%;
+  left: -10%;
+  width: 100px;
+  height: 40px;
+  margin: 10px 20px;
+  -moz-border-radius: 100px / 50px;
+  -webkit-border-radius: 100px / 50px;
+  border-radius: 100px / 50px;
+  background: #EA323C;
+  transform: matrix(0.99, 0.11, -0.14, 0.99, 0, 0);
+}
+
+.nouBtn>p {
+  font-family: "RubikOne";
+  font-size: 25px;
+  color: black;
+  -webkit-text-stroke: 0.4px black;
+  -webkit-text-fill-color: white;
+  transform: rotate(-15deg);
+}
+
+.playerTurn {
+  height: 50%;
+  width: 30%;
+  background-color: #FFC825;
+  filter: drop-shadow(5px 10px 10px rgba(0, 0, 0, 0.507));
+  margin: auto;
+  margin-left: 35%;
+  margin-top: 15%;
+  text-align: center;
+  overflow: hidden;
+  border-radius: 0.6rem;
+  border-width: 0 5rem;
+  border: solid #ffffff;
+}
+
+.playerHeader {
+  color: black;
+  font-size: 20px;
+  font-weight: bold;
+  text-align: center;
+  padding-top: 5%;
+}
+
+.drawCard {
+  height: 30%;
+  width: 50%;
+  background-color: #000000;
+  filter: drop-shadow(5px 10px 10px rgba(0, 0, 0, 0.507));
+  margin: auto;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 15%;
+  text-align: center;
+  overflow: hidden;
+  border: 3px solid #ffffff;
+}
+
+.drawHeader {
+  color: white;
+  font-size: 20px;
+  font-weight: bold;
+  text-align: center;
+  padding-top: 5%;
+}
+
+.drawHeader2 {
+  color: #40B1E5;
+  font-size: 20px;
+  font-weight: bold;
+  text-align: center;
+  padding-top: 5%;
+}
+
+.colorChoose {
+  height: 40%;
+  width: 50%;
+  background-color: #000000;
+  filter: drop-shadow(5px 10px 10px rgba(0, 0, 0, 0.507));
+  margin: auto;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 15%;
+  text-align: center;
+  overflow: hidden;
+  border: 3px solid #ffffff;
+}
+
+.header {
+  color: white;
+  font-size: 35px;
+  text-align: center;
+  padding-top: 5%;
+}
+
+.GreenBtn {
+  position: absolute;
+  width: 39px;
+  height: 58px;
+  background: #33984B;
+  color: #33984B;
+  transform: rotate(13.74deg);
+  margin-right: 15%;
+  overflow: hidden;
+}
+
+.BlueBtn {
+  width: 39px;
+  height: 58px;
+  background: #0098DC;
+  color: #0098DC;
+  transform: rotate(11.1deg);
+  margin-right: 15%;
+  overflow: hidden;
+}
+
+.YellowBtn {
+  width: 39px;
+  height: 58px;
+  background: #FFC825;
+  color: #FFC825;
+  transform: rotate(-10.93deg);
+  margin-right: 15%;
+  overflow: hidden;
+}
+
+.RedBtn {
+  width: 39px;
+  height: 58px;
+  background: #EA323C;
+  color: #EA323C;
+  transform: rotate(-16.13deg);
+  margin-right: 15%;
+  overflow: hidden;
+}
+
+.gamecolorNow{
+  width: 10px;
+  height: 30px;
+  margin-left: 10px;
+  border-radius: 10px;
+}

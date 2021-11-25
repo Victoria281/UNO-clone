@@ -1,24 +1,56 @@
 .gameProfileBody {
-    margin-right: 10%;
-    margin-left: 10%;
+    width: 75%;
+    margin: auto;
     padding-bottom: 5%;
+  }
+
+  .changePassword{
+    height: 220px;
+    overflow-x: hidden;
+    overflow-y: scroll;
   }
   
   .card {
-    display: -webkit-box;
-    display: -ms-flexbox;
-    display: flex;
-    margin: auto;
-    background-color: rgb(255, 255, 255);
-    padding: 0.8rem;
+    background-color:#ff60cf17;
+    backdrop-filter: blur(2px);
+    box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);
   }
-  
+
+  .card-header{
+    background-color: rgb(255, 255, 255);
+  }
+
+  #headerOne{
+    background-color: rgba(234, 58, 58, 0.5);
+  }
+
+  #headerTwo{
+    background-color: rgba(0, 152, 220, 0.5);
+  }
+
+  #headerThree{
+    background-color: rgba(51, 152, 75, 0.5);
+  }
+
+  #bodyOne{
+    background-color: rgba(234, 58, 58, 0.2);
+  }
+
+  #bodyTwo{
+    background-color: rgba(0, 152, 220, 0.2);
+  }
+
+  #bodyThree{
+    background-color: rgba(51, 152, 75, 0.2);
+  }
+
+
   .gameProfile {
     border: 1px solid black;
     background-color: rgb(255, 255, 255);
     padding: 0.8rem;
     border-radius: 10px;
-    margin-left: 10px;
+    /* margin-left: 10px; */
     height: 100%;
   }
   
@@ -45,10 +77,7 @@
     border-radius: 75px;
     border: 3px solid grey;
     width: 120px;
-    margin-left: auto;
-    margin-right: auto;
-    margin-top: 5%;
-  
+    margin: 25px auto 25px;
     position: relative;
   }
   
@@ -67,42 +96,28 @@
   }
   
   .username {
-    width: 60%;
-    margin-left: 20%;
-    margin-right: 20%;
-    margin-top: 5%;
     border-bottom: 2px solid black;
-    text-align: center;
     font-size: 20px;
   }
   
-  .username:hover {
+  /* .username:hover {
     border-bottom: 2px solid red;
-  }
+  } */
   
   .email {
-    width: 80%;
-    margin-left: 10%;
-    margin-right: 10%;
-    margin-top: 5%;
-    margin-bottom: 5%;
     border-bottom: 2px solid black;
-    text-align: center;
     font-size: 20px;
   }
   
-  .email:hover {
+  /* .email:hover {
     border-bottom: 2px solid red;
-  }
+  } */
   /* 
   .changeInfo {
     height: 125px;
   } */
   
   .changeInfo > input {
-    width: 80%;
-    margin-left: 10%;
-    margin-right: 10%;
     margin-top: 2%;
     border: 0;
     border-bottom: 2px solid black;
@@ -234,18 +249,18 @@
   
   .password {
     width: 90%;
-    padding: 15px 12px;
+    padding: 5px 5px;
     margin-bottom: 5px;
     border: 1px solid #e5e5e5;
     border-bottom: 2px solid #ddd;
     background: rgba(255, 255, 255, 0.2) !important;
-    color: #555;
+    color: #000000;
   }
   
   .scoreBorder {
     border: 1px solid #e5e5e5;
     border-radius: 10px;
-    margin: 10% 10%;
+    /* margin: 10% 10%; */
     padding-top: 5%;
     text-align: center;
     font-weight: bold;

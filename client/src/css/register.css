@@ -33,8 +33,9 @@
   #registerBtnTxt{
     transform: rotate(-20deg);
     position: relative;
-    -webkit-text-stroke-width: 1px;
+    -webkit-text-stroke-width: 0.5px;
     -webkit-text-stroke-color: white;
+    font-family: "RubikOne";
   }
 
   #registerBtn{
