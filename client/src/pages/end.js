@@ -41,9 +41,9 @@ const End = (props) => {
               : <div className="headerW">You Lose</div>
             }
             {player1win ? <div className="actionsW">+{points} Points</div>
-              : <div className="actionsW">Current HighScore: {userHighestScores[0]}</div>
+              : <div className="actionsW">Current HighScore: {userHighestScores}</div>
             }
-            {player1win ? <div className="actionsW">New HighScore: {points}</div>
+            {player1win ? <div className="actionsW">HighScore: {userHighestScores}</div>
               : <div className="actionsW">Try Again...</div>
             }
           </div>
@@ -153,7 +153,7 @@ const End = (props) => {
       const jsonData = await response.json();
       var userHighScore = jsonData.score;
       console.log(userHighScore)
-      setuserHighestScores(userHighScore[0]);
+      setuserHighestScores(userHighScore[0].score);
 
       if(userHighScore[0].score<points){
         updatePlayerHighestScore();
