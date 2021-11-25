@@ -77,7 +77,7 @@ var User = {
     updateUserInfo: function (userid, username, email, callback) {
         const query = {
             name: 'updateUserInfo',
-            text: 'UPDATE players SET usenrame=$1,email="$2" WHERE userid=$3',
+            text: 'UPDATE players SET username=$1,email=$2 WHERE userid=$3',
             values: [username,email,userid],
         }
 

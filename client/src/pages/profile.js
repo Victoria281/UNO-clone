@@ -215,7 +215,7 @@ const Profile = () => {
       } else {
         try {
           const uid = localStorage.getItem('userid')
-          const response = await fetch(`http://localhost:5000/api/uno/user/updateinfo/${uid}`, {
+          const response = await fetch(`https://uno-clone.herokuapp.com/api/uno/user/updateinfo/${uid}`, {
             method: 'PUT',
             headers: {
               'Content-Type': 'application/json',
