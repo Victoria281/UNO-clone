@@ -270,6 +270,27 @@ app.put('/user/icon/:id', printingDebuggingInfo, function (req, res, next) {
 
 });
 
+//updateUserInfo
+app.put('/user/updateinfo/:id', printingDebuggingInfo, function (req, res, next) {
+    const id = req.params.id;
+    const newusername = req.body.username;
+    const newemail= req.body.email;
+
+    User.updateUserIcon(id,newusername,newemail, function (err, result) {
+        if (err) {
+            if (err === "404") {
+                return next(createHttpError(404, `Not found`));
+            }
+            else {
+                return next(err);
+            }
+        } else {
+            return res.status(204).json({ statusMessage: 'Completed update.' });
+        }
+    });
+
+});
+
 //updateUserPassword
 app.put('/user/update/:id', printingDebuggingInfo, function (req, res, next) {
     const id = req.params.id;
