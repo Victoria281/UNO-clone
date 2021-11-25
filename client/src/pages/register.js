@@ -45,45 +45,6 @@ export default function App() {
 
   const handleFormSubmit = (e) => {
     e.preventDefault();
-
-    // if (username != "") {
-    //   // If username is not empty
-    //   setUsernameError("");
-      
-    //   if (email !== "") {
-    //     const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
-    //     if (emailRegex.test(email)) {
-    //       setEmailError("");
-    //       if (password !== "") {
-    //         setPasswordError("");
-    //         if (confirmpassword !== "") {
-    //           setPasswordCfmError("");
-    //           if (confirmpassword !== password) {
-    //             setPasswordCfmError("Password does not match!");
-    //           } else {
-    //             setSuccessMsg("Successfully Created!");
-    //           }
-    //         } else {
-    //           setPasswordCfmError("Confirm Password Required");
-    //         }
-    //       } else {
-    //         setPasswordError("Password Required");
-            
-    //       }
-    //     } else {
-    //       setEmailError("Not a valid format!");
-    //     }
-    //   } else {
-    //     setEmailError("Email Required");
-    //     // document.getElementById("registerBtn").disabled=true;
-    //   }
-    // } else {
-    //   // If username is empty
-    //   setUsernameError("Username Required");
-    // }
-    // console.log((emailError == "") && (usernameError == "") && (passwordError == "" ) && (passwordCfmError == ""))
-    // return((emailError == "") && (usernameError == "") && (passwordError == "" ) && (passwordCfmError == ""));
-
   };
 
   // Function called when register button is clicked
