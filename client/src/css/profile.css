@@ -1,0 +1,285 @@
+.gameProfileBody {
+    width: 75%;
+    margin: auto;
+    padding-bottom: 5%;
+  }
+
+  .changePassword{
+    height: 220px;
+    overflow-x: hidden;
+    overflow-y: scroll;
+  }
+  
+  .card {
+    background-color:#ff60cf17;
+    backdrop-filter: blur(2px);
+    box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);
+  }
+
+  .card-header{
+    background-color: rgb(255, 255, 255);
+  }
+
+  #headerOne{
+    background-color: rgba(234, 58, 58, 0.5);
+  }
+
+  #headerTwo{
+    background-color: rgba(0, 152, 220, 0.5);
+  }
+
+  #headerThree{
+    background-color: rgba(51, 152, 75, 0.5);
+  }
+
+  #bodyOne{
+    background-color: rgba(234, 58, 58, 0.2);
+  }
+
+  #bodyTwo{
+    background-color: rgba(0, 152, 220, 0.2);
+  }
+
+  #bodyThree{
+    background-color: rgba(51, 152, 75, 0.2);
+  }
+
+
+  .gameProfile {
+    border: 1px solid black;
+    background-color: rgb(255, 255, 255);
+    padding: 0.8rem;
+    border-radius: 10px;
+    /* margin-left: 10px; */
+    height: 100%;
+  }
+  
+  #radios label {
+    position: relative;
+  }
+  
+  input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+  }
+  
+  .mainIcon {
+    width: 80px;
+    opacity: 1;
+    display: block;
+    height: auto;
+    transition: 0.5s ease;
+    backface-visibility: hidden;
+  }
+  
+  .mainIconBorder {
+    padding: 15px;
+    border-radius: 75px;
+    border: 3px solid grey;
+    width: 120px;
+    margin: 25px auto 25px;
+    position: relative;
+  }
+  
+  .mainIconBorder:hover .mainIcon {
+    opacity: 0.3;
+  }
+  
+  .mainIconBorder:hover .middle {
+    opacity: 1;
+  }
+  
+  .text {
+    color: black;
+    font-size: 16px;
+    padding: 16px 32px;
+  }
+  
+  .username {
+    /* width: 60%; */
+    margin-right: 40%;
+    /* margin-top: 5%; */
+    border-bottom: 2px solid black;
+    font-size: 20px;
+  }
+  
+  /* .username:hover {
+    border-bottom: 2px solid red;
+  } */
+  
+  .email {
+    /* width: 80%; */
+    margin-right: 40%;
+    /* margin-top: 5%;
+    margin-bottom: 5%; */
+    border-bottom: 2px solid black;
+    font-size: 20px;
+  }
+  
+  /* .email:hover {
+    border-bottom: 2px solid red;
+  } */
+  /* 
+  .changeInfo {
+    height: 125px;
+  } */
+  
+  .changeInfo > input {
+    /* width: 80%; */
+    /* margin-left: 10%;
+    margin-right: 10%; */
+    margin-top: 2%;
+    border: 0;
+    border-bottom: 2px solid black;
+    text-align: center;
+    font-size: 20px;
+  }
+  
+  .profileIcons {
+    width: 40px;
+  }
+  
+  .profileIconBorder {
+    padding: 15px;
+    border-radius: 75px;
+    border: 3px solid grey;
+  }
+  
+  input[class="bird"]:hover + .profileIconBorder,
+  input[class="bird"]:checked + .profileIconBorder,
+  input[class="bird"]:focus + .profileIconBorder {
+    border: 3px solid red;
+    box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);
+  }
+  
+  input[class="cat"]:hover + .profileIconBorder,
+  input[class="cat"]:checked + .profileIconBorder,
+  input[class="cat"]:focus + .profileIconBorder {
+    border: 3px solid red;
+    box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);
+  }
+  
+  input[class="elephant"]:hover + .profileIconBorder,
+  input[class="elephant"]:checked + .profileIconBorder,
+  input[class="elephant"]:focus + .profileIconBorder {
+    border: 3px solid red;
+    box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);
+  }
+  
+  input[class="fox"]:hover + .profileIconBorder,
+  input[class="fox"]:checked + .profileIconBorder,
+  input[class="fox"]:focus + .profileIconBorder {
+    border: 3px solid red;
+    box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);
+  }
+  
+  input[class="frog"]:hover + .profileIconBorder,
+  input[class="frog"]:checked + .profileIconBorder,
+  input[class="frog"]:focus + .profileIconBorder {
+    border: 3px solid red;
+    box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);
+  }
+  
+  input[class="koala"]:hover + .profileIconBorder,
+  input[class="koala"]:checked + .profileIconBorder,
+  input[class="koala"]:focus + .profileIconBorder {
+    border: 3px solid red;
+    box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);
+  }
+  
+  input[class="shell"]:hover + .profileIconBorder,
+  input[class="shell"]:checked + .profileIconBorder,
+  input[class="shell"]:focus + .profileIconBorder {
+    border: 3px solid red;
+    box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);
+  }
+  
+  input[class="toucan"]:hover + .profileIconBorder,
+  input[class="toucan"]:checked + .profileIconBorder,
+  input[class="toucan"]:focus + .profileIconBorder {
+    border: 3px solid red;
+    box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);
+  }
+  
+  input[class="turtle"]:hover + .profileIconBorder,
+  input[class="turtle"]:checked + .profileIconBorder,
+  input[class="turtle"]:focus + .profileIconBorder {
+    border: 3px solid red;
+    box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);
+  }
+  
+  input[class="whale"]:hover + .profileIconBorder,
+  input[class="whale"]:checked + .profileIconBorder,
+  input[class="whale"]:focus + .profileIconBorder {
+    border: 3px solid red;
+    box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);
+  }
+  
+  .middle {
+    transition: 0.5s ease;
+    opacity: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    text-align: center;
+  }
+  
+  #box {
+    border: 1px solid black;
+    width: 100%;
+    margin: 0 30px;
+    text-align: center;
+    background: rgba(255, 255, 255, 0.6);
+    padding: 0px 50px;
+    box-sizing: border-box;
+    /* -webkit-box-shadow: 0 0.5rem 0.5rem rgba(0, 0, 16, 0.19),
+      0 0.3rem 0.3rem rgba(0, 0, 16, 0.23);
+    box-shadow: 0 0.5rem 0.5rem rgba(0, 0, 16, 0.19),
+      0 0.3rem 0.3rem rgba(0, 0, 16, 0.23); */
+  }
+  
+  #scorebox {
+    border: 1px solid black;
+    /* border: 1px solid grey; */
+    width: 100%;
+    margin: 30px 30px;
+    margin-bottom: 0;
+    text-align: center;
+    background: rgba(255, 255, 255, 0.6);
+    padding: 5px 50px;
+    box-sizing: border-box;
+    height: 100%;
+    /* -webkit-box-shadow: 0 0.5rem 1rem rgba(0, 0, 16, 0.19),
+      0 0.3rem 0.3rem rgba(0, 0, 16, 0.23);
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 16, 0.19),
+      0 0.3rem 0.3rem rgba(0, 0, 16, 0.23); */
+  }
+  
+  .password {
+    width: 90%;
+    padding: 15px 12px;
+    margin-bottom: 5px;
+    border: 1px solid #e5e5e5;
+    border-bottom: 2px solid #ddd;
+    background: rgba(255, 255, 255, 0.2) !important;
+    color: #000000;
+  }
+  
+  .scoreBorder {
+    border: 1px solid #e5e5e5;
+    border-radius: 10px;
+    /* margin: 10% 10%; */
+    padding-top: 5%;
+    text-align: center;
+    font-weight: bold;
+  }
+  
+  .shadowing:hover {
+    -webkit-box-shadow: 0 0.5rem 0.5rem rgba(0, 0, 16, 0.19),
+      0 0.3rem 0.3rem rgba(0, 0, 16, 0.23);
+    box-shadow: 0 0.5rem 0.5rem rgba(0, 0, 16, 0.19),
+      0 0.3rem 0.3rem rgba(0, 0, 16, 0.23);
+  }
+  
