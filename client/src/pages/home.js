@@ -1,14 +1,24 @@
 import React, { Fragment, useEffect, useState } from "react";
 
-import "../index.css";
+import "../css/home.css";
 
 export default function App() {
- 
+
   return (
     <div className="App">
-      <a className="btn" href="./game">
-        START GAME
-      </a>
+      <div className="cardsHome">
+          <img className="cardImage1" src={process.env.REACT_APP_API_URL + "/api/uno/images/Wild.png"} />
+          <img className="cardImage2" src={process.env.REACT_APP_API_URL + "/api/uno/images/Wild_Draw.png"} />
+      </div>
+
+      <div className="row d-flex justify-content-between">
+        <a className="startBtn" href="./game">
+          Single Player
+        </a>
+        <a className="startMultiBtn" href="./createroom">
+          Multiplayer
+        </a>
+      </div>
     </div>
   );
 }

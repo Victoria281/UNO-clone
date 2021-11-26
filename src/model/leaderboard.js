@@ -30,29 +30,10 @@ var LeaderBoard = {
         );
     },
 
-    getAllScores: function (callback) {
-        const query = {
-            name: 'getAllScores',
-            text: 'SELECT score, uno_leaderboard.created_by, username FROM uno_leaderboard RIGHT JOIN players using (userid) ORDER BY uno_leaderboard.score DESC;',
-            values: [],
-        }
-
-        return pool.query(query, function (error, result) {
-            if (error) {
-                callback(error, null);
-                return;
-            } else {
-                console.log(result.rows)
-                return callback(null, result.rows);
-            }
-        },
-        );
-    },
-
     getNumOfScores: function (num, callback) {
         const query = {
             name: 'getNumOfScores',
-            text: 'SELECT score, uno_leaderboard.created_by, username FROM uno_leaderboard RIGHT JOIN players using (userid) ORDER BY uno_leaderboard.created_by DESC LIMIT $1;',
+            text: 'SELECT score, uno_leaderboard.created_by, username, userid, profileicon FROM uno_leaderboard RIGHT JOIN players using (userid) ORDER BY uno_leaderboard.score DESC LIMIT $1;',
             values: [num],
         }
 
@@ -71,7 +52,7 @@ var LeaderBoard = {
     updateHighestScore: function (score, id, callback) {
         const query = {
             name: 'fetch-user',
-            text: 'UPDATE uno_leaderboard SET score = $1 WHERE userid = $2;',
+            text: 'UPDATE uno_leaderboard SET score = $1, created_by = NOW() WHERE userid = $2;',
             values: [score, id],
         }
 
@@ -87,17 +68,16 @@ var LeaderBoard = {
         },
         );
     },
-
     insertNewScore: function (id, score, callback) {
+        console.log(id)
+        console.log(score)
         const query = {
-            name: 'fetch-user',
+            name: 'insertNewScore',
             text: 'INSERT INTO uno_leaderboard("userid", "score") VALUES($1, $2);',
             values: [id, score],
         }
 
         return pool.query(query, function (error, result) {
-            console.log(error)
-            console.log(result)
             if (error) {
                 callback(error, null);
                 return;

@@ -1,0 +1,52 @@
+
+/* For home.js */
+.cardsHome{
+  width: 40%;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 2%;
+  margin-bottom: 2%;
+  justify-content: center;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(10px, max-content));
+}
+  .column{
+    height: 5%;
+  }
+  
+  .cardImage1 {
+    transform: rotate(-20deg);
+    height: 150px;
+  }
+  
+  .cardImage2 {
+    transform: rotate(20deg);
+    height: 150px;
+  }
+  
+  .startBtn {
+    font-family:"RubikOne";
+    font-size: 1.5rem;
+    letter-spacing: 0.2rem;
+    padding: 0.8rem 2rem;
+    margin: 1.5rem;
+    border: none;
+    background: #ea3a3a;
+    color: white;
+    transform: skewX(-10deg);
+    transition: box-shadow 0.3s ease-in-out;
+  }
+  
+  .startMultiBtn {
+    font-family: "RubikOne";
+    font-size: 1.5rem;
+    letter-spacing: 0.2rem;
+    margin: 1.5rem;
+    padding: 0.8rem 2rem;
+    border: none;
+    background: #6c01ad;
+    color: white;
+    transform: skewX(-10deg);
+    transition: box-shadow 0.3s ease-in-out;
+  }
+    

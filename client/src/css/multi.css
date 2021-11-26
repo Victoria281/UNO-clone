@@ -1,0 +1,274 @@
+.chatroom {
+    background-color: #D8E7F5;
+    border: 1px solid #1B7CB1;
+    border-radius: 10px;
+    height: 300px;
+    width: 40%;
+    position: absolute;
+    bottom: 5%;
+    right: 5%;
+}
+
+.chatheader {
+
+    background-color: #1B7CB1;
+    height: 20%;
+    border-radius: 10px 10px 0px 0px;
+}
+
+.chatbody {
+
+    height: 65%;
+    overflow-y: scroll;
+}
+
+.chatbody::-webkit-scrollbar {
+    width: 0.2em;
+}
+
+.chatbody::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+}
+
+.chatbody::-webkit-scrollbar-thumb {
+    background-color: darkgrey;
+    outline: 1px solid slategrey;
+}
+
+.mymessage {
+    position: relative;
+    background: #67AEEF;
+    border-radius: .4em;
+    padding: 5px;
+    width: 30%;
+    margin-right: 10px;
+    margin-left: auto;
+    margin-bottom: 30px;
+
+}
+
+.mymessage>p {
+    font-family: "Armata";
+    padding: 0;
+    margin: 0;
+    font-size: 14px;
+}
+
+.mymessage:after {
+    content: '';
+    position: absolute;
+    bottom: 2px;
+    right: 2%;
+    width: 0;
+    height: 0;
+    border: 20px solid transparent;
+    border-top-color: #67AEEF;
+    border-bottom: 0;
+    border-left: 0;
+    margin-left: -10px;
+    margin-bottom: -20px;
+}
+
+.systemMessage {
+    color: #1B7CB1;
+    font-size: 14px;
+    text-align: center;
+}
+
+.othermessage {
+    position: relative;
+    background: #5FA5CC;
+    border-radius: .4em;
+    padding: 5px;
+    width: 30%;
+    margin-left: 10px;
+    margin-right: auto;
+    margin-bottom: 30px;
+}
+
+.othermessage>p {
+    font-family: "Armata";
+    padding: 0;
+    margin: 0;
+    font-size: 14px;
+}
+
+.othermessage:after {
+    content: '';
+    position: absolute;
+    bottom: 5px;
+    left: 10%;
+    width: 0;
+    height: 0;
+    border: 20px solid transparent;
+    border-top-color: #5FA5CC;
+    border-bottom: 0;
+    border-left: 0;
+    margin-left: -10px;
+    margin-bottom: -20px;
+}
+
+.chatsend {
+    border-top: 1px solid #67AEEF;
+    padding-top: 2%;
+    padding-left: 3%;
+}
+
+.chatsend>input {
+    font-family: "Armata";
+    background-color: #D8E7F5;
+    border: none;
+    width: 90%;
+    height: 100%;
+}
+
+.chatsend>input:focus {
+    outline: none;
+}
+
+.chatsend>button {
+    background: none;
+    color: inherit;
+    border: none;
+    padding: 0;
+    font: inherit;
+    cursor: pointer;
+    outline: inherit;
+
+}
+
+.chatOpenModal{
+    position: absolute;
+    bottom: 20px;
+    right: 60px
+}
+
+
+
+
+.player1cards {
+    width: 30%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 0%;
+    justify-content: center;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(10px, max-content));
+}
+
+.p1cards {
+    filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+}
+
+.player2cards {
+    width: 30%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 2%;
+    justify-content: center;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(10px, max-content));
+}
+
+.p2cards {
+    filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+}
+
+
+.multicurrent {
+    align-self: space-between;
+}
+
+.middleArea {
+    display: flex;
+    justify-content: center;
+    padding-top: 76px;
+    padding-bottom: 60px;
+}
+
+.deckArea {
+    position: absolute;
+    top: 15%;
+    left: 32%;
+    background-color: lightgrey;
+    width: 35%;
+    height: 80%;
+    border-radius: 175px;
+    filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+    z-index: -9;
+}
+
+.colorNow {
+    width: 40px;
+    height: 30px;
+    margin-left: 10px;
+    border-radius: 10px;
+}
+
+button:focus {
+    outline: none;
+}
+
+button {
+    border: none;
+}
+
+
+.mskipBtn {
+    position: absolute;
+    bottom: 0;
+    left: -50%;
+}
+
+.mnextbtn {
+    width: 100px;
+    height: 40px;
+    margin: 10px 20px;
+    -moz-border-radius: 100px / 50px;
+    -webkit-border-radius: 100px / 50px;
+    border-radius: 100px / 50px;
+    transform: matrix(0.99, 0.11, -0.14, 0.99, 0, 0);
+}
+
+.mnextbtn>p {
+    font-family: "RubikOne";
+    font-size: 25px;
+    color: black;
+    -webkit-text-stroke: 0.4px black;
+    -webkit-text-fill-color: white;
+    transform: rotate(-15deg);
+}
+
+
+.mmainnou {
+    position: absolute;
+    bottom: 0;
+    right: 0%;
+}
+
+.mnouBtn {
+    /* position: absolute;
+    bottom: 30%;
+    left: 0%; */
+    width: 100px;
+    height: 40px;
+    margin: 10px 20px;
+    -moz-border-radius: 100px / 50px;
+    -webkit-border-radius: 100px / 50px;
+    border-radius: 100px / 50px;
+    background: #EA323C;
+    transform: matrix(0.99, 0.11, -0.14, 0.99, 0, 0);
+}
+
+.mnouBtn>p {
+    font-family: "RubikOne";
+    font-size: 25px;
+    color: black;
+    -webkit-text-stroke: 0.4px black;
+    -webkit-text-fill-color: white;
+    transform: rotate(-15deg);
+}
+
+.isplayable:hover{
+    border: 2px solid black
+}
