@@ -15,19 +15,19 @@ const Leaderboard = () => {
     const getPlayers = async () => {
         try {
             const response = await fetch(
-                "https://uno-clone.herokuapp.com/api/uno/leaderboard/30"
+                process.env.REACT_APP_API_URL + "/api/uno/leaderboard/30"
             );
             const jsonData = await response.json();
             var user_leaderboard = jsonData.scores;
-            console.log(user_leaderboard);
+            // console.log(user_leaderboard);
             setP1(user_leaderboard[0]);
             setP2(user_leaderboard[1]);
             setP3(user_leaderboard[2]);
             // user_leaderboard = user_leaderboard.slice(3, jsonData.length);
             setUsers(user_leaderboard);
-            console.log(user_leaderboard);
+            // console.log(user_leaderboard);
         } catch (err) {
-            console.error(err.message);
+            // console.error(err.message);
         }
     };
 
@@ -46,7 +46,7 @@ const Leaderboard = () => {
                                         <img
                                             class="img-responsive lb2Icons"
                                             alt="pic"
-                                            src={"https://uno-clone.herokuapp.com/api/uno/profile_icons/" + players.profileicon + ".png"}
+                                            src={process.env.REACT_APP_API_URL + "/api/uno/profile_icons/" + players.profileicon + ".png"}
                                         />
                                     </div>
                                     <div class="col-10 py-2 px-3">
@@ -73,7 +73,7 @@ const Leaderboard = () => {
                                             <img
                                                 class="img-responsive lb2Icons"
                                                 alt="pic"
-                                                src={"https://uno-clone.herokuapp.com/api/uno/profile_icons/" + players.profileicon + ".png"}
+                                                src={process.env.REACT_APP_API_URL + "/api/uno/profile_icons/" + players.profileicon + ".png"}
                                             />
                                         </div>
                                         <div class="col-10 py-2 px-3">
@@ -124,7 +124,7 @@ const Leaderboard = () => {
                                             <img
                                                 class="img-responsive lb1Icons"
                                                 alt="pic"
-                                                src={"https://uno-clone.herokuapp.com/api/uno/profile_icons/" + p2.profileicon + ".png"}
+                                                src={process.env.REACT_APP_API_URL + "/api/uno/profile_icons/" + p2.profileicon + ".png"}
                                             />
                                         </div>
                                         <div class="borderDesign2">
@@ -153,7 +153,7 @@ const Leaderboard = () => {
                                             <img
                                                 class="img-responsive lb1Icons"
                                                 alt="pic"
-                                                src={"https://uno-clone.herokuapp.com/api/uno/profile_icons/" + p1.profileicon + ".png"}
+                                                src={process.env.REACT_APP_API_URL + "/api/uno/profile_icons/" + p1.profileicon + ".png"}
                                             />
                                         </div>
                                         <div class="borderDesign1">
@@ -177,7 +177,7 @@ const Leaderboard = () => {
                                             <img
                                                 class="img-responsive lb1Icons"
                                                 alt="pic"
-                                                src={"https://uno-clone.herokuapp.com/api/uno/profile_icons/" + p3.profileicon + ".png"}
+                                                src={process.env.REACT_APP_API_URL + "/api/uno/profile_icons/" + p3.profileicon + ".png"}
                                             />
                                         </div>
                                         <div class="borderDesign3">

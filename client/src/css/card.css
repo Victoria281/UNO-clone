@@ -12,6 +12,14 @@ html, body {
   width: 100%;
 }
 
+.botTxttop{
+  transform: rotate(180deg) translateX(20%);
+}
+
+.cardsWidthtop{
+  width: 100%;
+}
+
 .botcardstop {
   width: 40%;
   margin-left: auto;
@@ -30,7 +38,12 @@ html, body {
   transform: rotate(183deg);
 }
 
+.botTxtleft{
+  transform: rotate(90deg) translateY(-70px) translateX(-90%);
+}
+
 .botcardsleft {
+  margin-top: 20%;
   width: 60%;
   height: 20%;
   margin-right: 0;
@@ -45,11 +58,16 @@ html, body {
   transform: rotate(93deg);
 }
 
+.botTxtright{
+  transform: rotate(-90deg) translateY(-100px) translateX(60%);
+}
+
 .botcardsright {
+  margin-top: 20%;
   width: 60%;
   height: 20%;
-  margin-left: 0;
-  margin-right: auto;
+  margin-left: auto;
+  margin-right: 50px;
 }
 
 .cardsright {
@@ -70,10 +88,22 @@ html, body {
   filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
 }
 
-.currentcard {
-  margin-left: 20%;
-  margin-top: 20%;
+.currentcard:first-child {
+  transform: rotate(-10deg);
+  z-index: -9;
 }
+
+.currentcards {
+  width: 90px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 2%;
+  justify-content: center;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(10px, max-content));
+}
+
+
 
 .maindeck {
   margin-right: 20%;
@@ -272,4 +302,11 @@ button {
   transform: rotate(-16.13deg);
   margin-right: 15%;
   overflow: hidden;
+}
+
+.gamecolorNow{
+  width: 10px;
+  height: 30px;
+  margin-left: 10px;
+  border-radius: 10px;
 }
