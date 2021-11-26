@@ -1,9 +1,7 @@
 import React, { Fragment, useEffect, useState } from "react";
 
 import axios from "axios";
-import { useHistory } from "react-router-dom";
 import "../css/register.css";
-import e from "cors";
 
 export default function App() {
   const [username, setUsername] = useState("");
@@ -120,18 +118,18 @@ export default function App() {
       }
     }
     
-    console.log("STATUS: " + status);
-    // console.log((emailError == "") && (usernameError == "") && (passwordError == "" ) && (passwordCfmError == ""))
+    // console.log("STATUS: " + status);
+    // // console.log((emailError == "") && (usernameError == "") && (passwordError == "" ) && (passwordCfmError == ""))
     if(status){
 
       axios
-        .post("http://localhost:5000/api/uno/register", {
+        .post(process.env.REACT_APP_API_URL + "/api/uno/register", {
           userName: username,
           email: email,
           password: password
         })
         .then((response) => {
-          console.log(response)
+          // console.log(response)
           // If no duplicates, set error to empty
           setDuplicateMsg("");
           window.location = "/login"
@@ -144,14 +142,14 @@ export default function App() {
             // The request was made but no response was received
             // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
             // http.ClientRequest in node.js
-            console.log("------------------INSIDE ERROR REQUEST---------------------")
-            console.log(error.request);
+            // console.log("------------------INSIDE ERROR REQUEST---------------------")
+            // console.log(error.request);
           } else {
             // Something happened in setting up the request that triggered an Error
-            console.log("BIG FAT ERRORRRR")
-            console.log('Error', error.message);
+            // console.log("BIG FAT ERRORRRR")
+            // console.log('Error', error.message);
           }
-          console.log(error.config);
+          // console.log(error.config);
         })
     }
   }

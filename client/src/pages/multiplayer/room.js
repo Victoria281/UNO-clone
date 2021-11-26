@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import "../../css/room.css"
 function RoomPage({ socket }) {
-  console.log("socket")
-  console.log(socket)
+  // console.log("socket")
+  // console.log(socket)
 
   const [username, setusername] = useState(localStorage.getItem("username"));
   const [roomname, setroomname] = useState("");
@@ -29,7 +29,7 @@ function RoomPage({ socket }) {
           className="img-responsive c1"
           style={{ width: 160 }}
           src={
-            "https://uno-clone.herokuapp.com/api/uno/images/Yellow_Draw.png"
+            process.env.REACT_APP_API_URL + "/api/uno/images/Yellow_Draw.png"
           }
           alt="logo"
         />
@@ -37,7 +37,7 @@ function RoomPage({ socket }) {
           className="img-responsive c2"
           style={{ width: 160 }}
           src={
-            "https://uno-clone.herokuapp.com/api/uno/images/Green_Skip.png"
+            process.env.REACT_APP_API_URL + "/api/uno/images/Green_Skip.png"
           }
           alt=""
         />
@@ -45,7 +45,7 @@ function RoomPage({ socket }) {
           className="img-responsive c3"
           style={{ width: 160 }}
           src={
-            "https://uno-clone.herokuapp.com/api/uno/images/Wild.png"
+            process.env.REACT_APP_API_URL + "/api/uno/images/Wild.png"
           }
           alt=""
         />
@@ -53,7 +53,7 @@ function RoomPage({ socket }) {
           className="img-responsive c4"
           style={{ width: 160 }}
           src={
-            "https://uno-clone.herokuapp.com/api/uno/images/Red_1.png"
+            process.env.REACT_APP_API_URL + "/api/uno/images/Red_1.png"
           }
           alt=""
         />
@@ -61,7 +61,7 @@ function RoomPage({ socket }) {
           className="img-responsive c5"
           style={{ width: 160 }}
           src={
-            "https://uno-clone.herokuapp.com/api/uno/images/Blue_Reverse.png"
+            process.env.REACT_APP_API_URL + "/api/uno/images/Blue_Reverse.png"
           }
           alt=""
         /></div>
@@ -77,11 +77,6 @@ function RoomPage({ socket }) {
         <Link to={`/multiplayer/${roomname}/${username}`}>
           <button class="roomBtn" onClick={sendData}><p>Start</p></button>
         </Link></div>
-      {/* <input
-        placeholder="Input your user name"
-        value={username}
-        onChange={(e) => setusername(e.target.value)}
-      ></input> */}
 
     </div>
   );
