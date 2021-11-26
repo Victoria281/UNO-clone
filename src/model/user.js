@@ -73,6 +73,23 @@ var User = {
             }
         });
     },
+    
+    updateUserInfo: function (userid, username, email, callback) {
+        const query = {
+            name: 'updateUserInfo',
+            text: 'UPDATE players SET username=$1,email=$2 WHERE userid=$3',
+            values: [username,email,userid],
+        }
+
+        return pool.query(query, function (error, result) {
+            if (error) {
+                callback(error, null);
+                return;
+            } else {
+                return callback(null, result.rowCount);
+            }
+        });
+    },
 
     updateUserIcon: function (userid, icon, callback) {
         const query = {

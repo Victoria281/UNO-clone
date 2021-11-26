@@ -1,1 +1,1 @@
-module.exports = process.env.JWTKEY;
+module.exports = 'unoclonegameishappening';
