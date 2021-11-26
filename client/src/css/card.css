@@ -310,3 +310,7 @@ button {
   margin-left: 10px;
   border-radius: 10px;
 }
+
+.isplayable:hover{
+    border: 2px solid black
+}

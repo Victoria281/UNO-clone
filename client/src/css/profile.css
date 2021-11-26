@@ -56,6 +56,8 @@
   
   #radios label {
     position: relative;
+    width: 80px;
+    margin: 5px;
   }
   
   input[type="radio"] {
@@ -140,10 +142,6 @@
     border: 3px solid grey;
   }
   
-  label {
-    width: 80px;
-    margin: 5px;
-  }
   
   input[class="bird"]:hover + .profileIconBorder,
   input[class="bird"]:checked + .profileIconBorder,

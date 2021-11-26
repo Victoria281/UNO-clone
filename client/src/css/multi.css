@@ -247,9 +247,9 @@ button {
 }
 
 .mnouBtn {
-    position: absolute;
+    /* position: absolute;
     bottom: 30%;
-    left: -10%;
+    left: 0%; */
     width: 100px;
     height: 40px;
     margin: 10px 20px;
@@ -270,5 +270,5 @@ button {
 }
 
 .isplayable:hover{
-    border: 3px solid black
+    border: 2px solid black
 }

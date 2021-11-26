@@ -122,7 +122,7 @@ const Game = () => {
                       }}
                     >
                       <img
-                        className="img-responsive"
+                        className="img-responsive isplayable"
                         style={{ width: 80 }}
                         src={
                           process.env.REACT_APP_API_URL + "/api/uno/images/" +
@@ -130,7 +130,6 @@ const Game = () => {
                         }
                         alt={decks.values + " " + decks.color}
                       />
-                      <p className="imageText">Yes</p>
                     </div>
                   )}
                   {!playable.includes(decks) && (
@@ -144,7 +143,6 @@ const Game = () => {
                         }
                         alt={decks.values + " " + decks.color}
                       />
-                      <p className="imageText">No</p>
                     </div>
                   )}
                 </div>

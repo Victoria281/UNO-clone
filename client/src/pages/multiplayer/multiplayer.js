@@ -339,7 +339,7 @@ const MultiPlayer = ({ username, roomname, socket }) => {
       player1: [],
       player2: [],
     };
-    for (var start = 0; start < 7; start++) {
+    for (var start = 0; start < 1; start++) {
       dealplayers.player1.push(cardarray[0]);
       dealplayers.player2.push(cardarray[1]);
       cardarray = cardarray.slice(4, cardarray.length);
@@ -491,7 +491,7 @@ const MultiPlayer = ({ username, roomname, socket }) => {
             if (players["player" + turn].length == 1) {
               var pressUnoBtn = unoBtn;
               pressUnoBtn[turn - 1] = true;
-              alert("Nuo has been pressed! Player " + turn + " have 1 card remaining!");
+              alert("NOU has been pressed! Player " + turn + " have 1 card remaining!");
               socket.emit('updateGameInfo', {
                 unoBtn: pressUnoBtn,
                 playerdeck: players,
@@ -527,7 +527,8 @@ const MultiPlayer = ({ username, roomname, socket }) => {
         mainDeck: drawmaindeck,
         used: newused,
         playerdeck: players,
-        current: current
+        current: current,
+        turn: turn
       })
     };
 
@@ -649,7 +650,7 @@ const MultiPlayer = ({ username, roomname, socket }) => {
     })
 
     socket.on('updateGameInfo', ({ mainDeck, used, current, playerdeck, turn, unoBtn }) => {
-      // console.log("receveived update game info")
+      console.log("receveived update game info")
       // console.log(mainDeck)
 
       if (turn === 1) {
