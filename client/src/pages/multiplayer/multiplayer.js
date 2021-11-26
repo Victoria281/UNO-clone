@@ -339,7 +339,7 @@ const MultiPlayer = ({ username, roomname, socket }) => {
       player1: [],
       player2: [],
     };
-    for (var start = 0; start < 1; start++) {
+    for (var start = 0; start < 7; start++) {
       dealplayers.player1.push(cardarray[0]);
       dealplayers.player2.push(cardarray[1]);
       cardarray = cardarray.slice(4, cardarray.length);

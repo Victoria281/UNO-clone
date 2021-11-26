@@ -82,7 +82,7 @@ const Profile = () => {
                 <div onChange={setIcon.bind(this)}>
                   {profileIcons.map((animal) => ((
 
-                    <label for={animal}>
+                    <label class="inputlabel" for={animal}>
                       <input
                         type="radio"
                         name="rating"
