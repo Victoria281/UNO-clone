@@ -69,10 +69,10 @@ const MultiPlayer = ({ username, roomname, socket }) => {
 
 
   const Player = ({ player, type, identity }) => {
-    console.log(identity)
-    console.log(type)
-    console.log(identity === type)
-    console.log("here")
+    // console.log(identity)
+    // console.log(type)
+    // console.log(identity === type)
+    // console.log("here")
     if (type === 1) {
       var playable = p1Playable;
     } else {
@@ -97,7 +97,7 @@ const MultiPlayer = ({ username, roomname, socket }) => {
                         className="img-responsive isplayable"
                         style={{ width: 70 }}
                         src={
-                          "https://uno-clone.herokuapp.com/api/uno/images/" +
+                          process.env.REACT_APP_API_URL + "/api/uno/images/" +
                           decks.image_file.slice(8)
                         }
                         alt={decks.values + " " + decks.color}
@@ -110,7 +110,7 @@ const MultiPlayer = ({ username, roomname, socket }) => {
                         className="img-responsive"
                         style={{ width: 70 }}
                         src={
-                          "https://uno-clone.herokuapp.com/api/uno/images/" +
+                          process.env.REACT_APP_API_URL + "/api/uno/images/" +
                           decks.image_file.slice(8)
                         }
                         alt={decks.values + " " + decks.color}
@@ -128,7 +128,7 @@ const MultiPlayer = ({ username, roomname, socket }) => {
                     className="img-responsive"
                     style={{ width: 70 }}
                     src={
-                      "https://uno-clone.herokuapp.com/api/uno/images/" +
+                      process.env.REACT_APP_API_URL + "/api/uno/images/" +
                       decks.image_file.slice(8)
                     }
                     alt={decks.values + " " + decks.color}
@@ -149,7 +149,7 @@ const MultiPlayer = ({ username, roomname, socket }) => {
               <img
                 style={{ width: 70 }}
                 className="img-responsive allcards"
-                src={"https://uno-clone.herokuapp.com/api/uno/images/Deck.png"}
+                src={process.env.REACT_APP_API_URL + "/api/uno/images/Deck.png"}
                 alt={decks.values + " " + decks.color}
               />
             </div>
@@ -166,7 +166,7 @@ const MultiPlayer = ({ username, roomname, socket }) => {
       setSelectColor(false);
       current.color = clr;
       current.values = 15;
-
+      current.image_file = './cards/Wild.png';
       var newturn = nextTurn(turn);
       var nmaindeck = mainDeck;
 
@@ -175,10 +175,10 @@ const MultiPlayer = ({ username, roomname, socket }) => {
         for (var draw4 = 0; draw4 < 4; draw4++) {
           players["player" + draw4CardPlayer].push(mainDeck[draw4]);
         }
-        console.log("The turn now is player" + turn);
-        console.log("PLayer" + draw4CardPlayer + "has to draw a card");
+        // console.log("The turn now is player" + turn);
+        // console.log("PLayer" + draw4CardPlayer + "has to draw a card");
         nmaindeck = mainDeck.slice(4, mainDeck.length);
-        newturn = nextTurn(newturn);
+        current.image_file = './cards/Wild_Draw.png';
       }
       socket.emit('updateGameInfo', {
         mainDeck: nmaindeck,
@@ -239,9 +239,9 @@ const MultiPlayer = ({ username, roomname, socket }) => {
   };
 
   const playCard = (cardInfo, player) => {
-    console.log("It is players " + turn + " turn");
-    console.log("Current card is " + current.color + " " + current.values);
-    console.log("Card played is " + cardInfo.color + " " + cardInfo.values);
+    // console.log("It is players " + turn + " turn");
+    // console.log("Current card is " + current.color + " " + current.values);
+    // console.log("Card played is " + cardInfo.color + " " + cardInfo.values);
 
     setIfShow(false);
     setIfDraw(false);
@@ -265,36 +265,34 @@ const MultiPlayer = ({ username, roomname, socket }) => {
     switch (cardInfo.values) {
       //skip is 10
       case "10":
-        console.log("skipped played----");
-        console.log("Player " + turn + " got skipped");
+        // console.log("skipped played----");
+        // console.log("Player " + turn + " got skipped");
         newturn = nextTurn(newturn);
         break;
 
       //reverse is 11
       case "11":
-        console.log("reverse is played----");
-        console.log("Its my turn again");
-        newturn = nextTurn(newturn);
+        // console.log("reverse is played----");
+        // console.log("Its my turn again");
 
         break;
 
       //+2 draw is 12
       case "12":
-        console.log("draw 2 played----");
+        // console.log("draw 2 played----");
         var drawCardPlayer = newturn;
         for (var draw2 = 0; draw2 < 2; draw2++) {
           players["player" + drawCardPlayer].push(mainDeck[draw2]);
         }
-        console.log("The turn now is player" + turn);
-        console.log("PLayer" + drawCardPlayer + "has to draw a card");
+        // console.log("The turn now is player" + turn);
+        // console.log("PLayer" + drawCardPlayer + "has to draw a card");
         nmaindeck = mainDeck.slice(2, mainDeck.length);
 
-        newturn = nextTurn(newturn);
         break;
 
       //wild is 13
       case "13":
-        console.log("select color played----");
+        // console.log("select color played----");
         // To Choose Colour
         setPlayers(players);
         setSelectColor(true);
@@ -304,7 +302,7 @@ const MultiPlayer = ({ username, roomname, socket }) => {
 
       //+4 is 14
       case "14":
-        console.log("draw 4 played----");
+        // console.log("draw 4 played----");
 
         // To Choose Colour
         setPlayers(players);
@@ -314,7 +312,7 @@ const MultiPlayer = ({ username, roomname, socket }) => {
         break;
 
       default:
-        console.log("normal card played----");
+        // console.log("normal card played----");
         break;
     }
 
@@ -329,7 +327,7 @@ const MultiPlayer = ({ username, roomname, socket }) => {
     }
 
 
-    console.log("here");
+    // console.log("here");
     return;
   };
 
@@ -346,18 +344,22 @@ const MultiPlayer = ({ username, roomname, socket }) => {
       dealplayers.player2.push(cardarray[1]);
       cardarray = cardarray.slice(4, cardarray.length);
     }
-    console.log("Dealt Cards...");
+    // console.log("Dealt Cards...");
     return [dealplayers, cardarray];
   };
 
   const getCards = async () => {
     try {
       const response = await fetch(
-        "https://uno-clone.herokuapp.com/api/uno/cards"
+        process.env.REACT_APP_API_URL + "/api/uno/cards", {
+          headers: {
+            'authorization': localStorage.getItem('token'),
+          },
+        }
       );
       const jsonData = await response.json();
       var cards_retrieved = jsonData.cards;
-      console.log("Retrieved Cards...");
+      // console.log("Retrieved Cards...");
       setCards(cards_retrieved);
       cards_retrieved = shuffleCards(cards_retrieved);
       var arr = dealCards(cards_retrieved);
@@ -365,26 +367,26 @@ const MultiPlayer = ({ username, roomname, socket }) => {
       var smaindeck = arr[1];
       var firstcard = smaindeck[0];
       var sturn = 1;
-      console.log("firstcard");
-      console.log(firstcard.values);
-      console.log(firstcard.color);
+      // console.log("firstcard");
+      // console.log(firstcard.values);
+      // console.log(firstcard.color);
       switch (firstcard.values) {
         //skip is 10
         case "10":
-          console.log("first card skipped played----");
-          console.log("Player 1 got skipped");
+          // console.log("first card skipped played----");
+          // console.log("Player 1 got skipped");
           sturn = 2
           break;
 
         //reverse is 11
         case "11":
-          console.log("first card reverse played----");
+          // console.log("first card reverse played----");
           sturn = 1
           break;
 
         //+2 draw is 12
         case "12":
-          console.log("first card draw 2 played----");
+          // console.log("first card draw 2 played----");
           for (var fdraw2 = 0; fdraw2 < 2; fdraw2++) {
             splayerdeck["player1"].push(smaindeck[fdraw2]);
           }
@@ -395,7 +397,7 @@ const MultiPlayer = ({ username, roomname, socket }) => {
 
         //wild is 13
         case "13":
-          console.log("first card select color played----");
+          // console.log("first card select color played----");
           // To Choose Colour
 
           var fcolor = ["red", "blue", "yellow", "green"];
@@ -408,7 +410,7 @@ const MultiPlayer = ({ username, roomname, socket }) => {
 
         //+4 is 14
         case "14":
-          console.log("first card draw 4 played----");
+          // console.log("first card draw 4 played----");
           for (var fdraw4 = 0; fdraw4 < 4; fdraw4++) {
             splayerdeck["player1"].push(smaindeck[fdraw4]);
           }
@@ -423,7 +425,7 @@ const MultiPlayer = ({ username, roomname, socket }) => {
 
           break;
         default:
-          console.log("first normal card played----");
+          // console.log("first normal card played----");
           break;
 
       };
@@ -437,9 +439,9 @@ const MultiPlayer = ({ username, roomname, socket }) => {
         turn: sturn
       })
 
-      console.log("Set Up Game...");
+      // console.log("Set Up Game...");
     } catch (err) {
-      console.error(err.message);
+      // console.error(err.message);
     }
   };
 
@@ -475,7 +477,7 @@ const MultiPlayer = ({ username, roomname, socket }) => {
   const UnoButton = ({ identity }) => {
     if (turn !== identity) {
       return (
-        <button
+        <button style={{ background: "black" }}
           className="mnouBtn"
         >
           <p>NOU!</p>
@@ -522,7 +524,7 @@ const MultiPlayer = ({ username, roomname, socket }) => {
       setIfDraw(true);
 
       socket.emit('updateGameInfo', {
-        maindeck: drawmaindeck,
+        mainDeck: drawmaindeck,
         used: newused,
         playerdeck: players,
         current: current
@@ -537,7 +539,7 @@ const MultiPlayer = ({ username, roomname, socket }) => {
             type="image"
             disabled={ifDraw}
             className="col-8"
-            src={"https://uno-clone.herokuapp.com/api/uno/images/Deck.png"}
+            src={process.env.REACT_APP_API_URL + "/api/uno/images/Deck.png"}
             style={{ width: 90 }}
           ></input>
   }
@@ -546,7 +548,7 @@ const MultiPlayer = ({ username, roomname, socket }) => {
     type="image"
     disabled={ifDraw}
     className="col-8"
-    src={"https://uno-clone.herokuapp.com/api/uno/images/Deck.png"}
+    src={process.env.REACT_APP_API_URL + "/api/uno/images/Deck.png"}
     style={{ width: 90 }}
     onClick={drawCards}
   ></input>
@@ -573,7 +575,7 @@ const MultiPlayer = ({ username, roomname, socket }) => {
       }
       const ans = decrypting(data.text, user);
       dispatchProcess(false, ans, data.text);
-      console.log(ans);
+      // console.log(ans);
       let temp = messages;
       temp.push({
         userId: data.userId,
@@ -583,8 +585,8 @@ const MultiPlayer = ({ username, roomname, socket }) => {
       setMessages([...temp]);
     });
     socket.on("test", (data) => {
-      console.log("it workedddd")
-      console.log(data)
+      // console.log("it workedddd")
+      // console.log(data)
     });
 
     socket.on("userNotFound", (data) => {
@@ -603,10 +605,10 @@ const MultiPlayer = ({ username, roomname, socket }) => {
     });
 
     socket.on("getUserPlayerNum", (data) => {
-      console.log("Received update to change player number")
-      console.log(data.users)
+      // console.log("Received update to change player number")
+      // console.log(data.users)
       for (var i = 0; i < data.users.length; i++) {
-        console.log(data.users[i])
+        // console.log(data.users[i])
         if (data.users[i].username === username) {
           setWhoami(data.users[i].playerNum);
           break
@@ -616,8 +618,8 @@ const MultiPlayer = ({ username, roomname, socket }) => {
 
     socket.on('startGame', ({ mainDeck, used, current, playerdeck, turn, usersInRoom }) => {
       setUsersInRoom(usersInRoom)
-      console.log("receveived start game info")
-      console.log(usersInRoom)
+      // console.log("receveived start game info")
+      // console.log(usersInRoom)
 
       if (turn === 1) {
         var player1playable = playerdeck.player1.filter(
@@ -647,8 +649,8 @@ const MultiPlayer = ({ username, roomname, socket }) => {
     })
 
     socket.on('updateGameInfo', ({ mainDeck, used, current, playerdeck, turn, unoBtn }) => {
-      console.log("receveived update game info")
-      console.log(playerdeck)
+      // console.log("receveived update game info")
+      // console.log(mainDeck)
 
       if (turn === 1) {
         var player1playable = playerdeck.player1.filter(
@@ -721,7 +723,7 @@ const MultiPlayer = ({ username, roomname, socket }) => {
                 className="img-responsive multicurrent"
                 style={{ width: 90 }}
                 src={
-                  "https://uno-clone.herokuapp.com/api/uno/images/" +
+                  process.env.REACT_APP_API_URL + "/api/uno/images/" +
                   current.image_file.slice(8)
                 }
               ></img>

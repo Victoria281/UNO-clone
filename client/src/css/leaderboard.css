@@ -6,7 +6,7 @@
 
 .leaderboard_body {
     padding: 2%;
-    height: 30%;
+    height: 90%;
     overflow-x: hidden;
     overflow-y: scroll;
 }
@@ -222,5 +222,5 @@
 } */
 
 #podium {
-    height: 10%;
+    height: 60%;
 }

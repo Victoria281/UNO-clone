@@ -37,11 +37,11 @@ const Game = () => {
 
   const CardActions = () => {
     return (
-      <div><p>p{action[0]}</p></div>
+      <div><p>{action[0]}</p></div>
     )
   }
   const botplay = (arr) => {
-    console.log("Bot is playing card ----------");
+    // console.log("Bot is playing card ----------");
     var normal_playable = arr.filter(
       (item) => item.color === current.color || item.values === current.values
     );
@@ -57,21 +57,21 @@ const Game = () => {
         cardplayed =
           normal_playable[Math.floor(Math.random() * normal_playable.length)];
       }
-      console.log(cardplayed);
+      // console.log(cardplayed);
 
       playCard(cardplayed, arr, true);
     } else if (wild_playable.length !== 0) {
       cardplayed =
         wild_playable[Math.floor(Math.random() * wild_playable.length)];
-      console.log(cardplayed);
+      // console.log(cardplayed);
       playCard(cardplayed, arr, true);
     } else if (normal_playable.length !== 0) {
       cardplayed =
         normal_playable[Math.floor(Math.random() * normal_playable.length)];
-      console.log(cardplayed);
+      // console.log(cardplayed);
       playCard(cardplayed, arr, true);
     } else {
-      console.log("Bot has no card to play");
+      // console.log("Bot has no card to play");
       players["player" + order[turn]].push(mainDeck[0]);
       setMainDeck(mainDeck.slice(1, mainDeck.length));
       setTurn(nextTurn(turn));
@@ -79,7 +79,7 @@ const Game = () => {
       setTimeout(() => {
         setAction([])
       }, 5000);
-      
+
     }
   };
 
@@ -91,7 +91,7 @@ const Game = () => {
             <div class={"cards" + arr.no}>
               <img
                 className="img-responsive allcards"
-                src={"https://uno-clone.herokuapp.com/api/uno/images/Deck.png"}
+                src={process.env.REACT_APP_API_URL + "/api/uno/images/Deck.png"}
                 alt={decks.values + " " + decks.color}
               />
             </div>
@@ -99,7 +99,7 @@ const Game = () => {
         </div>
         <div class={"botTxt" + arr.no}>
           <h6 style={order[turn] === arr.num ? { color: 'red' } : { color: 'black' }}>Player {arr.num}</h6>
-          {arr.num === action[1] ? <CardActions />:''}
+          {arr.num === action[1] ? <CardActions /> : ''}
         </div>
       </div>
     );
@@ -109,7 +109,7 @@ const Game = () => {
     return (
       <div>
         <h6 style={order[turn] === 1 ? { color: 'red' } : { color: 'black' }}>Player {num}</h6>
-        {1 === action[1] ? <CardActions />:''}
+        {1 === action[1] ? <CardActions /> : ''}
         <div className="playercards">
           {order[turn] === 1 &&
             player.map((decks) => {
@@ -125,7 +125,7 @@ const Game = () => {
                         className="img-responsive"
                         style={{ width: 80 }}
                         src={
-                          "https://uno-clone.herokuapp.com/api/uno/images/" +
+                          process.env.REACT_APP_API_URL + "/api/uno/images/" +
                           decks.image_file.slice(8)
                         }
                         alt={decks.values + " " + decks.color}
@@ -139,7 +139,7 @@ const Game = () => {
                         className="img-responsive"
                         style={{ width: 80 }}
                         src={
-                          "https://uno-clone.herokuapp.com/api/uno/images/" +
+                          process.env.REACT_APP_API_URL + "/api/uno/images/" +
                           decks.image_file.slice(8)
                         }
                         alt={decks.values + " " + decks.color}
@@ -158,7 +158,7 @@ const Game = () => {
                     className="img-responsive"
                     style={{ width: 80 }}
                     src={
-                      "https://uno-clone.herokuapp.com/api/uno/images/" +
+                      process.env.REACT_APP_API_URL + "/api/uno/images/" +
                       decks.image_file.slice(8)
                     }
                     alt={decks.values + " " + decks.color}
@@ -176,10 +176,12 @@ const Game = () => {
       setSelectColor(false);
       current.color = clr;
       current.values = 15;
-      console.log("current in se;ect")
-      console.log(current)
+      // console.log("current in se;ect")
+      // console.log(current)
       if (drawCard === true) {
         var drawed = nextTurn(turn);
+        // console.log("to draw"+drawed)
+        // console.log(nextTurn(drawed))
         setTurn(nextTurn(drawed));
       } else {
         setTurn(nextTurn(turn));
@@ -243,7 +245,7 @@ const Game = () => {
           className="img-responsive"
           style={{ width: 90 }}
           src={
-            "https://uno-clone.herokuapp.com/api/uno/images/" +
+            process.env.REACT_APP_API_URL + "/api/uno/images/" +
             current.image_file.slice(8)
           }
         ></img>
@@ -268,59 +270,44 @@ const Game = () => {
     switch (cardInfo.values) {
       //skip is 10
       case "10":
-        console.log("skipped played----");
+        // console.log("skipped played----");
         var skippedPlayer = nextTurn(turn);
-        console.log("Player " + order[skippedPlayer] + " got skipped");
+        // console.log("Player " + order[skippedPlayer] + " got skipped");
         setAction(["Skipped", order[skippedPlayer]])
-      setTimeout(() => {
-        setAction([])
-      }, 5000);
+        setTimeout(() => {
+          setAction([])
+        }, 5000);
         setTurn(nextTurn(skippedPlayer));
         break;
 
       //reverse is 11
       case "11":
-        console.log("reverse is played----");
+        // console.log("reverse is played----");
         var newOrder = [order[2], order[1], order[0], order[3]];
         var reverseplayerIndex = newOrder.indexOf(order[turn]);
-        console.log("New Order" + newOrder);
-        console.log("Old Order" + order);
-        console.log("This is the old order " + order);
-        console.log(
-          "The player who played reverse is " +
-          order[turn] +
-          " at turn is " +
-          turn
-        );
-        console.log(
-          "The same player should be " +
-          newOrder[reverseplayerIndex] +
-          " at this turn is " +
-          reverseplayerIndex
-        );
-        console.log(
-          "The next player should be " +
-          newOrder[nextTurn(reverseplayerIndex)] +
-          " at new turn is " +
-          nextTurn(reverseplayerIndex)
-        );
+        // console.log("New Order" + newOrder);
+        // console.log("Old Order" + order);
+        // console.log("This is the old order " + order);
+        // console.log( "The player who played reverse is " + order[turn] + " at turn is " +  turn );
+        // console.log( "The same player should be " +  newOrder[reverseplayerIndex] + " at this turn is " + reverseplayerIndex );
+        // console.log( "The next player should be " + newOrder[nextTurn(reverseplayerIndex)] + " at new turn is " + nextTurn(reverseplayerIndex) );
 
         setOrder(newOrder);
         setTurn(nextTurn(reverseplayerIndex));
-        console.log("why handddd");
+        // console.log("why handddd");
         break;
 
       //+2 draw is 12
       case "12":
-        console.log("draw 2 played----");
+        // console.log("draw 2 played----");
         var drawCardPlayer = nextTurn(turn);
         for (var draw2 = 0; draw2 < 2; draw2++) {
           players["player" + order[drawCardPlayer]].push(mainDeck[draw2]);
         }
         setAction(["+ 2", order[drawCardPlayer]])
-      setTimeout(() => {
-        setAction([])
-      }, 5000);
+        setTimeout(() => {
+          setAction([])
+        }, 5000);
         setMainDeck(mainDeck.slice(2, mainDeck.length));
         setPlayers(players);
 
@@ -333,7 +320,7 @@ const Game = () => {
 
       //wild is 13
       case "13":
-        console.log("select color played----");
+        // console.log("select color played----");
         // To Choose Colour
         if (order[turn] === 1) {
           setSelectColor(true);
@@ -345,8 +332,8 @@ const Game = () => {
           current.image_file = './cards/Wild.png';
 
           setCurrent(current);
-          console.log("bot select")
-          console.log(current)
+          // console.log("bot select")
+          // console.log(current)
           setTurn(nextTurn(turn));
         }
 
@@ -354,15 +341,15 @@ const Game = () => {
 
       //+4 is 14
       case "14":
-        console.log("draw 4 played----");
+        // console.log("draw 4 played----");
         var draw4CardPlayer = nextTurn(turn);
         for (var draw4 = 0; draw4 < 4; draw4++) {
           players["player" + order[draw4CardPlayer]].push(mainDeck[draw4]);
         }
         setAction(["+ 4", order[draw4CardPlayer]])
-      setTimeout(() => {
-        setAction([])
-      }, 5000);
+        setTimeout(() => {
+          setAction([])
+        }, 5000);
         setMainDeck(mainDeck.slice(4, mainDeck.length));
         setPlayers(players);
         // To Choose Colour
@@ -381,8 +368,8 @@ const Game = () => {
           current.values = 15;
           current.image_file = './cards/Wild_Draw.png';
           setCurrent(current);
-          console.log("bot select")
-          console.log(current)
+          // console.log("bot select")
+          // console.log(current)
           setPlayedDraw(true);
           setTimeout(() => {
             setPlayedDraw(false);
@@ -392,22 +379,31 @@ const Game = () => {
         break;
 
       default:
-        console.log("normal card played----");
+        // console.log("normal card played----");
         setTurn(nextTurn(turn));
         break;
     }
   }
 
   const playCard = (cardInfo, player, bot) => {
-    console.log("A card was played by Player " + order[turn]);
-    console.log("Current card is " + current.color + " " + current.values);
-    console.log("Card played is " + cardInfo.color + " " + cardInfo.values);
+    // console.log("A card was played by Player " + order[turn]);
+    // console.log("Current card is " + current.color + " " + current.values);
+    // console.log("Card played is " + cardInfo.color + " " + cardInfo.values);
 
     setIfShow(false);
     setIfDraw(false);
-    used.push(current);
-    setUsed(used);
+    // console.log(used)
+    if (used.length===0){
+      used.push(current)
+      setUsed(used)
+    }
+    else if (current.id !== used[used.length-1].id){
+      used.push(current)
+      setUsed(used)
+    }
+      
     setCurrent(cardInfo);
+    
     var player_new = player.filter((item) => item !== cardInfo);
     players["player" + order[turn]] = player_new;
     setPlayers(players);
@@ -421,9 +417,14 @@ const Game = () => {
       alert("You forgot to press NUO. 2 cards are drawn as penalty");
     }
 
-    if (players["player" + order[turn]].length === 1) {
+    if (order[turn] !== 1 && players["player" + order[turn]].length === 1) {
       var random = Math.random();
       if (random < 0.8) {
+        setAction(["NOU Pressed", order[turn]])
+        setTimeout(() => {
+          setAction([])
+        }, 5000);
+
         alert("PlayerBot " + order[turn] + "pressed NOU");
       } else {
         for (var botpenalty = 0; botpenalty < 2; botpenalty++) {
@@ -431,7 +432,10 @@ const Game = () => {
         }
         setMainDeck(mainDeck.slice(2, mainDeck.length));
         setPlayers(players);
-        alert("Bot forgot to press NUO. 2 cards are drawn as penalty");
+        setAction(["NOU not Pressed. +2", order[turn]])
+        setTimeout(() => {
+          setAction([])
+        }, 5000);
       }
     }
     if (bot) {
@@ -443,25 +447,25 @@ const Game = () => {
     }
     // switch ("14") {
 
-    console.log("here");
+    // console.log("here");
     return;
   };
 
   const playFirstCard = (firstcard, mdeck, firstPlayerDeck) => {
-    console.log("firstcard");
-    console.log(firstcard.values);
-    console.log(firstcard.color);
+    // console.log("firstcard");
+    // console.log(firstcard.values);
+    // console.log(firstcard.color);
     switch (firstcard.values) {
       //skip is 10
       case "10":
-        console.log("first card skipped played----");
-        console.log("Player 1 got skipped");
+        // console.log("first card skipped played----");
+        // console.log("Player 1 got skipped");
         setTurn(1);
         break;
 
       //reverse is 11
       case "11":
-        console.log("first card reverse played----");
+        // console.log("first card reverse played----");
         var fnewOrder = [order[2], order[1], order[0], order[3]];
         setOrder(fnewOrder);
         setTurn(3);
@@ -469,7 +473,7 @@ const Game = () => {
 
       //+2 draw is 12
       case "12":
-        console.log("first card draw 2 played----");
+        // console.log("first card draw 2 played----");
         for (var fdraw2 = 0; fdraw2 < 2; fdraw2++) {
           firstPlayerDeck["player1"].push(mdeck[fdraw2]);
         }
@@ -485,7 +489,7 @@ const Game = () => {
 
       //wild is 13
       case "13":
-        console.log("first card select color played----");
+        // console.log("first card select color played----");
         // To Choose Colour
 
         var fcolor = ["red", "blue", "yellow", "green"];
@@ -499,7 +503,7 @@ const Game = () => {
 
       //+4 is 14
       case "14":
-        console.log("first card draw 4 played----");
+        // console.log("first card draw 4 played----");
         for (var fdraw4 = 0; fdraw4 < 4; fdraw4++) {
           firstPlayerDeck["player1"].push(mdeck[fdraw4]);
         }
@@ -520,7 +524,7 @@ const Game = () => {
 
         break;
       default:
-        console.log("first normal card played----");
+        // console.log("first normal card played----");
         break;
     }
   };
@@ -545,18 +549,23 @@ const Game = () => {
         item.values === cardarray[0].values ||
         item.color === "wild"
     );
-    console.log("Dealt Cards...");
+    // console.log("Dealt Cards...");
     return [dealplayers, cardarray, player1playable];
   };
 
   const getCards = async () => {
     try {
       const response = await fetch(
-        "https://uno-clone.herokuapp.com/api/uno/cards"
+        process.env.REACT_APP_API_URL + "/api/uno/cards", {
+        method: 'GET',
+        headers: {
+          'authorization': localStorage.getItem('token'),
+        },
+      }
       );
       const jsonData = await response.json();
       var cards_retrieved = jsonData.cards;
-      console.log("Retrieved Cards...");
+      // console.log("Retrieved Cards...");
       setCards(cards_retrieved);
       cards_retrieved = shuffleCards(cards_retrieved);
       var arr = dealCards(cards_retrieved);
@@ -570,9 +579,9 @@ const Game = () => {
         cards_retrieved.slice(1, cards_retrieved.length),
         arr[0]
       );
-      console.log("Set Up Game...");
+      // console.log("Set Up Game...");
     } catch (err) {
-      console.error(err.message);
+      // console.error(err.message);
     }
   };
 
@@ -629,7 +638,7 @@ const Game = () => {
             type="image"
             disabled={ifDraw}
             className="deck"
-            src={"https://uno-clone.herokuapp.com/api/uno/images/Deck.png"}
+            src={process.env.REACT_APP_API_URL + "/api/uno/images/Deck.png"}
             style={{ width: 90 }}
             onClick={drawCards}
           ></input>
@@ -646,11 +655,11 @@ const Game = () => {
   }, []);
   let history = useHistory();
   useEffect(() => {
-    console.log("Turn changed");
-    console.log(turn);
-    console.log(current.image_file.slice(8));
-    console.log(current.image_file);
-    console.log("player " + order[turn] + " turn --------");
+    // console.log("Turn changed");
+    // console.log(turn);
+    // console.log("player"+order[turn]);
+  
+    // console.log("player " + order[turn] + " turn --------");
     if (
       (players.player1.length === 0 ||
         players.player2.length === 0 ||
@@ -658,7 +667,7 @@ const Game = () => {
         players.player4.length === 0) &&
       (mainDeck.length > 0 || used > 0)
     ) {
-      console.log("game ends");
+      // console.log("game ends");
       history.push({
         pathname: "/end",
         state: {
@@ -667,8 +676,8 @@ const Game = () => {
       });
     } else {
       if (order[turn] !== 1) {
-        console.log("the order now is " + order);
-        console.log("Its player " + order[turn]);
+        // console.log("the order now is " + order);
+        // console.log("Its player " + order[turn]);
         botplay(players["player" + order[turn]]);
       } else {
         var playable = players.player1.filter(
@@ -678,18 +687,19 @@ const Game = () => {
             item.color === "wild"
         );
 
-        console.log("the order now is " + order);
-        console.log("Its my turn -------------");
-        console.log("---------------------------------------");
-        console.log("---------------------------------------");
-        console.log("---------------------------------------");
-        console.log("Current card is " + current.color + " " + current.values);
-        console.log("The cards i can play is ");
-        console.log(playable);
+        // console.log("the order now is " + order);
+        // console.log("Its my turn -------------");
+        // console.log("---------------------------------------");
+        // console.log("---------------------------------------");
+        // console.log("---------------------------------------");
+        // console.log("Current card is " + current.color + " " + current.values);
+        // console.log("The cards i can play is ");
+        // console.log(playable);
         setPlayable(playable);
       }
     }
   }, [turn]);
+
 
   return (
     <div class="gamePage">
@@ -715,15 +725,16 @@ const Game = () => {
                   className="img-responsive currentcard"
                   style={{ width: 90, opacity: 0.5 }}
                   src={
-                    "https://uno-clone.herokuapp.com/api/uno/images/" +
+                    process.env.REACT_APP_API_URL + "/api/uno/images/" +
                     used[used.length - 1].image_file.slice(8)
                   }
-                ></img>}
+                ></img>
+                }
               <img
                 className="img-responsive currentcard"
                 style={{ width: 90 }}
                 src={
-                  "https://uno-clone.herokuapp.com/api/uno/images/" +
+                  process.env.REACT_APP_API_URL + "/api/uno/images/" +
                   current.image_file.slice(8)
                 }
               ></img>
@@ -752,7 +763,7 @@ const Game = () => {
             onClick={() => {
               if (players.player1.length === 1) {
                 setUnoButtonPressed(!isUnoButtonPressed);
-                alert("Nuo has been pressed! You have 1 card remaining!");
+                alert("NOU has been pressed! You have 1 card remaining!");
               }
             }}
           >

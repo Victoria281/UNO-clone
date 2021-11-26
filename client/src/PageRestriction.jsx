@@ -6,18 +6,19 @@ const Restrict = ({ component: Component, socket, ...props }) => (
     {...props}
     render={(routeProps) => {
       const id = localStorage.getItem("userid");
-      console.log("pagerestriction");
-      console.log(id);
-      console.log(socket);
+      const token = localStorage.getItem("token");
+      // console.log("pagerestriction");
+      // console.log(id);
+      // console.log(socket);
 
       if (id) {
-        console.log("render component");
+        // console.log("render component");
       } else {
-        console.log('REDIRECT TO "/login"!!!');
+        // console.log('REDIRECT TO "/login"!!!');
         alert("Please Login");
       }
 
-      return id !== null ? (
+      return (id !== null && token !== null) ? (
         <Component socket={socket} {...routeProps} />
       ) : (
         <Redirect to="/login" />
