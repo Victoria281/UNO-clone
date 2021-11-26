@@ -17,8 +17,7 @@ import PageRestriction from "./PageRestriction"
 import { NavLink } from 'react-router-dom'
 import io from "socket.io-client";
 
-// const socket = io.connect('https://uno-clone.herokuapp.com');
-const socket = io.connect('http://localhost:5000');
+const socket = io.connect(REACT_APP_API_URL);
 
 function Appmain(props) {
   return (
@@ -33,7 +32,7 @@ function Appmain(props) {
 }
 
 const App=() =>{
-  console.log(process.env.REACT_APP_SECRET_KEY)
+  // console.log(process.env.REACT_APP_SECRET_KEY)
   const [loggedIn, setLoggedIn] = useState(localStorage.getItem("userid"));
   useEffect(() => {
         setInterval(() => {
