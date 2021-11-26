@@ -33,7 +33,7 @@ var LeaderBoard = {
     getNumOfScores: function (num, callback) {
         const query = {
             name: 'getNumOfScores',
-            text: 'SELECT score, uno_leaderboard.created_by, username, userid, profileicon FROM uno_leaderboard RIGHT JOIN players using (userid) ORDER BY uno_leaderboard.created_by DESC LIMIT $1;',
+            text: 'SELECT score, uno_leaderboard.created_by, username, userid, profileicon FROM uno_leaderboard RIGHT JOIN players using (userid) ORDER BY uno_leaderboard.score DESC LIMIT $1;',
             values: [num],
         }
 
