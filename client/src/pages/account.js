@@ -21,7 +21,44 @@ export default function App() {
 
   // Function called when login button is clicked
   function createPost() {
-    axios
+    var status = true;
+
+    if(status === true){
+      // Check email field
+      if(email===""){
+        status = false;
+        setEmailError("Email Required!");
+      }else{
+        const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+        if (emailRegex.test(email)) {
+          status = true;
+          setEmailError("");
+        }else{
+          status = false;
+          setEmailError("Not a valid format")
+        }
+      }
+    }
+    // console.log("AFTERRRRRRRRRRRRRR EMAIL CHECK")
+    // console.log(status);
+
+    if(status === true){
+      // Check password field
+      if(password===""){
+        status = false;
+        setPasswordError("Password Required!");
+      }else{
+        status = true;
+        setPasswordError("");
+      }
+    }
+    // console.log("AFTERRRRRRR PASSWORD CHECK")
+    // console.log(status)
+
+
+
+    if(status){
+      axios
       .post(process.env.REACT_APP_API_URL + "/api/uno/login", {
         email: email,
         password: password
@@ -55,6 +92,34 @@ export default function App() {
         }
         // console.log(error.config);
       })
+    }
+
+
+// // checking if email is empty
+// if (email !== "") {
+//   // Checks email with regex expression
+//   const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+//   if (emailRegex.test(email)) {
+//     setEmailError("");
+//   } else {
+//     setEmailError("Invalid Email");
+//   }
+// } else {
+//   setEmailError("Email Required");
+// }
+
+// // Check if password is empty
+// if (password != "") {
+//   // Do something here!
+// } else {
+//   setPasswordError("Password Required");
+// }
+
+
+
+
+
+    
   }
 
 
@@ -74,26 +139,6 @@ export default function App() {
 
   const handleFormSubmit = (e) => {
     e.preventDefault();
-
-    // checking if email is empty
-    if (email !== "") {
-      // Checks email with regex expression
-      const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
-      if (emailRegex.test(email)) {
-        setEmailError("");
-      } else {
-        setEmailError("Invalid Email");
-      }
-    } else {
-      setEmailError("Email Required");
-    }
-
-    // Check if password is empty
-    if (password != "") {
-      // Do something here!
-    } else {
-      setPasswordError("Password Required");
-    }
   };
 
   return (
@@ -112,7 +157,7 @@ export default function App() {
             onSubmit={handleFormSubmit}
           >
             {successMsg && <div className="success-msg">{successMsg}</div>}
-            <label style={{ marginRight: 340, marginTop: 10 }}>Email:</label>
+            <label>Email:</label>
 
 
             <div class="input-group mb-3">
@@ -124,7 +169,7 @@ export default function App() {
 
             {emailError && <div className="error-msg">{emailError}</div>}
 
-            <label style={{ marginRight: 310, marginTop: 10 }}>Password:</label>
+            <label>Password:</label>
             <div class="input-group mb-3">
               <div class="input-group-prepend">
                 <span class="input-group-text"><i class="fa fa-lock fa-lg fa-fw" aria-hidden="true"></i></span>
