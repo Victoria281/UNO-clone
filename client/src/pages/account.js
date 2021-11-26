@@ -5,17 +5,18 @@ import "../css/account.css";
 // import { response } from "express";
 import axios from "axios";
 
+
 export default function App() {
   const [email, setEmail] = useState("");
   const [emailError, setEmailError] = useState("");
   const [post, setPost] = React.useState(null);
   const [password, setPassword] = useState("");
   const [passwordError, setPasswordError] = useState("");
-
+  const [credWrong, setCredWrong] = useState("");
   const [successMsg, setSuccessMsg] = useState("");
 
 
- 
+
 
 
   // Function called when login button is clicked
@@ -29,15 +30,19 @@ export default function App() {
         console.log(response)
         localStorage.setItem('token', 'Bearer '+response.data.token)
         localStorage.setItem('userid', response.data.user_id)
+        localStorage.setItem('username', response.data.username)
+        setCredWrong("");
+        window.location.replace("https://uno-clone.herokuapp.com")
         alert("Login successful!")
       })
       .catch((error) => {
-        if(error.response){
+        if (error.response) {
           console.log("ERROR RESPONSESSSSSSSSS")
           console.log(error.response.data)
           console.log(error.response.status);
           console.log(error.response.headers);
-        }else if (error.request) {
+          setCredWrong("Wrong Credentials Entered!");
+        } else if (error.request) {
           // The request was made but no response was received
           // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
           // http.ClientRequest in node.js
@@ -52,8 +57,8 @@ export default function App() {
       })
   }
 
-   
- 
+
+
 
   const handleEmailChange = (e) => {
     setSuccessMsg("");
@@ -94,45 +99,56 @@ export default function App() {
   return (
     <div className="App">
       <div className="wrapper">
-        <h3>
-          <b>Login</b>
-        </h3>
+        
+        <h1><b id="loginTxt" className="p-3">Login</b></h1>
+        <div id="loginSection" className="p-5">
+          <h3>
+            
+          </h3>
 
-        <form
-          className="form-group form"
-          autoComplete="off"
-          onSubmit={handleFormSubmit}
-        >
-          {successMsg && <div className="success-msg">{successMsg}</div>}
-          <label style={{ marginRight: 340, marginTop: 10 }}>Email:</label>
-          <input
-            type="text"
-            className="form-control"
-            placeholder="Enter your email address"
-            onChange={handleEmailChange}
-            value={email}
-          />
-          {emailError && <div className="error-msg">{emailError}</div>}
-
-          <label style={{ marginRight: 310, marginTop: 10 }}>Password:</label>
-          <input
-            type="password"
-            className="form-control"
-            placeholder="Enter your password"
-            onChange={handlePasswordChange}
-            value={password}
-          />
-          {passwordError && <div className="error-msg">{passwordError}</div>}
-
-          <button
-            type="submit"
-            className="btn btn-success btn-lg"
-            style={{ width: "50%", marginTop: 30, height: 50 }}
-            onClick={createPost}
+          <form
+            className="form-group form"
+            autoComplete="off"
+            onSubmit={handleFormSubmit}
           >
-            <p style={{fontSize: 15}}>Login</p>
-          </button>
-        </form>
+            {successMsg && <div className="success-msg">{successMsg}</div>}
+            <label style={{ marginRight: 340, marginTop: 10 }}>Email:</label>
+
+
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <span class="input-group-text"><i class="fa fa-envelope fa-lg fa-fw" aria-hidden="true"></i></span>
+              </div>
+              <input type="text" className="form-control" placeholder="Email Address" onChange={handleEmailChange} value={email} />
+            </div>
+
+            {emailError && <div className="error-msg">{emailError}</div>}
+
+            <label style={{ marginRight: 310, marginTop: 10 }}>Password:</label>
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <span class="input-group-text"><i class="fa fa-lock fa-lg fa-fw" aria-hidden="true"></i></span>
+              </div>
+              <input type="password" className="form-control" placeholder="Password" onChange={handlePasswordChange} value={password} />
+            </div>
+
+            {passwordError && <div className="error-msg">{passwordError}</div>}
+
+            {credWrong && <div className="error-msg">{credWrong}</div>}
+
+            <button
+              type="submit"
+              className="btn btn-success btn-lg"
+              style={{ marginTop: 15, height: 50, backgroundColor: '#FFB967', border: '1px solid #FFB967', borderRadius: '50%'}}
+              onClick={createPost}
+              id="submitBtn"
+            >
+              <p id="btnTxt" style={{ fontSize: 42, fontWeight: 'bolder' , fontFamily: 'Rubik Mono One', color:'black', marginTop: -20}}><b>Login</b></p>
+            </button><br/><br/>
+            <a href="http://localhost:3000/register" id="registerLink" className="p-4"> Create Account? </a>
+            <a href="http://localhost:3000/register" id="forgotLink" className="p-4"> Forgot Password? </a>
+          </form>
+        </div>
       </div>
     </div>
   );

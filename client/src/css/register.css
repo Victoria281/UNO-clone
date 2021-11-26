@@ -1,5 +1,4 @@
-
-  .error-msg {
+ .error-msg {
     font-size: "12px";
     width: "100%";
     color: "red";
@@ -8,4 +7,36 @@
   .success-msg {
     width: 100%;
   }
-  
+
+  #registerSection{
+    border: 2px solid white;
+    border-radius: 10px;
+    box-shadow: 1px 2px #888888;
+    background-color: white;
+    margin-top: 10%;
+  }
+
+
+  #registerTxt{
+    font-family: Rubik Mono One;
+    position: absolute;
+    top: 10px;
+    left: 110px;
+    border:#00b3ffe7;
+    border-style: solid;
+    border-radius: 15px;
+    background-color: #00b3ffe7;
+    width: 60%;
+  }
+
+  #registerBtnTxt{
+    transform: rotate(-20deg);
+    position: relative;
+    -webkit-text-stroke-width: 0.5px;
+    -webkit-text-stroke-color: white;
+    font-family: "RubikOne";
+  }
+
+  #registerBtn{
+    transform: rotate(8deg);
+  }

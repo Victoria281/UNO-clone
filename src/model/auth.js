@@ -23,6 +23,7 @@ var Auth = {
                     callback(error, null);
                     return;
                 } else {
+                    console.log(result.rows)
                     return callback(null, [result.rows[0]]);
                 }
             });
