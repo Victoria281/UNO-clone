@@ -10,6 +10,8 @@ const Leaderboard = () => {
     const [p2, setP2] = useState({});
     const [p3, setP3] = useState({});
 
+    var currentdate = new Date();
+
     const getPlayers = async () => {
         try {
             const response = await fetch(
@@ -43,7 +45,7 @@ const Leaderboard = () => {
                                     <div class="col-2 p-2">
                                         <img
                                             class="img-responsive lb2Icons"
-                                            alt="leaderboard"
+                                            alt="pic"
                                             src={process.env.REACT_APP_API_URL + "/api/uno/profile_icons/" + players.profileicon + ".png"}
                                         />
                                     </div>
@@ -59,7 +61,7 @@ const Leaderboard = () => {
                                 <p class="p-2">{players.created_by}</p>
                             </div>
                         </div>)
-                    } else {
+                    } else if(index>3) {
                         return (
                             <div class="row no-gutters leaderboard_row">
                                 <div class="col-sm-2 p-2 leaderboard_col text-center">
@@ -70,7 +72,7 @@ const Leaderboard = () => {
                                         <div class="col-2 p-2">
                                             <img
                                                 class="img-responsive lb2Icons"
-                                                alt="leaderboard"
+                                                alt="pic"
                                                 src={process.env.REACT_APP_API_URL + "/api/uno/profile_icons/" + players.profileicon + ".png"}
                                             />
                                         </div>
@@ -113,7 +115,7 @@ const Leaderboard = () => {
                         height={window.innerHeight}
                         /> : null} 
                     <div class="row no-gutters">
-                        <div class="col-7 p-5" >
+                        <div class="col-7 p-5">
                             <div id="podium" class="row no-gutters">
                                 <div className="col-4">
                                     <div className="h-25"> </div>
@@ -121,7 +123,7 @@ const Leaderboard = () => {
                                         <div class="lb2IconBorder">
                                             <img
                                                 class="img-responsive lb1Icons"
-                                                alt="leaderboard"
+                                                alt="pic"
                                                 src={process.env.REACT_APP_API_URL + "/api/uno/profile_icons/" + p2.profileicon + ".png"}
                                             />
                                         </div>
@@ -131,17 +133,8 @@ const Leaderboard = () => {
                                             </div>
                                             <p class="lbuserheader">{p2.username}</p>{" "}
                                             <p class="lbuser">
-                                                <strong>({p2.score})</strong>
-                                                {/* ({p2.created_by}) */}
+                                                <strong>{p2.score}pts</strong>
                                             </p>
-                                            {/* <div className="d-flex justify-content-center">
-                                                <img
-                                                    id="medal2"
-                                                    class="img-responsive"
-                                                    alt="leaderboard"
-                                                    src={medalImage2}
-                                                />
-                                            </div> */}
                                         </div>
                                     </div>
                                 </div>
@@ -152,14 +145,14 @@ const Leaderboard = () => {
                                             <img
                                                 id="crown"
                                                 class="img-responsive"
-                                                alt="leaderboard"
+                                                alt="pic"
                                                 src={crownImage} />
                                         </div>
 
                                         <div class="lb1IconBorder">
                                             <img
                                                 class="img-responsive lb1Icons"
-                                                alt="leaderboard"
+                                                alt="pic"
                                                 src={process.env.REACT_APP_API_URL + "/api/uno/profile_icons/" + p1.profileicon + ".png"}
                                             />
                                         </div>
@@ -171,8 +164,7 @@ const Leaderboard = () => {
                                                 {p1.username}
                                             </p>
                                             <p class="lbuser">
-                                                <strong>({p1.score})</strong>
-                                                {/* ({p1.created_by}) */}
+                                                <strong>{p1.score}pts</strong>
                                             </p>
                                         </div>
                                     </div>
@@ -182,15 +174,9 @@ const Leaderboard = () => {
                                     <div className="h-50"> </div>
                                     <div id="podiumPillar3">
                                         <div class="lb3IconBorder">
-                                            {/* <img
-                                                id="medal3"
-                                                class="img-responsive"
-                                                alt="leaderboard"
-                                                src={medalImage3}
-                                            /> */}
                                             <img
                                                 class="img-responsive lb1Icons"
-                                                alt="leaderboard"
+                                                alt="pic"
                                                 src={process.env.REACT_APP_API_URL + "/api/uno/profile_icons/" + p3.profileicon + ".png"}
                                             />
                                         </div>
@@ -200,8 +186,7 @@ const Leaderboard = () => {
                                             </div>
                                             <p class="lbuserheader">{p3.username}</p>{" "}
                                             <p class="lbuser">
-                                                <strong>({p3.score})</strong>
-                                                {/* ({p3.created_by}) */}
+                                                <strong>{p3.score}pts</strong>
                                             </p>
                                         </div>
                                     </div>
