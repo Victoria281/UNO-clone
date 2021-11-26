@@ -39,7 +39,7 @@ html, body {
 }
 
 .botTxtleft{
-  transform: rotate(90deg) translateY(-70px) translateX(-90%);
+  transform: rotate(90deg) translateY(-70px) translateX(-20px);
 }
 
 .botcardsleft {

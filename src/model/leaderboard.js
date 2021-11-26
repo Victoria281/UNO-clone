@@ -68,6 +68,26 @@ var LeaderBoard = {
         },
         );
     },
+    insertNewScore: function (id, score, callback) {
+        console.log(id)
+        console.log(score)
+        const query = {
+            name: 'insertNewScore',
+            text: 'INSERT INTO uno_leaderboard("userid", "score") VALUES($1, $2);',
+            values: [id, score],
+        }
+
+        return pool.query(query, function (error, result) {
+            if (error) {
+                callback(error, null);
+                return;
+            } else {
+                console.log(result.rows)
+                return callback(null, result.rows);
+            }
+        },
+        );
+    },
 
 }
 

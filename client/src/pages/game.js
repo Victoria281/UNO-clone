@@ -423,7 +423,7 @@ const Game = () => {
         setAction(["NOU Pressed", order[turn]])
         setTimeout(() => {
           setAction([])
-        }, 5000);
+        }, 3000);
 
         alert("PlayerBot " + order[turn] + "pressed NOU");
       } else {
@@ -435,7 +435,7 @@ const Game = () => {
         setAction(["NOU not Pressed. +2", order[turn]])
         setTimeout(() => {
           setAction([])
-        }, 5000);
+        }, 3000);
       }
     }
     if (bot) {
