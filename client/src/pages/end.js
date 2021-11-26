@@ -15,7 +15,7 @@ const End = (props) => {
     player4: 0
   });
   const [points, setPoints] = useState(0);
-  console.log(props.location.state);
+  // console.log(props.location.state);
   const [gameresult, setGameResult] = useState(false);
 
   const [userHighestScores, setuserHighestScores] = useState([]);
@@ -41,9 +41,9 @@ const End = (props) => {
               : <div className="headerW">You Lose</div>
             }
             {player1win ? <div className="actionsW">+{points} Points</div>
-              : <div className="actionsW">Current HighScore: {userHighestScores[0]}</div>
+              : <div className="actionsW">Current HighScore: {userHighestScores}</div>
             }
-            {player1win ? <div className="actionsW">New HighScore: {points}</div>
+            {player1win ? <div className="actionsW">HighScore: {userHighestScores}</div>
               : <div className="actionsW">Try Again...</div>
             }
           </div>
@@ -93,7 +93,7 @@ const End = (props) => {
         }
         cardsLeft[key] = players[key].length;
         tempPts += players[key].length * 10;
-        console.log(key + " -> " + players[key].length);
+        // console.log(key + " -> " + players[key].length);
       }
     }
     setCardsLeft(cardsLeft);
@@ -110,36 +110,18 @@ const End = (props) => {
     try {
       const userid = localStorage.getItem('userid')
       const response = await fetch(
-        `https://uno-clone.herokuapp.com/api/uno/leaderboard/update/${userid}`, {
+        process.env.REACT_APP_API_URL + `/api/uno/leaderboard/update/${userid}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
+              'authorization': localStorage.getItem('token'),
         },
         body: JSON.stringify({
           score: points
         })
       });
     } catch (err) {
-      console.error(err.message);
-    }
-  };
-
-  // Insert score if user has no prev score
-  const insertNewScore = async () => {
-    try {
-      const userid = localStorage.getItem('userid')
-      const response = await fetch(
-        `https://uno-clone.herokuapp.com/api/uno/leaderboard/insert/${userid}`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          score: points
-        })
-      });
-    } catch (err) {
-      console.error(err.message);
+      // console.error(err.message);
     }
   };
 
@@ -148,22 +130,25 @@ const End = (props) => {
     try {
       const uid = localStorage.getItem('userid')
       const response = await fetch(
-        `https://uno-clone.herokuapp.com/api/uno/leaderboard/user/${uid}`
+        process.env.REACT_APP_API_URL + `/api/uno/leaderboard/user/${uid}`, {
+          method: 'GET',
+          headers: {
+            'authorization': localStorage.getItem('token'),
+          },
+        }
       );
       const jsonData = await response.json();
       var userHighScore = jsonData.score;
       console.log(userHighScore)
-      setuserHighestScores(userHighScore[0]);
+      setuserHighestScores(userHighScore[0].score);
+
 
       if(userHighScore[0].score<points){
         updatePlayerHighestScore();
-        console.log("Update")
-      }else if(userHighScore[0].score==null){
-        insertNewScore();
-        console.log("Added")
+        // console.log("Update")
       }
     } catch (err) {
-      console.error(err.message);
+      // console.error(err.message);
     }
   };
 

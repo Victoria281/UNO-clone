@@ -1,9 +1,7 @@
 import React, { Fragment, useEffect, useState } from "react";
 
 import axios from "axios";
-import { useHistory } from "react-router-dom";
 import "../css/register.css";
-import e from "cors";
 
 export default function App() {
   const [username, setUsername] = useState("");
@@ -97,7 +95,7 @@ export default function App() {
           setPasswordError("");
         }else{
           status = false;
-          setPasswordError("Must have at least 8 characters and follow the format")
+          setPasswordError("Criteria: Upper and Lowercase, Number, Special Char")
         }
       }
     }
@@ -120,18 +118,18 @@ export default function App() {
       }
     }
     
-    console.log("STATUS: " + status);
-    // console.log((emailError == "") && (usernameError == "") && (passwordError == "" ) && (passwordCfmError == ""))
+    // console.log("STATUS: " + status);
+    // // console.log((emailError == "") && (usernameError == "") && (passwordError == "" ) && (passwordCfmError == ""))
     if(status){
 
       axios
-        .post("http://localhost:5000/api/uno/register", {
+        .post(process.env.REACT_APP_API_URL + "/api/uno/register", {
           userName: username,
           email: email,
           password: password
         })
         .then((response) => {
-          console.log(response)
+          // console.log(response)
           // If no duplicates, set error to empty
           setDuplicateMsg("");
           window.location = "/login"
@@ -144,14 +142,14 @@ export default function App() {
             // The request was made but no response was received
             // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
             // http.ClientRequest in node.js
-            console.log("------------------INSIDE ERROR REQUEST---------------------")
-            console.log(error.request);
+            // console.log("------------------INSIDE ERROR REQUEST---------------------")
+            // console.log(error.request);
           } else {
             // Something happened in setting up the request that triggered an Error
-            console.log("BIG FAT ERRORRRR")
-            console.log('Error', error.message);
+            // console.log("BIG FAT ERRORRRR")
+            // console.log('Error', error.message);
           }
-          console.log(error.config);
+          // console.log(error.config);
         })
     }
   }
@@ -171,19 +169,18 @@ export default function App() {
             onSubmit={handleFormSubmit}
           >
             {successMsg && <div className="success-msg">{successMsg}</div>}
-            <label style={{ marginRight: 365, marginTop: 1 }}>Username:</label>
-            
+            <label className="mt-2">Username:</label>
 
             <div class="input-group mb-2">
               <div class="input-group-prepend">
                 <span class="input-group-text"><i class="fa fa-user fa-lg fa-fw" aria-hidden="true"></i></span>
               </div>
-              <input type="text" className="form-control" placeholder="Username" onChange={handleUsernameChange} value={username} />
+              <input type="text" className="form-control pr-5" placeholder="Username" onChange={handleUsernameChange} value={username} />
             </div>
 
             {usernameError && <div className="error-msg">{usernameError}</div>}
 
-            <label style={{ marginRight: 400, marginTop: 1 }}>Email:</label>
+            <label >Email:</label>
             
 
             <div class="input-group mb-2">
@@ -195,7 +192,7 @@ export default function App() {
 
             {emailError && <div className="error-msg">{emailError}</div>}
 
-            <label style={{ marginRight: 370, marginTop: 1 }}>Password:</label>
+            <label>Password (must be 8 characters):</label>
             <div class="input-group mb-2">
               <div class="input-group-prepend">
                 <span class="input-group-text"><i class="fa fa-lock fa-lg fa-fw" aria-hidden="true"></i></span>
@@ -205,7 +202,7 @@ export default function App() {
 
             {passwordError && <div className="error-msg">{passwordError}</div>}
 
-            <label style={{ marginRight: 310, marginTop: 1 }}>
+            <label className="mt-3">
               Confirm Password:
             </label>
             <div class="input-group mb-2">

@@ -22,29 +22,24 @@ const fs = require("fs");
 const path = require("path");
 const url = require("url");
 
-
-
 //=====================================
 //  Images
 //=====================================
 
 //retrieveImagesForUno
-app.get('/images/*', function (req, res, next) {
+app.get('/images/*', printingDebuggingInfo, function (req, res, next) {
     var request = url.parse(req.url, true);
     var action = request.pathname;
-    var filePath = path.join(__dirname,
-        action).split("%20").join(" ");
+    var filePath = path.join(__dirname, action).split("%20").join(" ");
     console.log(action)
     console.log(filePath)
 
-    fs.exists(filePath, function (exists) {
-
-        if (!exists) {
-            res.writeHead(404, {
-                "Content-Type": "text/plain"
-            });
-            res.end("404 Not Found");
-            return;
+    fs.open(filePath, 'r', (err, fd) => {
+        if (err) {
+            if (err.code === 'ENOENT') {
+                return next(createHttpError(404, `Not found`));
+            }
+            throw err;
         }
 
         var ext = path.extname(action);
@@ -63,23 +58,23 @@ app.get('/images/*', function (req, res, next) {
                 res.end(content);
             });
     });
+
 });
 
 //retrieveImagesForProfile
-app.get('/profile_icons/*', function (req, res, next) {
+app.get('/profile_icons/*', printingDebuggingInfo, function (req, res, next) {
     var request = url.parse(req.url, true);
     var action = request.pathname;
-    var filePath = path.join(__dirname,
-        action).split("%20").join(" ");
+    var filePath = path.join(__dirname, action).split("%20").join(" ");
+    console.log(action)
+    console.log(filePath)
 
-    fs.exists(filePath, function (exists) {
-
-        if (!exists) {
-            res.writeHead(404, {
-                "Content-Type": "text/plain"
-            });
-            res.end("404 Not Found");
-            return;
+    fs.open(filePath, 'r', (err, fd) => {
+        if (err) {
+            if (err.code === 'ENOENT') {
+                return next(createHttpError(404, `Not found`));
+            }
+            throw err;
         }
 
         var ext = path.extname(action);
@@ -104,27 +99,8 @@ app.get('/profile_icons/*', function (req, res, next) {
 //  Card
 //=====================================
 
-//findById
-app.get('/card/:id', verifyToken, function (req, res, next) {
-    console.log("herere")
-    const id = req.params.id;
-
-    Card.findByID(id, function (err, result) {
-        if (err) {
-            if (err.code === '23505') {
-                return next(createHttpError(404, `Not found`));
-            }
-            else {
-                return next(err);
-            }
-        } else {
-            return res.json({ card: result });
-        }
-    });
-});
-
 //findAll
-app.get('/cards', function (req, res, next) {
+app.get('/cards', printingDebuggingInfo, verifyToken, function (req, res, next) {
 
     Card.findAll(function (err, result) {
         if (err) {
@@ -135,7 +111,12 @@ app.get('/cards', function (req, res, next) {
                 return next(err);
             }
         } else {
-            return res.json({ cards: result });
+            if (result.length == 0){
+                return next(createHttpError(404, `Not found`));
+            } else {
+                return res.status(200).json({ cards: result });
+            }
+            
         }
     });
 });
@@ -160,7 +141,7 @@ app.post('/login', printingDebuggingInfo, function (req, res, next) {
                         return res.status(500).json({ message: 'login failed' });
                     }
                     if (bcrypt.compareSync(password, results[0].password) == true) {
-                        
+
                         let data = {
                             user_id: results[0].userid,
                             token: jwt.sign({ id: results[0].userid }, config, {
@@ -189,16 +170,16 @@ app.post('/register', printingDebuggingInfo, function (req, res, next) {
     let email = req.body.email;
     let password = req.body.password;
 
-    
-    bcrypt.hash(password, 10, async(err, hash) => {
+
+    bcrypt.hash(password, 10, async (err, hash) => {
         if (err) {
             console.log('Error on hashing password');
-            
+
             return res.status(500).json({ statusMessage: 'Unable to complete registration with error!' });
         } else {
-                results = Auth.register(userName, email, hash, function(error, results){
-                  console.log("RESULTS: " + results)
-                if (results!=null){
+            results = Auth.register(userName, email, hash, function (error, results) {
+                console.log("RESULTS: " + results)
+                if (results != null) {
                     LeaderBoard.insertNewScore(results[0].userid, 0, function (err, result) {
                         console.log(results)
                         console.log(results[0].userid)
@@ -214,15 +195,15 @@ app.post('/register', printingDebuggingInfo, function (req, res, next) {
                         }
                     });
 
-                    
+
                 }
-                console.log("IM HEREEEEEEEEEEEEEEEE and the error here is " + error )
+                console.log("IM HEREEEEEEEEEEEEEEEE and the error here is " + error)
                 if (error) {
                     console.log("ERROR CODE:---------------------------- " + error)
-                    
+
                     return res.status(500).json({ statusMessage: 'Unable to complete registration due to duplicate field(s)' });
                 }
-                });
+            });
         }
     });
 
@@ -233,7 +214,7 @@ app.post('/register', printingDebuggingInfo, function (req, res, next) {
 //=====================================
 
 //findByUserId
-app.get('/user/:id', printingDebuggingInfo, function (req, res, next) {
+app.get('/user/:id', printingDebuggingInfo, verifyToken, function (req, res, next) {
     const id = req.params.id;
 
     User.findByUserID(id, function (err, result) {
@@ -245,13 +226,17 @@ app.get('/user/:id', printingDebuggingInfo, function (req, res, next) {
                 return next(err);
             }
         } else {
-            return res.json({ user: result });
+            if (result.length == 0){
+                return next(createHttpError(404, `Not found`));
+            } else {
+                return res.status(200).json({ user: result });
+            }
         }
     });
 });
 
 //updateUserIcon
-app.put('/user/icon/:id', printingDebuggingInfo, function (req, res, next) {
+app.put('/user/icon/:id', printingDebuggingInfo, verifyToken, function (req, res, next) {
     const id = req.params.id;
     const icon = req.body.icon;
 
@@ -271,10 +256,10 @@ app.put('/user/icon/:id', printingDebuggingInfo, function (req, res, next) {
 });
 
 //updateUserInfo
-app.put('/user/updateinfo/:id', printingDebuggingInfo, function (req, res, next) {
+app.put('/user/updateinfo/:id', printingDebuggingInfo, verifyToken, function (req, res, next) {
     const id = req.params.id;
     const newusername = req.body.username;
-    const newemail= req.body.email;
+    const newemail = req.body.email;
 
     User.updateUserInfo(id, newusername, newemail, function (err, result) {
         if (err) {
@@ -292,7 +277,7 @@ app.put('/user/updateinfo/:id', printingDebuggingInfo, function (req, res, next)
 });
 
 //updateUserPassword
-app.put('/user/update/:id', printingDebuggingInfo, function (req, res, next) {
+app.put('/user/update/:id', printingDebuggingInfo, verifyToken, function (req, res, next) {
     const id = req.params.id;
     const old_password = req.body.old_password;
     const new_password = req.body.new_password;
@@ -338,7 +323,7 @@ app.put('/user/update/:id', printingDebuggingInfo, function (req, res, next) {
 });
 
 //deleteUser
-app.delete('/user/delete/:id', printingDebuggingInfo, function (req, res, next) {
+app.delete('/user/delete/:id', printingDebuggingInfo, verifyToken, function (req, res, next) {
     const id = req.params.id;
 
     User.deleteUser(id, function (err, result) {
@@ -378,23 +363,6 @@ app.get('/leaderboard/user/:id', printingDebuggingInfo, function (req, res, next
     });
 });
 
-//getAllScores
-app.get('/leaderboard', printingDebuggingInfo, function (req, res, next) {
-
-    LeaderBoard.getAllScores(function (err, result) {
-        if (err) {
-            if (err.code === '23505') {
-                return next(createHttpError(404, `Not found`));
-            }
-            else {
-                return next(err);
-            }
-        } else {
-            return res.status(200).send({ score: result });
-        }
-    });
-});
-
 //getNumOfScores
 app.get('/leaderboard/:num', printingDebuggingInfo, function (req, res, next) {
     const num = req.params.num;
@@ -414,7 +382,7 @@ app.get('/leaderboard/:num', printingDebuggingInfo, function (req, res, next) {
 });
 
 //updateHighestScore
-app.put('/leaderboard/update/:id', printingDebuggingInfo, function (req, res, next) {
+app.put('/leaderboard/update/:id', printingDebuggingInfo, verifyToken, function (req, res, next) {
     const id = req.params.id;
     const score = req.body.score;
 
@@ -432,24 +400,6 @@ app.put('/leaderboard/update/:id', printingDebuggingInfo, function (req, res, ne
     });
 });
 
-//insertNewScore
-app.post('/leaderboard/insert/:id', printingDebuggingInfo, function (req, res, next) {
-    const id = req.params.id;
-    const score = req.body.score;
-
-    LeaderBoard.insertNewScore(id, score, function (err, result) {
-        if (err) {
-            if (err.code === '23505') {
-                return next(createHttpError(404, `Not found`));
-            }
-            else {
-                return next(err);
-            }
-        } else {
-            return res.status(201).send({ result: "Created" });
-        }
-    });
-});
 
 
 module.exports = app;
