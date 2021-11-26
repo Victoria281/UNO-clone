@@ -8,10 +8,16 @@ const Profile = () => {
     try {
       const uid = localStorage.getItem('userid')
       const response = await fetch(
-        `https://uno-clone.herokuapp.com/api/uno/user/${uid}`
+        process.env.REACT_APP_API_URL + `/api/uno/user/${uid}`,  {
+          method: 'GET',
+          headers: {
+            'authorization': localStorage.getItem('token'),
+          }}
       );
+      console.log(response)
       const jsonData = await response.json();
       var userInformation = jsonData.user;
+      console.log("userInformation")
       console.log(userInformation)
       setUserInfo(userInformation);
     } catch (err) {
@@ -29,14 +35,15 @@ const Profile = () => {
     const profileIcons = ['bird', 'cat', 'elephant', 'fox', 'frog', 'koala', 'shell', 'toucan', 'turtle', 'whale']
     const changeIcon = async () => {
       if (selectedIcon == null) {
-        console.log("no icon selected")
+        // console.log("no icon selected")
       } else {
         try {
           const uid = localStorage.getItem('userid')
-          const response = await fetch(`https://uno-clone.herokuapp.com/api/uno/user/icon/${uid}`, {
+          const response = await fetch(process.env.REACT_APP_API_URL + `/api/uno/user/icon/${uid}`, {
             method: 'PUT',
             headers: {
               'Content-Type': 'application/json',
+              'authorization': localStorage.getItem('token'),
             },
             body: JSON.stringify({
               icon: selectedIcon
@@ -50,7 +57,7 @@ const Profile = () => {
             alert("Error Occured!")
           }
         } catch (err) {
-          console.error(err.message);
+          // console.error(err.message);
         }
       }
 
@@ -86,7 +93,7 @@ const Profile = () => {
                       <div class="profileIconBorder">
                         <img
                           class="img-responsive profileIcons"
-                          src={"https://uno-clone.herokuapp.com/api/uno/profile_icons/" + animal + ".png"}
+                          src={process.env.REACT_APP_API_URL + "/api/uno/profile_icons/" + animal + ".png"}
                         />
                       </div>
                     </label>
@@ -118,9 +125,9 @@ const Profile = () => {
     const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/;
 
     const handlePasswordChange = async () => {
-      console.log(oldpassword)
-      console.log(newpassword)
-      console.log(checkpassword)
+      // console.log(oldpassword)
+      // console.log(newpassword)
+      // console.log(checkpassword)
       if (newpassword !== checkpassword || newpassword === " " || newpassword === "" || checkpassword === " " || checkpassword === "") {
         //alert("Password is not similar")
         setError("Password is not similar");
@@ -132,10 +139,11 @@ const Profile = () => {
       }else {
         try {
           const uid = localStorage.getItem('userid')
-          const response = await fetch(`https://uno-clone.herokuapp.com/api/uno/user/update/${uid}`, {
+          const response = await fetch(process.env.REACT_APP_API_URL + `/api/uno/user/update/${uid}`, {
             method: 'PUT',
             headers: {
               'Content-Type': 'application/json',
+              'authorization': localStorage.getItem('token'),
             },
             body: JSON.stringify({
               old_password: oldpassword,
@@ -152,7 +160,7 @@ const Profile = () => {
             //alert("Error Occured!")
           }
         } catch (err) {
-          console.error(err.message);
+          // console.error(err.message);
         }
       }
     }
@@ -206,8 +214,8 @@ const Profile = () => {
 
 
     const handleInfoChange = async () => {
-      console.log(newusername);
-      console.log(newemail);
+      // console.log(newusername);
+      // console.log(newemail);
       if (newusername === "" || newemail === "") {
         setError("Username and/or Email field is empty");
         setWarning(true);
@@ -215,10 +223,11 @@ const Profile = () => {
       } else {
         try {
           const uid = localStorage.getItem('userid')
-          const response = await fetch(`https://uno-clone.herokuapp.com/api/uno/user/updateinfo/${uid}`, {
+          const response = await fetch(process.env.REACT_APP_API_URL + `/api/uno/user/updateinfo/${uid}`, {
             method: 'PUT',
             headers: {
               'Content-Type': 'application/json',
+              'authorization': localStorage.getItem('token'),
             },
             body: JSON.stringify({
               username: newusername,
@@ -236,7 +245,7 @@ const Profile = () => {
           }
         } catch (err) {
           alert("Error Occured!");
-          console.error(err.message);
+          // console.error(err.message);
         }
       }
     }
@@ -316,7 +325,7 @@ return (
                       >
                         <img
                           class="img-responsive mainIcon"
-                          src={"https://uno-clone.herokuapp.com/api/uno/profile_icons/" + userInfo.profileicon + ".png"}
+                          src={process.env.REACT_APP_API_URL + "/api/uno/profile_icons/" + userInfo.profileicon + ".png"}
                         />
 
                         <div class="middle">

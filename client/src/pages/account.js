@@ -22,38 +22,38 @@ export default function App() {
   // Function called when login button is clicked
   function createPost() {
     axios
-      .post("https://uno-clone.herokuapp.com/api/uno/login", {
+      .post(process.env.REACT_APP_API_URL + "/api/uno/login", {
         email: email,
         password: password
       })
       .then((response) => {
-        console.log(response)
+        // console.log(response)
         localStorage.setItem('token', 'Bearer '+response.data.token)
         localStorage.setItem('userid', response.data.user_id)
         localStorage.setItem('username', response.data.username)
         setCredWrong("");
-        window.location.replace("https://uno-clone.herokuapp.com")
-        alert("Login successful!")
+        window.location = '/'
+        // alert("Login successful!")
       })
       .catch((error) => {
         if (error.response) {
-          console.log("ERROR RESPONSESSSSSSSSS")
-          console.log(error.response.data)
-          console.log(error.response.status);
-          console.log(error.response.headers);
+          // console.log("ERROR RESPONSESSSSSSSSS")
+          // console.log(error.response.data)
+          // console.log(error.response.status);
+          // console.log(error.response.headers);
           setCredWrong("Wrong Credentials Entered!");
         } else if (error.request) {
           // The request was made but no response was received
           // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
           // http.ClientRequest in node.js
-          console.log("------------------INSIDE ERROR REQUEST---------------------")
-          console.log(error.request);
+          // console.log("------------------INSIDE ERROR REQUEST---------------------")
+          // console.log(error.request);
         } else {
           // Something happened in setting up the request that triggered an Error
-          console.log("BIG FAT ERRORRRR")
-          console.log('Error', error.message);
+          // console.log("BIG FAT ERRORRRR")
+          // console.log('Error', error.message);
         }
-        console.log(error.config);
+        // console.log(error.config);
       })
   }
 
@@ -145,8 +145,8 @@ export default function App() {
             >
               <p id="btnTxt" style={{ fontSize: 42, fontWeight: 'bolder' , fontFamily: 'Rubik Mono One', color:'black', marginTop: -20}}><b>Login</b></p>
             </button><br/><br/>
-            <a href="http://localhost:3000/register" id="registerLink" className="p-4"> Create Account? </a>
-            <a href="http://localhost:3000/register" id="forgotLink" className="p-4"> Forgot Password? </a>
+            <a href="/register" id="registerLink" className="p-4"> Create Account? </a>
+            <a href="/register" id="forgotLink" className="p-4"> Forgot Password? </a>
           </form>
         </div>
       </div>

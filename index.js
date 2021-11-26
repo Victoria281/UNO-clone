@@ -1,8 +1,7 @@
 const express = require('express')
 const app = express()
-const cors = require("cors");
-const pool = require("./db");
 const path = require("path");
+const cors = require("cors");
 const PORT = process.env.PORT || 5000;
 const createHttpErrors = require('http-errors');
 const ApiRouter = require('./src/controller/api');
@@ -10,14 +9,12 @@ const http = require("http");
 const socketio = require("socket.io");
 const { get_Current_User, user_Disconnect, join_User, get_All_Users, get_Excess_Players, get_Users_In_Room } = require("./users");
 
-
-
-//process.env.PORT
-//process.env.NODE_ENV => production or undefined
-
-
+var corsOptions = {
+    origin: ["http://localhost:3000", "http://uno-clone.herokuapp.com"],
+    optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
+  }
 //middleware
-app.use(cors());
+app.use(cors(corsOptions));
 app.use(express.json());
 
 const server = http.createServer(app);
@@ -57,7 +54,6 @@ app.use((req, res, next) => {
 
 // Error Handler
 app.use((error, req, res, next) => {
-    console.error(error);
     return res.status(error.status || 500).json({
         error: error.message || `Unknown Error!`,
     });
