@@ -96,9 +96,6 @@
   }
   
   .username {
-    /* width: 60%; */
-    margin-right: 40%;
-    /* margin-top: 5%; */
     border-bottom: 2px solid black;
     font-size: 20px;
   }
@@ -107,11 +104,11 @@
     border-bottom: 2px solid red;
   } */
   
+  .editBtn:hover {
+    border-bottom: 2px solid rgb(234, 58, 58);
+  }
+  
   .email {
-    /* width: 80%; */
-    margin-right: 40%;
-    /* margin-top: 5%;
-    margin-bottom: 5%; */
     border-bottom: 2px solid black;
     font-size: 20px;
   }
@@ -125,9 +122,6 @@
   } */
   
   .changeInfo > input {
-    /* width: 80%; */
-    /* margin-left: 10%;
-    margin-right: 10%; */
     margin-top: 2%;
     border: 0;
     border-bottom: 2px solid black;
@@ -259,7 +253,7 @@
   
   .password {
     width: 90%;
-    padding: 15px 12px;
+    padding: 5px 5px;
     margin-bottom: 5px;
     border: 1px solid #e5e5e5;
     border-bottom: 2px solid #ddd;

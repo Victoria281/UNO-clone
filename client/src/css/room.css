@@ -1,0 +1,86 @@
+.logo {
+    width: 23%;
+    margin-left: 35%;
+    margin-right: auto;
+    margin-top: 2%;
+    justify-content: center;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(10px, max-content));
+}
+
+.c1 {
+    margin-top: 8px;
+    transform: rotate(-23deg);
+}
+
+.c2 {
+    transform: rotate(-10deg);
+}
+
+.c3 {
+    transform: rotate(0deg);
+}
+
+.c4 {
+    margin-top: 8px;
+    transform: rotate(10deg);
+}
+
+.c5 {
+    margin-top: 28px;
+    transform: rotate(23deg);
+}
+
+.name {
+    background: #6C01AD;
+    margin-left: auto;
+    margin-right: auto;
+
+    width: 401px;
+    color: white;
+    font-family: "RubikOne";
+    font-size: 36px;
+    text-align: center;
+    padding: 10px;
+    transform: skew(-18deg) translateY(-50px);
+    -webkit-transform: skew(-18deg) translateY(-50px);
+    -moz-transform: skew(-18deg) translateY(-50px);
+    -o-transform: skew(-18deg) translateY(-50px);
+}
+
+.input-box {
+
+    font-family: "Armata";
+    text-align: center;
+}
+
+.roomInput {
+    margin-left: auto;
+    margin-right: auto;
+
+    width: 20%;
+    color: black;
+    font-size: 18px;
+    border-radius: 10px;
+    padding: 10px;
+}
+
+.roomBtn {
+    width: 100px;
+    height: 40px;
+    margin: 10px 20px;
+    -moz-border-radius: 100px / 40px;
+    -webkit-border-radius: 100px / 40px;
+    border-radius: 100px / 40px;
+    background: #6C01AD;
+    transform: matrix(0.99, 0.11, -0.14, 0.99, 0, 0);
+}
+
+.roomBtn>p {
+    font-family: "RubikOne";
+    font-size: 28px;
+    color: black;
+    -webkit-text-stroke: 0.4px black;
+    -webkit-text-fill-color: white;
+    transform: rotate(-15deg);
+}
