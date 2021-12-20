@@ -13,6 +13,8 @@ import Music from "./components/Music";
 import Room from "./pages/multiplayer/room";
 import MultiPlayer from "./pages/multiplayer/multiplayer";
 import PageRestriction from "./PageRestriction"
+import ForgotPassword from './pages/forgot'
+import VerifyReset from './pages/verifyReset'
 
 import { NavLink } from 'react-router-dom'
 import io from "socket.io-client";
@@ -103,9 +105,11 @@ const App=() =>{
           <PageRestriction exact path="/end" component={EndPage} />
           <Route exact path="/login" component={AccountPage} />
           <Route exact path="/register" component={RegisterPage} />
+          <Route exact path="/forgot" component={ForgotPassword}/>
           <PageRestriction exact path="/profile" component={ProfilePage} />
           <PageRestriction exact path="/leaderboard" component={LeaderboardPage} />
           <Route exact path="/logout" component={Logout} />
+          <Route exact path="/verifyReset" component={VerifyReset} />
           <PageRestriction exact path="/createroom" component={Room} socket={socket}/>
           <PageRestriction path="/multiplayer/:roomname/:username" component={Appmain} socket={socket}/>
         </Switch>

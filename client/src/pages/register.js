@@ -2,6 +2,7 @@ import React, { Fragment, useEffect, useState } from "react";
 
 import axios from "axios";
 import "../css/register.css";
+import nodemailer from 'nodemailer';
 
 export default function App() {
   const [username, setUsername] = useState("");
@@ -18,6 +19,26 @@ export default function App() {
   const [passwordCfmError, setPasswordCfmError] = useState("");
 
   const [duplicateMsg, setDuplicateMsg] = useState("");
+
+  let transporter = nodemailer.createTransport({
+    service: "smtp.mailtrap.io",
+    auth: {
+      type: "OAuth2",
+      user: process.env.EMAIL,
+      pass: process.env.WORD,
+      clientId: process.env.OAUTH_CLIENTID,
+      clientSecret: process.env.OAUTH_CLIENT_SECRET,
+      refreshToken: process.env.OAUTH_REFRESH_TOKEN,
+    },
+   });
+   transporter.verify((err, success) => {
+    err
+      ? console.log(err)
+      : console.log(`=== Server is ready to take messages: ${success} ===`);
+   });
+
+
+  
 
   const handleUsernameChange = (e) => {
     setUsername(e.target.value);
@@ -123,7 +144,7 @@ export default function App() {
     if(status){
 
       axios
-        .post(process.env.REACT_APP_API_URL + "/api/uno/register", {
+        .post("http://localhost:5000/api/uno/register", {
           userName: username,
           email: email,
           password: password
@@ -187,7 +208,7 @@ export default function App() {
               <div class="input-group-prepend">
                 <span class="input-group-text"><i class="fa fa-envelope fa-lg fa-fw" aria-hidden="true"></i></span>
               </div>
-              <input type="text" className="form-control" placeholder="Email" onChange={handleEmailChange} value={email} />
+              <input type="text" className="form-control pr-4" placeholder="Email" onChange={handleEmailChange} value={email} />
             </div>
 
             {emailError && <div className="error-msg">{emailError}</div>}
@@ -219,7 +240,7 @@ export default function App() {
             <button
               id="registerBtn"
               type="submit"
-              className="btn btn-success btn-lg"
+              className="btn btn-success btn-lg link pop-on-hover"
               style={{ width: "40%", marginTop: 30, height: 50, backgroundColor: '#45BDF8', borderRadius: '50%'}}
               onClick={createPost}
               
