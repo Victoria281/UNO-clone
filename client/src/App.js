@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React, { useState, useEffect } from "react";
 
 //components
@@ -35,7 +34,6 @@ function Appmain(props) {
 const App = () => {
   // console.log(process.env.REACT_APP_SECRET_KEY)
   const [loggedIn, setLoggedIn] = useState(localStorage.getItem("userid"));
-
   useEffect(() => {
     setInterval(() => {
       const userid = localStorage.getItem("userid");
