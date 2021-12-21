@@ -1,10 +1,10 @@
 // @ts-nocheck
-import React, { useState, useEffect } from "react";
+import React, { Fragment, useState, useEffect } from "react";
 
 //components
 import GamePage from "./pages/game";
 import HomePage from "./pages/home";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import EndPage from "./pages/end";
 import AccountPage from "./pages/account";
 import RegisterPage from "./pages/register";
@@ -23,25 +23,24 @@ const socket = io.connect(process.env.REACT_APP_API_URL);
 function Appmain(props) {
   return (
     <React.Fragment>
-      <MultiPlayer
-        username={props.match.params.username}
-        roomname={props.match.params.roomname}
-        socket={socket}
-      />
+        <MultiPlayer
+          username={props.match.params.username}
+          roomname={props.match.params.roomname}
+          socket={socket}
+        />
     </React.Fragment>
   );
 }
 
-const App = () => {
+const App=() =>{
   // console.log(process.env.REACT_APP_SECRET_KEY)
   const [loggedIn, setLoggedIn] = useState(localStorage.getItem("userid"));
-
   useEffect(() => {
-    setInterval(() => {
-      const userid = localStorage.getItem("userid");
-      setLoggedIn(userid);
-    }, 5000)
-  }, []);
+        setInterval(() => {
+            const userid = localStorage.getItem("userid");
+            setLoggedIn(userid);
+            }, [])
+    }, 5000);
 
   return (
     <Router>
@@ -88,11 +87,11 @@ const App = () => {
 
               </li>
               <li className="nav-item active navbarDesign" style={{ background: '#F5F93C' }}>
-                <Account isLoggedIn={loggedIn} />
+                <Account isLoggedIn={loggedIn}/>
               </li>
               <li className="nav-item active navbarDesign" style={{ background: '#FFB967' }}>
                 <div className="borderHover" style={{ borderColor: '#FFB967' }}><p className="nav-link navBarWord">
-                  <Music />
+                <Music/>
                 </p></div>
               </li>
             </ul>
@@ -108,8 +107,8 @@ const App = () => {
           <PageRestriction exact path="/profile" component={ProfilePage} />
           <PageRestriction exact path="/leaderboard" component={LeaderboardPage} />
           <Route exact path="/logout" component={Logout} />
-          <PageRestriction exact path="/createroom" component={Room} socket={socket} />
-          <PageRestriction path="/multiplayer/:roomname/:username" component={Appmain} socket={socket} />
+          <PageRestriction exact path="/createroom" component={Room} socket={socket}/>
+          <PageRestriction path="/multiplayer/:roomname/:username" component={Appmain} socket={socket}/>
         </Switch>
       </div>
     </Router>
