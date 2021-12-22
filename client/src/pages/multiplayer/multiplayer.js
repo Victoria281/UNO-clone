@@ -1,7 +1,8 @@
+// @ts-nocheck
 import { decrypting, encrypting } from "../../crypto";
-import { secure_action } from "../../store/action/action";
+import { secure_action } from "../../store/features/securityReducer/action/action";
 import Modal from "react-modal";
-import React, { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useDispatch } from "react-redux";
 import shuffleCards from "../../components/shuffle";
 import "../../css/multi.css"
@@ -12,7 +13,7 @@ import ChatIcon from "../../icons/chatLogo.png"
 const MultiPlayer = ({ username, roomname, socket }) => {
   const [whoami, setWhoami] = useState();
   const [usersInRoom, setUsersInRoom] = useState();
-  const [cards, setCards] = useState([]);
+  const [, setCards] = useState([]);
   const [mainDeck, setMainDeck] = useState([]);
   const [used, setUsed] = useState([]);
   const [current, setCurrent] = useState({
@@ -29,7 +30,7 @@ const MultiPlayer = ({ username, roomname, socket }) => {
   const [selectColor, setSelectColor] = useState(false);
   const [p1Playable, setP1Playable] = useState([]);
   const [p2Playable, setP2Playable] = useState([]);
-  const [ifShow, setIfShow] = useState(false);
+  const [, setIfShow] = useState(false);
   const [ifDraw, setIfDraw] = useState(false);
   const [drawCard, setDrawCard] = useState(false);
   const [turn, setTurn] = useState(1);
@@ -48,6 +49,7 @@ const MultiPlayer = ({ username, roomname, socket }) => {
 
   const sendData = () => {
     if (textingMsg !== "") {
+      console.log(textingMsg);
       socket.emit("chat", encrypting(textingMsg));
       setTextingMsg("");
     }
@@ -73,10 +75,11 @@ const MultiPlayer = ({ username, roomname, socket }) => {
     // console.log(type)
     // console.log(identity === type)
     // console.log("here")
+    var playable;
     if (type === 1) {
-      var playable = p1Playable;
+      playable = p1Playable;
     } else {
-      var playable = p2Playable;
+      playable = p2Playable;
     }
 
 
@@ -143,9 +146,9 @@ const MultiPlayer = ({ username, roomname, socket }) => {
     } else {
 
       return (
-        <div class="player2cards">
+        <div className="player2cards">
           {player.map((decks) => (
-            <div class="p2cards">
+            <div className="p2cards">
               <img
                 style={{ width: 70 }}
                 className="img-responsive allcards"
@@ -348,103 +351,6 @@ const MultiPlayer = ({ username, roomname, socket }) => {
     return [dealplayers, cardarray];
   };
 
-  const getCards = async () => {
-    try {
-      const response = await fetch(
-        process.env.REACT_APP_API_URL + "/api/uno/cards", {
-          headers: {
-            'authorization': localStorage.getItem('token'),
-          },
-        }
-      );
-      const jsonData = await response.json();
-      var cards_retrieved = jsonData.cards;
-      // console.log("Retrieved Cards...");
-      setCards(cards_retrieved);
-      cards_retrieved = shuffleCards(cards_retrieved);
-      var arr = dealCards(cards_retrieved);
-      var splayerdeck = arr[0];
-      var smaindeck = arr[1];
-      var firstcard = smaindeck[0];
-      var sturn = 1;
-      // console.log("firstcard");
-      // console.log(firstcard.values);
-      // console.log(firstcard.color);
-      switch (firstcard.values) {
-        //skip is 10
-        case "10":
-          // console.log("first card skipped played----");
-          // console.log("Player 1 got skipped");
-          sturn = 2
-          break;
-
-        //reverse is 11
-        case "11":
-          // console.log("first card reverse played----");
-          sturn = 1
-          break;
-
-        //+2 draw is 12
-        case "12":
-          // console.log("first card draw 2 played----");
-          for (var fdraw2 = 0; fdraw2 < 2; fdraw2++) {
-            splayerdeck["player1"].push(smaindeck[fdraw2]);
-          }
-          smaindeck = smaindeck.slice(2, smaindeck.length);
-
-          sturn = 2
-          break;
-
-        //wild is 13
-        case "13":
-          // console.log("first card select color played----");
-          // To Choose Colour
-
-          var fcolor = ["red", "blue", "yellow", "green"];
-          var fnum = Math.floor(Math.random() * 4);
-          firstcard.color = fcolor[fnum];
-          firstcard.values = 15;
-          sturn = 1
-
-          break;
-
-        //+4 is 14
-        case "14":
-          // console.log("first card draw 4 played----");
-          for (var fdraw4 = 0; fdraw4 < 4; fdraw4++) {
-            splayerdeck["player1"].push(smaindeck[fdraw4]);
-          }
-          smaindeck = smaindeck.slice(4, smaindeck.length);
-          // To Choose Colour
-
-          var fcolor4 = ["red", "blue", "yellow", "green"];
-          var fn4um = Math.floor(Math.random() * 4);
-          firstcard.color = fcolor4[fn4um];
-          firstcard.values = 15;
-          sturn = 2
-
-          break;
-        default:
-          // console.log("first normal card played----");
-          break;
-
-      };
-
-
-      socket.emit('startGame', {
-        mainDeck: smaindeck,
-        used: [],
-        current: firstcard,
-        playerdeck: splayerdeck,
-        turn: sturn
-      })
-
-      // console.log("Set Up Game...");
-    } catch (err) {
-      // console.error(err.message);
-    }
-  };
-
   const PassTurn = ({ identity }) => {
     if (turn !== identity) {
       return (
@@ -488,7 +394,7 @@ const MultiPlayer = ({ username, roomname, socket }) => {
         <button
           className="mnouBtn"
           onClick={() => {
-            if (players["player" + turn].length == 1) {
+            if (players["player" + turn].length === 1) {
               var pressUnoBtn = unoBtn;
               pressUnoBtn[turn - 1] = true;
               alert("NOU has been pressed! Player " + turn + " have 1 card remaining!");
@@ -538,6 +444,7 @@ const MultiPlayer = ({ username, roomname, socket }) => {
           {turn !== identity &&
           <input
             type="image"
+            alt="DeckImg"
             disabled={ifDraw}
             className="col-8"
             src={process.env.REACT_APP_API_URL + "/api/uno/images/Deck.png"}
@@ -548,6 +455,7 @@ const MultiPlayer = ({ username, roomname, socket }) => {
   <input
     type="image"
     disabled={ifDraw}
+    alt="DeckImg"
     className="col-8"
     src={process.env.REACT_APP_API_URL + "/api/uno/images/Deck.png"}
     style={{ width: 90 }}
@@ -681,13 +589,110 @@ const MultiPlayer = ({ username, roomname, socket }) => {
       turn && setTurn(turn)
       unoBtn && setUnoBtn(unoBtn)
     })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [socket]);
 
   useEffect(scrollToBottom, [messages]);
 
   useEffect(() => {
+    const getCards = async () => {
+      try {
+        const response = await fetch(
+          process.env.REACT_APP_API_URL + "/api/uno/cards", {
+            headers: {
+              'authorization': localStorage.getItem('token'),
+            },
+          }
+        );
+        const jsonData = await response.json();
+        var cards_retrieved = jsonData.cards;
+        // console.log("Retrieved Cards...");
+        setCards(cards_retrieved);
+        cards_retrieved = shuffleCards(cards_retrieved);
+        var arr = dealCards(cards_retrieved);
+        var splayerdeck = arr[0];
+        var smaindeck = arr[1];
+        var firstcard = smaindeck[0];
+        var sturn = 1;
+        // console.log("firstcard");
+        // console.log(firstcard.values);
+        // console.log(firstcard.color);
+        switch (firstcard.values) {
+          //skip is 10
+          case "10":
+            // console.log("first card skipped played----");
+            // console.log("Player 1 got skipped");
+            sturn = 2
+            break;
+  
+          //reverse is 11
+          case "11":
+            // console.log("first card reverse played----");
+            sturn = 1
+            break;
+  
+          //+2 draw is 12
+          case "12":
+            // console.log("first card draw 2 played----");
+            for (var fdraw2 = 0; fdraw2 < 2; fdraw2++) {
+              splayerdeck["player1"].push(smaindeck[fdraw2]);
+            }
+            smaindeck = smaindeck.slice(2, smaindeck.length);
+  
+            sturn = 2
+            break;
+  
+          //wild is 13
+          case "13":
+            // console.log("first card select color played----");
+            // To Choose Colour
+  
+            var fcolor = ["red", "blue", "yellow", "green"];
+            var fnum = Math.floor(Math.random() * 4);
+            firstcard.color = fcolor[fnum];
+            firstcard.values = 15;
+            sturn = 1
+  
+            break;
+  
+          //+4 is 14
+          case "14":
+            // console.log("first card draw 4 played----");
+            for (var fdraw4 = 0; fdraw4 < 4; fdraw4++) {
+              splayerdeck["player1"].push(smaindeck[fdraw4]);
+            }
+            smaindeck = smaindeck.slice(4, smaindeck.length);
+            // To Choose Colour
+  
+            var fcolor4 = ["red", "blue", "yellow", "green"];
+            var fn4um = Math.floor(Math.random() * 4);
+            firstcard.color = fcolor4[fn4um];
+            firstcard.values = 15;
+            sturn = 2
+  
+            break;
+          default:
+            // console.log("first normal card played----");
+            break;
+  
+        };
+  
+  
+        socket.emit('startGame', {
+          mainDeck: smaindeck,
+          used: [],
+          current: firstcard,
+          playerdeck: splayerdeck,
+          turn: sturn
+        })
+  
+        // console.log("Set Up Game...");
+      } catch (err) {
+        // console.error(err.message);
+      }
+    };
     getCards();
-
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
 
@@ -712,9 +717,9 @@ const MultiPlayer = ({ username, roomname, socket }) => {
 
 
           <div className="row no-gutters">
-            <div class="col-3">
+            <div className="col-3">
 
-              <div class="mmainnou">
+              <div className="mmainnou">
                 <UnoButton identity={whoami} />
 
               </div>
@@ -722,6 +727,7 @@ const MultiPlayer = ({ username, roomname, socket }) => {
             <div className="col-6 middleArea">
               <img
                 className="img-responsive multicurrent"
+                alt= {current.image_file.slice(8)}
                 style={{ width: 90 }}
                 src={
                   process.env.REACT_APP_API_URL + "/api/uno/images/" +
@@ -729,11 +735,11 @@ const MultiPlayer = ({ username, roomname, socket }) => {
                 }
               ></img>
               <MainDeck identity={whoami} />
-              <div class="deckArea"></div>
+              <div className="deckArea"></div>
             </div>
 
-            <div class="col-3">
-              <div class="mskipBtn">
+            <div className="col-3">
+              <div className="mskipBtn">
                 <PassTurn identity={whoami} />
               </div>
             </div>
@@ -767,8 +773,8 @@ const MultiPlayer = ({ username, roomname, socket }) => {
           isOpen={chatOpen}
           className="chatroom"
         >
-          <div class="row no-gutters chatheader">
-            <div class="col-2">
+          <div className="row no-gutters chatheader">
+            <div className="col-2">
               <img
                 className="img-responsive"
                 style={{ width: 40 }}
@@ -776,10 +782,10 @@ const MultiPlayer = ({ username, roomname, socket }) => {
                 alt="logo"
               />
             </div>
-            <div class="col-8">
+            <div className="col-8">
               <p>{username} in {roomname}</p>
             </div>
-            <div class="col-2">
+            <div className="col-2">
               <button style={{ backgroundColor: "#1B7CB1" }} onClick={() => { setChatOpen(false); }}>Close</button>
             </div>
           </div>

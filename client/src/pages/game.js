@@ -1,14 +1,15 @@
-import React, { Fragment, useEffect, useState } from "react";
+// @ts-nocheck
+import { useEffect, useState } from "react";
 import Modal from "react-modal";
 import shuffleCards from "../components/shuffle";
 import "../index.css";
 import "../css/card.css";
 
 import { useHistory } from "react-router-dom";
-import { nextTurn, previousTurn } from "../components/nextPlayer";
+import { nextTurn } from "../components/nextPlayer";
 
 const Game = () => {
-  const [cards, setCards] = useState([]);
+  const [, setCards] = useState([]);
   const [mainDeck, setMainDeck] = useState([]);
   const [used, setUsed] = useState([]);
   const [current, setCurrent] = useState({
@@ -26,10 +27,10 @@ const Game = () => {
   const [isUnoButtonPressed, setUnoButtonPressed] = useState(false);
   const [selectColor, setSelectColor] = useState(false);
   const [drawCard, setDrawCard] = useState(false);
-  const [ifShow, setIfShow] = useState(false);
+  const [, setIfShow] = useState(false);
   const [ifDraw, setIfDraw] = useState(false);
   const [playedDraw, setPlayedDraw] = useState(false);
-  const [turnModal, setTurnModal] = useState(false);
+  const [turnModal,] = useState(false);
   const [order, setOrder] = useState([1, 2, 3, 4]);
   const [playable, setPlayable] = useState([]);
   const [turn, setTurn] = useState(0);
@@ -85,10 +86,10 @@ const Game = () => {
 
   const Bot = (arr) => {
     return (
-      <div class={"cardsWidth" + arr.no}>
-        <div class={"botcards" + arr.no}>
+      <div className={"cardsWidth" + arr.no}>
+        <div className={"botcards" + arr.no}>
           {arr.arr.map((decks) => (
-            <div class={"cards" + arr.no}>
+            <div className={"cards" + arr.no}>
               <img
                 className="img-responsive allcards"
                 src={process.env.REACT_APP_API_URL + "/api/uno/images/Deck.png"}
@@ -97,7 +98,7 @@ const Game = () => {
             </div>
           ))}
         </div>
-        <div class={"botTxt" + arr.no}>
+        <div className={"botTxt" + arr.no}>
           <h6 style={order[turn] === arr.num ? { color: 'red' } : { color: 'black' }}>Player {arr.num}</h6>
           {arr.num === action[1] ? <CardActions /> : ''}
         </div>
@@ -241,6 +242,7 @@ const Game = () => {
         <div className="playerHeader">Card Now is:</div>
         <img
           className="img-responsive"
+          alt={current.image_file.slice(8)}
           style={{ width: 90 }}
           src={
             process.env.REACT_APP_API_URL + "/api/uno/images/" +
@@ -551,38 +553,6 @@ const Game = () => {
     return [dealplayers, cardarray, player1playable];
   };
 
-  const getCards = async () => {
-    try {
-      const response = await fetch(
-        process.env.REACT_APP_API_URL + "/api/uno/cards", {
-        method: 'GET',
-        headers: {
-          'authorization': localStorage.getItem('token'),
-        },
-      }
-      );
-      const jsonData = await response.json();
-      var cards_retrieved = jsonData.cards;
-      // console.log("Retrieved Cards...");
-      setCards(cards_retrieved);
-      cards_retrieved = shuffleCards(cards_retrieved);
-      var arr = dealCards(cards_retrieved);
-      cards_retrieved = arr[1];
-      setPlayable(arr[2]);
-      setPlayers(arr[0]);
-      setCurrent(cards_retrieved[0]);
-      setMainDeck(cards_retrieved.slice(1, cards_retrieved.length));
-      playFirstCard(
-        cards_retrieved[0],
-        cards_retrieved.slice(1, cards_retrieved.length),
-        arr[0]
-      );
-      // console.log("Set Up Game...");
-    } catch (err) {
-      // console.error(err.message);
-    }
-  };
-
   const MainDeck = () => {
     const drawCards = () => {
       if (mainDeck.length === 1) {
@@ -634,6 +604,7 @@ const Game = () => {
         <div>
           <input
             type="image"
+            alt="deckImgInput"
             disabled={ifDraw}
             className="deck"
             src={process.env.REACT_APP_API_URL + "/api/uno/images/Deck.png"}
@@ -649,8 +620,41 @@ const Game = () => {
   };
 
   useEffect(() => {
+    const getCards = async () => {
+      try {
+        const response = await fetch(
+          process.env.REACT_APP_API_URL + "/api/uno/cards", {
+          method: 'GET',
+          headers: {
+            'authorization': localStorage.getItem('token'),
+          },
+        }
+        );
+        const jsonData = await response.json();
+        var cards_retrieved = jsonData.cards;
+        // console.log("Retrieved Cards...");
+        setCards(cards_retrieved);
+        cards_retrieved = shuffleCards(cards_retrieved);
+        var arr = dealCards(cards_retrieved);
+        cards_retrieved = arr[1];
+        setPlayable(arr[2]);
+        setPlayers(arr[0]);
+        setCurrent(cards_retrieved[0]);
+        setMainDeck(cards_retrieved.slice(1, cards_retrieved.length));
+        playFirstCard(
+          cards_retrieved[0],
+          cards_retrieved.slice(1, cards_retrieved.length),
+          arr[0]
+        );
+        // console.log("Set Up Game...");
+      } catch (err) {
+        // console.error(err.message);
+      }
+    };
     getCards();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
   let history = useHistory();
   useEffect(() => {
     // console.log("Turn changed");
@@ -696,6 +700,7 @@ const Game = () => {
         setPlayable(playable);
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [turn]);
 
 
@@ -721,6 +726,7 @@ const Game = () => {
               {used.length > 0 &&
                 <img
                   className="img-responsive currentcard"
+                  alt={ used[used.length - 1].image_file.slice(8) }
                   style={{ width: 90, opacity: 0.5 }}
                   src={
                     process.env.REACT_APP_API_URL + "/api/uno/images/" +
@@ -731,6 +737,7 @@ const Game = () => {
               <img
                 className="img-responsive currentcard"
                 style={{ width: 90 }}
+                alt={ current.image_file.slice(8) }
                 src={
                   process.env.REACT_APP_API_URL + "/api/uno/images/" +
                   current.image_file.slice(8)
@@ -751,11 +758,11 @@ const Game = () => {
         </div>
       </div>
       <div className="row my-3 p-0 bottomRow">
-        <div class="col-3"></div>
-        <div class="col-6">
+        <div className="col-3"></div>
+        <div className="col-6">
           <Player player={players.player1} type="human" num={1} />
         </div>
-        <div class="col-3">
+        <div className="col-3">
           <button
             className="nouBtn"
             onClick={() => {

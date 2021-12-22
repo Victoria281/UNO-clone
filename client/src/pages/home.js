@@ -1,5 +1,3 @@
-import React, { Fragment, useEffect, useState } from "react";
-
 import "../css/home.css";
 
 export default function App() {
@@ -7,8 +5,8 @@ export default function App() {
   return (
     <div className="App">
       <div className="cardsHome">
-          <img className="cardImage1" src={process.env.REACT_APP_API_URL + "/api/uno/images/Wild.png"} />
-          <img className="cardImage2" src={process.env.REACT_APP_API_URL + "/api/uno/images/Wild_Draw.png"} />
+          <img className="cardImage1" alt="wildImg" src={process.env.REACT_APP_API_URL + "/api/uno/images/Wild.png"} />
+          <img className="cardImage2" alt="wildDrawImg" src={process.env.REACT_APP_API_URL + "/api/uno/images/Wild_Draw.png"} />
       </div>
 
       <div className="row d-flex justify-content-between">

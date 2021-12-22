@@ -1,3 +1,4 @@
+// @ts-nocheck
 var crypto = require('crypto');
 
 var algo = 'aes256';

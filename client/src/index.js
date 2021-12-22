@@ -1,4 +1,4 @@
-import React from 'react';
+// @ts-nocheck
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
@@ -7,9 +7,12 @@ import { createStore } from "redux";
 import { Provider } from "react-redux";
 
 const store = createStore(rootReducers);
+
 ReactDOM.render(
-  <Provider store={store}>
-    <App />
-  </Provider>,
+  <ReactDOM.StrictMode>
+    <Provider store={store}>
+      <App />
+    </Provider>
+  </ReactDOM.StrictMode>,
   document.getElementById('root')
 );

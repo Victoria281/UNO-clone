@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React, { Fragment, useState, useEffect } from "react";
 
 //components
@@ -57,10 +58,10 @@ const App=() =>{
             <span className="navbar-toggler-icon"></span>
           </button>
           <p className="brand d-none d-sm-block">
-            <div class="card1"></div>
-            <div class="card2"></div>
-            <p class="logomain">NOU</p>
-            <p class="logosub">uno-clone</p>
+            <div className="card1"></div>
+            <div className="card2"></div>
+            <p className="logomain">NOU</p>
+            <p className="logosub">uno-clone</p>
           </p>
           <div className="collapse navbar-collapse" id="navbarTogglerDemo03">
             <ul className="navbar-nav ml-auto mt-2 mt-lg-0">

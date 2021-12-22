@@ -166,7 +166,7 @@ app.post('/login', printingDebuggingInfo, function (req, res, next) {
 //register
 app.post('/register', printingDebuggingInfo, function (req, res, next) {
     console.log('processRegister running.');
-    let userName = req.body.userName;
+    let userName = req.body.username;
     let email = req.body.email;
     let password = req.body.password;
 
