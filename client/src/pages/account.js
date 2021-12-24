@@ -3,7 +3,8 @@ import { useState } from "react";
 import "../css/account.css";
 // import { response } from "express";
 import axios from "axios";
-
+import { config } from "dotenv";
+config();
 
 export default function App() {
   const [email, setEmail] = useState("");
@@ -53,7 +54,7 @@ export default function App() {
     // console.log("AFTERRRRRRR PASSWORD CHECK")
     // console.log(status)
 
-
+    console.log(process.env);
 
     if(status){
       axios

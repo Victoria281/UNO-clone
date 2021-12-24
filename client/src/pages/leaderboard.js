@@ -58,23 +58,15 @@ const LoadingScreen = () => {
         <Fragment>
             {users.length === 0 || (
                 <div className="gameBody">
-                      {ifConfetti ? <Confetti
-                        run={ifConfetti}
-                        width={window.innerWidth*0.6}
-                        height={window.innerHeight}
-                        /> : null} 
+                      {ifConfetti ? <Confetti run={ifConfetti} width={window.innerWidth*0.6} height={window.innerHeight} /> : null} 
                     <div className="row no-gutters">
-                        <div claclassNamess="col-7 p-5">
+                        <div className="col-7 p-5">
                             <div id="podium" className="row no-gutters">
                                 <div className="col-4">
                                     <div className="h-25"> </div>
                                     <div id="podiumPillar2">
                                         <div className="lb2IconBorder">
-                                            <img
-                                                className="img-responsive lb1Icons"
-                                                alt="pic"
-                                                src={process.env.REACT_APP_API_URL + "/api/uno/profile_icons/" + p2.profileicon + ".png"}
-                                            />
+                                            <img className="img-responsive lb1Icons" alt="pic" src={process.env.REACT_APP_API_URL + "/api/uno/profile_icons/" + p2.profileicon + ".png"} />
                                         </div>
                                         <div className="borderDesign2">
                                             <div className="d-flex justify-content-end">
@@ -91,19 +83,11 @@ const LoadingScreen = () => {
                                 <div id="firsplace" className="col-4">
                                     <div id="podiumPillar1">
                                         <div className="d-flex justify-content-end">
-                                            <img
-                                                id="crown"
-                                                className="img-responsive"
-                                                alt="pic"
-                                                src={crownImage} />
+                                            <img id="crown" className="img-responsive" alt="pic" src={crownImage} />
                                         </div>
 
                                         <div className="lb1IconBorder">
-                                            <img
-                                                className="img-responsive lb1Icons"
-                                                alt="pic"
-                                                src={process.env.REACT_APP_API_URL + "/api/uno/profile_icons/" + p1.profileicon + ".png"}
-                                            />
+                                            <img className="img-responsive lb1Icons" alt="pic" src={process.env.REACT_APP_API_URL + "/api/uno/profile_icons/" + p1.profileicon + ".png"} />
                                         </div>
                                         <div className="borderDesign1">
                                             <div className="d-flex justify-content-end">
@@ -123,11 +107,7 @@ const LoadingScreen = () => {
                                     <div className="h-50"> </div>
                                     <div id="podiumPillar3">
                                         <div className="lb3IconBorder">
-                                            <img
-                                                className="img-responsive lb1Icons"
-                                                alt="pic"
-                                                src={process.env.REACT_APP_API_URL + "/api/uno/profile_icons/" + p3.profileicon + ".png"}
-                                            />
+                                            <img className="img-responsive lb1Icons" alt="pic" src={process.env.REACT_APP_API_URL + "/api/uno/profile_icons/" + p3.profileicon + ".png"} />
                                         </div>
                                         <div className="borderDesign3">
                                             <div className="d-flex justify-content-end">

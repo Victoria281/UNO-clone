@@ -14,6 +14,7 @@ import Music from "./components/Music";
 import Room from "./pages/multiplayer/room";
 import MultiPlayer from "./pages/multiplayer/multiplayer";
 import PageRestriction from "./PageRestriction"
+import * as deleteCard from './store/features/deletecard/deletecard'
 
 import { NavLink } from 'react-router-dom'
 import io from "socket.io-client";
