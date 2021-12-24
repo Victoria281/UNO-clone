@@ -1,4 +1,5 @@
-import React, { Fragment, useEffect, useState } from "react";
+// @ts-nocheck
+import { useEffect, useState } from "react";
 import Modal from "react-modal";
 import "../css/end.css";
 import Trophy from "../endGameImages/trophy.png";
@@ -28,12 +29,14 @@ const End = (props) => {
           <div className="col-3">
             {player1win ? <img
               className="trophy"
-            src={Trophy}
+              alt="trophy"
+              src={Trophy}
             />
-              :<img
-              className="loseicon"
-            src={Lose}
-            />
+              : <img
+                className="loseicon"
+                alt="loseicon"
+                src={Lose}
+              />
             }
           </div>
           <div className="col-9">
@@ -100,7 +103,7 @@ const End = (props) => {
     setPoints(tempPts);
     setWinner(win);
     setGameResult(true);
-    if(winner=="player1"){
+    if (winner === "player1") {
       setWin(true);
     }
   };
@@ -114,12 +117,13 @@ const End = (props) => {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
-              'authorization': localStorage.getItem('token'),
+          'authorization': localStorage.getItem('token'),
         },
         body: JSON.stringify({
           score: points
         })
       });
+      console.log("updated response for highest score for players (end.js, 125)", response);
     } catch (err) {
       // console.error(err.message);
     }
@@ -131,11 +135,11 @@ const End = (props) => {
       const uid = localStorage.getItem('userid')
       const response = await fetch(
         process.env.REACT_APP_API_URL + `/api/uno/leaderboard/user/${uid}`, {
-          method: 'GET',
-          headers: {
-            'authorization': localStorage.getItem('token'),
-          },
-        }
+        method: 'GET',
+        headers: {
+          'authorization': localStorage.getItem('token'),
+        },
+      }
       );
       const jsonData = await response.json();
       var userHighScore = jsonData.score;
@@ -143,7 +147,7 @@ const End = (props) => {
       setuserHighestScores(userHighScore[0].score);
 
 
-      if(userHighScore[0].score<points){
+      if (userHighScore[0].score < points) {
         updatePlayerHighestScore();
         // console.log("Update")
       }
@@ -155,6 +159,7 @@ const End = (props) => {
   useEffect(() => {
     getWinner();
     userHighestScore();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [points]);
 
   return (

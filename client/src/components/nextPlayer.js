@@ -1,3 +1,4 @@
+// @ts-nocheck
 export const nextTurn = (turn) => {
   var nextPlyer = turn + 1;
   if (nextPlyer === 4) {

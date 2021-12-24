@@ -1,11 +1,12 @@
-import React, { useState } from "react";
+// @ts-nocheck
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import "../../css/room.css"
 function RoomPage({ socket }) {
   // console.log("socket")
   // console.log(socket)
 
-  const [username, setusername] = useState(localStorage.getItem("username"));
+  const [username,] = useState(localStorage.getItem("username"));
   const [roomname, setroomname] = useState("");
   //activates joinRoom function defined on the backend
   const sendData = () => {
@@ -65,17 +66,17 @@ function RoomPage({ socket }) {
           }
           alt=""
         /></div>
-      <h1 class="name">MULTIPLAYER</h1>
-      <div class="input-box">
+      <h1 className="name">MULTIPLAYER</h1>
+      <div className="input-box">
         <input
-          class="roomInput"
+          className="roomInput"
           placeholder="Room Name"
           value={roomname}
           onChange={(e) => setroomname(e.target.value)}
         ></input>
         <br />
         <Link to={`/multiplayer/${roomname}/${username}`}>
-          <button class="roomBtn" onClick={sendData}><p>Start</p></button>
+          <button className="roomBtn" onClick={sendData}><p>Start</p></button>
         </Link></div>
 
     </div>

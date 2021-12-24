@@ -10,7 +10,7 @@ const socketio = require("socket.io");
 const { get_Current_User, user_Disconnect, join_User, get_All_Users, get_Excess_Players, get_Users_In_Room } = require("./users");
 
 var corsOptions = {
-    origin: ["http://localhost:3000", "http://uno-clone.herokuapp.com"],
+    origin: ["http://192.168.50.158:3000", "http://uno-clone.herokuapp.com", "http://localhost:3000"],
     optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
   }
 //middleware
@@ -20,7 +20,7 @@ app.use(express.json());
 const server = http.createServer(app);
 const io = socketio(server, {
     cors: {
-        origin: ["http://localhost:3000", "http://uno-clone.herokuapp.com"],
+        origin: ["http://192.168.50.158:3000", "http://uno-clone.herokuapp.com", "http://localhost:3000"],
         methods: ["GET", "POST"],
         credentials: true
     }

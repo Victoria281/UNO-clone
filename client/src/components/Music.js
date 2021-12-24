@@ -1,5 +1,7 @@
-import React, { Fragment, useEffect, useState } from "react";
-import music from "../audio/Kahoot_Lobby_Music.mp3"
+import { Fragment, useState } from "react";
+
+// @ts-ignore
+import music from '../audio/Kahoot_Lobby_Music.mp3';
 
 const Music = () => {
     const [isPlaying, setisPlaying] = useState(false);
@@ -35,8 +37,8 @@ const Music = () => {
             marginBottom: "10px"
           }}>
             {isPlaying ? 
-              <i class="fa fa-volume-up"></i> : 
-              <i class="fa fa-volume-off"></i>}
+              <i className="fa fa-volume-up"></i> : 
+              <i className="fa fa-volume-off"></i>}
           </h1>
         </button>
       </div>

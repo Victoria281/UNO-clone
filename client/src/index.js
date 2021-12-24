@@ -1,15 +1,20 @@
+// @ts-check
 import React from 'react';
+import { connect } from 'react-redux';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
-import rootReducers from "./store/reducer/index";
-import { createStore } from "redux";
 import { Provider } from "react-redux";
+import { store } from "./store/store";
 
-const store = createStore(rootReducers);
+console.log("Current State of Store:", store.getState());
+
 ReactDOM.render(
-  <Provider store={store}>
-    <App />
-  </Provider>,
+  <React.StrictMode>
+    <Provider store={store}>
+      <App />
+    </Provider>
+  </React.StrictMode>
+  ,
   document.getElementById('root')
 );
