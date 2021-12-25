@@ -29,7 +29,7 @@ export default class Leaderboard extends Component {
             );
             const jsonData = await response.json();
             var user_leaderboard = jsonData.scores;
-            console.log(user_leaderboard);
+            // console.log(user_leaderboard);
             // setP1(user_leaderboard[0]);
             // setP2(user_leaderboard[1]);
             // setP3(user_leaderboard[2]);

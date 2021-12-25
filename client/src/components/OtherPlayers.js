@@ -6,7 +6,7 @@ const OtherPlayers = ({ users }) => {
     return (
         <div>
             {users.map((players, index) => {
-                console.log("index:" + index);
+                // console.log("index:" + index);
                 if (parseInt(players.userid) === parseInt(localStorage.getItem("userid"))) {
                     return (
                         <div className="row no-gutters leaderboard_player" id={players.userid}>
