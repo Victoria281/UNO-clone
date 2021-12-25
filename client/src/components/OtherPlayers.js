@@ -31,7 +31,7 @@ const OtherPlayers = ({ users }) => {
                                 <p className="p-2">{players.score}</p>
                             </div>
                             <div className="col-sm-3 leaderboard_col py-2">
-                                <p className="p-1 pr-2 createdDate">{(players.created_by).split("T")[0]}</p>
+                                <p className="p-2 pr-2 createdDate">{(players.created_by).split("T")[0]}</p>
                             </div>
                         </div>
                     );
@@ -59,7 +59,7 @@ const OtherPlayers = ({ users }) => {
                                 <p className="p-2">{players.score}</p>
                             </div>
                             <div className="col-sm-3 leaderboard_col py-2">
-                                <p className="p-1 pr-2 createdDate">{(players.created_by).split("T")[0]}</p>
+                                <p className="p-2 pr-2 createdDate">{(players.created_by).split("T")[0]}</p>
                             </div>
                         </div>
                     );
@@ -87,7 +87,7 @@ const OtherPlayers = ({ users }) => {
                                 <p className="p-2">{players.score}</p>
                             </div>
                             <div className="col-sm-3 leaderboard_col py-2">
-                                <p className="p-1 pr-2 createdDate">{(players.created_by).split("T")[0]}</p>
+                                <p className="p-2 pr-2 createdDate">{(players.created_by).split("T")[0]}</p>
                             </div>
                         </div>
                     );
