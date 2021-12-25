@@ -99,14 +99,29 @@
     color: black;
 }
 
-#podiumPillar1{
-    position: absolute;
-    bottom:65px; 
-    animation: growth1 3s 1;
-    height: 100%;
-    width: 100%
+#createdDate {
+    font-size: x-small;
+    /* padding: 5%; */
 }
 
+/*
+    /===============================\
+    |      Podium Pillar Style      |
+    \===============================/
+*/
+.pillarBody {
+    position: relative;
+    justify-content: space-around;
+    align-items: end;
+}
+
+#podiumPillar1{
+    bottom: 64px;
+    position: relative;
+    animation: growth1 3s 1;
+    height: 100%;
+    width: 90%
+}
 
 .borderDesign1 {
     overflow: hidden;
@@ -122,11 +137,11 @@
 }
 
 #podiumPillar2{
-    position: absolute;
-    bottom:0px; 
+    bottom: 0px; 
+    position: relative;
     animation: growth2 3s 1;
     height: 75%;
-    width: 100%
+    width: 90%
 }
 
 .borderDesign2 {
@@ -143,11 +158,11 @@
 }
 
 #podiumPillar3{
-    position: absolute;
-    bottom:0px; 
+    bottom: 0px; 
+    position: relative;
     animation: growth3 3s 1;
     height: 50%;
-    width: 100%
+    width: 90%
 }
 
 .borderDesign3 {
@@ -222,5 +237,10 @@
 } */
 
 #podium {
-    height: 60%;
+    height: 90%;
+    margin-bottom: 3%;
+}
+
+.mb-6 {
+    margin-bottom: 6%;
 }
