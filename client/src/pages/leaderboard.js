@@ -3,10 +3,11 @@ import React, { Fragment, useEffect, Suspense, useState } from "react";
 import "../css/leaderboard.css";
 import crownImage from "../icons/pepicons_crown.png";
 import Confetti from 'react-confetti';
+import { LoadingScreen } from "../components/loadingScreen";
 const OtherPlayers = React.lazy(() => import("../components/OtherPlayers"));
 
 const Leaderboard = () => {
-    const [users, setUsers] = useState([]);    
+    const [users, setUsers] = useState([]);
     const [ifConfetti, setifConfetti] = useState(true);
     const [p1, setP1] = useState({});
     const [p2, setP2] = useState({});
@@ -21,7 +22,7 @@ const Leaderboard = () => {
             );
             const jsonData = await response.json();
             var user_leaderboard = jsonData.scores;
-            // console.log(user_leaderboard);
+            console.log(user_leaderboard);
             setP1(user_leaderboard[0]);
             setP2(user_leaderboard[1]);
             setP3(user_leaderboard[2]);
@@ -33,21 +34,11 @@ const Leaderboard = () => {
         }
     };
 
-
     const toggleConfetti = () => {
         setTimeout(() => {
             setifConfetti(false);
         }, 4000);
     }
-
-    
-const LoadingScreen = () => {
-    return (
-      <div className="d-flex justify-content-center my-auto align-middle">
-        <h5>Loading...</h5>
-      </div>
-    );
-  }
 
     useEffect(() => {
         getPlayers();
@@ -58,7 +49,7 @@ const LoadingScreen = () => {
         <Fragment>
             {users.length === 0 || (
                 <div className="gameBody">
-                      {ifConfetti ? <Confetti run={ifConfetti} width={window.innerWidth*0.6} height={window.innerHeight} /> : null} 
+                    {ifConfetti ? <Confetti run={ifConfetti} width={window.innerWidth * 0.6} height={window.innerHeight} /> : null}
                     <div className="row no-gutters">
                         <div className="col-7 p-5">
                             <div id="podium" className="row no-gutters">
@@ -74,7 +65,7 @@ const LoadingScreen = () => {
                                             </div>
                                             <p className="lbuserheader">{p2.username}</p>{" "}
                                             <p className="lbuser">
-                                                <strong>{p2.score}pts</strong>
+                                                <strong>{p2.score} pts</strong>
                                             </p>
                                         </div>
                                     </div>
@@ -141,7 +132,7 @@ const LoadingScreen = () => {
                                     </div>
                                 </div>
                                 <Suspense fallback={<LoadingScreen />}>
-                                    <OtherPlayers users={users}/>
+                                    <OtherPlayers users={users} />
                                 </Suspense>
                             </div>
                         </div>

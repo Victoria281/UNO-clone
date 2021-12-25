@@ -1,6 +1,6 @@
 // @ts-check
 import rootReducers from "./reducer/index";
-import { createStore, createSelector } from '@reduxjs/toolkit';
+import { createStore } from '@reduxjs/toolkit';
 
 export const store = createStore(
     rootReducers,
