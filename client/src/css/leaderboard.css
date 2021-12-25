@@ -1,12 +1,14 @@
 .gameBody {
     margin-right: 3%;
     margin-left: 3%;
-    padding-bottom: 3%;
+    margin-bottom: 3%;
 }
 
 .leaderboard_body {
     padding: 2%;
-    height: 90%;
+    /* padding-bottom: 5%; */
+    /* height: 90%; */
+    max-height: 83%;
     overflow-x: hidden;
     overflow-y: scroll;
 }
@@ -238,6 +240,7 @@
 
 #podium {
     height: 90%;
+    max-height: 80%;
     margin-bottom: 3%;
 }
 

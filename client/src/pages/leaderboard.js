@@ -1,5 +1,5 @@
 // @ts-nocheck
-import React, { Fragment, useEffect, Suspense, useState, Component } from "react";
+import React, { Fragment, Suspense, Component } from "react";
 import "../css/leaderboard.css";
 import crownImage from "../icons/pepicons_crown.png";
 import Confetti from 'react-confetti';
@@ -68,7 +68,7 @@ export default class Leaderboard extends Component {
                     <div className="gameBody">
                         {this.checkConfettiStats(ifConfetti)}
                         <div className="row no-gutters">
-                            <div className="col-7 p-5 mb-6">
+                            <div className="col-xl-7 col-lg-7 col-md-12 col-sm-12 p-5 mb-6">
                                 <div id="podium" className="row no-gutters pillarBody">
                                     <div className="col-4 p-2" id="podiumPillar2">
                                         <div className="lb2IconBorder">
@@ -123,7 +123,8 @@ export default class Leaderboard extends Component {
                                 </div>
                             </div>
 
-                            <div className="col-5 pt-3">
+                            <div className="col-xl-5 col-lg-5 col-md-12 col-sm-12 pt-3">
+                                <h4 className="text-center">Leaderboard</h4>
                                 <div className="leaderboard_body">
                                     <div className="row no-gutters">
                                         <div className="col-sm-2 leaderboard_col text-center">
@@ -150,6 +151,4 @@ export default class Leaderboard extends Component {
             </Fragment>
         );
     }
-
-
 }
