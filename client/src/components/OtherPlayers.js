@@ -9,7 +9,7 @@ const OtherPlayers = ({ users }) => {
                 console.log("index:" + index);
                 if (parseInt(players.userid) === parseInt(localStorage.getItem("userid"))) {
                     return (
-                        <div className="row no-gutters leaderboard_player">
+                        <div className="row no-gutters leaderboard_player" id={players.userid}>
                             <div className="col-sm-2 leaderboard_col text-center">
                                 <p className=" font-weight-bold p-2">{index + 1}</p>
                             </div>
