@@ -4,7 +4,7 @@ import "../css/leaderboard.css";
 const OtherPlayers = ({ users }) => {
     console.log("users:", users);
     return (
-        <div>
+        <div className="listV">
             {users.map((players, index) => {
                 // console.log("index:" + index);
                 if (parseInt(players.userid) === parseInt(localStorage.getItem("userid"))) {

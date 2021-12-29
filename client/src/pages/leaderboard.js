@@ -96,11 +96,11 @@ export default class Leaderboard extends Component {
             <div className="tabContainer no-gutters">
                 <div className="tabSelector">
                     <div className="ldb">
-                        <a id="leaderboardTab" className="tabText" onClick={() => this.changeSelectedTab('leaderboard')} href="">Leaderboard</a>
+                        <a id="leaderboardTab" className="tabText" onClick={() => this.changeSelectedTab('leaderboard')}>Leaderboard</a>
                         {/* <p className="tabText">Leaderboard</p> */}
                     </div>
                     <div className="stats">
-                        <a id="statsTab" className="tabText" onClick={() => this.changeSelectedTab('stats')} href="">My Stats</a>
+                        <a id="statsTab" className="tabText" onClick={() => this.changeSelectedTab('stats')}>My Stats</a>
                         {/* <p className="tabText">My Stats</p> */}
                     </div>
                 </div>
@@ -174,21 +174,21 @@ export default class Leaderboard extends Component {
 
                         <div className="col-xl-5 col-lg-5 col-md-12 col-sm-12 pt-3">
                             <h4 className="text-center">Leaderboard</h4>
-                            <div className="leaderboard_body">
-                                <div className="row no-gutters">
-                                    <div className="col-sm-2 leaderboard_col text-center">
-                                        <h6 className="p-1 font-weight-bold">No</h6>
-                                    </div>
-                                    <div className="col-sm-5 leaderboard_col">
-                                        <h6 className="p-1 font-weight-bold">Players</h6>
-                                    </div>
-                                    <div className="col-sm-2 leaderboard_col">
-                                        <h6 className="p-1 font-weight-bold">Score</h6>
-                                    </div>
-                                    <div className="col-sm-3 leaderboard_col">
-                                        <h6 className="p-1 font-weight-bold">Created</h6>
-                                    </div>
+                            <div className="row no-gutters">
+                                <div className="col-sm-2 leaderboard_col text-center">
+                                    <h6 className="p-1 font-weight-bold">No</h6>
                                 </div>
+                                <div className="col-sm-5 leaderboard_col">
+                                    <h6 className="p-1 font-weight-bold">Players</h6>
+                                </div>
+                                <div className="col-sm-2 leaderboard_col">
+                                    <h6 className="p-1 font-weight-bold">Score</h6>
+                                </div>
+                                <div className="col-sm-3 leaderboard_col">
+                                    <h6 className="p-1 font-weight-bold">Created</h6>
+                                </div>
+                            </div>
+                            <div className="leaderboard_body">
                                 <Suspense fallback={<LoadingScreen />}>
                                     <OtherPlayers users={users} />
                                 </Suspense>
