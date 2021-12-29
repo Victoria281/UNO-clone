@@ -1,14 +1,60 @@
+.tabContainer {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.tabSelector {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    padding: 0.7rem;
+    width: 21%;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    background-color: cyan;
+}
+
+.ldb {
+    margin-right: 10px;
+}
+
+.ldb, .stats {
+    border: 1px;
+    border-color: black;
+    border-style: solid;
+    border-radius: 10px;
+}
+
+.tabText {
+    font-size: 30px;
+    margin: 10px;
+}
+
+.tabText:hover {
+    cursor: pointer;
+    background-color: rgb(35, 200, 255);
+    border-radius: 10px;
+    padding: 10px;
+    margin: 0px;
+}
+
 .gameBody {
     margin-right: 3%;
     margin-left: 3%;
-    margin-bottom: 3%;
+    background-color: cyan;
+    border-radius: 20px;
+    padding: 1%;
+    max-height: 750px;
 }
 
 .leaderboard_body {
     padding: 2%;
     /* padding-bottom: 5%; */
     /* height: 90%; */
-    max-height: 83%;
+    max-height: 72%;
+    max-width: 97%;
     overflow-x: hidden;
     overflow-y: scroll;
 }
@@ -111,6 +157,12 @@
     |      Podium Pillar Style      |
     \===============================/
 */
+#podium {
+    height: 90%;
+    max-height: 75%;
+    margin-bottom: 5%;
+}
+
 .pillarBody {
     position: relative;
     justify-content: space-around;
@@ -238,11 +290,7 @@
     width: 80px;
 } */
 
-#podium {
-    height: 90%;
-    max-height: 80%;
-    margin-bottom: 3%;
-}
+
 
 .mb-6 {
     margin-bottom: 6%;
