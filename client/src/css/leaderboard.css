@@ -20,15 +20,8 @@
     margin-right: 10px;
 }
 
-.ldb, .stats {
-    border: 1px;
-    border-color: black;
-    border-style: solid;
-    border-radius: 10px;
-}
-
 .tabText {
-    font-size: 30px;
+    font-size: 1.5rem;
     margin: 10px;
 }
 
@@ -38,6 +31,10 @@
     border-radius: 10px;
     padding: 10px;
     margin: 0px;
+}
+
+.statsTabStyle {
+    justify-content: center;
 }
 
 .gameBody {
