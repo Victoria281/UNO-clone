@@ -33,7 +33,17 @@ var LeaderBoard = {
     getNumOfScores: function (num, callback) {
         const query = {
             name: 'getNumOfScores',
-            text: 'SELECT score, uno_leaderboard.created_at, username, uno_leaderboard.userid, profileicon FROM uno_leaderboard LEFT JOIN players ON uno_leaderboard.userid = players.userid ORDER BY uno_leaderboard.score DESC LIMIT $1;',
+            text: `SELECT 
+                        score, uno_leaderboard.created_at, username, uno_leaderboard.userid, profileicon 
+                    FROM 
+                        uno_leaderboard 
+                    LEFT JOIN 
+                        players 
+                    ON 
+                        uno_leaderboard.userid = players.userid 
+                    ORDER BY
+                        score DESC
+                    LIMIT $1;`,
             values: [num],
         }
 
@@ -68,6 +78,7 @@ var LeaderBoard = {
         },
         );
     },
+    
     insertNewScore: function (id, score, callback) {
         console.log(id)
         console.log(score)

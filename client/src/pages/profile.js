@@ -68,6 +68,7 @@ const Profile = () => {
     const setIcon = (event) => {
       setSelectedIcon(event.target.value)
     }
+    
     return (
       <div className="modal" id="myModal">
         <div className="modal-dialog">

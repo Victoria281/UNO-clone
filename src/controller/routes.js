@@ -111,12 +111,12 @@ app.get('/cards', printingDebuggingInfo, verifyToken, function (req, res, next) 
                 return next(err);
             }
         } else {
-            if (result.length == 0){
+            if (result.length == 0) {
                 return next(createHttpError(404, `Not found`));
             } else {
                 return res.status(200).json({ cards: result });
             }
-            
+
         }
     });
 });
@@ -212,6 +212,23 @@ app.post('/register', printingDebuggingInfo, function (req, res, next) {
 //=====================================
 //  User
 //=====================================
+//getUserStatistics
+app.get('/user/stat', printingDebuggingInfo, verifyToken, function (req, res, next) {
+    const uid = req.decodedToken.id;
+    console.log(">>>>", uid);
+    User.getUserStat(uid, function (err, result) {
+        if (err) {
+            if (err.code === '23505') {
+                return next(createHttpError(404, `Not found`));
+            }
+            else {
+                return next(err);
+            }
+        } else {
+            return res.status(200).send({ score: result });
+        }
+    });
+});
 
 //findByUserId
 app.get('/user/:id', printingDebuggingInfo, verifyToken, function (req, res, next) {
@@ -226,7 +243,7 @@ app.get('/user/:id', printingDebuggingInfo, verifyToken, function (req, res, nex
                 return next(err);
             }
         } else {
-            if (result.length == 0){
+            if (result.length == 0) {
                 return next(createHttpError(404, `Not found`));
             } else {
                 return res.status(200).json({ user: result });

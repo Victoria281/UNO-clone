@@ -5,12 +5,14 @@ import crownImage from "../icons/pepicons_crown.png";
 import Confetti from 'react-confetti';
 import { LoadingScreen } from "../components/loadingScreen";
 const OtherPlayers = React.lazy(() => import("../components/OtherPlayers"));
+const UserStatistics = React.lazy(() => import("../components/UserStatistics"));
 
 export default class Leaderboard extends Component {
     constructor(props) {
         super(props);
         this.state = {
             users: [],
+            userStat: [],
             ifConfetti: true,
             p1: {},
             p2: {},
@@ -22,6 +24,7 @@ export default class Leaderboard extends Component {
 
     componentDidMount() {
         this.getPlayers();
+        this.getUserStat();
     }
 
     async getPlayers() {
@@ -47,6 +50,31 @@ export default class Leaderboard extends Component {
             });
         } catch (err) {
             // console.error(err.message);
+        }
+    }
+
+    async getUserStat() {
+        try {
+            const token = localStorage.getItem("token");
+            console.log("userToken:", token);
+
+            const response = await fetch(process.env.REACT_APP_API_URL + `/api/uno/user/stat/`, {
+                method: "GET",
+                headers: {
+                    'authorization': token
+                }
+            });
+
+            console.log("response: " + response.statusText);
+            const data = await response.json();
+            console.log("dataReceived:", data.score);
+
+            this.setState({
+                userStat: data.score
+            });
+
+        } catch (err) {
+            console.error(">>>>", err);
         }
     }
 
@@ -116,7 +144,7 @@ export default class Leaderboard extends Component {
             <Fragment>
                 <div className="gameBody">
                     <div id="activeContent" className="row no-gutters">
-                        <div className="col-xl-7 col-lg-7 col-md-12 col-sm-12 p-5 mb-6">
+                        <div className="col-xl-7 col-lg-7 col-md-12 col-sm-12 pt-5 pl-5 pr-5">
                             {this.checkConfettiStats(ifConfetti)}
                             <div id="podium" className="row no-gutters pillarBody">
                                 <div className="col-4 p-2" id="podiumPillar2">
@@ -201,13 +229,14 @@ export default class Leaderboard extends Component {
     }
 
     stats() {
-        const { users } = this.state;
+        const { userStat } = this.state;
         return (
             <Fragment>
                 <div className="gameBody">
                     <div id="activeContent" className="row no-gutters statsTabStyle">
                         <div className="col-xl-12 col-lg-12 col-md-12 col-sm-12 pt-3">
                             <h4 className="text-center">__username__ Game Statistics</h4>
+
 
                             <div className="row no-gutters mt-4">
                                 <div className="col-sm-6 leaderboard_col text-right">
@@ -240,7 +269,7 @@ export default class Leaderboard extends Component {
 
                             <div className="leaderboard_body">
                                 <Suspense fallback={<LoadingScreen />}>
-
+                                    <UserStatistics userStat={userStat} />
                                 </Suspense>
                             </div>
                         </div>

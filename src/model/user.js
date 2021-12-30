@@ -13,7 +13,7 @@ var User = {
     findByUserID: function (id, callback) {
         const query = {
             name: 'findByUserID',
-            text: 'SELECT p.username, p.email, p.profileicon, l.score, l.created_by FROM players AS p LEFT JOIN uno_leaderboard AS l ON p.userid = l.userid WHERE p.userid =$1',
+            text: 'SELECT p.username, p.email, p.profileicon, l.score, l.created_at FROM players AS p LEFT JOIN uno_leaderboard AS l ON p.userid = l.userid WHERE p.userid =$1',
             values: [id],
         }
 
@@ -32,6 +32,29 @@ var User = {
             }
         },
         );
+    },
+    
+    getUserStat: function (id, callback) {
+        console.log("====================================");
+        console.log("getUserStats running!\n\n");
+        console.log("userId:", id);
+        console.log("====================================");
+        
+        const query = {
+            name: 'getUserStat',
+            text: 'SELECT score, game_status, created_at FROM uno_leaderboard WHERE userid = $1',
+            values: [id],
+        };
+        
+        return pool.query(query, function (error, result) {
+            if (error) {
+                callback(error, null);
+                return;
+            } else {
+                console.log(result.rows);
+                return callback(null, result.rows);
+            }
+        });
     },
 
     checkPassword: function (id, callback) {
