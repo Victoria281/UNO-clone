@@ -37,25 +37,3 @@ VALUES
   (15, 213, 0),
   (33, 224, 0);
 
-CREATE TABLE player_stat (
-  id SERIAL PRIMARY KEY,
-  userid INTEGER NOT NULL REFERENCES players(userid),
-  wins INTEGER NOT NULL DEFAULT 0,
-  losses INTEGER NOT NULL DEFAULT 0,
-  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
-);
-
-INSERT INTO
-  player_stat (userid, wins, losses)
-VALUES 
-  (17, 2, 1),
-  (30, 1, 2),
-  (26, 0, 2),
-  (27, 1, 2),
-  (33, 3, 0),
-  (15, 0, 3),
-  (28, 0, 3),
-  (31, 0, 3),
-  (29, 0, 3);
-

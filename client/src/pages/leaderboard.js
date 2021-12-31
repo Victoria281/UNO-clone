@@ -230,6 +230,27 @@ export default class Leaderboard extends Component {
 
     stats() {
         const { userStat } = this.state;
+        let totalGames = userStat.length;
+        let totalWins = 0;
+        let lastGame;
+
+        for (let i = 0; i < userStat.length; i++) {
+            if (userStat[i].game_status === 1) {
+                totalWins++;
+            }
+
+            if (i === 0) {
+                lastGame = userStat[i].created_at;
+            }
+             
+            if (lastGame < userStat[i].created_at) {
+                lastGame = userStat[i].created_at;
+            }
+        }
+
+        console.log("totalWins", totalWins);
+        console.log("lastGame", lastGame);
+
         return (
             <Fragment>
                 <div className="gameBody">
@@ -245,9 +266,9 @@ export default class Leaderboard extends Component {
                                     <h6 className="p-1 font-weight-bold">My Latest Game was on:</h6>
                                 </div>
                                 <div className="col-sm-2 leaderboard_col text-center">
-                                    <h6 className="p-1 font-weight-bold">12</h6>
-                                    <h6 className="p-1 font-weight-bold">4</h6>
-                                    <h6 className="p-1 font-weight-bold">21 May 2021</h6>
+                                    <h6 className="p-1 font-weight-bold">{totalGames}</h6>
+                                    <h6 className="p-1 font-weight-bold">{totalWins}</h6>
+                                    <h6 className="p-1 font-weight-bold">{lastGame}</h6>
                                 </div>
 
                             </div>

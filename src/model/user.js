@@ -81,10 +81,6 @@ var User = {
                     WHERE 
                         ul.userid = $1
                         AND ul.userid = p.userid
-                    GROUP BY
-                        'Total No. of Wins'
-                    HAVING
-                        'Total No. of Wins' = 1
                 `,
             values: [id],
         };
