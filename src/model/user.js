@@ -42,7 +42,50 @@ var User = {
         
         const query = {
             name: 'getUserStat',
-            text: 'SELECT score, game_status, created_at FROM uno_leaderboard WHERE userid = $1',
+            text: `SELECT 
+                        p.username, ul.score, ul.game_status, ul.created_at 
+                    FROM 
+                        uno_leaderboard as ul, players as p
+                    WHERE 
+                        ul.userid = $1
+                        AND ul.userid = p.userid`,
+            values: [id],
+        };
+        
+        return pool.query(query, function (error, result) {
+            if (error) {
+                callback(error, null);
+                return;
+            } else {
+                console.log(result.rows);
+                return callback(null, result.rows);
+            }
+        });
+    },
+
+    getUserOverallStat: function (id, callback) {
+        console.log("====================================");
+        console.log("getUserOverallStat running!\n\n");
+        console.log("userId:", id);
+        console.log("====================================");
+        
+        const query = {
+            name: 'getUserOverallStat',
+            text: `SELECT 
+                        COUNT(p.username) 'Total', 
+                        MAX(ul.score) 'Max Score', 
+                        ul.game_status 'Total No. of Wins', 
+                        MAX(ul.created_at) 'Last Played'
+                    FROM 
+                        uno_leaderboard as ul, players as p
+                    WHERE 
+                        ul.userid = $1
+                        AND ul.userid = p.userid
+                    GROUP BY
+                        'Total No. of Wins'
+                    HAVING
+                        'Total No. of Wins' = 1
+                `,
             values: [id],
         };
         

@@ -230,6 +230,25 @@ app.get('/user/stat', printingDebuggingInfo, verifyToken, function (req, res, ne
     });
 });
 
+//getUserOverallStatistics
+app.get('/user/stat/overall', printingDebuggingInfo, verifyToken, function (req, res, next) {
+    const uid = req.decodedToken.id;
+    console.log(">>>>", uid);
+
+    User.getUserOverallStat(uid, function (err, result) {
+        if (err) {
+            if (err.code === '23505') {
+                return next(createHttpError(404, `Not found`));
+            }
+            else {
+                return next(err);
+            }
+        } else {
+            return res.status(200).send({ score: result });
+        }
+    });
+});
+
 //findByUserId
 app.get('/user/:id', printingDebuggingInfo, verifyToken, function (req, res, next) {
     const id = req.params.id;
