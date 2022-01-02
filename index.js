@@ -34,6 +34,7 @@ if (process.env.NODE_ENV === "production") {
 }
 
 console.log(__dirname);
+console.log(process.env.PG_USER)
 console.log(path.join(__dirname, "client/build"));
 
 
