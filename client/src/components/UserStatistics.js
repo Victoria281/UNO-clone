@@ -1,6 +1,5 @@
 // @ts-nocheck
 import "../css/leaderboard.css";
-import { Redirect } from "react-router-dom";
 
 
 const OtherPlayers = ({ userStat }) => {
@@ -12,16 +11,16 @@ const OtherPlayers = ({ userStat }) => {
                 // console.log("index:" + index);
                 return (
                     <div className="row no-gutters leaderboard_player">
-                        <div className="col-sm-2 leaderboard_col text-center">
+                        <div className="col-sm-2 leaderboard_col py-2 text-center">
                             <p className=" font-weight-bold p-2">{index + 1}</p>
                         </div>
-                        <div className="col-sm-5 leaderboard_col">
-
+                        <div className="col-sm-2 leaderboard_col py-2 text-center">
+                            <p className="p-2">{player.game_status === 1 ? "Win" : "Loose"}</p>
                         </div>
-                        <div className="col-sm-2 leaderboard_col py-2">
+                        <div className="col-sm-2 leaderboard_col py-2 text-center">
                             <p className="p-2">{player.score}</p>
                         </div>
-                        <div className="col-sm-3 leaderboard_col py-2">
+                        <div className="col-sm-4 leaderboard_col py-2 text-center">
                             <p className="p-2 pr-2 createdDate">{(player.created_at)}</p>
                         </div>
                     </div>

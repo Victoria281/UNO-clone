@@ -17,7 +17,7 @@ export default class Leaderboard extends Component {
             p1: {},
             p2: {},
             p3: {},
-            selectedTab: 'stats',
+            selectedTab: 'leaderboard',
         };
         this.changeSelectedTab = this.changeSelectedTab.bind(this);
     }
@@ -27,27 +27,63 @@ export default class Leaderboard extends Component {
         this.getUserStat();
     }
 
-    async getPlayers() {
+    getPlayers() {
         try {
-            const response = await fetch(
+            fetch(
                 process.env.REACT_APP_API_URL + "/api/uno/leaderboard/30"
-            );
-            const jsonData = await response.json();
-            var user_leaderboard = jsonData.scores;
-            // console.log(user_leaderboard);
-            // setP1(user_leaderboard[0]);
-            // setP2(user_leaderboard[1]);
-            // setP3(user_leaderboard[2]);
-            // setUsers(user_leaderboard);
+            )
+                .then(response => response.json())
+                .then((data) => {
+                    console.log("parsed:", data);
 
-            this.setState({
-                users: user_leaderboard,
-                p1: user_leaderboard[0],
-                p2: user_leaderboard[1],
-                p3: user_leaderboard[2],
-            }, () => {
-                console.log("Current state of getPlayers after calling api:", this.state);
-            });
+                    let user_leaderboard = data.scores;
+                    console.log("!!", user_leaderboard.length);
+                    let p2 = false;
+                    let p3 = false;
+                    let tmpUid = user_leaderboard[0].userid;
+
+                    this.setState({ p1: user_leaderboard[0] });
+                    let ctr = 0;
+
+                    while (p2 === false && ctr < user_leaderboard.length) {
+                        console.log("running p2 while loop, ctr:", ctr);
+                        console.log(">>", user_leaderboard[ctr].userid, tmpUid);
+                        console.log(">>", user_leaderboard[ctr].userid !== tmpUid);
+                        
+                        if (user_leaderboard[ctr].userid !== tmpUid) {
+                            this.setState({ p2: user_leaderboard[ctr] });
+                            tmpUid = user_leaderboard[ctr].userid;
+                            p2 = true;
+                        }
+                        
+                        ctr++;
+                    }
+
+                    while (p3 === false && ctr < user_leaderboard.length) {
+                        console.log("running p3 while loop, ctr:", ctr);
+                        console.log(">>", user_leaderboard[ctr].userid, tmpUid);
+                        console.log(">>", user_leaderboard[ctr].userid !== tmpUid);
+                        
+                        if (user_leaderboard[ctr].userid !== tmpUid) {
+                            this.setState({ p3: user_leaderboard[ctr] });
+                            tmpUid = user_leaderboard[ctr].userid;
+                            p3 = true;
+                        }
+
+                        ctr++;
+                    }
+
+
+                    this.setState({
+                        users: user_leaderboard
+                    }, () => {
+                        console.log("Current state of getPlayers after calling api:", this.state);
+                    });
+
+
+                });
+
+
         } catch (err) {
             // console.error(err.message);
         }
@@ -120,20 +156,39 @@ export default class Leaderboard extends Component {
     }
 
     tab() {
-        return (
-            <div className="tabContainer no-gutters">
-                <div className="tabSelector">
-                    <div className="ldb">
-                        <a id="leaderboardTab" className="tabText" onClick={() => this.changeSelectedTab('leaderboard')}>Leaderboard</a>
-                        {/* <p className="tabText">Leaderboard</p> */}
-                    </div>
-                    <div className="stats">
-                        <a id="statsTab" className="tabText" onClick={() => this.changeSelectedTab('stats')}>My Stats</a>
-                        {/* <p className="tabText">My Stats</p> */}
+        const { selectedTab } = this.state;
+
+        if (selectedTab === "leaderboard") {
+            return (
+                <div className="tabContainer no-gutters">
+                    <div className="tabSelector">
+                        <div className="ldb tabSelected">
+                            <button id="leaderboardTab" className="tabText" onClick={() => this.changeSelectedTab('leaderboard')}>Leaderboard</button>
+                            {/* <p className="tabText">Leaderboard</p> */}
+                        </div>
+                        <div className="stats">
+                            <button id="statsTab" className="tabText" onClick={() => this.changeSelectedTab('stats')}>My Stats</button>
+                            {/* <p className="tabText">My Stats</p> */}
+                        </div>
                     </div>
                 </div>
-            </div>
-        )
+            )
+        } else {
+            return (
+                <div className="tabContainer no-gutters">
+                    <div className="tabSelector">
+                        <div className="ldb">
+                            <button id="leaderboardTab" className="tabText" onClick={() => this.changeSelectedTab('leaderboard')}>Leaderboard</button>
+                            {/* <p className="tabText">Leaderboard</p> */}
+                        </div>
+                        <div className="stats tabSelected">
+                            <button id="statsTab" className="tabText" onClick={() => this.changeSelectedTab('stats')}>My Stats</button>
+                            {/* <p className="tabText">My Stats</p> */}
+                        </div>
+                    </div>
+                </div>
+            )
+        }
     }
 
     leaderboard() {
@@ -216,11 +271,9 @@ export default class Leaderboard extends Component {
                                     <h6 className="p-1 font-weight-bold">Created</h6>
                                 </div>
                             </div>
-                            <div className="leaderboard_body">
-                                <Suspense fallback={<LoadingScreen />}>
-                                    <OtherPlayers users={users} />
-                                </Suspense>
-                            </div>
+                            <Suspense fallback={<LoadingScreen />}>
+                                <OtherPlayers users={users} />
+                            </Suspense>
                         </div>
                     </div>
                 </div>
@@ -242,7 +295,7 @@ export default class Leaderboard extends Component {
             if (i === 0) {
                 lastGame = userStat[i].created_at;
             }
-             
+
             if (lastGame < userStat[i].created_at) {
                 lastGame = userStat[i].created_at;
             }
@@ -251,53 +304,119 @@ export default class Leaderboard extends Component {
         console.log("totalWins", totalWins);
         console.log("lastGame", lastGame);
 
-        return (
-            <Fragment>
-                <div className="gameBody">
-                    <div id="activeContent" className="row no-gutters statsTabStyle">
-                        <div className="col-xl-12 col-lg-12 col-md-12 col-sm-12 pt-3">
-                            <h4 className="text-center">__username__ Game Statistics</h4>
+        if (userStat.length === 0) {
+            return (
+                <Fragment>
+                    <div className="gameBody">
+                        <div id="activeContent" className="row no-gutters statsTabStyle">
+                            <div className="col-xl-12 col-lg-12 col-md-12 col-sm-12 pt-3">
+                                <h4 className="text-center">My Game Statistics</h4>
 
 
-                            <div className="row no-gutters mt-4">
-                                <div className="col-sm-6 leaderboard_col text-right">
-                                    <h6 className="p-1 font-weight-bold">My Total No. of Games:</h6>
-                                    <h6 className="p-1 font-weight-bold">My Total No. of Wins:</h6>
-                                    <h6 className="p-1 font-weight-bold">My Latest Game was on:</h6>
-                                </div>
-                                <div className="col-sm-2 leaderboard_col text-center">
-                                    <h6 className="p-1 font-weight-bold">{totalGames}</h6>
-                                    <h6 className="p-1 font-weight-bold">{totalWins}</h6>
-                                    <h6 className="p-1 font-weight-bold">{lastGame}</h6>
+                                <div className="row no-gutters mt-4">
+                                    <div className="col-sm-6 leaderboard_col text-right">
+                                        <h6 className="p-1 font-weight-bold">My Total No. of Games:</h6>
+                                        <h6 className="p-1 font-weight-bold">My Total No. of Wins:</h6>
+                                        <h6 className="p-1 font-weight-bold">My Latest Game was on:</h6>
+                                    </div>
+                                    <div className="col-sm-2 leaderboard_col text-center">
+                                        <h6 className="p-1 font-weight-bold">{totalGames}</h6>
+                                        <h6 className="p-1 font-weight-bold">{totalWins}</h6>
+                                        <h6 className="p-1 font-weight-bold">{lastGame}</h6>
+                                    </div>
+
                                 </div>
 
-                            </div>
+                                <div className="row no-gutters mt-4">
+                                    <div className="col-sm-2 leaderboard_col text-center">
+                                        <h6 className="p-1 font-weight-bold">No</h6>
+                                    </div>
+                                    <div className="col-sm-5 leaderboard_col">
+                                        <h6 className="p-1 font-weight-bold">Players</h6>
+                                    </div>
+                                    <div className="col-sm-2 leaderboard_col">
+                                        <h6 className="p-1 font-weight-bold">Score</h6>
+                                    </div>
+                                    <div className="col-sm-3 leaderboard_col">
+                                        <h6 className="p-1 font-weight-bold">Created</h6>
+                                    </div>
+                                </div>
 
-                            <div className="row no-gutters mt-4">
-                                <div className="col-sm-2 leaderboard_col text-center">
-                                    <h6 className="p-1 font-weight-bold">No</h6>
+                                <div className="leaderboard_body">
+                                    <Suspense fallback={<LoadingScreen />}>
+                                        <UserStatistics userStat={userStat} />
+                                    </Suspense>
                                 </div>
-                                <div className="col-sm-5 leaderboard_col">
-                                    <h6 className="p-1 font-weight-bold">Players</h6>
-                                </div>
-                                <div className="col-sm-2 leaderboard_col">
-                                    <h6 className="p-1 font-weight-bold">Score</h6>
-                                </div>
-                                <div className="col-sm-3 leaderboard_col">
-                                    <h6 className="p-1 font-weight-bold">Created</h6>
-                                </div>
-                            </div>
-
-                            <div className="leaderboard_body">
-                                <Suspense fallback={<LoadingScreen />}>
-                                    <UserStatistics userStat={userStat} />
-                                </Suspense>
                             </div>
                         </div>
                     </div>
-                </div>
-            </Fragment>
-        )
+                </Fragment>
+            )
+        } else {
+            lastGame = (lastGame.split("T")[0]);
+
+            return (
+                <Fragment>
+                    <div className="gameBody">
+                        <div id="activeContent" className="row no-gutters statsTabStyle">
+                            <div className="col-xl-12 col-lg-12 col-md-12 col-sm-12 pt-3">
+                                <h4 className="text-center">{userStat[0].username}'s Game Statistics</h4>
+
+
+                                <div className="row no-gutters mt-4">
+                                    <div className="col-sm-6 leaderboard_col text-right">
+                                        <h6 className="p-1 font-weight-bold">My Total No. of Games:</h6>
+                                        <h6 className="p-1 font-weight-bold">My Total No. of Wins:</h6>
+                                        <h6 className="p-1 font-weight-bold">My Latest Game was on:</h6>
+                                    </div>
+                                    <div className="col-sm-2 leaderboard_col text-center">
+                                        <h6 className="p-1 font-weight-bold">{totalGames}</h6>
+                                        <h6 className="p-1 font-weight-bold">{totalWins}</h6>
+                                        <h6 className="p-1 font-weight-bold">{lastGame}</h6>
+                                    </div>
+
+                                </div>
+
+                                <div className="row no-gutters mt-4 statsHeader">
+                                    <div className="col-sm-3">
+                                    </div>
+                                    <div className="col-sm-6 center">
+                                        <div className="row no-gutters mt-4">
+                                            <div className="col-sm-2 leaderboard_col py-2 text-center">
+                                                <h6 className="p-1 font-weight-bold">Game</h6>
+                                            </div>
+                                            <div className="col-sm-2 leaderboard_col py-2 text-center">
+                                                <h6 className="p-1 font-weight-bold">Status</h6>
+                                            </div>
+                                            <div className="col-sm-2 leaderboard_col py-2 text-center">
+                                                <h6 className="p-1 font-weight-bold">Score</h6>
+                                            </div>
+                                            <div className="col-sm-4 leaderboard_col py-2 text-center">
+                                                <h6 className="p-1 font-weight-bold">Date</h6>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="col-sm-3">
+                                    </div>
+                                </div>
+
+                                <div className="row no-gutters mt-4">
+                                    <div className="col-sm-3">
+                                    </div>
+                                    <div className="col-sm-6 leaderboard_body">
+                                        <Suspense fallback={<LoadingScreen />}>
+                                            <UserStatistics userStat={userStat} />
+                                        </Suspense>
+                                    </div>
+                                    <div className="col-sm-3">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </Fragment>
+            )
+        }
     }
 
     render() {

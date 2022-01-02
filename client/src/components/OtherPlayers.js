@@ -3,15 +3,23 @@ import "../css/leaderboard.css";
 
 const OtherPlayers = ({ users }) => {
     console.log("users:", users);
+    let printed = 0;
+    let newIndex = 1;
+
     return (
-        <div className="listV">
+        <div className="listV leaderboard_body">
             {users.map((players, index) => {
-                // console.log("index:" + index);
-                if (parseInt(players.userid) === parseInt(localStorage.getItem("userid"))) {
+                // console.log("printed:", printed);
+                
+                // if the logged in user is the current user
+                if (parseInt(players.userid) === parseInt(localStorage.getItem("userid")) && printed !== players.userid) {
+                    // console.log("printed inside:", printed);
+                    printed = players.userid;
+                    newIndex++;
                     return (
-                        <div className="row no-gutters leaderboard_player" id={players.userid}>
-                            <div className="col-sm-2 leaderboard_col text-center">
-                                <p className=" font-weight-bold p-2">{index + 1}</p>
+                        <div className="row no-gutters leaderboard_player" id={players.userid} key={players.userid + "T" + index}>
+                            <div className="col-sm-2 leaderboard_col py-2 text-center">
+                                <p className=" font-weight-bold p-2">{newIndex - 1}</p>
                             </div>
                             <div className="col-sm-5 leaderboard_col">
                                 <div className="row no-gutters">
@@ -35,11 +43,16 @@ const OtherPlayers = ({ users }) => {
                             </div>
                         </div>
                     );
-                } else if (index >= 3) {
+                } 
+                
+                // if the row to print is after the current user
+                else if (index >= 3 && printed !== players.userid) {
+                    printed = players.userid;
+                    newIndex++;
                     return (
-                        <div className="row no-gutters leaderboard_row">
-                            <div className="col-sm-2 p-2 leaderboard_col text-center">
-                                <p className="font-weight-bold">{index + 1}</p>
+                        <div className="row no-gutters leaderboard_row" key={players.userid + "T" + index}>
+                            <div className="col-sm-2 p-2 leaderboard_col py-2 text-center">
+                                <p className="font-weight-bold">{newIndex - 1}</p>
                             </div>
                             <div className="col-sm-5 leaderboard_col">
                                 <div className="row no-gutters">
@@ -63,11 +76,16 @@ const OtherPlayers = ({ users }) => {
                             </div>
                         </div>
                     );
-                } else {
+                } 
+                
+                // if the row to print is before the current user
+                else if (index < 3 && printed !== players.userid) {
+                    printed = players.userid;
+                    newIndex++;
                     return (
-                        <div className="row no-gutters leaderboard_row">
-                            <div className="col-sm-2 p-2 leaderboard_col text-center">
-                                <p className="font-weight-bold">{index + 1}</p>
+                        <div className="row no-gutters leaderboard_row" key={players.userid + "T" + index}>
+                            <div className="col-sm-2 p-2 leaderboard_col py-2 text-center">
+                                <p className="font-weight-bold">{newIndex - 1}</p>
                             </div>
                             <div className="col-sm-5 leaderboard_col">
                                 <div className="row no-gutters">
@@ -91,6 +109,12 @@ const OtherPlayers = ({ users }) => {
                             </div>
                         </div>
                     );
+                } 
+                
+                // this handles all the extra rows that each player has
+                // each row is a new entry of a score for that user (i.e. user played more than 1 game)
+                else {
+                    // do nothing
                 }
             })}
         </div>

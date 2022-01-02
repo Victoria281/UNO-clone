@@ -21,6 +21,8 @@
 }
 
 .tabText {
+    background-color: transparent;
+
     font-size: 1.5rem;
     margin: 10px;
 }
@@ -30,6 +32,12 @@
     background-color: rgb(35, 200, 255);
     border-radius: 10px;
     padding: 10px;
+    margin: 0px;
+}
+
+.tabSelected {
+    background-color: rgb(35, 200, 255);
+    border-radius: 10px;
     margin: 0px;
 }
 
@@ -47,13 +55,11 @@
 }
 
 .leaderboard_body {
-    padding: 2%;
-    /* padding-bottom: 5%; */
-    /* height: 90%; */
+    padding: 0% 2% 2% 2%;
     max-height: 600px;
     max-width: 97%;
     overflow-x: hidden;
-    overflow-y: scroll;
+    overflow-y: visible;
 }
 
 .leaderboard_body::-webkit-scrollbar {
