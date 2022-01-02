@@ -23,7 +23,8 @@ var Auth = {
                     callback(error, null);
                     return;
                 } else {
-                    console.log(result.rows)
+                    console.log(result.rows[0])
+                    console.log("HIIIIIIIIIIIIIIIIIIII")
                     return callback(null, [result.rows[0]]);
                 }
             });
@@ -64,6 +65,35 @@ var Auth = {
         });
     },
 
+    // Mailtrap, check if user email is in database before sending axios for testing
+    email: function (email, callback) {
+        try {
+            const query = {
+                name: 'emailVerify',
+                text: 'SELECT * FROM players WHERE email=$1;',
+                values: [email],
+            }
+
+            return pool.query(query, function (error, result) {
+                // if (error) {
+                    
+                    // return;
+                    try{
+                        console.log(result)
+                        console.log("NO ERROR")
+                        return callback(null, [result.rows[0]]);
+
+                    }catch(e){
+                        console.log("THERE IS AN ERRORRR")
+                        callback(error, null);
+                        return;
+                    }
+            });
+        } catch (error) {
+            return callback(error, null);;
+        }
+
+    },
 }
 
 //---------------------------------------------
