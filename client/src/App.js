@@ -14,18 +14,20 @@ import Music from "./components/Music";
 import Room from "./pages/multiplayer/room";
 import MultiPlayer from "./pages/multiplayer/multiplayer";
 import PageRestriction from "./PageRestriction"
-
 import { NavLink } from 'react-router-dom'
 import io from "socket.io-client";
 
+//new
+import MultiplayerCreateRoom from "./Component/MultiplayerComponents/createRoom"
+import MultiplayerGameRoom from "./Component/MultiplayerComponents/gameRoom"
+
 const socket = io.connect(process.env.REACT_APP_API_URL);
 
-function Appmain(props) {
+function AppGameRoom(props) {
   return (
     <React.Fragment>
-        <MultiPlayer
-          username={props.match.params.username}
-          roomname={props.match.params.roomname}
+        <MultiplayerGameRoom
+          roomcode={props.match.params.roomcode}
           socket={socket}
         />
     </React.Fragment>
@@ -107,8 +109,12 @@ const App=() =>{
           <PageRestriction exact path="/profile" component={ProfilePage} />
           <PageRestriction exact path="/leaderboard" component={LeaderboardPage} />
           <Route exact path="/logout" component={Logout} />
-          <PageRestriction exact path="/createroom" component={Room} socket={socket}/>
-          <PageRestriction path="/multiplayer/:roomname/:username" component={Appmain} socket={socket}/>
+          {/* <PageRestriction exact path="/createroom" component={Room} socket={socket}/> */}
+          {/* <PageRestriction path="/multiplayer/:roomname/:username" component={Appmain} socket={socket}/> */}
+
+          {/* new */}
+          <Route exact path="/createroom" render={()=><MultiplayerCreateRoom socket={socket}/>}/>
+          <Route path="/multiplayer/:roomcode" component={AppGameRoom}/>
         </Switch>
       </div>
     </Router>
