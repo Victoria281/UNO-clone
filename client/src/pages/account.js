@@ -53,8 +53,7 @@ export default function App() {
     // console.log("AFTERRRRRRR PASSWORD CHECK")
     // console.log(status)
 
-
-
+    console.log(process.env.REACT_APP_API_URL)
     if(status){
       axios
       .post(process.env.REACT_APP_API_URL + "/api/uno/login", {
@@ -91,38 +90,7 @@ export default function App() {
         // console.log(error.config);
       })
     }
-
-
-// // checking if email is empty
-// if (email !== "") {
-//   // Checks email with regex expression
-//   const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
-//   if (emailRegex.test(email)) {
-//     setEmailError("");
-//   } else {
-//     setEmailError("Invalid Email");
-//   }
-// } else {
-//   setEmailError("Email Required");
-// }
-
-// // Check if password is empty
-// if (password != "") {
-//   // Do something here!
-// } else {
-//   setPasswordError("Password Required");
-// }
-
-
-
-
-
-    
   }
-
-
-
-
   const handleEmailChange = (e) => {
     setSuccessMsg("");
     setEmailError("");

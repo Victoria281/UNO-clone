@@ -9,10 +9,8 @@ import { Provider } from "react-redux";
 const store = createStore(rootReducers);
 
 ReactDOM.render(
-  <ReactDOM.StrictMode>
     <Provider store={store}>
       <App />
-    </Provider>
-  </ReactDOM.StrictMode>,
+    </Provider>,
   document.getElementById('root')
 );

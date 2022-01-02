@@ -27,7 +27,6 @@ const Music = () => {
 
     return(
     <Fragment>
-        <div>
           {/* Button to call our main function */}
         <button onClick={playPause} style={{backgroundColor : '#ffffff00'}}>
           <h1 style={{
@@ -41,7 +40,6 @@ const Music = () => {
               <i className="fa fa-volume-off"></i>}
           </h1>
         </button>
-      </div>
       </Fragment>);
 };
   

@@ -1,6 +1,7 @@
 // @ts-nocheck
 import { useEffect, useState } from "react";
 import Modal from "react-modal";
+import Tutorial from "../components/Tutorial";
 import shuffleCards from "../components/shuffle";
 import "../index.css";
 import "../css/card.css";
@@ -35,6 +36,7 @@ const Game = () => {
   const [playable, setPlayable] = useState([]);
   const [turn, setTurn] = useState(0);
   const [action, setAction] = useState(["",]);
+  const [isTutorialOpen, setisTutorialOpen] = useState(false);
 
   const CardActions = () => {
     return (
@@ -709,6 +711,12 @@ const Game = () => {
       <ChooseColorWild />
       <PlayerTurnModal />
       <AddCardModal />
+      <Tutorial 
+        isTutorial = {isTutorialOpen}
+        setisTutorialOpen = {setisTutorialOpen}
+      />
+
+      <button onClick={() => setisTutorialOpen(true)} >Tutorial Modal</button>
 
       <div className="row my-3">
         <div className="col-2 p-0" id="bot-left">
