@@ -100,7 +100,7 @@ app.get('/profile_icons/*', printingDebuggingInfo, function (req, res, next) {
 //=====================================
 
 //findAll
-app.get('/cards', printingDebuggingInfo, verifyToken, function (req, res, next) {
+app.get('/cards', printingDebuggingInfo, function (req, res, next) {
 
     Card.findAll(function (err, result) {
         if (err) {
