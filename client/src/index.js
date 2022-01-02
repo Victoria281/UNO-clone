@@ -1,12 +1,15 @@
-// @ts-check
+// @ts-nocheck
+
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
+import rootReducers from "./store/reducer/index";
+import { createStore, applyMiddleware } from "redux";
 import { Provider } from "react-redux";
-import { store } from "./store/store";
+import thunk from "redux-thunk"
 
-console.log("Current State of Store:", store.getState());
+const store = createStore(rootReducers, applyMiddleware(thunk));
 
 ReactDOM.render(
   <React.StrictMode>

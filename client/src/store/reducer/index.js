@@ -1,10 +1,12 @@
-// @ts-nocheck
-import { SecurityReducer } from "./secure_action";
-// import { BotPlayReducer } from "./bot_play";
+import SecurityReducer from "./secure_action";
+import multiplayer_rooms from "./multiplayer/rooms";
+import multiplayer_game from "./multiplayer/game";
+
 import { combineReducers } from "redux";
 
 const rootReducers = combineReducers({
-  SecurityReducer: SecurityReducer,
-  // BotPlayReducer: BotPlayReducer,
+  SecurityReducer,
+  multiplayer_rooms,
+  multiplayer_game
 });
 export default rootReducers;
