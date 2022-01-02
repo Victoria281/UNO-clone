@@ -148,7 +148,7 @@ export default function App() {
             {emailSuccess && <div>{emailSuccess}</div>}
             {emailError && <div>{emailError}</div>}
           
-                <input type="text" name="email" style={{marginTop: 20, marginBottom: 20,  borderRadius: 5}} size={38} value={email} onChange={(e) => setEmail(e.target.value)} />
+                <input type="text" name="email" autoComplete="on" style={{marginTop: 20, marginBottom: 20,  borderRadius: 5}} size={38} value={email} onChange={(e) => setEmail(e.target.value)} />
                 <button 
                   className="btn btn-success btn-lg link pop-on-hover" 
                   style={{ width: "40%", marginTop: 20, height: 60, backgroundColor: 'orange', borderRadius: 40}} 

@@ -151,7 +151,7 @@ export default function App() {
               <div class="input-group-prepend">
                 <span class="input-group-text"><i class="fa fa-lock fa-lg fa-fw" aria-hidden="true"></i></span>
               </div>
-              <input type="password" className="form-control" placeholder="Password" onChange={handlePasswordChange} value={password} />
+              <input type="password" className="form-control" placeholder="Password" onChange={handlePasswordChange} value={password} autocomplete="off"/>
             </div>
 
             {passwordError && <div className="error-msg">{passwordError}</div>}
@@ -163,7 +163,7 @@ export default function App() {
               <div class="input-group-prepend">
                 <span class="input-group-text"><i class="fa fa-lock fa-lg fa-fw" aria-hidden="true"></i></span>
               </div>
-              <input type="password" className="form-control" placeholder="Confirm Password" onChange={handleCfmPasswordChange} value={confirmpassword} />
+              <input type="password" className="form-control" placeholder="Confirm Password" onChange={handleCfmPasswordChange} value={confirmpassword} autocomplete="off"/>
             </div>
 
             {passwordCfmError && (
