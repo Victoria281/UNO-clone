@@ -1,4 +1,5 @@
-import React, { Fragment, useEffect, useState } from "react";
+// @ts-nocheck
+import { useState } from "react";
 
 import axios from "axios";
 import "../css/register.css";
@@ -70,78 +71,78 @@ export default function App() {
   // Function called when register button is clicked
   function createPost() {
     var status = true;
-    
-    
-    if(status==true){
+
+
+    if (status === true) {
       // Check Username Fields
-        if(username==""){
-          status = false;
-          setUsernameError("Username Required");
-        }else{
-          status = true;
-          setUsernameError("");
-        }
+      if (username === "") {
+        status = false;
+        setUsernameError("Username Required");
+      } else {
+        status = true;
+        setUsernameError("");
+      }
     }
-    
-    if(status==true){
+
+    if (status === true) {
       // Check Email Field
-      if(email==""){
+      if (email === "") {
         status = false;
         setEmailError("Email Required");
-      }else{
+      } else {
         const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
         if (emailRegex.test(email)) {
           status = true;
           setEmailError("");
-        }else{
+        } else {
           status = false;
           setEmailError("Not a valid format")
         }
       }
     }
-    
-    if(status==true){
+
+    if (status === true) {
       // Check password field
-      if(password==""){
+      if (password === "") {
         status = false;
         setPasswordError("Password required")
-      }else{
+      } else {
         status = true;
         setPasswordError("");
         // Regex must contain 1 lowercase, 1 uppercase, 1 number, 1 special character (escapes reserved RegEx in case of conflict),
         // string must be 8 chars or longer
-        const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/;
-        if(passwordRegex.test(password)){
+        const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})/;
+        if (passwordRegex.test(password)) {
           status = true;
           setPasswordError("");
-        }else{
+        } else {
           status = false;
           setPasswordError("Criteria: Upper and Lowercase, Number, Special Char")
         }
       }
     }
-    
-    if(status==true){
+
+    if (status === true) {
       // Check confirm password field
-      if(confirmpassword==""){
+      if (confirmpassword === "") {
         status = false;
         setPasswordCfmError("Confirm Password Required");
-      }else{
-        if(confirmpassword == password){
+      } else {
+        if (confirmpassword === password) {
           status = true;
           setPasswordCfmError("");
-          
-          
-        }else{
+
+
+        } else {
           status = false;
           setPasswordCfmError("Password does not match confirm password");
         }
       }
     }
-    
+
     // console.log("STATUS: " + status);
     // // console.log((emailError == "") && (usernameError == "") && (passwordError == "" ) && (passwordCfmError == ""))
-    if(status){
+    if (status) {
 
       axios
         .post("http://localhost:5000/api/uno/register", {
@@ -156,10 +157,10 @@ export default function App() {
           window.location = "/login"
         })
         .catch((error) => {
-          if(error.response){
+          if (error.response) {
             // Set state of duplicate msg
             setDuplicateMsg("There is a duplicate of either username or email. Please change.")
-          }else if (error.request) {
+          } else if (error.request) {
             // The request was made but no response was received
             // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
             // http.ClientRequest in node.js
@@ -179,11 +180,11 @@ export default function App() {
     <div className="App">
       <div className="wrapper">
         <h1><b id="registerTxt" className="p-3">Register</b></h1>
-          
-        
+
+
         <div id="registerSection" className="pt-5 pl-5 pr-5 pb-2">
-        
-        {duplicateMsg && <div className="error-msg">{duplicateMsg}</div>}
+
+          {duplicateMsg && <div className="error-msg">{duplicateMsg}</div>}
           <form
             className="form-group form"
             autoComplete="off"
@@ -192,9 +193,9 @@ export default function App() {
             {successMsg && <div className="success-msg">{successMsg}</div>}
             <label className="mt-2">Username:</label>
 
-            <div class="input-group mb-2">
-              <div class="input-group-prepend">
-                <span class="input-group-text"><i class="fa fa-user fa-lg fa-fw" aria-hidden="true"></i></span>
+            <div className="input-group mb-2">
+              <div className="input-group-prepend">
+                <span className="input-group-text"><i className="fa fa-user fa-lg fa-fw" aria-hidden="true"></i></span>
               </div>
               <input type="text" className="form-control pr-5" placeholder="Username" onChange={handleUsernameChange} value={username} />
             </div>
@@ -202,11 +203,11 @@ export default function App() {
             {usernameError && <div className="error-msg">{usernameError}</div>}
 
             <label >Email:</label>
-            
 
-            <div class="input-group mb-2">
-              <div class="input-group-prepend">
-                <span class="input-group-text"><i class="fa fa-envelope fa-lg fa-fw" aria-hidden="true"></i></span>
+
+            <div className="input-group mb-2">
+              <div className="input-group-prepend">
+                <span className="input-group-text"><i className="fa fa-envelope fa-lg fa-fw" aria-hidden="true"></i></span>
               </div>
               <input type="text" className="form-control pr-4" placeholder="Email" onChange={handleEmailChange} value={email} />
             </div>
@@ -214,9 +215,9 @@ export default function App() {
             {emailError && <div className="error-msg">{emailError}</div>}
 
             <label>Password (must be 8 characters):</label>
-            <div class="input-group mb-2">
-              <div class="input-group-prepend">
-                <span class="input-group-text"><i class="fa fa-lock fa-lg fa-fw" aria-hidden="true"></i></span>
+            <div className="input-group mb-2">
+              <div className="input-group-prepend">
+                <span className="input-group-text"><i className="fa fa-lock fa-lg fa-fw" aria-hidden="true"></i></span>
               </div>
               <input type="password" className="form-control" placeholder="Password" onChange={handlePasswordChange} value={password} />
             </div>
@@ -226,9 +227,9 @@ export default function App() {
             <label className="mt-3">
               Confirm Password:
             </label>
-            <div class="input-group mb-2">
-              <div class="input-group-prepend">
-                <span class="input-group-text"><i class="fa fa-lock fa-lg fa-fw" aria-hidden="true"></i></span>
+            <div className="input-group mb-2">
+              <div className="input-group-prepend">
+                <span className="input-group-text"><i className="fa fa-lock fa-lg fa-fw" aria-hidden="true"></i></span>
               </div>
               <input type="password" className="form-control" placeholder="Confirm Password" onChange={handleCfmPasswordChange} value={confirmpassword} />
             </div>
@@ -243,9 +244,9 @@ export default function App() {
               className="btn btn-success btn-lg link pop-on-hover"
               style={{ width: "40%", marginTop: 30, height: 50, backgroundColor: '#45BDF8', borderRadius: '50%'}}
               onClick={createPost}
-              
+
             >
-            <p id="registerBtnTxt" style={{ fontSize: 42, fontWeight: 'bolder' , fontFamily: 'Rubik Mono One', color:'black', marginTop: -20}}>Register</p>
+              <p id="registerBtnTxt" style={{ fontSize: 42, fontWeight: 'bolder', fontFamily: 'Rubik Mono One', color: 'black', marginTop: -20 }}>Register</p>
             </button>
           </form>
         </div>

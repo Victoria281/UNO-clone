@@ -1,6 +1,5 @@
-import React, { Fragment, useEffect, useState } from "react";
-
-import { useHistory } from "react-router-dom";
+//@ts-nocheck
+import React, { useState } from "react";
 import "../css/account.css";
 // import { response } from "express";
 import axios from "axios";
@@ -169,9 +168,9 @@ export default function App() {
             <label>Email:</label>
 
 
-            <div class="input-group mb-3">
-              <div class="input-group-prepend">
-                <span class="input-group-text"><i class="fa fa-envelope fa-lg fa-fw" aria-hidden="true"></i></span>
+            <div className="input-group mb-3">
+              <div className="input-group-prepend">
+                <span className="input-group-text"><i className="fa fa-envelope fa-lg fa-fw" aria-hidden="true"></i></span>
               </div>
               <input type="text" className="form-control pr-4" placeholder="Email Address" onChange={handleEmailChange} value={email} />
             </div>
@@ -179,9 +178,9 @@ export default function App() {
             {emailError && <div className="error-msg">{emailError}</div>}
 
             <label>Password:</label>
-            <div class="input-group mb-3">
-              <div class="input-group-prepend">
-                <span class="input-group-text"><i class="fa fa-lock fa-lg fa-fw" aria-hidden="true"></i></span>
+            <div className="input-group mb-3">
+              <div className="input-group-prepend">
+                <span className="input-group-text"><i className="fa fa-lock fa-lg fa-fw" aria-hidden="true"></i></span>
               </div>
               <input type="password" className="form-control" placeholder="Password" onChange={handlePasswordChange} value={password} />
             </div>

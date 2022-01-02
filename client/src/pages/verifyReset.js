@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React, { Fragment, useEffect, useState } from "react";
 
 import emailjs from 'emailjs-com'

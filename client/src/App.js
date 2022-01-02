@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React, { Fragment, useState, useEffect } from "react";
 
 //components
@@ -19,14 +20,17 @@ import VerifyReset from './pages/verifyReset'
 import { NavLink } from 'react-router-dom'
 import io from "socket.io-client";
 
+//new
+import MultiplayerCreateRoom from "./Component/MultiplayerComponents/createRoom"
+import MultiplayerGameRoom from "./Component/MultiplayerComponents/gameRoom"
+
 const socket = io.connect(process.env.REACT_APP_API_URL);
 
-function Appmain(props) {
+function AppGameRoom(props) {
   return (
     <React.Fragment>
-        <MultiPlayer
-          username={props.match.params.username}
-          roomname={props.match.params.roomname}
+        <MultiplayerGameRoom
+          roomcode={props.match.params.roomcode}
           socket={socket}
         />
     </React.Fragment>
@@ -59,10 +63,10 @@ const App=() =>{
             <span className="navbar-toggler-icon"></span>
           </button>
           <p className="brand d-none d-sm-block">
-            <div class="card1"></div>
-            <div class="card2"></div>
-            <p class="logomain">NOU</p>
-            <p class="logosub">uno-clone</p>
+            <div className="card1"></div>
+            <div className="card2"></div>
+            <p className="logomain">NOU</p>
+            <p className="logosub">uno-clone</p>
           </p>
           <div className="collapse navbar-collapse" id="navbarTogglerDemo03">
             <ul className="navbar-nav ml-auto mt-2 mt-lg-0">
@@ -109,9 +113,12 @@ const App=() =>{
           <PageRestriction exact path="/profile" component={ProfilePage} />
           <PageRestriction exact path="/leaderboard" component={LeaderboardPage} />
           <Route exact path="/logout" component={Logout} />
+          {/* <PageRestriction exact path="/createroom" component={Room} socket={socket}/> */}
+          {/* <PageRestriction path="/multiplayer/:roomname/:username" component={Appmain} socket={socket}/> */}
           <Route exact path="/verifyReset" component={VerifyReset} />
-          <PageRestriction exact path="/createroom" component={Room} socket={socket}/>
-          <PageRestriction path="/multiplayer/:roomname/:username" component={Appmain} socket={socket}/>
+          {/* new */}
+          <Route exact path="/createroom" render={()=><MultiplayerCreateRoom socket={socket}/>}/>
+          <Route path="/multiplayer/:roomcode" component={AppGameRoom}/>
         </Switch>
       </div>
     </Router>

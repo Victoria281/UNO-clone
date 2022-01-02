@@ -16,6 +16,12 @@
     box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);
   }
 
+  .card-link {
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+  }
+
   .card-header{
     background-color: rgb(255, 255, 255);
   }
@@ -104,6 +110,12 @@
     border-bottom: 2px solid red;
   } */
   
+  .editBtn {
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+  }
+
   .editBtn:hover {
     border-bottom: 2px solid rgb(234, 58, 58);
   }
