@@ -110,7 +110,7 @@ app.get('/profile_icons/*', printingDebuggingInfo, function (req, res, next) {
 //=====================================
 
 //findAll
-app.get('/cards', printingDebuggingInfo, function (req, res, next) {
+app.get('/cards', printingDebuggingInfo, verifyToken, function (req, res, next) {
 
     Card.findAll(function (err, result) {
         if (err) {
@@ -178,7 +178,7 @@ app.post('/login', printingDebuggingInfo, function (req, res, next) {
 //register
 app.post('/register', printingDebuggingInfo, function (req, res, next) {
     console.log('processRegister running.');
-    let userName = req.body.username;
+    let userName = req.body.userName;
     let email = req.body.email;
     let password = req.body.password;
 

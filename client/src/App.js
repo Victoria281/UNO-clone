@@ -7,7 +7,7 @@ import HomePage from "./pages/home";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import EndPage from "./pages/end";
 import AccountPage from "./Component/AccountComponents/loginComponents/account";
-import RegisterPage from "./Component/AccountComponents/registerCompoenents/register";
+import RegisterPage from "./Component/AccountComponents/RegisterComponents/register";
 import ProfilePage from "./pages/profile";
 import LeaderboardPage from "./pages/leaderboard";
 import Music from "./components/Music";

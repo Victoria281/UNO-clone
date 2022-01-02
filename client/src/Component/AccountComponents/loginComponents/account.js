@@ -1,6 +1,6 @@
 //@ts-nocheck
 import React, { useState } from "react";
-import "../css/account.css";
+import "../../../css/account.css";
 // import { response } from "express";
 import axios from "axios";
 
