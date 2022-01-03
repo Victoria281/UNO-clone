@@ -1,7 +1,6 @@
-import React, { Fragment, useEffect, useState } from "react";
-
-import { useHistory } from "react-router-dom";
-import "../css/account.css";
+//@ts-nocheck
+import React, { useState } from "react";
+import "../../../css/account.css";
 // import { response } from "express";
 import axios from "axios";
 
@@ -9,15 +8,24 @@ import axios from "axios";
 export default function App() {
   const [email, setEmail] = useState("");
   const [emailError, setEmailError] = useState("");
-  const [post, setPost] = React.useState(null);
   const [password, setPassword] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [credWrong, setCredWrong] = useState("");
   const [successMsg, setSuccessMsg] = useState("");
 
 
+  // const [shake, setShake] = useState(false);
 
 
+  // const animate = () => {
+        
+  //   // Button begins to shake
+  //   setShake(true);
+    
+  //   // Buttons stops to shake after 2 seconds
+  //   setTimeout(() => setShake(false), 2000);
+    
+  // }
 
   // Function called when login button is clicked
   function createPost() {
@@ -59,7 +67,7 @@ export default function App() {
 
     if(status){
       axios
-      .post(process.env.REACT_APP_API_URL + "/api/uno/login", {
+      .post("http://localhost:5000/api/uno/login", {
         email: email,
         password: password
       })
@@ -160,21 +168,21 @@ export default function App() {
             <label>Email:</label>
 
 
-            <div class="input-group mb-3">
-              <div class="input-group-prepend">
-                <span class="input-group-text"><i class="fa fa-envelope fa-lg fa-fw" aria-hidden="true"></i></span>
+            <div className="input-group mb-3">
+              <div className="input-group-prepend">
+                <span className="input-group-text"><i className="fa fa-envelope fa-lg fa-fw" aria-hidden="true"></i></span>
               </div>
-              <input type="text" className="form-control" placeholder="Email Address" onChange={handleEmailChange} value={email} />
+              <input type="text" className="form-control pr-4" placeholder="Email Address" onChange={handleEmailChange} value={email} autocomplete="on"/>
             </div>
 
             {emailError && <div className="error-msg">{emailError}</div>}
 
             <label>Password:</label>
-            <div class="input-group mb-3">
-              <div class="input-group-prepend">
-                <span class="input-group-text"><i class="fa fa-lock fa-lg fa-fw" aria-hidden="true"></i></span>
+            <div className="input-group mb-3">
+              <div className="input-group-prepend">
+                <span className="input-group-text"><i className="fa fa-lock fa-lg fa-fw" aria-hidden="true"></i></span>
               </div>
-              <input type="password" className="form-control" placeholder="Password" onChange={handlePasswordChange} value={password} />
+              <input type="password" className="form-control" placeholder="Password" onChange={handlePasswordChange} value={password} autocomplete="off"/>
             </div>
 
             {passwordError && <div className="error-msg">{passwordError}</div>}
@@ -183,15 +191,16 @@ export default function App() {
 
             <button
               type="submit"
-              className="btn btn-success btn-lg"
+              className="btn btn-success btn-lg mt-4 link pop-on-hover"
               style={{ marginTop: 15, height: 50, backgroundColor: '#FFB967', border: '1px solid #FFB967', borderRadius: '50%'}}
               onClick={createPost}
               id="submitBtn"
             >
               <p id="btnTxt" style={{ fontSize: 42, fontWeight: 'bolder' , fontFamily: 'Rubik Mono One', color:'black', marginTop: -20}}><b>Login</b></p>
-            </button><br/><br/>
-            <a href="/register" id="registerLink" className="p-4"> Create Account? </a>
-            <a href="/register" id="forgotLink" className="p-4"> Forgot Password? </a>
+            </button><br/><br/><br/>
+            {/* <button onClick = {animate} className = {shake ? `shake` : null}>Click me</button> */}
+            <a href="/register" id="registerLink" className="p-4"> <b>Create Account?</b> </a>
+            <a href="/forgot" id="forgotLink" className="p-4"> <b>Forgot Password?</b> </a>
           </form>
         </div>
       </div>

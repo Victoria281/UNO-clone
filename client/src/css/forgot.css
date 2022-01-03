@@ -1,4 +1,4 @@
- .error-msg {
+.error-msg {
     font-size: "12px";
     width: "100%";
     color: "red";
@@ -8,7 +8,7 @@
     width: 100%;
   }
 
-  #registerSection{
+  #forgotSection{
     border: 2px solid white;
     border-radius: 10px;
     box-shadow: 1px 2px #888888;
@@ -18,11 +18,11 @@
   }
 
 
-  #registerTxt{
+  #forgotTxt{
     font-family: Rubik Mono One;
     position: absolute;
-    top: 10px;
-    left: 110px;
+    top: 30px;
+    left: 130px;
     border:#cad5dae7;
     border-style: solid;
     border-radius: 15px;

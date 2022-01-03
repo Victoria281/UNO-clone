@@ -1,0 +1,52 @@
+.pop-on-hover {
+    display: inline-block;
+    vertical-align: middle;
+    -webkit-transform: perspective(1px) translateZ(0);
+    transform: perspective(1px) translateZ(0);
+    box-shadow: 0 0 1px rgba(0, 0, 0, 0);
+  }
+  .pop-on-hover:hover, .pop-on-hover:focus, .pop-on-hover:active {
+    -webkit-animation-name: pop-on-hover;
+    animation-name: pop-on-hover;
+    -webkit-animation-duration: 0.3s;
+    animation-duration: 0.3s;
+    -webkit-animation-timing-function: linear;
+    animation-timing-function: linear;
+    -webkit-animation-iteration-count: 1;
+    animation-iteration-count: 1;
+  }
+
+
+
+  #resetSection{
+    border: 2px solid white;
+    border-radius: 10px;
+    box-shadow: 1px 2px #888888;
+    background-color: white;
+    margin-top: 10%;
+ 
+  }
+
+  #resetBtnTxt{
+    transform: rotate(-20deg);
+    position: relative;
+    -webkit-text-stroke-width: 0.5px;
+    -webkit-text-stroke-color: white;
+    font-family: "RubikOne";
+  }
+
+  #resetTxt{
+    font-family: Rubik Mono One;
+    position: absolute;
+    top: 10px;
+    left: 110px;
+    border:#cad5dae7;
+    border-style: solid;
+    border-radius: 15px;
+    background-color: #00b3ffe7;
+    width: 60%;
+  }
+
+  #resetBtn{
+    transform: rotate(8deg);
+  }
