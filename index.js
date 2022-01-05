@@ -8,11 +8,12 @@ const ApiRouter = require('./src/controller/api');
 const http = require("http");
 const socketio = require("socket.io");
 const { get_Current_User, user_Disconnect, join_User, get_All_Users, get_Excess_Players, get_Users_In_Room } = require("./users");
+const { createNewRoom, joinNewRoom, leftRoom } = require("./roomControl");
 
 var corsOptions = {
     origin: ["http://192.168.50.158:3000", "http://uno-clone.herokuapp.com", "http://localhost:3000"],
     optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
-  }
+}
 //middleware
 app.use(cors(corsOptions));
 app.use(express.json());
@@ -61,6 +62,43 @@ app.use((error, req, res, next) => {
 
 
 io.on("connection", (socket) => {
+    socket.on("createRoom", ({ username, roomcode }) => {
+        console.log("creating")
+        const success = createNewRoom(socket.id, username, roomcode);
+        if (success) {
+            socket.join(roomcode);
+            console.log("broadcasted")
+            io.sockets.in(roomcode).emit("newuser", {
+                user: success,
+            });
+        } else {
+            socket.emit("roomExists", {
+                message: "Room already exists. Please try again!"
+            });
+        }
+        console.log("created")
+    });
+
+    socket.on("joinARoom", ({ username, roomcode }) => {
+        console.log("joining")
+        const success = joinNewRoom(socket.id, username, roomcode);
+        if (success) {
+            socket.join(roomcode);
+            console.log("broadcasted")
+            io.sockets.in(roomcode).emit("newuser", {
+                user: success,
+            });
+        }
+        console.log("joined")
+    });
+
+    socket.on('sendStartGame', (newState) => {
+        io.to(newState.roomcode).emit('startGame', newState)
+    })
+
+    socket.on('sendGameUpdate', (newState) => {
+        io.to(newState.roomcode).emit('updateGame', newState)
+    })
 
     //user has joined a room
     socket.on("joinRoom", ({ username, roomname }) => {
@@ -85,7 +123,7 @@ io.on("connection", (socket) => {
                     console.log("p_user")
                     console.log(p_user)
                     console.log(c_user)
-                    socket.to(p_user).emit("getUserPlayerNum", {users: c_user});
+                    socket.to(p_user).emit("getUserPlayerNum", { users: c_user });
                 }
 
             } else {
@@ -103,7 +141,7 @@ io.on("connection", (socket) => {
                     console.log("start update")
                     console.log(p_user)
                     console.log(c_user)
-                    socket.to(p_user.room).emit("getUserPlayerNum", {users: c_user});
+                    socket.to(p_user.room).emit("getUserPlayerNum", { users: c_user });
                 }
 
                 socket.broadcast.to(p_user.room).emit("message", {
@@ -126,7 +164,7 @@ io.on("connection", (socket) => {
         if (p_user) {
             const c_user = get_All_Users(p_user.room);
             if (c_user)
-                socket.emit('getUserPlayerNum', {users: c_user})
+                socket.emit('getUserPlayerNum', { users: c_user })
 
             const clients = get_Users_In_Room(p_user.room);
             console.log("clients")
@@ -174,19 +212,29 @@ io.on("connection", (socket) => {
 
     //when the user gone
     socket.on("disconnect", () => {
-        console.log("disconnected")
-        const p_user = user_Disconnect(socket.id);
-
-        if (p_user) {
-            io.to(p_user.room).emit("message", {
-                userId: p_user.id,
-                username: p_user.username,
-                text: `${p_user.username} has left the room`,
+        console.log("disconnecting")
+        const { roomcode, success } = leftRoom(socket.id)
+        if (success) {
+            socket.leave(roomcode)
+            console.log("broadcasted")
+            socket.broadcast.to(roomcode).emit("newuser", {
+                user: success,
             });
-            const c_user = get_All_Users(p_user.room);
-            if (c_user)
-                socket.to(p_user.room).emit('getUserPlayerNum', {users: c_user})
         }
+        console.log("disconnected")
+        // console.log("disconnected")
+        // const p_user = user_Disconnect(socket.id);
+
+        // if (p_user) {
+        //     io.to(p_user.room).emit("message", {
+        //         userId: p_user.id,
+        //         username: p_user.username,
+        //         text: `${p_user.username} has left the room`,
+        //     });
+        //     const c_user = get_All_Users(p_user.room);
+        //     if (c_user)
+        //         socket.to(p_user.room).emit('getUserPlayerNum', {users: c_user})
+        // }
     });
 
     socket.on('connect_failed', function () {

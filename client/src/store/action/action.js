@@ -1,3 +1,4 @@
+// @ts-nocheck
 export const secure_action = (encrypt, text, cypher) => {
     return {
         type: "secure_action",
