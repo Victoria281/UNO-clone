@@ -36,7 +36,7 @@ var User = {
     
     getUserStat: function (id, callback) {
         console.log("====================================");
-        console.log("getUserStats running!\n\n");
+        console.log("getUserStats running!");
         console.log("userId:", id);
         console.log("====================================");
         

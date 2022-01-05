@@ -49,9 +49,35 @@
     margin-right: 3%;
     margin-left: 3%;
     background-color: cyan;
-    border-radius: 20px;
+    border-top-right-radius: 5px;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
     padding: 1%;
     max-height: 750px;
+}
+
+.navTabHoverActions {
+    cursor: pointer;
+}
+
+.loginAgain {
+    text-decoration: underline;
+    text-decoration-style: solid;
+}
+
+.nav-tabs {
+    margin-left: 3%;
+    margin-right: 3%;
+}
+
+.nav {
+    margin-top: 15px;
+}
+
+.ldbTabActive {
+    background-color: rgb(255, 80, 80) !important;
+    color: white !important;
+    border-color: red !important;
 }
 
 .leaderboard_body {
@@ -280,6 +306,7 @@
 
 #crown{
     margin-bottom: -15px;
+    margin-right: 70px;
     width: 80px;
 }
 /* 

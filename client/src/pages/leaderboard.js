@@ -49,13 +49,13 @@ export default class Leaderboard extends Component {
                         console.log("running p2 while loop, ctr:", ctr);
                         console.log(">>", user_leaderboard[ctr].userid, tmpUid);
                         console.log(">>", user_leaderboard[ctr].userid !== tmpUid);
-                        
+
                         if (user_leaderboard[ctr].userid !== tmpUid) {
                             this.setState({ p2: user_leaderboard[ctr] });
                             tmpUid = user_leaderboard[ctr].userid;
                             p2 = true;
                         }
-                        
+
                         ctr++;
                     }
 
@@ -63,7 +63,7 @@ export default class Leaderboard extends Component {
                         console.log("running p3 while loop, ctr:", ctr);
                         console.log(">>", user_leaderboard[ctr].userid, tmpUid);
                         console.log(">>", user_leaderboard[ctr].userid !== tmpUid);
-                        
+
                         if (user_leaderboard[ctr].userid !== tmpUid) {
                             this.setState({ p3: user_leaderboard[ctr] });
                             tmpUid = user_leaderboard[ctr].userid;
@@ -160,33 +160,25 @@ export default class Leaderboard extends Component {
 
         if (selectedTab === "leaderboard") {
             return (
-                <div className="tabContainer no-gutters">
-                    <div className="tabSelector">
-                        <div className="ldb tabSelected">
-                            <button id="leaderboardTab" className="tabText" onClick={() => this.changeSelectedTab('leaderboard')}>Leaderboard</button>
-                            {/* <p className="tabText">Leaderboard</p> */}
-                        </div>
-                        <div className="stats">
-                            <button id="statsTab" className="tabText" onClick={() => this.changeSelectedTab('stats')}>My Stats</button>
-                            {/* <p className="tabText">My Stats</p> */}
-                        </div>
-                    </div>
-                </div>
+                <ul className="nav nav-tabs">
+                    <li className="nav-item">
+                        <button className="nav-link navTabHoverActions ldbTabActive active" aria-current="page" onClick={() => this.changeSelectedTab('leaderboard')}>Leaderboard</button>
+                    </li>
+                    <li className="nav-item">
+                        <button className="nav-link navTabHoverActions" onClick={() => this.changeSelectedTab('stats')}>My Stats</button>
+                    </li>
+                </ul>
             )
         } else {
             return (
-                <div className="tabContainer no-gutters">
-                    <div className="tabSelector">
-                        <div className="ldb">
-                            <button id="leaderboardTab" className="tabText" onClick={() => this.changeSelectedTab('leaderboard')}>Leaderboard</button>
-                            {/* <p className="tabText">Leaderboard</p> */}
-                        </div>
-                        <div className="stats tabSelected">
-                            <button id="statsTab" className="tabText" onClick={() => this.changeSelectedTab('stats')}>My Stats</button>
-                            {/* <p className="tabText">My Stats</p> */}
-                        </div>
-                    </div>
-                </div>
+                <ul className="nav nav-tabs">
+                    <li className="nav-item">
+                        <button className="nav-link navTabHoverActions" onClick={() => this.changeSelectedTab('leaderboard')}>Leaderboard</button>
+                    </li>
+                    <li className="nav-item">
+                        <button className="nav-link navTabHoverActions ldbTabActive active" aria-current="page" onClick={() => this.changeSelectedTab('stats')}>My Stats</button>
+                    </li>
+                </ul>
             )
         }
     }
@@ -322,7 +314,7 @@ export default class Leaderboard extends Component {
                                     <div className="col-sm-2 leaderboard_col text-center">
                                         <h6 className="p-1 font-weight-bold">{totalGames}</h6>
                                         <h6 className="p-1 font-weight-bold">{totalWins}</h6>
-                                        <h6 className="p-1 font-weight-bold">{lastGame}</h6>
+                                        <h6 className="p-1 font-weight-bold">N/A</h6>
                                     </div>
 
                                 </div>
@@ -343,9 +335,12 @@ export default class Leaderboard extends Component {
                                 </div>
 
                                 <div className="leaderboard_body">
-                                    <Suspense fallback={<LoadingScreen />}>
-                                        <UserStatistics userStat={userStat} />
-                                    </Suspense>
+                                    <div className="row no-gutters">
+                                        <div className="col-sm-12 leaderboard_col text-center">
+                                            <p>There are no past records of any games played!</p>
+                                            <p>If you think this is a mistake, <a href="/logout" className="loginAgain">please re-login again</a>!</p>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
