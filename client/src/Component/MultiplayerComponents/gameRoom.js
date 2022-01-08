@@ -8,9 +8,9 @@ import {
     startGameDetected,
     updateGameDetected,
 } from "../../store/action/multiplayer/game"
-import Player from "./playerComponents/player"
-import OtherPlayer from "./playerComponents/otherPlayers"
-import Deck from "./playerComponents/deck"
+import Player from "./gameComponents/Player"
+import OtherPlayer from "./gameComponents/OtherPlayers"
+import Deck from "./gameComponents/Deck"
 import {
     Box,
     Grid

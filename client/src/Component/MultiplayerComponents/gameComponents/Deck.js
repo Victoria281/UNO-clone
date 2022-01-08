@@ -34,25 +34,27 @@ const Deck = ({ current, used, socket }) => {
 
                 :
                 <Stack direction="row" spacing={3}>
+                    <div>
+                        <img
+                            className="img-responsive"
+                            style={{ width: 90 }}
+                            src={
+                                process.env.REACT_APP_API_URL + "/api/uno/images/" +
+                                current.image_file.slice(8)
+                            }
+                            alt={current.values + " " + current.color}
+                        />
+                        <img
+                            className="img-responsive"
+                            style={{ width: 90 }}
+                            src={
+                                process.env.REACT_APP_API_URL + "/api/uno/images/" +
+                                used[used.length-1].image_file.slice(8)
+                            }
+                            alt={used[used.length-1].values + " " + used[used.length-1].color}
+                        />
+                    </div>
 
-                    <img
-                        className="img-responsive"
-                        style={{ width: 90 }}
-                        src={
-                            process.env.REACT_APP_API_URL + "/api/uno/images/" +
-                            current.image_file.slice(8)
-                        }
-                        alt={current.values + " " + current.color}
-                    />
-                    <img
-                        className="img-responsive"
-                        style={{ width: 90 }}
-                        src={
-                            process.env.REACT_APP_API_URL + "/api/uno/images/" +
-                            current.image_file.slice(8)
-                        }
-                        alt={current.values + " " + current.color}
-                    />
                     <img
                         className="img-responsive"
                         style={{ width: 90 }}
