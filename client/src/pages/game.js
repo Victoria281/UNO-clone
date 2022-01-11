@@ -1,7 +1,7 @@
 // @ts-nocheck
 import { useEffect, useState } from "react";
 import Modal from "react-modal";
-import Tutorial from "../components/Tutorial";
+import Tutorial from "../Component/TutorialComponent/Tutorial";
 import shuffleCards from "../components/shuffle";
 import "../index.css";
 import "../css/card.css";
@@ -707,7 +707,7 @@ const Game = () => {
 
 
   return (
-    <div class="gamePage">
+    <div className="gamePage">
       <ChooseColorWild />
       <PlayerTurnModal />
       <AddCardModal />
