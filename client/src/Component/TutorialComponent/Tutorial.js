@@ -97,12 +97,12 @@ const Tutorial = (
                 >
                     <Typography>{carouselItems[activeStep].title}</Typography>
                 </Box> */}
-                <SwipeableViews
+                {/* <SwipeableViews
                     axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
                     index={activeStep}
                     onChangeIndex={handleStepChange}
                     enableMouseEvents
-                >
+                > */}
                     <Box sx={{ height: 400, width: '100%' }}>
                         {
                             activeStep === 0 ?
@@ -113,7 +113,7 @@ const Tutorial = (
                                 <TutorialItem item={carouselItems[activeStep]} />
                         }
                     </Box>
-                </SwipeableViews>
+                {/* </SwipeableViews> */}
                 <div className="d-flex justify-content-between">
 
                     <div>
