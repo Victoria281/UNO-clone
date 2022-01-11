@@ -4,6 +4,7 @@ import { useTheme } from '@mui/material/styles';
 import { Typography, Box, Modal, Button, MobileStepper, LinearProgress } from "@mui/material";
 import styles from './styles.module.css';
 import game from "../../img/game.png";
+import SwipeableViews from 'react-swipeable-views';
 
 const Tutorial = (
     isTutorialOpen
@@ -33,8 +34,8 @@ const Tutorial = (
         {
             title: "Special cards",
             image: game,
-            description: 
-             `Wild: Changes colour of current card on the discard pile 
+            description:
+                `Wild: Changes colour of current card on the discard pile 
              Skip : Skips the next player 
              Reverse : Changes the direction of play 
             +2 Draw: Causes next player to draw 2 cards and skip their turn 
@@ -51,6 +52,7 @@ const Tutorial = (
 
     const [activeStep, setActiveStep] = useState(0);
     const maxSteps = carouselItems.length;
+    const theme = useTheme();
 
     const handleNext = () => {
         setActiveStep((prevActiveStep) => prevActiveStep + 1);
@@ -60,7 +62,9 @@ const Tutorial = (
         setActiveStep((prevActiveStep) => prevActiveStep - 1);
     };
 
-    const theme = useTheme();
+    const handleStepChange = (step) => {
+        setActiveStep(step);
+      };
 
     const closeModal = () => {
         setActiveStep(0);
@@ -68,21 +72,18 @@ const Tutorial = (
     }
 
     const TutorialItem = (item) => {
-        console.log(item.item.title)
         return (
             <Box className="w-100 h-100 text-center">
                 <h3 className={styles.title}> {item.item.title}</h3>
 
                 <div className={`pb-4`}><img src={item.item.image} className={styles.image}></img></div>
-
-                {/* <div className={`pt-4 pb-4`}><p className={styles.description}>{item.item.description}</p></div> */}
             </Box>
         )
     }
 
-    const TCarousel = () => {
+    const TutorialCarousel = () => {
         return (
-            <Box sx={{ flexGrow: 1 }}>
+            <Box>
                 {/* <Box
                     square
                     elevation={0}
@@ -96,17 +97,23 @@ const Tutorial = (
                 >
                     <Typography>{carouselItems[activeStep].title}</Typography>
                 </Box> */}
-                <Box sx={{ width: '100%' }}>
-                    {
-                        activeStep === 0 ?
-                            <Box className="w-100 h-100 text-center">
-                                <h3 className={styles.title}> {carouselItems[activeStep].title}  </h3>
-                                <Typography> {carouselItems[activeStep].description} </Typography>
-                            </Box> :
-                            <TutorialItem item={carouselItems[activeStep]} />
-                    }
-                </Box>
-
+                <SwipeableViews
+                    axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
+                    index={activeStep}
+                    onChangeIndex={handleStepChange}
+                    enableMouseEvents
+                >
+                    <Box sx={{ height: 400, width: '100%' }}>
+                        {
+                            activeStep === 0 ?
+                                <Box className="w-100 text-center">
+                                    <h3 className={styles.title}> {carouselItems[activeStep].title}  </h3>
+                                    <Typography> {carouselItems[activeStep].description} </Typography>
+                                </Box> :
+                                <TutorialItem item={carouselItems[activeStep]} />
+                        }
+                    </Box>
+                </SwipeableViews>
                 <div className="d-flex justify-content-between">
 
                     <div>
@@ -117,9 +124,9 @@ const Tutorial = (
                             className="px-3">
 
                             {
-                            activeStep === 0 
-                            ? null 
-                            : <i className={`fa fa-caret-left ${styles.next}`}></i>
+                                activeStep === 0
+                                    ? null
+                                    : <i className={`fa fa-caret-left ${styles.next}`}></i>
                             }
 
                         </Button>
@@ -132,17 +139,17 @@ const Tutorial = (
 
                     <div>
                         {
-                            activeStep === maxSteps - 1 
-                            ? <Button onClick={closeModal} className="bg-danger p-2 text-light border border-dark rounded"> Finish </Button> 
-                            : <Button
+                            activeStep === maxSteps - 1
+                                ? <Button onClick={closeModal} className="bg-danger p-2 mr-4  text-light border border-dark rounded"> Finish </Button>
+                                : <Button
                                     size="small"
                                     onClick={handleNext}
                                     disabled={activeStep === maxSteps - 1}
                                 >
 
-                                    {activeStep === 0 
-                                    ? <Box className="bg-danger p-2 text-light border border-dark rounded"> Start </Box> 
-                                    : <i className={`fa fa-caret-right ${styles.next}`}></i>
+                                    {activeStep === 0
+                                        ? <Box className="bg-danger p-2 mr-4 text-light border border-dark rounded"> Start </Box>
+                                        : <i className={`fa fa-caret-right ${styles.next}`}></i>
                                     }
                                 </Button>
                         }
@@ -152,58 +159,6 @@ const Tutorial = (
         )
     }
 
-    // const TutorialCarousel = () => {
-    //     return (
-    //         <Carousel
-    //             NextIcon={<i className={`fa fa-caret-right ${styles.next}`}></i>}
-    //             PrevIcon={<i className={`fa fa-caret-left ${styles.next}`}></i>}
-    //             autoPlay={false}
-    //             navButtonsAlwaysVisible={true}
-    //             navButtonsProps={{
-    //                 style: {
-    //                     backgroundColor: 'transparent',
-    //                 }
-    //             }}
-    //             navButtonsWrapperProps={{
-    //                 style: {
-    //                     bottom: '150px',
-    //                     top: 'unset',
-    //                     padding: '10px'
-    //                 }
-    //             }}
-    //             animation={'slide'}
-    //             fullHeightHover={false}
-    //             indicatorIconButtonProps={{
-    //                 style: {
-    //                     height: '20px',
-    //                     width: '20px',
-    //                     border: '3px solid black',
-    //                     borderRadius: '10px',
-    //                     color: 'white',
-    //                     backgroundColor: 'white',
-    //                     overflow: 'hidden',
-    //                     boxShadow: '4px 4px 4px rgba(0, 0, 0, 0.582)',
-    //                     margin: '10px'
-    //                 }
-    //             }}
-    //             activeIndicatorIconButtonProps={{
-    //                 style: {
-    //                     color: '#E71E1E',
-    //                     backgroundColor: '#E71E1E'
-    //                 }
-    //             }}
-    //             changeOnFirstRender={false}
-    //             className={styles.tutorialCarousel}
-    //         >
-    //             {
-    //                 carouselItems.map((carouselItem) => <TutorialItem item={carouselItem} />)
-    //             }
-    //         </Carousel>
-    //     )
-    // }
-
-
-
     return (
         <div className={styles.tutorialModalDiv}>
             <Modal
@@ -211,7 +166,7 @@ const Tutorial = (
                 onClose={closeModal}
             >
                 <Box className={styles.tutorialModal}>
-                    <TCarousel />
+                    <TutorialCarousel />
                 </Box>
             </Modal>
         </div>
