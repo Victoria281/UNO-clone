@@ -6,14 +6,17 @@ import GamePage from "./pages/game";
 import HomePage from "./pages/home";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import EndPage from "./pages/end";
-import AccountPage from "./pages/account";
-import RegisterPage from "./pages/register";
+import AccountPage from "./Component/AccountComponents/loginComponents/account";
+import RegisterPage from "./Component/AccountComponents/RegisterComponents/register";
 import ProfilePage from "./pages/profile";
 import LeaderboardPage from "./pages/leaderboard";
 import Music from "./components/Music";
 import Room from "./pages/multiplayer/room";
 import MultiPlayer from "./pages/multiplayer/multiplayer";
 import PageRestriction from "./PageRestriction"
+import ForgotPassword from './pages/forgot'
+import VerifyReset from './pages/verifyReset'
+
 import { NavLink } from 'react-router-dom'
 import io from "socket.io-client";
 
@@ -106,12 +109,13 @@ const App=() =>{
           <PageRestriction exact path="/end" component={EndPage} />
           <Route exact path="/login" component={AccountPage} />
           <Route exact path="/register" component={RegisterPage} />
+          <Route exact path="/forgot" component={ForgotPassword}/>
           <PageRestriction exact path="/profile" component={ProfilePage} />
           <PageRestriction exact path="/leaderboard" component={LeaderboardPage} />
           <Route exact path="/logout" component={Logout} />
           {/* <PageRestriction exact path="/createroom" component={Room} socket={socket}/> */}
           {/* <PageRestriction path="/multiplayer/:roomname/:username" component={Appmain} socket={socket}/> */}
-
+          <Route exact path="/verifyReset" component={VerifyReset} />
           {/* new */}
           <Route exact path="/createroom" render={()=><MultiplayerCreateRoom socket={socket}/>}/>
           <Route path="/multiplayer/:roomcode" component={AppGameRoom}/>

@@ -6,6 +6,16 @@ const bcrypt = require('bcrypt');
 const config = require('../../config');
 const jwt = require('jsonwebtoken');
 
+require("dotenv").config()
+
+const bodyParser = require("body-parser")
+const cors = require("cors")
+const nodemailer = require("nodemailer")
+
+app.use(bodyParser.urlencoded({extended: true}))
+app.use(bodyParser.json())
+
+app.use(cors())
 
 //ROUTES//
 const Card = require("../model/card")
@@ -100,7 +110,7 @@ app.get('/profile_icons/*', printingDebuggingInfo, function (req, res, next) {
 //=====================================
 
 //findAll
-app.get('/cards', printingDebuggingInfo, function (req, res, next) {
+app.get('/cards', printingDebuggingInfo, verifyToken, function (req, res, next) {
 
     Card.findAll(function (err, result) {
         if (err) {
@@ -149,8 +159,10 @@ app.post('/login', printingDebuggingInfo, function (req, res, next) {
                             }),
                             username: results[0].username
                         };
+                        console.log("TESTTTTTTTTTTTTT")
                         return res.status(200).json(data);
                     } else {
+                        console.log("THERE'S AN ERROR IN ROUTES.JS")
                         return res.status(500).json({ message: error });
                     }
                 }
@@ -166,7 +178,7 @@ app.post('/login', printingDebuggingInfo, function (req, res, next) {
 //register
 app.post('/register', printingDebuggingInfo, function (req, res, next) {
     console.log('processRegister running.');
-    let userName = req.body.username;
+    let userName = req.body.userName;
     let email = req.body.email;
     let password = req.body.password;
 
@@ -191,6 +203,7 @@ app.post('/register', printingDebuggingInfo, function (req, res, next) {
                                 return next(err);
                             }
                         } else {
+                            
                             return res.status(201).json({ statusMessage: 'Completed registration.' });
                         }
                     });
@@ -401,5 +414,162 @@ app.put('/leaderboard/update/:id', printingDebuggingInfo, verifyToken, function 
 });
 
 
+
+
+// MAILTRAP: verify email exists and sends mail via SMTP
+app.post('/verify', printingDebuggingInfo, cors(), (req, res, next) =>{
+
+    let email = req.body.email;
+    try {
+        Auth.email(email, function (error, results) {
+            if (error) {
+                return res.status(500).json({ message: 'Something went wrong' });
+
+            } else {
+                if(results == null){
+                    return res.status(404).send("Email is not found!")
+                }else{
+                    
+                    if (results.length == 1) {
+                        // let uid = results[0].userid
+                        // let email = results[0].email
+                        // console.log("The userid is: "+uid)
+                        
+                        console.log("-----------------------THERE IS NO ERR")
+                        console.log(results.length)
+                        console.log(results)
+                        // if(results==null){
+                        //     console.log("AHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH")
+                        //     return res.status(404).send("Not Found")
+                        // }else{
+    
+                        
+                        let uid = results[0].userid
+                        let email = results[0].email
+    
+                        const transport = nodemailer.createTransport({
+                            host: "smtp.mailtrap.io",
+                            port: 587,
+                            auth:{
+                                user: "43c596c3fc1cb2",
+                                pass: "8d27e394c31025"
+                            }
+                        })
+                    
+                        transport.sendMail({
+                            from: "nicholasphan77@gmail.com",
+                            to: email,
+                            subject: "Reset Password Verification",
+                            html: `<div className="email" style="
+                            border: 1px solid black;
+                            padding: 20px;
+                            font-family: sans-serif;
+                            line-height: 2;
+                            font-size: 20px;
+                            ">
+                            <h2>Reset</h2>
+                            <p>We have received that this is your email address ${email} and we would like to verify it.</p>
+                            <b>Click on the link below to reset your password: </b>
+                            <b><a href="http://localhost:3000/verifyReset?u=${uid}">Click here</a> to reset your password: </b>
+                            <p>Contact me at nicholasphan77@gmail.com if this was not initiated by you!</p>
+                            </div>
+                            `
+                    
+                    
+                    
+                        })
+                        
+    
+    
+                        return res.status(200).send("Successfully sent!")
+                        // }
+    
+                        
+    
+                       
+                    }
+                }
+
+
+            }
+
+        })
+        
+
+
+
+    } catch (error) {
+        return res.status(500).json({ message: error });
+    }
+});
+
+
+
+// MAILTRAP: resetUserPassword
+app.put('/user/reset/:id', printingDebuggingInfo, function (req, res, next) {
+    const id = req.params.id;
+    const new_password = req.body.password;
+
+    try {       
+        // console.log("-----------------------------------------------------------------")
+        // console.log(results)
+        // console.log("-----------------------------------------------------------------")
+
+                
+        bcrypt.hash(new_password, 10, async (err, hash) => {
+                            
+            results = User.resetUserPasswordMailtrap(id, hash, function (error, results) {
+                console.log(results)
+                if (results != null) {
+                    return res.status(204).json({ statusMessage: 'Completed reset.' });
+                }
+                if (error) {
+                    return res.status(500).json({ statusMessage: 'Unable to complete reset' });
+                }
+            });
+                            
+        });
+    } catch (error) {
+        return next(err);
+    }
+
+});
+
+
+
+
+
+app.put('/user/reset', printingDebuggingInfo, function (req, res, next) {
+    const email = req.body.email;
+    const new_password = req.body.password;
+
+    try {       
+        // console.log("-----------------------------------------------------------------")
+        // console.log(results)
+        // console.log("-----------------------------------------------------------------")
+        console.log(email)
+                
+        bcrypt.hash(new_password, 10, async (err, hash) => {
+                            
+            results = User.resetUserPasswordGmail(email, hash, function (error, results) {
+                console.log(results)
+                if(results===0){
+                    console.log("There is no such user in the database! Ensure that you have registered with us!")
+                    return res.status(404).json({ statusMessage: 'No user found' })
+                }
+                if (results != null) {
+                    return res.status(204).json({ statusMessage: 'Completed reset.' });
+                }
+                if (error) {
+                    return res.status(500).json({ statusMessage: 'Unable to complete reset' });
+                }
+            });
+                            
+        });
+    } catch (error) {
+        return next(err);
+    }
+
+});
 
 module.exports = app;
