@@ -1,7 +1,8 @@
 import {
     UPDATE_PLAYER_LIST,
     PREPARE_GAME,
-    UPDATE_GAME
+    UPDATE_GAME,
+    UPDATE_UNO_PRESSED
 } from '../../action/multiplayer/game';
 
 const initialState = {
@@ -13,6 +14,7 @@ const initialState = {
     turn: "",
     order: [],
     myTurnIs: "",
+    unoPressed: false,
 };
 
 const reducer = (state = initialState, action) => {
@@ -32,6 +34,11 @@ const reducer = (state = initialState, action) => {
                 playerdeck: action.data.playerdeck,
                 turn: action.data.turn,
                 order: action.data.order,
+            };
+        case UPDATE_UNO_PRESSED:
+            return {
+                ...state,
+                unoPressed: action.press,
             };
         default:
             return state;
