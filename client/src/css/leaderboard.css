@@ -41,20 +41,20 @@
     margin: 0px;
 }
 
-.statsTabStyle {
+/* .statsTabStyle {
     justify-content: center;
-}
+} */
 
-.gameBody {
+/* .gameBody {
     margin-right: 3%;
     margin-left: 3%;
     background-color: cyan;
     border-top-right-radius: 5px;
     border-bottom-left-radius: 5px;
     border-bottom-right-radius: 5px;
-    padding: 1%;
+    padding: 1%;lead
     max-height: 750px;
-}
+} */
 
 .navTabHoverActions {
     cursor: pointer;
@@ -88,6 +88,7 @@
     overflow-y: visible;
 }
 
+/*
 .leaderboard_body::-webkit-scrollbar {
     width: 0.3em;
 }
@@ -100,6 +101,7 @@
     background-color: rgb(0, 0, 0);
     outline: 1px solid slategrey;
 }
+*/
 
 .leaderboard_row {
     border: 1px solid black;
@@ -117,24 +119,24 @@
     box-shadow: 0 0.5rem 1rem rgba(0, 0, 16, 0.19), 0 0.3rem 0.3rem rgba(0, 0, 16, 0.23);
 }
 
-.leaderboard_player {
+/* .leaderboard_player { */
     /* border: 1px solid black; */
-    border-radius: 5px;
-    overflow: hidden;
-    margin-bottom: 30px;
-    -webkit-box-shadow: 0 0.5rem 1rem rgba(0, 0, 16, 0.19), 0 0.3rem 0.3rem rgba(0, 0, 16, 0.23);
-    box-shadow: 0 0.5rem 1rem rgba(0, 0, 16, 0.19), 0 0.3rem 0.3rem rgba(0, 0, 16, 0.23);
-    background-color: #FFC825;
-}
+    /* border-radius: 5px; */
+    /* overflow: hidden; */
+    /* margin-bottom: 30px; */
+    /* -webkit-box-shadow: 0 0.5rem 1rem rgba(0, 0, 16, 0.19), 0 0.3rem 0.3rem rgba(0, 0, 16, 0.23); */
+    /* box-shadow: 0 0.5rem 1rem rgba(0, 0, 16, 0.19), 0 0.3rem 0.3rem rgba(0, 0, 16, 0.23); */
+    /* background-color: #FFC825; */
+/* }  */
 
-.lb1Icons {
+/* .lb1Icons {
     width: 70px;
-}
+} */
 
-.lb2Icons {
+/* .lb2Icons {
     width: 40px;
-}
-
+} */
+/* 
 .lb1IconBorder {
     width: 105px;
     padding: 15px;
@@ -142,26 +144,26 @@
     border: 3px solid gold;
     margin-right: auto;
     margin-left: auto;
-}
+} */
 
-.lb2IconBorder {
+/* .lb2IconBorder {
     width: 105px;
     padding: 15px;
     border-radius: 75px;
     border: 3px solid grey;
     margin-right: auto;
     margin-left: auto;
-}
+} */
 
-.lb3IconBorder {
+/* .lb3IconBorder {
     width: 105px;
     padding: 15px;
     border-radius: 75px;
     border: 3px solid #CD7F32;
     margin-right: auto;
     margin-left: auto;
-}
-
+} */
+/* 
 .lbuserheader {
     margin-top: -25px;
     text-align:center;
@@ -174,39 +176,40 @@
     text-align:center;
     font-weight: bold;
     color: black;
-}
+} */
 
-#createdDate {
+/* #createdDate {
     font-size: x-small;
-    /* padding: 5%; */
-}
+    padding: 5%;
+} */
+
 
 /*
     /===============================\
     |      Podium Pillar Style      |
     \===============================/
 */
-#podium {
+/* #podium {
     height: 90%;
     max-height: 75%;
     margin-bottom: 5%;
-}
+} */
 
-.pillarBody {
+/* .pillarBody {
     position: relative;
     justify-content: space-around;
     align-items: end;
-}
+} */
 
-#podiumPillar1{
+/* #podiumPillar1{
     bottom: 64px;
     position: relative;
     animation: growth1 3s 1;
     height: 100%;
     width: 90%
-}
+} */
 
-.borderDesign1 {
+/* .borderDesign1 {
     overflow: hidden;
     border-radius: 10px;
     background-color: white;
@@ -217,19 +220,19 @@
     margin-top: 10px;
     -webkit-box-shadow: 0 0.5rem 1rem rgba(0, 0, 16, 0.19), 0 0.3rem 0.3rem rgba(0, 0, 16, 0.23);
     box-shadow: 0 0.5rem 1rem rgba(0, 0, 16, 0.19), 0 0.3rem 0.3rem rgba(0, 0, 16, 0.23);
-}
+} */
 
-#podiumPillar2{
+/* #podiumPillar2{
     bottom: 0px; 
     position: relative;
     animation: growth2 3s 1;
     height: 75%;
     width: 90%
-}
+} */
 
-.borderDesign2 {
+/* .borderDesign2 {
     overflow: hidden;
-    border-radius: 10px;
+    border-radius: 10px;s
     background-color: white;
     height: 100%;
     margin-right: auto;
@@ -238,16 +241,16 @@
     margin-top: 10px;
     -webkit-box-shadow: 0 0.5rem 1rem rgba(0, 0, 16, 0.19), 0 0.3rem 0.3rem rgba(0, 0, 16, 0.23);
     box-shadow: 0 0.5rem 1rem rgba(0, 0, 16, 0.19), 0 0.3rem 0.3rem rgba(0, 0, 16, 0.23);
-}
+} */
 
-#podiumPillar3{
+/* #podiumPillar3{
     bottom: 0px; 
     position: relative;
     animation: growth3 3s 1;
     height: 50%;
     width: 90%
-}
-
+} */
+/* 
 .borderDesign3 {
     overflow: hidden;
     border-radius: 10px;
@@ -259,26 +262,28 @@
     margin-top: 10px;
     -webkit-box-shadow: 0 0.5rem 1rem rgba(0, 0, 16, 0.19), 0 0.3rem 0.3rem rgba(0, 0, 16, 0.23);
     box-shadow: 0 0.5rem 1rem rgba(0, 0, 16, 0.19), 0 0.3rem 0.3rem rgba(0, 0, 16, 0.23);
-}
+} */
 
-#triangle1{
+/* #triangle1{
     background-color: gold;
     height:70px;
     width:80%;
     clip-path: polygon(0 0, 100% 100%, 100% 0);
-}
-#triangle2{
+} */
+
+/* #triangle2{
     background-color: grey;
     height:70px;
     width:80%;
     clip-path: polygon(0 0, 100% 100%, 100% 0);
-}
-#triangle3{
+} */
+
+/* #triangle3{
     background-color: #CD7F32;
     height:70px;
     width:80%;
     clip-path: polygon(0 0, 100% 100%, 100% 0);
-}
+} */
 
 @keyframes growth1{
     from {
@@ -304,11 +309,11 @@
     }
 }
 
-#crown{
+/* #crown{
     margin-bottom: -15px;
     margin-right: 70px;
     width: 80px;
-}
+} */
 /* 
 #medal2{
     width: 80px;

@@ -1,11 +1,14 @@
 // @ts-nocheck
 import React, { Fragment, Suspense, Component } from "react";
+import { StyledEngineProvider } from "@mui/material/styles";
+import LeaderboardTab from "../Component/Leaderboard/tabs";
 import "../css/leaderboard.css";
 import crownImage from "../icons/pepicons_crown.png";
 import Confetti from 'react-confetti';
 import { LoadingScreen } from "../components/loadingScreen";
 const OtherPlayers = React.lazy(() => import("../components/OtherPlayers"));
 const UserStatistics = React.lazy(() => import("../components/UserStatistics"));
+
 
 export default class Leaderboard extends Component {
     constructor(props) {
@@ -28,65 +31,67 @@ export default class Leaderboard extends Component {
     }
 
     getPlayers() {
-        try {
-            fetch(
-                process.env.REACT_APP_API_URL + "/api/uno/leaderboard/30"
-            )
-                .then(response => response.json())
-                .then((data) => {
-                    console.log("parsed:", data);
 
-                    let user_leaderboard = data.scores;
-                    console.log("!!", user_leaderboard.length);
-                    let p2 = false;
-                    let p3 = false;
-                    let tmpUid = user_leaderboard[0].userid;
+        fetch(
+            process.env.REACT_APP_API_URL + "/api/uno/leaderboard/30"
+        )
+            .then(response => response.json())
+            .then((data) => {
+                console.log("parsed:", data);
 
-                    this.setState({ p1: user_leaderboard[0] });
-                    let ctr = 0;
+                let user_leaderboard = data.scores;
+                console.log("!!", user_leaderboard.length);
+                let p2 = false;
+                let p3 = false;
+                let tmpUid = user_leaderboard[0].userid;
 
-                    while (p2 === false && ctr < user_leaderboard.length) {
-                        console.log("running p2 while loop, ctr:", ctr);
-                        console.log(">>", user_leaderboard[ctr].userid, tmpUid);
-                        console.log(">>", user_leaderboard[ctr].userid !== tmpUid);
+                this.setState({ p1: user_leaderboard[0] });
+                let ctr = 0;
 
-                        if (user_leaderboard[ctr].userid !== tmpUid) {
-                            this.setState({ p2: user_leaderboard[ctr] });
-                            tmpUid = user_leaderboard[ctr].userid;
-                            p2 = true;
-                        }
+                while (p2 === false && ctr < user_leaderboard.length) {
+                    // console.log("running p2 while loop, ctr:", ctr);
+                    // console.log(">>", user_leaderboard[ctr].userid, tmpUid);
+                    // console.log(">>", user_leaderboard[ctr].userid !== tmpUid);
 
-                        ctr++;
+                    if (user_leaderboard[ctr].userid !== tmpUid) {
+                        this.setState({ p2: user_leaderboard[ctr] });
+                        tmpUid = user_leaderboard[ctr].userid;
+                        p2 = true;
                     }
 
-                    while (p3 === false && ctr < user_leaderboard.length) {
-                        console.log("running p3 while loop, ctr:", ctr);
-                        console.log(">>", user_leaderboard[ctr].userid, tmpUid);
-                        console.log(">>", user_leaderboard[ctr].userid !== tmpUid);
+                    ctr++;
+                }
 
-                        if (user_leaderboard[ctr].userid !== tmpUid) {
-                            this.setState({ p3: user_leaderboard[ctr] });
-                            tmpUid = user_leaderboard[ctr].userid;
-                            p3 = true;
-                        }
+                while (p3 === false && ctr < user_leaderboard.length) {
+                    // console.log("running p3 while loop, ctr:", ctr);
+                    // console.log(">>", user_leaderboard[ctr].userid, tmpUid);
+                    // console.log(">>", user_leaderboard[ctr].userid !== tmpUid);
 
-                        ctr++;
+                    if (user_leaderboard[ctr].userid !== tmpUid) {
+                        this.setState({ p3: user_leaderboard[ctr] });
+                        tmpUid = user_leaderboard[ctr].userid;
+                        p3 = true;
                     }
 
-
-                    this.setState({
-                        users: user_leaderboard
-                    }, () => {
-                        console.log("Current state of getPlayers after calling api:", this.state);
-                    });
+                    ctr++;
+                }
 
 
+                this.setState({
+                    users: user_leaderboard
+                }, () => {
+                    console.log("Current state of getPlayers after calling api:", this.state);
                 });
 
 
-        } catch (err) {
-            // console.error(err.message);
-        }
+            }).catch(
+                (err) => {
+                    console.log("Error:", err);
+                    this.setState({
+                        selectedTab: '503'
+                    });
+                }
+            );
     }
 
     async getUserStat() {
@@ -342,6 +347,7 @@ export default class Leaderboard extends Component {
                                         </div>
                                     </div>
                                 </div>
+                                
                             </div>
                         </div>
                     </div>
@@ -419,37 +425,22 @@ export default class Leaderboard extends Component {
 
         if (selectedTab === "leaderboard") {
             return (
-                <Fragment>
-                    {users.length === 0 || (
-                        <div>
-                            {this.tab()}
-                            {this.leaderboard()}
-                        </div>
-                    )}
-                </Fragment>
+                <StyledEngineProvider>
+                    <LeaderboardTab />
+                </StyledEngineProvider>
             );
         } else if (selectedTab === "stats") {
             return (
-                <Fragment>
-                    {users.length === 0 || (
-                        <div>
-                            {this.tab()}
-                            {this.stats()}
-                        </div>
-                    )}
-                </Fragment>
+                <StyledEngineProvider>
+                    <LeaderboardTab />
+                </StyledEngineProvider>
             );
         } else {
             return (
-                <Fragment>
-                    {users.length === 0 || (
-                        <div>
-                            {this.tab()}
-                        </div>
-                    )}
-                </Fragment>
+                <StyledEngineProvider>
+                    <LeaderboardTab />
+                </StyledEngineProvider>
             );
         }
-
     }
 }

@@ -54,6 +54,7 @@ const OtherPlayers = ({ users }) => {
                             <div className="col-sm-2 p-2 leaderboard_col py-2 text-center">
                                 <p className="font-weight-bold">{newIndex - 1}</p>
                             </div>
+
                             <div className="col-sm-5 leaderboard_col">
                                 <div className="row no-gutters">
                                     <div className="col-2 p-2">
@@ -68,9 +69,11 @@ const OtherPlayers = ({ users }) => {
                                     </div>
                                 </div>
                             </div>
+
                             <div className="col-sm-2 leaderboard_col py-2">
                                 <p className="p-2">{players.score}</p>
                             </div>
+                            
                             <div className="col-sm-3 leaderboard_col py-2">
                                 <p className="p-2 pr-2 createdDate">{(players.created_at).split("T")[0]}</p>
                             </div>

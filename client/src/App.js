@@ -26,23 +26,23 @@ const socket = io.connect(process.env.REACT_APP_API_URL);
 function AppGameRoom(props) {
   return (
     <React.Fragment>
-        <MultiplayerGameRoom
-          roomcode={props.match.params.roomcode}
-          socket={socket}
-        />
+      <MultiplayerGameRoom
+        roomcode={props.match.params.roomcode}
+        socket={socket}
+      />
     </React.Fragment>
   );
 }
 
-const App=() =>{
+const App = () => {
   // console.log(process.env.REACT_APP_SECRET_KEY)
   const [loggedIn, setLoggedIn] = useState(localStorage.getItem("userid"));
   useEffect(() => {
-        setInterval(() => {
-            const userid = localStorage.getItem("userid");
-            setLoggedIn(userid);
-            }, [])
-    }, 5000);
+    setInterval(() => {
+      const userid = localStorage.getItem("userid");
+      setLoggedIn(userid);
+    }, [])
+  }, 5000);
 
   return (
     <Router>
@@ -59,42 +59,50 @@ const App=() =>{
           >
             <span className="navbar-toggler-icon"></span>
           </button>
-          <p className="brand d-none d-sm-block">
+          <div className="brand d-none d-sm-block">
             <div className="card1"></div>
             <div className="card2"></div>
             <p className="logomain">NOU</p>
             <p className="logosub">uno-clone</p>
-          </p>
+          </div>
           <div className="collapse navbar-collapse" id="navbarTogglerDemo03">
             <ul className="navbar-nav ml-auto mt-2 mt-lg-0">
               <li className="nav-item active navbarDesign" style={{ background: '#e71e1e' }}>
 
-                <NavLink to="/leaderboard" exact activeClassName="activeIcon"> <div className="borderHover" style={{ borderColor: '#e71e1e' }}><p className="nav-link navBarWord">
-                  Ranks
-                </p></div></NavLink>
+                <NavLink to="/leaderboard" exact activeClassName="activeIcon">
+                  <div className="borderHover" style={{ borderColor: '#e71e1e' }}>
+                    <p className="nav-link navBarWord">Ranks</p>
+                  </div>
+                </NavLink>
 
               </li>
               <li className="nav-item active navbarDesign" style={{ background: '#1E9FE7' }}>
 
-                <NavLink to="/" exact activeClassName="activeIcon"><div className="borderHover" style={{ borderColor: '#1E9FE7' }}><p className="nav-link navBarWord">
-                  Game
-                </p></div></NavLink>
+                <NavLink to="/" exact activeClassName="activeIcon">
+                  <div className="borderHover" style={{ borderColor: '#1E9FE7' }}>
+                    <p className="nav-link navBarWord">Game</p>
+                  </div>
+                </NavLink>
 
               </li>
               <li className="nav-item active navbarDesign" style={{ background: '#46E71E' }}>
 
-                <NavLink to="/profile" exact activeClassName="activeIcon"><div className="borderHover" style={{ borderColor: '#46E71E' }}><p className="nav-link navBarWord">
-                  Profile
-                </p></div></NavLink>
+                <NavLink to="/profile" exact activeClassName="activeIcon">
+                  <div className="borderHover" style={{ borderColor: '#46E71E' }}>
+                    <p className="nav-link navBarWord">Profile</p>
+                  </div>
+                </NavLink>
 
               </li>
               <li className="nav-item active navbarDesign" style={{ background: '#F5F93C' }}>
-                <Account isLoggedIn={loggedIn}/>
+                <Account isLoggedIn={loggedIn} />
               </li>
               <li className="nav-item active navbarDesign" style={{ background: '#FFB967' }}>
-                <div className="borderHover" style={{ borderColor: '#FFB967' }}><p className="nav-link navBarWord">
-                <Music/>
-                </p></div>
+                <div className="borderHover" style={{ borderColor: '#FFB967' }}>
+                  <div className="nav-link navBarWord">
+                    <Music />
+                  </div>
+                </div>
               </li>
             </ul>
           </div>
@@ -113,8 +121,8 @@ const App=() =>{
           {/* <PageRestriction path="/multiplayer/:roomname/:username" component={Appmain} socket={socket}/> */}
 
           {/* new */}
-          <Route exact path="/createroom" render={()=><MultiplayerCreateRoom socket={socket}/>}/>
-          <Route path="/multiplayer/:roomcode" component={AppGameRoom}/>
+          <Route exact path="/createroom" render={() => <MultiplayerCreateRoom socket={socket} />} />
+          <Route path="/multiplayer/:roomcode" component={AppGameRoom} />
         </Switch>
       </div>
     </Router>
