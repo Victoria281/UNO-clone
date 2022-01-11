@@ -2,7 +2,7 @@
 import { useState } from "react";
 import {
     playCard,
-} from "../../../store/action/multiplayer/game"
+} from "../../../../store/action/multiplayer/game"
 import { useDispatch } from 'react-redux'
 import { Stack } from '@mui/material';
 import SelectColorModal from './SelectColorModal'

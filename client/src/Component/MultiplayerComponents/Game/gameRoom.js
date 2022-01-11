@@ -1,13 +1,13 @@
 // @ts-nocheck
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from 'react-redux'
-import { joinRoom } from "../../store/action/multiplayer/rooms"
+import { joinRoom } from "../../../store/action/multiplayer/rooms"
 import {
     updatePlayerList,
     prepareGameMaterials,
     startGameDetected,
     updateGameDetected,
-} from "../../store/action/multiplayer/game"
+} from "../../../store/action/multiplayer/game"
 import Player from "./gameComponents/Player"
 import OtherPlayer from "./gameComponents/OtherPlayers"
 import Deck from "./gameComponents/Deck"
