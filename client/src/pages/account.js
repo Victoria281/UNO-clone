@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import "../css/account.css";
 // import { response } from "express";
 import axios from "axios";
+import VisibilityIcon from '@mui/icons-material/Visibility';
 
 
 export default function App() {
@@ -12,7 +13,8 @@ export default function App() {
   const [passwordError, setPasswordError] = useState("");
   const [credWrong, setCredWrong] = useState("");
   const [successMsg, setSuccessMsg] = useState("");
-
+  const [wobble, setWobble] = React.useState(0);
+  const [passwordShown, setPasswordShown] = useState(false);
 
 
 
@@ -139,6 +141,11 @@ export default function App() {
     e.preventDefault();
   };
 
+  // Password visibility function
+  const togglePassword = () => {
+    setPasswordShown(!passwordShown);
+  };
+
   return (
     <div className="App">
       <div className="wrapper">
@@ -151,11 +158,12 @@ export default function App() {
 
           <form
             className="form-group form"
+            style={{paddingRight: 70, paddingLeft: 60, width: '500px'}}
             autoComplete="off"
             onSubmit={handleFormSubmit}
           >
             {successMsg && <div className="success-msg">{successMsg}</div>}
-            <label>Email:</label>
+            <label style={{marginTop: 10}}>Email:</label>
 
 
             <div className="input-group mb-3">
@@ -172,7 +180,8 @@ export default function App() {
               <div className="input-group-prepend">
                 <span className="input-group-text"><i className="fa fa-lock fa-lg fa-fw" aria-hidden="true"></i></span>
               </div>
-              <input type="password" className="form-control" placeholder="Password" onChange={handlePasswordChange} value={password} />
+              <input type={passwordShown ? "text" : "password"} className="form-control" style={{paddingRight: 40}} placeholder="Password" onChange={handlePasswordChange} value={password} autocomplete="off"/>
+              <button onClick={togglePassword}><VisibilityIcon style={{padding: 2, marginTop: 6}}/></button>
             </div>
 
             {passwordError && <div className="error-msg">{passwordError}</div>}
@@ -183,13 +192,19 @@ export default function App() {
               type="submit"
               className="btn btn-success btn-lg"
               style={{ marginTop: 15, height: 50, backgroundColor: '#FFB967', border: '1px solid #FFB967', borderRadius: '50%'}}
-              onClick={createPost}
+              onClick={() => {
+                setWobble(1);
+                createPost();
+              }}
+              onAnimationEnd={()=> setWobble(0)}
+              wobble = {wobble}
               id="submitBtn"
             >
-              <p id="btnTxt" style={{ fontSize: 42, fontWeight: 'bolder' , fontFamily: 'Rubik Mono One', color:'black', marginTop: -20}}><b>Login</b></p>
-            </button><br/><br/>
-            <a href="/register" id="registerLink" className="p-4"> Create Account? </a>
-            <a href="/register" id="forgotLink" className="p-4"> Forgot Password? </a>
+              <p id="btnTxt" style={{ fontSize: 42, fontWeight: 'bolder' , fontFamily: 'Rubik Mono One', color:'black', marginTop: -26}}><b>Login</b></p>
+            </button><br/><br/><br/>
+            {/* <button onClick = {animate} className = {shake ? `shake` : null}>Click me</button> */}
+            <a href="/register" id="registerLink" className="p-4"> <b>Create Account?</b> </a>
+            <a href="/forgot" id="forgotLink" className="p-4"> <b>Forgot Password?</b> </a>
           </form>
         </div>
       </div>
