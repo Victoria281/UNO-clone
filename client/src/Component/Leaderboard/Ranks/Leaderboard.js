@@ -127,7 +127,6 @@ const DisplayLeaderboard = () => {
 
     return (
         <Box className={`row no-gutters ${styles.gameBody}`}>
-
             <Box className='col-xl-7 col-lg-7 col-md-12 col-sm-12'>
                 <Box className={`row no-gutters ${styles.ldbPodium} ${styles.pillarBody}`} alignContent={'end'} textAlign={'end'}>
                     <Box className={`col-sm-4 p-2 ${styles.podiumPillar2}`}>
@@ -144,7 +143,7 @@ const DisplayLeaderboard = () => {
                     </Box>
 
                     <Box className={`col-sm-4 p-2 ${styles.podiumPillar1}`}>
-                        <Box alignContent={'end'} className='d-flex'>
+                        <Box alignContent={'end'} className={styles.crownBox}>
                             <Avatar className={styles.crown} alt="1stPlace" src={crownImage}></Avatar>
                         </Box>
 
@@ -178,7 +177,6 @@ const DisplayLeaderboard = () => {
             </Box>
 
             <Box className='col-xl-5 col-lg-5 col-md-12 col-sm-12'>
-                <Typography textAlign={'center'} variant='h4'>Leaderboard</Typography>
 
                 <Box className='row no-gutters'>
                     <Box className='col-sm-2'>

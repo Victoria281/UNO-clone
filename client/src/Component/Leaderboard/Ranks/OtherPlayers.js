@@ -30,6 +30,7 @@ const OtherPlayers =
         let newIndex = 1;
         let uid = localStorage.getItem('userid');
         let convUid = 0;
+        const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
 
         if (uid === null) {
             convUid = 0;
@@ -59,7 +60,7 @@ const OtherPlayers =
                             newIndex++;
 
                             let date = new Date(players.created_at);
-                            let createdAtString = date.getDate() + " " + date.getMonth() + " " + date.getFullYear() + " " + date.getHours() + ":" + date.getMinutes() + (date.getHours() > 12 ? "PM" : "AM");
+                            let createdAtString = date.getDate() + " " + months[date.getMonth()] + " " + date.getFullYear() + " " + date.getHours() + ":" + date.getMinutes() + (date.getHours() > 12 ? "PM" : "AM");
 
                             return (
                                 <Box className={`row no-gutters ${styles.leaderboard_player}`} key={players.userid}>
@@ -98,7 +99,7 @@ const OtherPlayers =
                             newIndex++;
 
                             let date = new Date(players.created_at);
-                            let createdAtString = date.getDate() + " " + date.getMonth() + " " + date.getFullYear() + " " + date.getHours() + ":" + date.getMinutes() + (date.getHours() > 12 ? "PM" : "AM");
+                            let createdAtString = date.getDate() + " " + months[date.getMonth()] + " " + date.getFullYear() + " " + date.getHours() + ":" + date.getMinutes() + (date.getHours() > 12 ? "PM" : "AM");
 
                             return (
                                 <Box className={`row no-gutters ${styles.leaderboard_row}`} key={players.userid}>
@@ -137,7 +138,7 @@ const OtherPlayers =
                             newIndex++;
 
                             let date = new Date(players.created_at);
-                            let createdAtString = date.getDate() + " " + date.getMonth() + " " + date.getFullYear() + " " + date.getHours() + ":" + date.getMinutes() + (date.getHours() > 12 ? "PM" : "AM");
+                            let createdAtString = date.getDate() + " " + months[date.getMonth()] + " " + date.getFullYear() + " " + date.getHours() + ":" + date.getMinutes() + (date.getHours() > 12 ? "PM" : "AM");
 
 
                             return (
