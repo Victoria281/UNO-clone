@@ -1,21 +1,35 @@
 // @ts-nocheck
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import "../../css/room.css"
-function RoomPage({ socket }) {
-  // console.log("socket")
-  // console.log(socket)
+import { useSelector, useDispatch } from 'react-redux'
+import { createNewRoom } from "../../store/action/multiplayer/rooms"
 
-  const [username,] = useState(localStorage.getItem("username"));
+function RoomPage({ socket }) {
+  console.log(socket)
+  const dispatch = useDispatch();
+
   const [roomname, setroomname] = useState("");
-  //activates joinRoom function defined on the backend
-  const sendData = () => {
+  const [username,] = useState(localStorage.getItem("username"))
+  const roomCode = useSelector(state => state.roomCode)
+
+  const createRoom = () => {
+    if (roomname !== "") {
+      const roomCode = dispatch(createNewRoom(roomname, username, socket))
+      // socket.emit("joinRoom", { username, roomname });
+    } else {
+      alert("Please enter room name!");
+      window.location.reload();
+    }
+  };
+
+  const joinRoom = () => {
     if (username === "") {
       alert("Error Occured. You should login again")
     } else {
       if (roomname !== "") {
-        socket.emit("joinRoom", { username, roomname });
-        //if empty error message pops up and returns to the same page
+        const roomCode = dispatch(createNewRoom(roomname, username, socket))
+        // socket.emit("joinRoom", { username, roomname });
       } else {
         alert("Please enter room name!");
         window.location.reload();
@@ -75,9 +89,10 @@ function RoomPage({ socket }) {
           onChange={(e) => setroomname(e.target.value)}
         ></input>
         <br />
-        <Link to={`/multiplayer/${roomname}/${username}`}>
-          <button className="roomBtn" onClick={sendData}><p>Start</p></button>
-        </Link></div>
+        {/* <Link to={`/multiplayer/${roomname}/${username}`}> */}
+        <button className="roomBtn" onClick={createRoom}><p>Start</p></button>
+        <button className="roomBtn" onClick={joinRoom}><p>Join</p></button>
+        {/* </Link> */}</div>
 
     </div>
   );
