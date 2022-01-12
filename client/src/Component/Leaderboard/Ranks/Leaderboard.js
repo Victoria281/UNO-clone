@@ -131,7 +131,7 @@ const DisplayLeaderboard = () => {
                 <Box className={`row no-gutters ${styles.ldbPodium} ${styles.pillarBody}`} alignContent={'end'} textAlign={'end'}>
                     <Box className={`col-sm-4 p-2 ${styles.podiumPillar2}`}>
                         <Box className={styles.lb2IconBorder}>
-                            <Avatar className={styles.lb1Icons} alt="2ndPlace" src={process.env.REACT_APP_API_URL + "/api/uno/profile_icons/" + player2.profileicon + ".png"}></Avatar>
+                            <img className={styles.lb1Icons} alt="2ndPlace" src={process.env.REACT_APP_API_URL + "/api/uno/profile_icons/" + player2.profileicon + ".png"}></img>
                         </Box>
                         <Box className={styles.borderDesign2}>
                             <Box alignContent={'end'} className='d-flex'>
@@ -144,11 +144,11 @@ const DisplayLeaderboard = () => {
 
                     <Box className={`col-sm-4 p-2 ${styles.podiumPillar1}`}>
                         <Box alignContent={'end'} className={styles.crownBox}>
-                            <Avatar className={styles.crown} alt="1stPlace" src={crownImage}></Avatar>
+                            <img className={styles.crown} alt="1stPlace" src={crownImage}></img>
                         </Box>
 
                         <Box className={styles.lb1IconBorder}>
-                            <Avatar className='lb1Icons' alt='1stPlace' src={process.env.REACT_APP_API_URL + "/api/uno/profile_icons/" + player1.profileicon + ".png"}></Avatar>
+                            <img className={styles.lb1Icons} alt='1stPlace' src={process.env.REACT_APP_API_URL + "/api/uno/profile_icons/" + player1.profileicon + ".png"}></img>
                         </Box>
 
                         <Box className={styles.borderDesign1}>
@@ -162,7 +162,7 @@ const DisplayLeaderboard = () => {
 
                     <Box className={`col-sm-4 p-2 ${styles.podiumPillar3}`}>
                         <Box className={styles.lb3IconBorder}>
-                            <Avatar className='lb1Icons' alt='3rdPlace' src={process.env.REACT_APP_API_URL + "/api/uno/profile_icons/" + player3.profileicon + ".png"}></Avatar>
+                            <img className={styles.lb2Icons} alt='3rdPlace' src={process.env.REACT_APP_API_URL + "/api/uno/profile_icons/" + player3.profileicon + ".png"}></img>
                         </Box>
 
                         <Box className={styles.borderDesign3}>
@@ -178,21 +178,17 @@ const DisplayLeaderboard = () => {
 
             <Box className='col-xl-5 col-lg-5 col-md-12 col-sm-12'>
 
-                <Box className='row no-gutters'>
+                <Box className={`row no-gutters ${styles.leaderboard_header}`}>
                     <Box className='col-sm-2'>
                         <Typography variant='h6' className='p-1' sx={{ fontWeight: 'bold', textAlign: 'center' }}>No</Typography>
                     </Box>
 
-                    <Box className='col-sm-5'>
+                    <Box className='col-sm-8'>
                         <Typography variant='h6' className='p-1' sx={{ fontWeight: 'bold' }}>Players</Typography>
                     </Box>
 
                     <Box className='col-sm-2'>
                         <Typography variant='h6' className='p-1' sx={{ fontWeight: 'bold' }}>Score</Typography>
-                    </Box>
-
-                    <Box className='col-sm-3'>
-                        <Typography variant='h6' className='p-1' sx={{ fontWeight: 'bold' }}>Created</Typography>
                     </Box>
                 </Box>
 

@@ -56,7 +56,7 @@
 }
 
 .createdDate {
-    font-size: x-small;
+    font-size: small;
     /* padding: 5%; */
 }
 
@@ -93,9 +93,9 @@
 }
 
 .crown {
-    margin-bottom: -15px;
-    margin-right: 0%;
-    width: 80px;
+    margin-bottom: -30px;
+    width: 55px;
+    height: 55px;
 }
 
 .crownBox {
@@ -106,13 +106,15 @@
 }
 
 .lb1Icons {
-    width: 70px;
+    object-fit: contain;
+    width: 40px;
+    height: 40px;
 }
 
-.triangle1 {
+.podiumTriangle1 {
     background-color: gold;
     height: 70px;
-    width: 80%;
+    width: 100%;
     clip-path: polygon(0 0, 100% 100%, 100% 0);
 }
 
@@ -149,13 +151,15 @@
 }
 
 .lb2Icons {
+    object-fit: contain;
     width: 40px;
+    height: 40px;
 }
 
-.triangle2 {
+.podiumTriangle2 {
     background-color: grey;
     height: 70px;
-    width: 80%;
+    width: 100%;
     clip-path: polygon(0 0, 100% 100%, 100% 0);
 }
 
@@ -191,10 +195,10 @@
     box-shadow: 0 0.5rem 1rem rgba(0, 0, 16, 0.19), 0 0.3rem 0.3rem rgba(0, 0, 16, 0.23);
 }
 
-.triangle3 {
+.podiumTriangle3 {
     background-color: #CD7F32;
     height: 70px;
-    width: 80%;
+    width: 100%;
     clip-path: polygon(0 0, 100% 100%, 100% 0);
 }
 
@@ -216,12 +220,20 @@
     box-shadow: 0 0.5rem 1rem rgba(0, 0, 16, 0.19), 0 0.3rem 0.3rem rgba(0, 0, 16, 0.23);
 }
 
+.leaderboard_header {
+    padding: 0% 2% 0% 2%;
+}
+
 .leaderboard_body {
     padding: 0% 2% 2% 2%;
     max-height: 600px;
-    max-width: 97%;
+    /* max-width: 97%; */
     overflow-x: hidden;
     overflow-y: visible;
+}
+
+.ldbRowIcon {
+    width: 40px;
 }
 
 @keyframes growth1 {

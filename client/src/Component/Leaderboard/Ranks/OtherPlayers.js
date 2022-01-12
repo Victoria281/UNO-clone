@@ -68,26 +68,22 @@ const OtherPlayers =
                                         <Typography sx={{ fontWeight: 'bold', textAlign: 'center', paddingY: 2 }}>{newIndex - 1}</Typography>
                                     </Box>
 
-                                    <Box className='col-sm-5 row no-gutters'>
-                                        <Box className='col-sm-3' sx={{ paddingY: 2, paddingX: 2 }}>
+                                    <Box className='col-sm-8 row no-gutters'>
+                                        <Box className='col-sm-2' sx={{ paddingY: 2, paddingX: 2 }}>
                                             <img
-                                                className={`img-responsive ${styles.lb2Icons}`}
+                                                className={`img-responsive ${styles.ldbRowIcon}`}
                                                 alt="pic"
                                                 src={"https://uno-clone.herokuapp.com/api/uno/profile_icons/" + players.profileicon + ".png"}
                                             />
                                         </Box>
 
-                                        <Box className='col-sm-9' sx={{ paddingY: 2, paddingX: 2 }}>
+                                        <Box className='col-sm-10' sx={{ paddingY: 2, paddingX: 2 }}>
                                             <Typography sx={{ padding: 2 }}>{players.username}</Typography>
                                         </Box>
                                     </Box>
 
                                     <Box className='col-sm-2' sx={{ paddingY: 2 }}>
                                         <Typography sx={{ padding: 2 }}>{players.score}</Typography>
-                                    </Box>
-
-                                    <Box className='col-sm-3' sx={{ paddingY: 2 }}>
-                                        <Typography className={styles.createdDate} sx={{ padding: 2, paddingRight: 2 }}>{createdAtString}</Typography>
                                     </Box>
                                 </Box>
                             );
@@ -107,26 +103,22 @@ const OtherPlayers =
                                         <Typography sx={{ fontWeight: 'bold', textAlign: 'center', paddingY: 2 }}>{newIndex - 1}</Typography>
                                     </Box>
 
-                                    <Box className='col-sm-5 row no-gutters'>
-                                        <Box className='col-sm-3 p-2'>
+                                    <Box className='col-sm-8 row no-gutters'>
+                                        <Box className='col-sm-2' sx={{ paddingY: 2, paddingX: 2 }}>
                                             <img
-                                                className={`img-responsive ${styles.lb2Icons}`}
+                                                className={`img-responsive ${styles.ldbRowIcon}`}
                                                 alt="pic"
                                                 src={"https://uno-clone.herokuapp.com/api/uno/profile_icons/" + players.profileicon + ".png"}
                                             />
                                         </Box>
 
-                                        <Box className='col-sm-9' sx={{ paddingY: 2, paddingX: 3 }}>
+                                        <Box className='col-sm-10' sx={{ paddingY: 2, paddingX: 3 }}>
                                             <Typography sx={{ padding: 2 }}>{players.username}</Typography>
                                         </Box>
                                     </Box>
 
                                     <Box className='col-sm-2' sx={{ paddingY: 2 }}>
                                         <Typography sx={{ padding: 2 }}>{players.score}</Typography>
-                                    </Box>
-
-                                    <Box className='col-sm-3' sx={{ paddingY: 2 }}>
-                                        <Typography className={styles.createdDate} sx={{ padding: 2, paddingRight: 2 }}>{createdAtString}</Typography>
                                     </Box>
                                 </Box>
                             );
@@ -147,26 +139,22 @@ const OtherPlayers =
                                         <Typography sx={{ fontWeight: 'bold', textAlign: 'center', paddingY: 2 }}>{newIndex - 1}</Typography>
                                     </Box>
 
-                                    <Box className='col-sm-5 row no-gutters'>
-                                        <Box className='col-sm-3' sx={{ padding: 2 }}>
+                                    <Box className='col-sm-8 row no-gutters'>
+                                        <Box className='col-sm-2' sx={{ paddingY: 2, paddingX: 2 }}>
                                             <img
-                                                className={`img-responsive ${styles.lb2Icons}`}
+                                                className={`img-responsive ${styles.ldbRowIcon}`}
                                                 alt="pic"
                                                 src={"https://uno-clone.herokuapp.com/api/uno/profile_icons/" + players.profileicon + ".png"}
                                             />
                                         </Box>
 
-                                        <Box className='col-sm-9' sx={{ paddingY: 2, paddingX: 2 }}>
+                                        <Box className='col-sm-10' sx={{ paddingY: 2, paddingX: 2 }}>
                                             <Typography sx={{ padding: 2 }}>{players.username}</Typography>
                                         </Box>
                                     </Box>
 
                                     <Box className='col-sm-2' sx={{ paddingY: 2 }}>
                                         <Typography sx={{ padding: 2 }}>{players.score}</Typography>
-                                    </Box>
-
-                                    <Box className='col-sm-3' sx={{ paddingY: 2 }}>
-                                        <Typography className={styles.createdDate} sx={{ padding: 2, paddingRight: 2 }}>{createdAtString}</Typography>
                                     </Box>
                                 </Box>
                             );
