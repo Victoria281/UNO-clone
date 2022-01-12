@@ -1,6 +1,6 @@
 import {
     generateRoomCode
-} from "../../features/multiplayer/rooms"
+} from "../../../features/multiplayer/rooms"
 
 export const CREATE_NEW_ROOM = "CREATE_NEW_ROOM"
 export const JOIN_A_ROOM = "JOIN_A_ROOM"

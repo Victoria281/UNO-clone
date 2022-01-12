@@ -312,5 +312,5 @@ button {
 }
 
 .isplayable:hover{
-    transform: translateY(-10px)
+    border: 2px solid black
 }

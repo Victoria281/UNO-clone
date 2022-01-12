@@ -1,16 +1,14 @@
 // @ts-nocheck
-import { useState } from "react";
 import {
     playCard,
 } from "../../../store/action/multiplayer/game"
 import { useDispatch } from 'react-redux'
-import { Stack } from '@mui/material';
-import SelectColorModal from './SelectColorModal'
+import {Stack} from '@mui/material';
+
 
 //gets the data from the action object and reducers defined earlier
-const Player = ({ handleWildCard, playerDeck, playing, socket }) => {
+const Player = ({ playerDeck, socket }) => {
     const dispatch = useDispatch();
-
     return (
         <Stack direction="row" spacing={1}>
             {playerDeck.map((card, i) =>
@@ -19,11 +17,7 @@ const Player = ({ handleWildCard, playerDeck, playing, socket }) => {
                         className="p1cards"
                         key={i}
                         onClick={() => {
-                            if (card.color === "wild") {
-                                handleWildCard(card)
-                            } else {
-                                dispatch(playCard(card, socket));
-                            }
+                            dispatch(playCard(card, socket));
                         }}
                     >
                         <img
@@ -53,9 +47,6 @@ const Player = ({ handleWildCard, playerDeck, playing, socket }) => {
 
 
             )}
-            {playing && <div>
-                <p>Turn</p>
-            </div>}
         </Stack >
     );
 }
