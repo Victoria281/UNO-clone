@@ -3,9 +3,9 @@ import { Stack } from '@mui/material';
 import styles from "../styles.module.css"
 
 //gets the data from the action object and reducers defined earlier
-const OtherPlayer = ({ playerDeck, placement }) => {
+const OtherPlayer = ({ playerDeck, playing, placement }) => {
     return (
-        <Stack direction="row" spacing={1} className= {`${styles.OtherPlayerStack} ${styles['OtherPlayerStack'+placement]}`}>
+        <Stack direction="row" spacing={1} className={`${styles.OtherPlayerStack} ${styles['OtherPlayerStack' + placement]}`}>
             {playerDeck.map((card, i) =>
                 <div
                     className="p1cards"
@@ -22,6 +22,9 @@ const OtherPlayer = ({ playerDeck, placement }) => {
                 </div>
             )}
 
+            {playing && <div>
+                <p>Turn</p>
+            </div>}
         </Stack >
     );
 }
