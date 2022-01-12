@@ -106,7 +106,7 @@ const App=({hideLoader}) =>{
 
         <Switch>
         <PageRestriction exact path="/" component={HomePage} />
-        {/* <PageRestriction exact path="/" component={Loader} /> */}
+        <PageRestriction exact path="/load" component={Loader} />
           <PageRestriction exact path="/game" component={GamePage} />
           <PageRestriction exact path="/end" component={EndPage} />
           <Route exact path="/login" component={AccountPage} />

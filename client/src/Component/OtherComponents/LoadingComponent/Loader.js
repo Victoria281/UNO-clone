@@ -26,7 +26,7 @@ const Loader = () => {
         setIsFlipped(!isFlipped)
     }
     return (
-        <>
+        <div className="loading">
             <div className="scene scene--card">
                 <div className={isFlipped ? 'cards is-flipped' : 'cards'}>
                     <div
@@ -52,7 +52,7 @@ const Loader = () => {
                 <h1>Loading</h1>
 
             </div>
-        </>);
+        </div>);
 };
 
 export default Loader;
