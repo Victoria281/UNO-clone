@@ -16,7 +16,7 @@ import MultiPlayer from "./pages/multiplayer/multiplayer";
 import PageRestriction from "./PageRestriction"
 import { NavLink } from 'react-router-dom'
 import io from "socket.io-client";
-
+import Loader from "./Component/OtherComponents/LoadingComponent/Loader"
 //new
 import MultiplayerCreateRoom from "./Component/MultiplayerComponents/createRoom"
 import MultiplayerGameRoom from "./Component/MultiplayerComponents/gameRoom"
@@ -34,7 +34,11 @@ function AppGameRoom(props) {
   );
 }
 
-const App=() =>{
+const App=({hideLoader}) =>{
+  useEffect(() => {
+    hideLoader()
+  });
+
   // console.log(process.env.REACT_APP_SECRET_KEY)
   const [loggedIn, setLoggedIn] = useState(localStorage.getItem("userid"));
   useEffect(() => {
@@ -101,7 +105,8 @@ const App=() =>{
         </nav>
 
         <Switch>
-          <PageRestriction exact path="/" component={HomePage} />
+        <PageRestriction exact path="/" component={HomePage} />
+        {/* <PageRestriction exact path="/" component={Loader} /> */}
           <PageRestriction exact path="/game" component={GamePage} />
           <PageRestriction exact path="/end" component={EndPage} />
           <Route exact path="/login" component={AccountPage} />
