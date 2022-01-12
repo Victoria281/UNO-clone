@@ -25,7 +25,7 @@ const OtherPlayers =
             (state) => state.leaderboard_leaderboard.user_leaderboard
         );
 
-        console.log("OtherPlayers, User:", users);
+        // console.log("OtherPlayers, User:", users);
         let printed = 0;
         let newIndex = 1;
         let uid = localStorage.getItem('userid');
