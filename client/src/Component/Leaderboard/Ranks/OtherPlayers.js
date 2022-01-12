@@ -73,7 +73,7 @@ const OtherPlayers =
                                             <img
                                                 className={`img-responsive ${styles.ldbRowIcon}`}
                                                 alt="pic"
-                                                src={"https://uno-clone.herokuapp.com/api/uno/profile_icons/" + players.profileicon + ".png"}
+                                                src={process.env.REACT_APP_API_URL + "/api/uno/profile_icons/" + players.profileicon + ".png"}
                                             />
                                         </Box>
 
@@ -108,7 +108,7 @@ const OtherPlayers =
                                             <img
                                                 className={`img-responsive ${styles.ldbRowIcon}`}
                                                 alt="pic"
-                                                src={"https://uno-clone.herokuapp.com/api/uno/profile_icons/" + players.profileicon + ".png"}
+                                                src={process.env.REACT_APP_API_URL + "/api/uno/profile_icons/" + players.profileicon + ".png"}
                                             />
                                         </Box>
 
@@ -144,7 +144,7 @@ const OtherPlayers =
                                             <img
                                                 className={`img-responsive ${styles.ldbRowIcon}`}
                                                 alt="pic"
-                                                src={"https://uno-clone.herokuapp.com/api/uno/profile_icons/" + players.profileicon + ".png"}
+                                                src={process.env.REACT_APP_API_URL + "/api/uno/profile_icons/" + players.profileicon + ".png"}
                                             />
                                         </Box>
 
