@@ -1,5 +1,6 @@
 
-
+.loading {
+  
 .scene {
     display: inline-block;
     width: 200px;
@@ -96,3 +97,4 @@
       #{($i+1)*16%} { opacity: 1; }
     }
   }
+}
