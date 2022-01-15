@@ -17,8 +17,8 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
     integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"/>  
-  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"/>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
   <!--
       Notice the use of %PUBLIC_URL% in the tags above.
       It will be replaced with the URL of the `public` folder during the build.
@@ -34,6 +34,31 @@
 <body>
   <noscript>You need to enable JavaScript to run this app.</noscript>
   <div id="root"></div>
+  <div class="loader">
+    <div class="scene scene--card">
+      <div class="loadingcards">
+        <div
+          class="card__face card__face--front">
+          <img class="" src="./images/Deck.png" />
+        </div>
+        <div
+          class="card__face card__face--back" id="randCard">
+          <img class="" src="./images/Deck.png"/>
+        </div>
+      </div>
+      <p> Click Me ! </p>
+    </div>
+
+    <div>
+      <img class="loadingcard" src="./images/Blue_Skip.png"/>
+      <img class="loadingcard" src="./images/Red_Reverse.png"/>
+      <img class="loadingcard" src="./images/Green_Draw.png"/>
+      <img class="loadingcard" src="./images/Yellow_0.png"/>
+      <img class="loadingcard" src="./images/Wild_Draw.png"/>
+      <h1>Loading</h1>
+
+    </div>
+  </div>
   <!--
       This HTML file is a template.
       If you open it directly in the browser, you will see an empty page.
@@ -53,7 +78,28 @@
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
     integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
     crossorigin="anonymous"></script>
-
+  <script>
+    var card = document.querySelector('.loadingcards');
+    var options = [
+        "Blue_Skip",
+        "Yellow_0",
+        "Red_Reverse",
+        "Blue_Skip",
+        "Green_Draw",
+        "Wild",
+        "Wild_Draw",
+        "Blue_3",
+        "Red_6"
+    ]
+    card.addEventListener('click', function () {
+      if (!card.classList.contains("is-flipped")){
+        var randImg = document.getElementById("randCard")
+        var ranCard = Math.floor(Math.random() * options.length)
+        randImg.innerHTML = '<img class="" src="./images/'+options[ranCard]+'.png"/>'
+      }
+      card.classList.toggle('is-flipped');
+    });
+  </script>
 </body>
 
 </html>

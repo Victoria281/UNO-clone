@@ -11,12 +11,17 @@ import thunk from "redux-thunk"
 
 const store = createStore(rootReducers, applyMiddleware(thunk));
 
+const loader = document.querySelector('.loader');
+const hideLoader = () => loader.hidden = true;
+
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
-      <App />
+      <App
+        hideLoader={hideLoader}
+      />
     </Provider>
   </React.StrictMode>
   ,
   document.getElementById('root')
-);
+)
