@@ -44,8 +44,8 @@ const reducer =
      */
     (state = initialState, action) => {
         switch (action.type) {
-            case GET_TOP_30_PLAYERS:
-                console.log(">>>>", action);
+            case GET_TOP_30_PLAYERS: {
+                 console.log(">>>>", action);
 
                 /**
                  * @type {UserScores}
@@ -90,7 +90,7 @@ const reducer =
                     }
 
                     ctr++;
-                };
+                }
 
                 while (tmpP3 === false && ctr < action.data.scores.length) {
                     // console.log("running p3 while loop, ctr:", ctr);
@@ -113,10 +113,12 @@ const reducer =
                     p2: p2Data,
                     p3: p3Data,
                 };
+            }
 
-            default:
+            default: {
                 return state;
-        };
+            }   
+        }
     };
 
 export default reducer;

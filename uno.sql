@@ -29,7 +29,7 @@ CREATE TABLE public.players (
     username character varying(45) NOT NULL,
     email character varying(255) NOT NULL,
     password character varying(255) NOT NULL,
-    created_by timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
     profileicon character varying(255) DEFAULT 'bird'::character varying NOT NULL
 );
 
@@ -137,7 +137,7 @@ CREATE TABLE public.uno_leaderboard (
     id integer NOT NULL,
     userid integer NOT NULL,
     score numeric NOT NULL,
-    created_by timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
+    created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
 );
 
 
@@ -197,7 +197,7 @@ ALTER TABLE ONLY public.uno_leaderboard ALTER COLUMN id SET DEFAULT nextval('pub
 -- Data for Name: players; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.players (userid, username, email, password, created_by, profileicon) FROM stdin;
+COPY public.players (userid, username, email, password, created_at, profileicon) FROM stdin;
 17	t3	t3@gmail.com	$2b$10$nx1gimQUduev11T/SocEde5JqeXEnT1/Gj/jqzBCvqlhBaOiaiDGe	2021-11-15 11:32:44.202216	bird
 26	t11	t11@gmail.com	$2b$10$mxfVRYC5b5jlV87rqnnIaO7b/WJz3ADnP.OReW5.eu/Le4qCM3DvO	2021-11-16 00:46:45.855368	bird
 27	t2	t2@gmail.com	$2b$10$UiJgTTntkPk9CPDFu3Kn2O5XyxMVOAzLwkX/V4BtTwXM3epkyINwy	2021-11-16 00:48:55.012633	bird
@@ -256,7 +256,7 @@ COPY public.uno_cards (card_id, color, "values", image_file) FROM stdin;
 37	blue	4	./cards/Blue_4.png
 38	blue	5	./cards/Blue_5.png
 39	blue	6	./cards/Blue_6.png
-40	blue	7	/cards/Blue_7.png
+40	blue	7	./cards/Blue_7.png
 41	blue	8	./cards/Blue_8.png
 42	blue	9	./cards/Blue_9.png
 43	blue	10	./cards/Blue_Skip.png
@@ -317,7 +317,7 @@ COPY public.uno_cards (card_id, color, "values", image_file) FROM stdin;
 98	yellow	3	./cards/Yellow_3.png
 99	yellow	4	./cards/Yellow_4.png
 100	yellow	5	./cards/Yellow_5.png
-101	yellow	6	/cards/Yellow_6.png
+101	yellow	6	./cards/Yellow_6.png
 102	yellow	7	./cards/Yellow_7.png
 103	yellow	8	./cards/Yellow_8.png
 104	yellow	9	./cards/Yellow_9.png
@@ -325,7 +325,6 @@ COPY public.uno_cards (card_id, color, "values", image_file) FROM stdin;
 106	yellow	11	./cards/Yellow_Reverse.png
 107	yellow	12	./cards/Yellow_Draw.png
 \.
-
 
 --
 -- Data for Name: uno_effects; Type: TABLE DATA; Schema: public; Owner: postgres
@@ -354,7 +353,7 @@ COPY public.uno_effects (effectid, uno_values, effect) FROM stdin;
 -- Data for Name: uno_leaderboard; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.uno_leaderboard (id, userid, score, created_by) FROM stdin;
+COPY public.uno_leaderboard (id, userid, score, created_at) FROM stdin;
 10	17	5975	2021-11-15 11:35:57.542435
 14	26	0	2021-11-16 00:46:45.864256
 15	27	0	2021-11-16 00:48:55.020625

@@ -1,8 +1,5 @@
 import { useSelector } from 'react-redux';
-import { useState } from 'react';
-// import { useDispatch } from 'react-redux';
-// import Confetti from 'react-confetti';
-import { Suspense } from 'react';
+import React, { Suspense } from 'react';
 
 // Type Imports
 import { RootState } from '../../../store/types';

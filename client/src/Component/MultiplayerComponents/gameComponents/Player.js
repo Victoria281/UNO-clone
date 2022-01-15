@@ -1,5 +1,9 @@
+<<<<<<< HEAD:client/src/Component/MultiplayerComponents/gameComponents/Player.js
 // @ts-nocheck
 import { useState } from "react";
+=======
+import React from "react";
+>>>>>>> f608359 (minor changes):client/src/Component/MultiplayerComponents/playerComponents/player.js
 import {
     playCard,
 } from "../../../store/action/multiplayer/game"
