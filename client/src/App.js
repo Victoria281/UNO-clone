@@ -20,6 +20,7 @@ import io from "socket.io-client";
 //new
 import MultiplayerCreateRoom from "./Component/MultiplayerComponents/createRoom"
 import MultiplayerGameRoom from "./Component/MultiplayerComponents/gameRoom"
+import WaitingRoom from "./pages/waitingRoom";
 
 const socket = io.connect(process.env.REACT_APP_API_URL);
 
@@ -115,6 +116,8 @@ const App=() =>{
           {/* new */}
           <Route exact path="/createroom" render={()=><MultiplayerCreateRoom socket={socket}/>}/>
           <Route path="/multiplayer/:roomcode" component={AppGameRoom}/>
+          <Route exact path="/waitingroom" component={WaitingRoom} />
+
         </Switch>
       </div>
     </Router>

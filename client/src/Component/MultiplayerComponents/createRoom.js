@@ -17,6 +17,7 @@ const CreateRoom = ({ socket }) => {
         if (roomname !== "") {
             dispatch(createNewRoom(roomname, username, socket))
             .then(result => history.push(`/multiplayer/${result}`))
+            localStorage.setItem("roomname",roomname)
         } else {
             alert("Please enter room name!");
             window.location.reload();
