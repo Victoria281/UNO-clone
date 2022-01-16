@@ -1,4 +1,4 @@
- .error-msg {
+.error-msg {
     font-size: "12px";
     width: "100%";
     color: "red";
@@ -8,7 +8,7 @@
     width: 100%;
   }
 
-  #registerSection{
+  #forgotSection{
     border: 2px solid white;
     border-radius: 10px;
     box-shadow: 1px 2px #888888;
@@ -18,12 +18,12 @@
   }
 
 
-  #registerTxt{
+  #forgotTxt{
     font-family: Rubik Mono One;
     position: absolute;
-    top: 10px;
-    left: 110px;
-    border:#00b3ffe7;
+    top: 30px;
+    left: 130px;
+    border:#cad5dae7;
     border-style: solid;
     border-radius: 15px;
     background-color: #00b3ffe7;
@@ -101,32 +101,8 @@
     animation-iteration-count: 1;
   }
 
-
-  /* Button Wobble animation */
-#registerBtn:focus, #submitBtn:hover{
-  animation: wobble 1s 1;
-}
-
-@keyframes wobble {
-  25% {
-    transform: rotate(15deg);
-  }
-
-  50% {
-    transform: rotate(-30deg);
-  }
-
-  75% {
-    transform: rotate(5deg);
-  }
-
-  100% {
-    transform: rotate(0deg);
-  }
-}
-
-/* Button on click animation */
-#registerBtn:after {
+  /* Button on click animation */
+#forgotBtn:after {
   content: "";
   display: block;
   position: absolute;
@@ -140,8 +116,8 @@
   box-shadow: 0 0 10px 40px white;
 }
 
-#registerBtn:active:after {
-  box-shadow: 0 0 0 0 rgb(0, 153, 255);
+#forgotBtn:active:after {
+  box-shadow: 0 0 0 0 orange;
   position: absolute;
   border-radius: 4em;
   left: 0;
@@ -150,6 +126,6 @@
   transition: 0s;
 }
 
-#registerBtn:active {
+#forgotBtn:active {
   top: 1px;
 }

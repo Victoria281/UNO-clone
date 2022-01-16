@@ -1,4 +1,5 @@
-export const SecurityReducer = (state = {}, action) => {
+// @ts-nocheck
+const SecurityReducer = (state = {}, action) => {
     switch (action.type) {
 
         case "secure_action":
@@ -7,3 +8,4 @@ export const SecurityReducer = (state = {}, action) => {
             return state;
     }
 };
+export default SecurityReducer;

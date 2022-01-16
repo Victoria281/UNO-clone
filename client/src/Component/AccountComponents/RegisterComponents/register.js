@@ -2,7 +2,10 @@
 import { useState } from "react";
 
 import axios from "axios";
-import "../css/register.css";
+import "../../../css/register.css";
+import VisibilityIcon from '@mui/icons-material/Visibility';
+
+import nodemailer from 'nodemailer';
 
 export default function App() {
   const [username, setUsername] = useState("");
@@ -19,6 +22,28 @@ export default function App() {
   const [passwordCfmError, setPasswordCfmError] = useState("");
 
   const [duplicateMsg, setDuplicateMsg] = useState("");
+  const [passwordShown1, setPasswordShown1] = useState(false);
+  const [passwordShown2, setPasswordShown2] = useState(false);
+
+  let transporter = nodemailer.createTransport({
+    service: "smtp.mailtrap.io",
+    auth: {
+      type: "OAuth2",
+      user: process.env.EMAIL,
+      pass: process.env.WORD,
+      clientId: process.env.OAUTH_CLIENTID,
+      clientSecret: process.env.OAUTH_CLIENT_SECRET,
+      refreshToken: process.env.OAUTH_REFRESH_TOKEN,
+    },
+   });
+   transporter.verify((err, success) => {
+    err
+      ? console.log(err)
+      : console.log(`=== Server is ready to take messages: ${success} ===`);
+   });
+
+
+  
 
   const handleUsernameChange = (e) => {
     setUsername(e.target.value);
@@ -45,6 +70,15 @@ export default function App() {
   const handleFormSubmit = (e) => {
     e.preventDefault();
 
+  };
+
+  // Password visibility function
+  const togglePassword1 = () => {
+    setPasswordShown1(!passwordShown1);
+  };
+
+  const togglePassword2 = () => {
+    setPasswordShown2(!passwordShown2);
   };
 
   // Function called when register button is clicked
@@ -124,7 +158,7 @@ export default function App() {
     if (status) {
 
       axios
-        .post(process.env.REACT_APP_API_URL + "/api/uno/register", {
+        .post("http://localhost:5000/api/uno/register", {
           userName: username,
           email: email,
           password: password
@@ -166,6 +200,7 @@ export default function App() {
           {duplicateMsg && <div className="error-msg">{duplicateMsg}</div>}
           <form
             className="form-group form"
+            style={{marginTop: 10, marginRight: 70, marginLeft: 70, width: '400px'}}
             autoComplete="off"
             onSubmit={handleFormSubmit}
           >
@@ -176,7 +211,7 @@ export default function App() {
               <div className="input-group-prepend">
                 <span className="input-group-text"><i className="fa fa-user fa-lg fa-fw" aria-hidden="true"></i></span>
               </div>
-              <input type="text" className="form-control pr-5" placeholder="Username" onChange={handleUsernameChange} value={username} />
+              <input type="text" className="form-control pr-5" placeholder="Username" onChange={handleUsernameChange} value={username} autocomplete="off"/>
             </div>
 
             {usernameError && <div className="error-msg">{usernameError}</div>}
@@ -188,7 +223,7 @@ export default function App() {
               <div className="input-group-prepend">
                 <span className="input-group-text"><i className="fa fa-envelope fa-lg fa-fw" aria-hidden="true"></i></span>
               </div>
-              <input type="text" className="form-control" placeholder="Email" onChange={handleEmailChange} value={email} />
+              <input type="text" className="form-control pr-4" placeholder="Email" onChange={handleEmailChange} value={email} autocomplete="off"/>
             </div>
 
             {emailError && <div className="error-msg">{emailError}</div>}
@@ -198,7 +233,8 @@ export default function App() {
               <div className="input-group-prepend">
                 <span className="input-group-text"><i className="fa fa-lock fa-lg fa-fw" aria-hidden="true"></i></span>
               </div>
-              <input type="password" className="form-control" placeholder="Password" onChange={handlePasswordChange} value={password} />
+              <input type={passwordShown1 ? "text" : "password"} className="form-control" style={{paddingRight: 40}} placeholder="Password" onChange={handlePasswordChange} value={password} autocomplete="off"/>
+              <button onClick={togglePassword1}><VisibilityIcon style={{padding: 2, marginTop: 6}}/></button>
             </div>
 
             {passwordError && <div className="error-msg">{passwordError}</div>}
@@ -210,7 +246,8 @@ export default function App() {
               <div className="input-group-prepend">
                 <span className="input-group-text"><i className="fa fa-lock fa-lg fa-fw" aria-hidden="true"></i></span>
               </div>
-              <input type="password" className="form-control" placeholder="Confirm Password" onChange={handleCfmPasswordChange} value={confirmpassword} />
+              <input type={passwordShown2 ? "text" : "password"} className="form-control" style={{paddingRight: 40}} placeholder="Confirm Password" onChange={handleCfmPasswordChange} value={confirmpassword} autocomplete="off"/>
+              <button onClick={togglePassword2}><VisibilityIcon style={{padding: 2, marginTop: 6}}/></button>
             </div>
 
             {passwordCfmError && (
@@ -220,12 +257,12 @@ export default function App() {
             <button
               id="registerBtn"
               type="submit"
-              className="btn btn-success btn-lg"
-              style={{ width: "40%", marginTop: 30, height: 50, backgroundColor: '#45BDF8', borderRadius: '50%' }}
+              className="btn btn-success btn-lg link pop-on-hover"
+              style={{ width: "40%", marginTop: 30, height: 50, backgroundColor: '#45BDF8', borderRadius: '50%'}}
               onClick={createPost}
 
             >
-              <p id="registerBtnTxt" style={{ fontSize: 42, fontWeight: 'bolder', fontFamily: 'Rubik Mono One', color: 'black', marginTop: -20 }}>Register</p>
+              <p id="registerBtnTxt" style={{ fontSize: 36, fontWeight: 'bolder', fontFamily: 'Rubik Mono One', color: 'black', marginTop: -16, marginLeft: -20 }}>Register</p>
             </button>
           </form>
         </div>

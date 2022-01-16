@@ -100,7 +100,7 @@ app.get('/profile_icons/*', printingDebuggingInfo, function (req, res, next) {
 //=====================================
 
 //findAll
-app.get('/cards', printingDebuggingInfo, verifyToken, function (req, res, next) {
+app.get('/cards', printingDebuggingInfo, function (req, res, next) {
 
     Card.findAll(function (err, result) {
         if (err) {
@@ -400,6 +400,39 @@ app.put('/leaderboard/update/:id', printingDebuggingInfo, verifyToken, function 
     });
 });
 
+// Resetting password when forget
+app.put('/user/reset', printingDebuggingInfo, function (req, res, next) {
+    const email = req.body.email;
+    const new_password = req.body.password;
+
+    try {       
+        // console.log("-----------------------------------------------------------------")
+        // console.log(results)
+        // console.log("-----------------------------------------------------------------")
+        console.log(email)
+                
+        bcrypt.hash(new_password, 10, async (err, hash) => {
+                            
+            results = User.resetUserPasswordGmail(email, hash, function (error, results) {
+                console.log(results)
+                if(results===0){
+                    console.log("There is no such user in the database! Ensure that you have registered with us!")
+                    return res.status(404).json({ statusMessage: 'No user found' })
+                }
+                if (results != null) {
+                    return res.status(204).json({ statusMessage: 'Completed reset.' });
+                }
+                if (error) {
+                    return res.status(500).json({ statusMessage: 'Unable to complete reset' });
+                }
+            });
+                            
+        });
+    } catch (error) {
+        return next(err);
+    }
+
+});
 
 
 module.exports = app;
