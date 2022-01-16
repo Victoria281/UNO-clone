@@ -53,7 +53,7 @@ export const startGameDetected = (data) => async (dispatch, getState) => {
         data
     });
     console.log(data.order)
-    return data.order.filter((p) => p !== player)
+    return data.order.slice(player+1).concat(data.order.slice(0, player))
 }
 
 export const updateGameDetected = (data) => async (dispatch, getState) => {

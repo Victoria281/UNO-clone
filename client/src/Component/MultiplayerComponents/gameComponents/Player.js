@@ -11,6 +11,9 @@ import SelectColorModal from './SelectColorModal'
 const Player = ({ handleWildCard, playerDeck, playing, socket }) => {
     const dispatch = useDispatch();
 
+    const handlePlayCard = () => {
+
+    }
     return (
         <Stack direction="row" spacing={1}>
             {playerDeck.map((card, i) =>
@@ -18,13 +21,7 @@ const Player = ({ handleWildCard, playerDeck, playing, socket }) => {
                     <div
                         className="p1cards"
                         key={i}
-                        onClick={() => {
-                            if (card.color === "wild") {
-                                handleWildCard(card)
-                            } else {
-                                dispatch(playCard(card, socket));
-                            }
-                        }}
+                        onClick={() => handlePlayCard()}
                     >
                         <img
                             className="img-responsive isplayable"
@@ -39,7 +36,8 @@ const Player = ({ handleWildCard, playerDeck, playing, socket }) => {
                     :
                     <div
                         className="p1cards"
-                        key={i}>
+                        key={i}
+                        onClick={() => handlePlayCard()}>
                         <img
                             className="img-responsive"
                             style={{ width: 70 }}

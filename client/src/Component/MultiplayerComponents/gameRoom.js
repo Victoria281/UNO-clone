@@ -79,83 +79,83 @@ const GameRoom = ({ socket, roomcode }) => {
     return (
 
         <>
-        <SelectColorModal
-            selectColorModalOpen={selectColorModalOpen} 
-            setSelectColorModalOpen={setSelectColorModalOpen} 
-            socket={socket} 
-            card={cardChosen} 
-        />
-        <Box>
-            <Grid container
-                style={{ border: "1px solid grey", height: "25vh" }}>
-                <Grid item xs={6}
-                    style={{ border: "1px solid grey", marginRight: "auto", marginLeft: "auto" }}>
-                    {(gameStarted && otherPlayers[1] !== undefined) &&
-                        <OtherPlayer
-                            placement={'Top'}
-                            playerDeck={game_state.playerdeck["player" + otherPlayers[1]]}
-                            playing={game_state.turn === otherPlayers[1]}
-                            socket={socket} />
-                    }
-                </Grid>
-            </Grid>
-            <Grid container
-                style={{ border: "1px solid grey", height: "40vh" }}>
-                <Grid item xs={3}
-                    style={{ border: "1px solid grey" }}>
-                    {(gameStarted && otherPlayers[0] !== undefined) &&
-                        <OtherPlayer
-                            placement={'Left'}
-                            playerDeck={game_state.playerdeck["player" + otherPlayers[0]]}
-                            playing={game_state.turn === otherPlayers[0]}
-                            socket={socket} />
-                    }
-                </Grid>
-                <Grid item xs={6}
-                    style={{
-                        border: "1px solid grey", display: "flex",
-                        justifyContent: "space-around",
-                        alignItems: "center"
-                    }}>
-                    {gameStarted && <Deck 
-                                current={game_state.current} 
-                                playing={game_state.turn === game_state.myTurnIs} 
-                                mainDeck={game_state.mainDeck} 
-                                used={game_state.used}
-                                socket={socket} />}
-                </Grid>
-                <Grid item xs={3}
-                    style={{ border: "1px solid grey" }}>
-                    {(gameStarted && otherPlayers[2] !== undefined) &&
-                        <OtherPlayer
-                            placement={'Right'}
-                            playerDeck={game_state.playerdeck["player" + otherPlayers[2]]}
-                            playing={game_state.turn === otherPlayers[2]}
-                            socket={socket} />
-                    }
-                </Grid>
-            </Grid>
-            <Grid container
-                style={{ border: "1px solid grey", height: "25vh" }}>
-                <Grid item xs={6}
-                    style={{ border: "1px solid grey", marginRight: "auto", marginLeft: "auto" }}>
-                    {!gameStarted ?
-                        <button className="roomBtn" onClick={() => { startGamePressed() }}><p>Start Game</p></button>
-                        :
-                        <div>
-                            <p>turn {game_state.turn}</p>
-                            <p>mine is {game_state.myTurnIs}</p>
-                            <Player
-                            handleWildCard={handleWildCard}
-                                playerDeck={game_state.playerdeck["player" + game_state.myTurnIs]}
-                                playing={game_state.turn === game_state.myTurnIs}
+            <SelectColorModal
+                selectColorModalOpen={selectColorModalOpen}
+                setSelectColorModalOpen={setSelectColorModalOpen}
+                socket={socket}
+                card={cardChosen}
+            />
+            <Box>
+                <Grid container
+                    style={{ border: "1px solid grey", height: "25vh" }}>
+                    <Grid item xs={6}
+                        style={{ border: "1px solid grey", marginRight: "auto", marginLeft: "auto" }}>
+                        {(gameStarted && otherPlayers[1] !== undefined) &&
+                            <OtherPlayer
+                                placement={'Top'}
+                                playerDeck={game_state.playerdeck["player" + otherPlayers[1]]}
+                                playing={game_state.turn === otherPlayers[1]}
                                 socket={socket} />
-                        </div>
-                    }
+                        }
+                    </Grid>
                 </Grid>
-            </Grid>
+                <Grid container
+                    style={{ border: "1px solid grey", height: "40vh" }}>
+                    <Grid item xs={3}
+                        style={{ border: "1px solid grey" }}>
+                        {(gameStarted && otherPlayers[0] !== undefined) &&
+                            <OtherPlayer
+                                placement={'Left'}
+                                playerDeck={game_state.playerdeck["player" + otherPlayers[0]]}
+                                playing={game_state.turn === otherPlayers[0]}
+                                socket={socket} />
+                        }
+                    </Grid>
+                    <Grid item xs={6}
+                        style={{
+                            border: "1px solid grey", display: "flex",
+                            justifyContent: "space-around",
+                            alignItems: "center"
+                        }}>
+                        {gameStarted && <Deck
+                            current={game_state.current}
+                            playing={game_state.turn === game_state.myTurnIs}
+                            mainDeck={game_state.mainDeck}
+                            used={game_state.used}
+                            socket={socket} />}
+                    </Grid>
+                    <Grid item xs={3}
+                        style={{ border: "1px solid grey" }}>
+                        {(gameStarted && otherPlayers[2] !== undefined) &&
+                            <OtherPlayer
+                                placement={'Right'}
+                                playerDeck={game_state.playerdeck["player" + otherPlayers[2]]}
+                                playing={game_state.turn === otherPlayers[2]}
+                                socket={socket} />
+                        }
+                    </Grid>
+                </Grid>
+                <Grid container
+                    style={{ border: "1px solid grey", height: "25vh" }}>
+                    <Grid item xs={6}
+                        style={{ border: "1px solid grey", marginRight: "auto", marginLeft: "auto" }}>
+                        {!gameStarted ?
+                            <button className="roomBtn" onClick={() => { startGamePressed() }}><p>Start Game</p></button>
+                            :
+                            <div>
+                                <p>turn {game_state.turn}</p>
+                                <p>mine is {game_state.myTurnIs}</p>
+                                <Player
+                                    handleWildCard={handleWildCard}
+                                    playerDeck={game_state.playerdeck["player" + game_state.myTurnIs]}
+                                    playing={game_state.turn === game_state.myTurnIs}
+                                    socket={socket} />
+                            </div>
+                        }
+                    </Grid>
+                </Grid>
             </Box>
-            </>
+        </>
     );
 }
 export default GameRoom;

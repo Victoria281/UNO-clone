@@ -17,15 +17,15 @@ export const getRandomInt = (num) => {
 };
 
 export const checkFirstCardPlayable = (c1, c2) => {
-    // console.log(c1)
-    // console.log(c2)
+    console.log(c1)
+    console.log(c2)
     if ((c1.color === c2.color ||
         c1.values === c2.values ||
         c1.color === "wild")) {
-            // console.log("true")
+            console.log("true")
         return true
     } else {
-        // console.log("false")
+        console.log("false")
         return false
     }
 };
@@ -80,16 +80,6 @@ export const getNextTurn = (currentTurn, order) => {
     playerInOrder += 1;
     if (playerInOrder >= order.length) {
         playerInOrder = 0;
-    }
-    return order[playerInOrder];
-}
-
-export const getPrevTurn = (currentTurn, order) => {
-
-    var playerInOrder = order.findIndex(t => t === currentTurn)
-    playerInOrder -= 1;
-    if (playerInOrder == -1) {
-        playerInOrder = order.length-1;
     }
     return order[playerInOrder];
 }
@@ -159,7 +149,6 @@ export const applyCard = (color, game_state, card, first) => {
             var unoColors = ["red", "green", "blue", "yellow"]
             color = unoColors[getRandomInt(4)]
         }
-        game_state.turn = getPrevTurn(game_state.turn, game_state.order)
     }
     console.log("apply card")
     console.log(first)
@@ -210,7 +199,7 @@ export const applyCard = (color, game_state, card, first) => {
             game_state.turn = getNextTurn(game_state.turn, game_state.order)
             break;
     }
-    console.log("-------------------END---------------")
+    // console.log("-------------------END---------------")
     // console.log(game_state)
     // console.log("---------------------------------------------")
     return game_state
