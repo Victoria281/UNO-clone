@@ -19,7 +19,6 @@ const Bot = ({ playerDeck, placement, setBotPlayedCard }) => {
                     identity={"bot"}
                     cardId={"p1" + card.id}
                     botPlay={card.botPlayCard}
-                    setBotPlayedCard={setBotPlayedCard}
                 />
             )}
         </Stack>

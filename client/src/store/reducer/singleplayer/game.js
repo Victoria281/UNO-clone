@@ -13,6 +13,8 @@ const initialState = {
     turn: "",
     order: [],
     unoPressed: false,
+    toDrawCard: false,
+    botPlayingCard: false,
 };
 
 const reducer = (state = initialState, action) => {

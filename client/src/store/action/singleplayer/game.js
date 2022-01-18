@@ -7,9 +7,9 @@ import {
     applyCard,
     getOrderArray,
     checkOneCardLeft,
-    drawACard
 } from "../../features/multiplayer/game"
 import {
+    drawACard,
     boyPlayCard
 } from "../../features/singleplayer/game"
 
@@ -36,6 +36,7 @@ export const prepareGameMaterials = () => async (dispatch, getState) => {
             gameState = applyCard(null, gameState, arr[1][0], true)
             gameState.playerdeck["player0"] = filterPlayableCards(gameState.current, gameState.playerdeck["player0"], gameState.turn == gameState.playerTurn)
 
+            console.log("uno has been prepared")
             dispatch({
                 type: SINGLEPLAYER_PREPARE_GAME,
                 gameState
@@ -48,19 +49,20 @@ export const prepareGameMaterials = () => async (dispatch, getState) => {
 export const playCard = (card, color) => async (dispatch, getState) => {
     const game_state = getState().singleplayer_game;
     const new_game_state = applyCard(color, game_state, card, null)
-    // console.log(card)
-    // console.log(game_state)
-    // console.log(new_game_state)
+    // // console.log(card)
+    // // console.log(game_state)
+    // // console.log(new_game_state)
     // if (game_state.playerdeck["player0"].length ===new_game_state 1) {
-    //     console.log("Times start")
+    //     // console.log("Times start")
     //     setTimeout(() => {
-    //         console.log("Times up")
+    //         // console.log("Times up")
     //         const timeout_game_state = getState().multiplayer_game;
     //         checkOneCardLeft(timeout_game_state)
     //     }, 5000);
     // }
 
     new_game_state.playerdeck["player0"] = filterPlayableCards(new_game_state.current, new_game_state.playerdeck["player0"], new_game_state.turn == new_game_state.playerTurn)
+
     dispatch({
         type: SINGLEPLAYER_UPDATE_GAME,
         new_game_state
@@ -70,6 +72,7 @@ export const playCard = (card, color) => async (dispatch, getState) => {
 export const playBotCard = (card) => async (dispatch, getState) => {
     const game_state = getState().singleplayer_game;
 
+    console.log("The Bots card is being played")
     var color = null;
     if (card.color === "wild") {
         var unoColors = ["red", "green", "blue", "yellow"]
@@ -77,22 +80,27 @@ export const playBotCard = (card) => async (dispatch, getState) => {
     }
 
     const new_game_state = applyCard(color, game_state, card, null)
-    // console.log(card)
-    // console.log(game_state)
-    // console.log(new_game_state)
+    
+    new_game_state.botPlayingCard = false
+    // // console.log(card)
+    // // console.log(game_state)
+    // // console.log(new_game_state)
     // if (game_state.playerdeck["player0"].length ===new_game_state 1) {
-    //     console.log("Times start")
+    //     // console.log("Times start")
     //     setTimeout(() => {
-    //         console.log("Times up")
+    //         // console.log("Times up")
     //         const timeout_game_state = getState().multiplayer_game;
     //         checkOneCardLeft(timeout_game_state)
     //     }, 5000);
     // }
+    new_game_state.playerdeck["player0"] = filterPlayableCards(new_game_state.current, new_game_state.playerdeck["player0"], new_game_state.turn == new_game_state.playerTurn)
 
     dispatch({
         type: SINGLEPLAYER_UPDATE_GAME,
         new_game_state
     });
+    // console.log("i ended")
+    return;
 }
 
 
@@ -100,19 +108,19 @@ export const playBotCard = (card) => async (dispatch, getState) => {
 export const botTurn = () => async (dispatch, getState) => {
     const game_state = getState().singleplayer_game;
     const new_game_state = boyPlayCard(game_state)
-    // console.log(card)
-    // console.log(game_state)
-    // console.log(new_game_state)
+    // // console.log(card)
+    // // console.log(game_state)
+    // // console.log(new_game_state)
     // if (game_state.playerdeck["player0"].length ===new_game_state 1) {
-    //     console.log("Times start")
+    //     // console.log("Times start")
     //     setTimeout(() => {
-    //         console.log("Times up")
+    //         // console.log("Times up")
     //         const timeout_game_state = getState().multiplayer_game;
     //         checkOneCardLeft(timeout_game_state)
     //     }, 5000);
     // }
-    console.log("check thisss")
-    console.log(new_game_state)
+    // console.log("check thisss")
+    // console.log(new_game_state)
     dispatch({
         type: SINGLEPLAYER_UPDATE_GAME,
         new_game_state
@@ -122,26 +130,23 @@ export const botTurn = () => async (dispatch, getState) => {
 
 
 export const callUNO = (state) => async (dispatch, getState) => {
-    console.log("uno button pressed")
+    // console.log("uno button pressed")
     dispatch({
         type: UPDATE_UNO_PRESSED,
         press: true
     });
 }
 
-export const drawCard = (socket) => async (dispatch, getState) => {
-    const game_state = getState().multiplayer_game;
-    const new_drawn_game_state = drawACard(game_state);
-    if (new_drawn_game_state.color === "wild") {
-        return new_drawn_game_state
-    } else {
-        const roomcode = getState().multiplayer_rooms.roomcode;
+export const drawCard = () => async (dispatch, getState) => {
+    const game_state = getState().singleplayer_game;
+    const new_game_state = drawACard(game_state);
+    new_game_state.playerdeck["player0"] = filterPlayableCards(new_game_state.current, new_game_state.playerdeck["player0"], new_game_state.turn == new_game_state.playerTurn)
+    new_game_state.toDrawCard = false
 
-        socket.emit('sendGameUpdate', {
-            ...new_drawn_game_state,
-            roomcode: roomcode
-        })
-    }
+    dispatch({
+        type: SINGLEPLAYER_UPDATE_GAME,
+        new_game_state
+    });
 }
 
 

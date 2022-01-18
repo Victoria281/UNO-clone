@@ -9,7 +9,7 @@ import { Transition } from "react-transition-group";
 
 
 //gets the data from the action object and reducers defined earlier
-const BotCard = ({ card, cardId, identity, botPlay, setBotPlayedCard }) => {
+const BotCard = ({ card, cardId, identity, botPlay }) => {
     const nodeRef = useRef(null);
     const dispatch = useDispatch();
     const [inAProp, setInAProp] = useState(true);
@@ -23,9 +23,8 @@ const BotCard = ({ card, cardId, identity, botPlay, setBotPlayedCard }) => {
     
 
     useEffect(() => {
-         console.log(botPlay)
         if (botPlay) {
-            console.log("im true")
+            // console.log("im true")
             const mainDeckDOM = document.getElementById("mainDeck").getBoundingClientRect();
             const selectedCardDOM = document.getElementById(`${cardId}`).getBoundingClientRect();
     
@@ -37,11 +36,8 @@ const BotCard = ({ card, cardId, identity, botPlay, setBotPlayedCard }) => {
                     })
                     setInAProp(false);
                     setTimeout(() => {
-                        console.log("here")
                         setInAProp(true);
-                        console.log("im updating bot played card")
-                        setBotPlayedCard(false)
-                        dispatch(playBotCard(card));
+                        dispatch(playBotCard(card))
                     }, timeout);
     
                 }
@@ -81,7 +77,7 @@ const BotCard = ({ card, cardId, identity, botPlay, setBotPlayedCard }) => {
     return (
         <Transition nodeRef={nodeRef} in={inAProp} timeout={timeout}>
             {(state) => {
-                // console.log(state);
+                // // console.log(state);
                 return (
                     <div
                         id={`${cardId}`}

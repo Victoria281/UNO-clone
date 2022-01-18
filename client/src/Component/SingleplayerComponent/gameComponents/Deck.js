@@ -5,7 +5,7 @@ import {
 import { useDispatch } from 'react-redux'
 import { Stack } from '@mui/material';
 import styles from "./styles.module.css"
-
+import DrawCardDeck from "./DrawCardDeck"
 //gets the data from the action object and reducers defined earlier
 const Deck = ({ current, used }) => {
     const dispatch = useDispatch();
@@ -15,7 +15,7 @@ const Deck = ({ current, used }) => {
 
                 <div className={styles.CardPlayedDeck}>
                     <img
-                        id="mainDeck" 
+                        id="mainDeck"
                         className={`img-responsive ${styles.TopCard}`}
                         style={{ width: 90 }}
                         src={
@@ -36,19 +36,17 @@ const Deck = ({ current, used }) => {
                         />
                     }
                 </div>
+                <div className={styles.DrawCardDeck}>
 
-                <img
-                    className="img-responsive"
-                    style={{ width: 90 }}
-                    src={
-                        process.env.REACT_APP_API_URL + "/api/uno/images/Deck.png"
-                    }
-                    onClick={() => {
-                        console.log("drawing");
-
-                    }}
-                    alt={current.values + " " + current.color}
-                />
+                    <DrawCardDeck />
+                    <img
+                        className={`img-responsive ${styles.BelowDrawCard}`}
+                        style={{ width: 90 }}
+                        src={
+                            process.env.REACT_APP_API_URL + "/api/uno/images/Deck.png"
+                        }
+                    />
+                </div>
             </Stack>
         </div>
     );

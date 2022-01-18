@@ -31,7 +31,7 @@ const Card = ({ card, cardId, identity, playable }) => {
                 })
                 setInAProp(false);
                 setTimeout(() => {
-                    console.log("here")
+                    // console.log("here")
                     setInAProp(true);
                     dispatch(playCard(card));
                 }, timeout);
@@ -69,7 +69,7 @@ const Card = ({ card, cardId, identity, playable }) => {
     return (
         <Transition nodeRef={nodeRef} in={inAProp} timeout={timeout}>
             {(state) => {
-                // console.log(state);
+                // // console.log(state);
                 return (
                     <div
                         id={`${cardId}`}
@@ -79,8 +79,8 @@ const Card = ({ card, cardId, identity, playable }) => {
                         }}
                         // className="p1cards"
                         onClick={() => {
-                            console.log("clicked");
-                            console.log("isplayable");
+                            // console.log("clicked");
+                            // console.log("isplayable");
                             if (card.playable){
                                 handleClick();
                             }

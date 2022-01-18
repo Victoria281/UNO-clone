@@ -11,7 +11,7 @@ import styles from "../styles.module.css"
 //gets the data from the action object and reducers defined earlier
 const Player = ({ playerDeck, current }) => {
     const dispatch = useDispatch();
-    console.log(playerDeck)
+    // console.log(playerDeck)
     return (
         <div className={styles.PlayerArea}>
             <Stack direction="row" spacing={1} className={styles.PlayerStack}>
@@ -30,7 +30,9 @@ const Player = ({ playerDeck, current }) => {
                             display: "flex",
                             alignItems: "center"
                         }}>
-                        <button className="roomBtn" onClick={() => { console.log("herer"); dispatch(callUNO()) }}><p>UNO</p></button>
+                        <button className="roomBtn" onClick={() => { 
+                            // console.log("herer"); dispatch(callUNO()) 
+                        }}><p>UNO</p></button>
                     </div>
                 </div>
             </Stack>
