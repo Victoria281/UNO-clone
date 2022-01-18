@@ -1,19 +1,25 @@
 // @ts-nocheck
 import { Fragment, useEffect, useState } from "react";
+import CustomNotification from '../Component/OtherComponents/NotificationComponent/Notifications'
 import "../css/profile.css";
 
 const Profile = () => {
   const [userInfo, setUserInfo] = useState([]);
+  //const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+  const [ifWarning, setWarning] = useState(false);
+  const [notif, setNotif] = useState({open : false , type : "", message : ""});
 
   const getUser = async () => {
     try {
       const uid = localStorage.getItem('userid')
       const response = await fetch(
-        process.env.REACT_APP_API_URL + `/api/uno/user/${uid}`,  {
-          method: 'GET',
-          headers: {
-            'authorization': localStorage.getItem('token'),
-          }}
+        process.env.REACT_APP_API_URL + `/api/uno/user/${uid}`, {
+        method: 'GET',
+        headers: {
+          'authorization': localStorage.getItem('token'),
+        }
+      }
       );
       console.log(response)
       const jsonData = await response.json();
@@ -36,6 +42,7 @@ const Profile = () => {
     const profileIcons = ['bird', 'cat', 'elephant', 'fox', 'frog', 'koala', 'shell', 'toucan', 'turtle', 'whale']
     const changeIcon = async () => {
       if (selectedIcon == null) {
+        
         // console.log("no icon selected")
       } else {
         try {
@@ -51,11 +58,12 @@ const Profile = () => {
             })
           })
           if (response.status === 204) {
-            alert("Profile icon updated!")
-            window.location.reload(true);
+            setTimeout(() =>{window.location.reload(true);}, 3000);
+            setNotif({open : true, type: 'success', message: 'Update Successful'})
           }
           else {
             alert("Error Occured!")
+            setNotif({open : true, type: 'error', message: 'Oops something went wrong'})
           }
         } catch (err) {
           // console.error(err.message);
@@ -94,7 +102,7 @@ const Profile = () => {
                       <div className="profileIconBorder">
                         <img
                           className="img-responsive profileIcons"
-                          alt={animal+ ".png"} 
+                          alt={animal + ".png"}
                           src={process.env.REACT_APP_API_URL + "/api/uno/profile_icons/" + animal + ".png"}
                         />
                       </div>
@@ -121,8 +129,6 @@ const Profile = () => {
     const [oldpassword, setOldPassword] = useState('');
     const [newpassword, setNewPassword] = useState('');
     const [checkpassword, setCheckPassword] = useState('');
-    const [error, setError] = useState('');
-    const [ifWarning, setWarning] = useState(false);
 
     const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})/;
 
@@ -133,9 +139,13 @@ const Profile = () => {
       if (newpassword !== checkpassword || newpassword === " " || newpassword === "" || checkpassword === " " || checkpassword === "") {
         setError("Password is not similar");
         setWarning(true);
+        setNotif({open : true, type: 'error', message: 'Oops something went wrong'})
+        setTimeout(() =>{window.location.reload(true);}, 3000);
       } else if (!passwordRegex.test(newpassword)) {
         setError("Password must contain 1 lowercase, 1 uppercase, 1 number, 1 special character and must be 8 characters long.");
         setWarning(true);
+        setNotif({open : true, type: 'error', message: 'Oops something went wrong'})
+        setTimeout(() =>{window.location.reload(true);}, 3000);
       } else {
         try {
           const uid = localStorage.getItem('userid')
@@ -151,16 +161,18 @@ const Profile = () => {
             })
           })
           if (response.status === 204) {
-            alert("Password changed!")
-            window.location.reload(true);
+            setTimeout(() =>{window.location.reload(true);}, 3000);
+            setNotif({open : true, type: 'success', message: 'Update Successful'})
           }
           else {
             setError("Password was not changed. Please check your inputs!");
             setWarning(true);
+            setNotif({open : true, type: 'error', message: 'Oops something went wrong'})
+            setTimeout(() =>{window.location.reload(true);}, 3000);
             //alert("Error Occured!")
           }
         } catch (err) {
-          // console.error(err.message);
+          console.error(err.message);
         }
       }
     }
@@ -209,9 +221,6 @@ const Profile = () => {
     const [newusername, setNewUsername] = useState(userInfo.username);
     const [newemail, setNewEmail] = useState(userInfo.email);
     const [edit, setEdit] = useState(false);
-    const [error, setError] = useState('');
-    const [ifWarning, setWarning] = useState(false);
-
 
     const handleInfoChange = async () => {
       // console.log(newusername);
@@ -219,6 +228,7 @@ const Profile = () => {
       if (newusername === "" || newemail === "") {
         setError("Username and/or Email field is empty");
         setWarning(true);
+        setNotif({open : true, type: 'error', message: 'Oops something went wrong'})
       } else {
         try {
           const uid = localStorage.getItem('userid')
@@ -234,18 +244,20 @@ const Profile = () => {
             })
           })
           if (response.status === 204) {
-            alert("User Info updated!")
-            window.location.reload(true);
+            setTimeout(() =>{window.location.reload(true);}, 3000);
+            setNotif({open : true, type: 'success', message: 'Update Successful'})
           }
           else {
             setError("User Info was not changed. Please check your inputs");
             setWarning(true);
+            setNotif({open : true, type: 'error', message: 'Oops something went wrong'})
           }
         } catch (err) {
           setError("User Info was not changed. Please check your inputs");
           setWarning(true);
+          setNotif({open : true, type: 'error', message: 'Oops something went wrong'})
           console.error(err.message);
-        }
+        } 
       }
     }
 
@@ -277,11 +289,12 @@ const Profile = () => {
             </p>
           </div>
           <div className="col">
-              {
-                ifWarning ?
-                  <div className="alert alert-danger m-3">{error}</div> :
-                  null
-              }
+            {
+              ifWarning ?
+                <div className="alert alert-danger m-3">{error}</div> :
+                null
+            }
+
             <input className="btn btn-danger m-3" type="submit" onClick={handleInfoChange} />
             <button className="btn btn-primary m-3" onClick={toggleEdit}> Cancel </button>
           </div>
@@ -305,6 +318,7 @@ const Profile = () => {
   return (
     <Fragment>
       <div id="root">
+        <CustomNotification notif={notif} setNotif={setNotif}/>
         <div className="gameProfileBody py-4">
           <ProfileModal />
           <div className="row no-gutters">
