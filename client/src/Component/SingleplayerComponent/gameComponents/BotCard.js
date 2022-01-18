@@ -29,21 +29,43 @@ const BotCard = ({ card, cardId, identity, botPlay }) => {
             const selectedCardDOM = document.getElementById(`${cardId}`).getBoundingClientRect();
     
             switch (identity) {
-                case "bot": {
+                case "bot1": {
                     setTravelFromDeck({
-                        x: mainDeckDOM.x - selectedCardDOM.x,
-                        y: mainDeckDOM.y - selectedCardDOM.y
+                        y: -(mainDeckDOM.x - selectedCardDOM.x),
+                        x: mainDeckDOM.y - selectedCardDOM.y
                     })
-                    setInAProp(false);
-                    setTimeout(() => {
-                        setInAProp(true);
-                        dispatch(playBotCard(card))
-                    }, timeout);
-    
+                    break;
+                }
+                case "bot2": {
+                    setTravelFromDeck({
+                        x: selectedCardDOM.x - mainDeckDOM.x,
+                        y: -(mainDeckDOM.y - selectedCardDOM.y)
+                    })
+                    break;
+                }
+                case "bot3": {
+                    setTravelFromDeck({
+                        y: mainDeckDOM.x - selectedCardDOM.x,
+                        x: -(mainDeckDOM.y - selectedCardDOM.y)
+                    })
+
+                    console.log("bot card")
+                    console.log(selectedCardDOM)
+                    console.log("main card")
+                    console.log(mainDeckDOM)
+                    console.log("calculation")
+                    console.log(mainDeckDOM.x - selectedCardDOM.x)
+                    console.log(mainDeckDOM.y - selectedCardDOM.y)
+                    break;
                 }
                 default: 
                 break;
             }
+            setInAProp(false);
+            setTimeout(() => {
+                setInAProp(true);
+                dispatch(playBotCard(card))
+            }, timeout);
             
         } 
           

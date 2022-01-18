@@ -40,10 +40,10 @@ const GameRoom = () => {
     useEffect(() => {
         console.log("Whose turn is it now?")
         console.log(game_state.turn)
-        
-        if (game_state.turn !== 0 && game_state.mainDeck.length !== 0 && !game_state.botPlayingCard && !game_state.toDrawCard){
+
+        if (game_state.turn !== 0 && game_state.mainDeck.length !== 0 && !game_state.botPlayingCard && !game_state.toDrawCard) {
             // console.log("Its the bots turn now")
-            console.log("PlayerBot "+game_state.turn+" now")
+            console.log("PlayerBot " + game_state.turn + " now")
             dispatch(botTurn())
         }
     }, [game_state]);
@@ -60,8 +60,9 @@ const GameRoom = () => {
                             style={{ border: "1px solid grey", marginRight: "auto", marginLeft: "auto" }}>
                             <Bot
                                 placement={'Top'}
+                                number={2}
                                 playerDeck={game_state.playerdeck["player" + otherPlayers[1]]}
-                                />
+                            />
                         </Grid>
                     </Grid>
                     <Grid container
@@ -69,9 +70,10 @@ const GameRoom = () => {
                         <Grid item xs={3}
                             style={{ border: "1px solid grey" }}>
                             <Bot
+                                number={1}
                                 placement={'Left'}
                                 playerDeck={game_state.playerdeck["player" + otherPlayers[0]]}
-                                />
+                            />
                         </Grid>
                         <Grid item xs={6}
                             style={{
@@ -84,9 +86,10 @@ const GameRoom = () => {
                         <Grid item xs={3}
                             style={{ border: "1px solid grey" }}>
                             <Bot
+                                number={3}
                                 placement={'Right'}
                                 playerDeck={game_state.playerdeck["player" + otherPlayers[2]]}
-                                />
+                            />
                         </Grid>
                     </Grid>
                     <Grid container
