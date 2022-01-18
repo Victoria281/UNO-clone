@@ -4,7 +4,7 @@ import "../css/home.css";
 
 export default function App() {
 
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(false);
 
   return (
     <div className="App">
