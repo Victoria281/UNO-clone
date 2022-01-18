@@ -457,3 +457,27 @@ ALTER TABLE ONLY public.uno_leaderboard
 --
 -- PostgreSQL database dump complete
 --
+
+-- Create Friendship Table
+CREATE TABLE friends (
+    id SERIAL PRIMARY KEY NOT NULL,
+    userId INTEGER NOT NULL,
+    fk_friendId INTEGER NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (userId) REFERENCES players(userid) ON DELETE CASCADE,
+    FOREIGN KEY (fk_friendId) REFERENCES players(userid) ON DELETE CASCADE
+);
+
+INSERT INTO 
+    friends 
+    (userId, fk_friendId) 
+VALUES 
+    (27, 17),
+    (17, 27),
+    (15, 27),
+    (27, 15),
+    (15, 17),
+    (17, 15),
+    (15, 28),
+    (28, 15),
+    (27, 28);

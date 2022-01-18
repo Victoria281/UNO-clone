@@ -3,12 +3,13 @@
 //imports
 //---------------------------------------------
 
-const pool = require("../../db");
+const pool = require('../../db');
+// import pool from '../../db';
 
 //---------------------------------------------
 //object / functions
 //---------------------------------------------
-var User = {
+const User = {
 
     findByUserID: function (id, callback) {
         const query = {
@@ -22,24 +23,24 @@ var User = {
                 callback(error, null);
                 return;
             } else {
-                if (result.rows.length == 0){
+                if (result.rows.length == 0) {
                     callback("404", null);
                 } else {
                     console.log(result.rows)
-                return callback(null, result.rows[0]);
+                    return callback(null, result.rows[0]);
                 }
-                
+
             }
         },
         );
     },
-    
+
     getUserStat: function (id, callback) {
         console.log("====================================");
         console.log("getUserStats running!");
         console.log("userId:", id);
         console.log("====================================");
-        
+
         const query = {
             name: 'getUserStat',
             text: `SELECT 
@@ -51,7 +52,7 @@ var User = {
                         AND ul.userid = p.userid`,
             values: [id],
         };
-        
+
         return pool.query(query, function (error, result) {
             if (error) {
                 callback(error, null);
@@ -68,7 +69,7 @@ var User = {
         console.log("getUserOverallStat running!\n\n");
         console.log("userId:", id);
         console.log("====================================");
-        
+
         const query = {
             name: 'getUserOverallStat',
             text: `SELECT 
@@ -84,7 +85,7 @@ var User = {
                 `,
             values: [id],
         };
-        
+
         return pool.query(query, function (error, result) {
             if (error) {
                 callback(error, null);
@@ -135,12 +136,12 @@ var User = {
             }
         });
     },
-    
+
     updateUserInfo: function (userid, username, email, callback) {
         const query = {
             name: 'updateUserInfo',
             text: 'UPDATE players SET username=$1,email=$2 WHERE userid=$3',
-            values: [username,email,userid],
+            values: [username, email, userid],
         }
 
         return pool.query(query, function (error, result) {
@@ -187,10 +188,121 @@ var User = {
                 console.log(result.rows)
                 return callback(null, result.rows);
             }
-        },
-        );
+        });
     },
 
+    // getFriend
+    getFriend: (id, callback) => {
+        const query = {
+            name: 'getFriend',
+            text: `
+                SELECT
+                    u.userid, u.username, u.email
+                FROM
+                    friends AS f,
+                    players AS u
+                WHERE
+                    f.userid = $1
+                    AND f.fk_friendid = u.userid
+            `,
+            values: [id],
+        };
+
+        return pool.query(query, (error, result) => {
+
+            if (error) {
+                console.log(error);
+                return callback(error, null);
+            } else {
+                console.log(result);
+                const message = {
+                    rowCount: result.rowCount,
+                    rows: result.rows,
+                };
+                return callback(null, message);
+            }
+
+        });
+    },
+
+    // addFriend
+    addFriend: async (userid, friendid, callback) => {
+        const selectQuery = {
+            name: 'getSpecificFriend',
+            text: `
+                SELECT
+                    u.userid, u.username, u.email
+                FROM
+                    friends AS f,
+                    players AS u
+                WHERE
+                    f.userid = $1
+                    AND f.fk_friendid = u.userid
+                    AND f.fk_friendid = $2
+            `,
+            values: [userid, friendid],
+        };
+
+        pool.query(selectQuery, (error, result) => {
+
+            if (error) {
+                console.error("ERROR: Unable to retrieve friend in addFriend function");
+
+                return callback(error, null);
+
+            } else {
+                // console.log(result);
+
+                if (result.rows.length > 0) {
+                    console.error("ERROR: User already has this friend");
+
+                    const message = {
+                        code: 500,
+                        message: 'You already friended this user',
+                    }
+
+                    return callback(message, null);
+
+                } else {
+                    console.log("running!");
+
+                    const query = {
+                        name: 'addFriend',
+                        text: `
+                            INSERT INTO
+                                friends
+                                (userid, fk_friendid)
+                            VALUES
+                                ($1, $2)
+                        `,
+                        values: [userid, friendid],
+                    };
+            
+                    if (userid === friendid) {
+                        const message = {
+                            code: 400,
+                            message: 'You cannot add yourself as a friend',
+                        };
+            
+                        return callback(message, null);
+            
+                    } else {
+                        return pool.query(query, (error, result) => {
+                            if (error) {
+                                console.log("Error Adding Friend:", error);
+                                return callback(error, null);
+            
+                            } else {
+                                return callback(null, result);
+            
+                            }
+                        });
+            
+                    }
+                }
+            }
+        });
+    }
 }
 
 //---------------------------------------------

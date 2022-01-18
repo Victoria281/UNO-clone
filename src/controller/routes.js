@@ -21,6 +21,7 @@ const http = require("http");
 const fs = require("fs");
 const path = require("path");
 const url = require("url");
+const e = require('express');
 
 //=====================================
 //  Images
@@ -376,7 +377,116 @@ app.delete('/user/delete/:id', printingDebuggingInfo, verifyToken, function (req
     });
 });
 
+//getFriends
+app.get('/user/friend/:uid', printingDebuggingInfo, verifyToken, (req, res, next) => {
+    let uid = req.params.uid;
+    // console.log("uid", uid);
+    // console.log("req.decodedToken.id", req.decodedToken.id);
 
+    if (isNaN(uid)) {
+        console.error("ERROR: uid is not a number");
+        const message = {
+            message: 'User id needs to be a number',
+            code: 400
+        };
+        return res.status(400).json(message);
+
+    } else {
+        uid = parseInt(uid);
+    }
+
+    if (uid !== req.decodedToken.id) {
+        console.error("ERROR: uid is not the same as the user id");
+
+        const message = {
+            message: 'You are not authorized to view this user\'s friends',
+            code: 401
+        };
+        return res.status(401).json(message);
+
+    }  
+    else {
+        User.getFriend(uid, (err, result) => {
+            if (err) {
+                const message = {
+                    code: 500,
+                    message: 'Unable to get friends',
+                };
+
+                return res.status(500).json(message);
+
+            } else {
+                const message = {
+                    code: 200,
+                    message: 'Successfully retrieved friends',
+                    data: result
+                };
+
+                return res.status(200).json(message);
+            }
+        });
+
+    }
+});
+
+app.post('/user/friend/:uid', printingDebuggingInfo, verifyToken, (req, res, next) => {
+    let uid = req.params.uid;
+    let friendId = req.body.friendId;
+
+    if (isNaN(uid)) {
+        console.error("ERROR: uid is not a number");
+
+        const message = {
+            message: 'User id needs to be a number',
+            code: 400
+        };
+        return res.status(400).json(message);
+
+    } else {
+        uid = parseInt(uid);
+    }
+
+    if (isNaN(friendId)) {
+        console.error("ERROR: Friend id is not a number");
+        const message = {
+            message: 'Friend id needs to be a number',
+            code: 400
+        };
+        return res.status(400).json(message);
+
+    } else {
+        friendId = parseInt(friendId);
+    }
+
+    if (uid !== req.decodedToken.id) {
+        console.error("ERROR: uid is not the same as the user id");
+
+        const message = {
+            message: 'You are not authorized to perform this action',
+            code: 401
+        };
+
+        return res.status(401).json(message);
+
+    } else {
+        User.addFriend(uid, friendId, (error, result) => {
+            if (error) {
+                console.error("ERROR: Unable to add friend:", error);
+
+                return res.status(500).json(error);
+
+            } else {
+                const message = {
+                    code: 200,
+                    message: 'Friend added',
+                    rowsAffected: result.rowCount,
+                };
+
+                return res.status(200).json(message);
+            }
+        });
+    }
+})
 //=====================================
 //  LeaderBoard
 //=====================================
