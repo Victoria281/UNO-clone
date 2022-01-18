@@ -1,8 +1,10 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
+import { useEffect } from 'react';
 
 // Type Imports
 import { RootState } from '../../../store/types';
+import { UserLeaderboard } from '../../../store/types';
 
 // CSS Module Imports
 import styles from '../styles.module.css';
@@ -12,20 +14,36 @@ import { Typography, Box } from '@mui/material';
 
 const OtherPlayers =
     () => {
+        /**
+         * 
+         * @type {UserLeaderboard}
+         */
+        let users = [
+            {
+                userid: 0,
+                username: "",
+                score: 0,
+                profileicon: 'bird',
+                created_at: ''
+            }
+        ];
 
-        const users = useSelector(
-            /**
-             * Selector function to get the leaderboard scores from the store
-             * 
-             * @param {RootState} state 
-             * Takes in the state of the store
-             * 
-             * @returns 
-             * Returns the leaderboard scores from the store
-             */
-            (state) => state.leaderboard_leaderboard.user_leaderboard
-        );
-
+        () => {
+            useEffect(() => {
+                users = useSelector(
+                    /**
+                     * Selector function to get the leaderboard scores from the store
+                     * 
+                     * @param {RootState} state 
+                     * Takes in the state of the store
+                     * 
+                     * @returns 
+                     * Returns the leaderboard scores from the store
+                     */
+                    (state) => state.leaderboard_leaderboard.user_leaderboard
+                );
+            });
+        }
         // console.log("OtherPlayers, User:", users);
         let printed = 0;
         let newIndex = 1;
@@ -56,7 +74,7 @@ const OtherPlayers =
                     {users.map((players, index) => {
 
                         // if the logged in user is the current user
-                        if (parseInt(players.userid) === convUid && printed !== players.userid) {
+                        if (players.userid === convUid && printed !== players.userid) {
                             printed = players.userid;
                             newIndex++;
 

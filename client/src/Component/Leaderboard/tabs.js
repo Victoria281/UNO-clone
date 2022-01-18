@@ -9,7 +9,7 @@ import PropTypes from 'prop-types';
 import { Tab, Tabs, Typography, Box } from '@mui/material';
 
 // Other Imports
-import { LoadingScreen } from '../loadingScreen';
+import Loader from '../OtherComponents/LoadingComponent/Loader';
 import DisplayStatsData from './Stats/Statistics';
 import DisplayLeaderboard from './Ranks/Leaderboard';
 import { updateCurrentUserStats } from '../../store/action/leaderboard/stats';
@@ -63,9 +63,6 @@ const GetStatsData = () => {
         token: "",
     };
 
-    // console.log("!!userId", userId);
-    // console.log("!!token", token);
-
     if (userId !== null && token !== null) {
         userInfo = {
             userId: parseInt(userId),
@@ -74,7 +71,7 @@ const GetStatsData = () => {
 
         console.log("running!");
 
-        dispatch(updateCurrentUserStats(userInfo));
+        dispatch(updateCurrentUserStats(userInfo))
         dispatch(getTop30Players());
     }
 };
@@ -95,10 +92,11 @@ const LeaderboardTab = () => {
                 </Tabs>
             </Box>
 
+            {GetStatsData()}
+
             {/* Leaderboard Tab */}
             <TabPanel value={value} index={0}>
-                <Suspense fallback={<LoadingScreen />}>
-                    {GetStatsData()}
+                <Suspense fallback={<Loader />}>
                     <DisplayLeaderboard />
                 </Suspense>
 
@@ -106,8 +104,7 @@ const LeaderboardTab = () => {
 
             {/* Statistics Tab */}
             <TabPanel value={value} index={1}>
-                <Suspense fallback={<LoadingScreen />}>
-                    {GetStatsData()}
+                <Suspense fallback={<Loader />}>
                     <DisplayStatsData />
                 </Suspense>
             </TabPanel>

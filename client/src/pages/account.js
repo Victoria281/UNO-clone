@@ -54,8 +54,6 @@ export default function App() {
     // console.log("AFTERRRRRRR PASSWORD CHECK")
     // console.log(status)
 
-    console.log(process.env);
-
     if(status){
       axios
       .post(process.env.REACT_APP_API_URL + "/api/uno/login", {
