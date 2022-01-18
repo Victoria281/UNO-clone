@@ -4,19 +4,19 @@ import {
 } from "../../../store/action/multiplayer/game"
 import { useDispatch } from 'react-redux'
 import { Stack } from '@mui/material';
-
+import styles from "./styles.module.css"
 
 //gets the data from the action object and reducers defined earlier
 const Deck = ({ current, used }) => {
     const dispatch = useDispatch();
     return (
         <div>
-            <Stack direction="row" spacing={3}>
+            <Stack direction="row" spacing={3} className={styles.mainDeckArea}>
 
-                <div>
+                <div className={styles.CardPlayedDeck}>
                     <img
-                        id="mainDeck"
-                        className="img-responsive"
+                        id="mainDeck" 
+                        className={`img-responsive ${styles.TopCard}`}
                         style={{ width: 90 }}
                         src={
                             process.env.REACT_APP_API_URL + "/api/uno/images/" +
@@ -26,7 +26,7 @@ const Deck = ({ current, used }) => {
                     />
                     {used.length !== 0 &&
                         <img
-                            className="img-responsive"
+                            className={`img-responsive ${styles.BelowCard}`}
                             style={{ width: 90 }}
                             src={
                                 process.env.REACT_APP_API_URL + "/api/uno/images/" +
@@ -49,13 +49,6 @@ const Deck = ({ current, used }) => {
                     }}
                     alt={current.values + " " + current.color}
                 />
-                <p>{current.color}</p>
-                <div
-                    style={{
-                        display: "flex",
-                        alignItems: "center"
-                    }}>
-                    <button className="roomBtn" onClick={() => { console.log("herer"); dispatch(callUNO()) }}><p>UNO</p></button></div>
             </Stack>
         </div>
     );

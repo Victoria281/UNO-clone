@@ -13,13 +13,14 @@ import Player from "./gameComponents/Player"
 import Bot from "./gameComponents/Bot"
 import {
     prepareGameMaterials,
+    botTurn,
 } from "../../store/action/singleplayer/game"
 
 const GameRoom = () => {
     const dispatch = useDispatch();
     const [otherPlayers, setOtherPlayers] = useState([])
+    const [botPlayedCard, setBotPlayedCard] = useState(false)
     const game_state = useSelector(state => state.singleplayer_game)
-    console.log(game_state)
     const test = [
         { card: "Blue_0.png", id: 1 },
         { card: "Blue_1.png", id: 2 },
@@ -31,13 +32,24 @@ const GameRoom = () => {
     useEffect(() => {
         dispatch(prepareGameMaterials())
             .then((result) => {
-                console.log("result")
+                console.log("Time to Start UNO")
                 console.log(result)
                 setOtherPlayers(result);
             })
-        console.log("otherPlayers")
-        console.log(otherPlayers)
     }, []);
+
+    useEffect(() => {
+        console.log("game state got updated")
+        console.log(game_state)
+        console.log(botPlayedCard)
+        if (game_state.turn !== 0 && game_state.mainDeck.length !== 0 && !botPlayedCard){
+            console.log("Its the bots turn now")
+            console.log("PlayerBot "+game_state.turn+" now")
+            dispatch(botTurn()).then((result)=>{
+                setBotPlayedCard(true)
+            })
+        }
+    }, [game_state]);
 
     return (
         <>
@@ -52,7 +64,8 @@ const GameRoom = () => {
                             <Bot
                                 placement={'Top'}
                                 playerDeck={game_state.playerdeck["player" + otherPlayers[1]]}
-                            />
+                                setBotPlayedCard={setBotPlayedCard}
+                                />
                         </Grid>
                     </Grid>
                     <Grid container
@@ -62,7 +75,8 @@ const GameRoom = () => {
                             <Bot
                                 placement={'Left'}
                                 playerDeck={game_state.playerdeck["player" + otherPlayers[0]]}
-                            />
+                                setBotPlayedCard={setBotPlayedCard}
+                                />
                         </Grid>
                         <Grid item xs={6}
                             style={{
@@ -77,7 +91,8 @@ const GameRoom = () => {
                             <Bot
                                 placement={'Right'}
                                 playerDeck={game_state.playerdeck["player" + otherPlayers[2]]}
-                            />
+                                setBotPlayedCard={setBotPlayedCard}
+                                />
                         </Grid>
                     </Grid>
                     <Grid container

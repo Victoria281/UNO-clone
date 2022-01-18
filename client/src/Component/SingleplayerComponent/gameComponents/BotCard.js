@@ -1,14 +1,15 @@
 // @ts-nocheck
 import { useEffect, useState, useRef } from "react";
 import {
-    playCard
+    playCard,
+    playBotCard
 } from "../../../store/action/singleplayer/game"
 import { useDispatch } from 'react-redux'
 import { Transition } from "react-transition-group";
 
 
 //gets the data from the action object and reducers defined earlier
-const Card = ({ card, cardId, identity, playable }) => {
+const BotCard = ({ card, cardId, identity, botPlay, setBotPlayedCard }) => {
     const nodeRef = useRef(null);
     const dispatch = useDispatch();
     const [inAProp, setInAProp] = useState(true);
@@ -19,29 +20,40 @@ const Card = ({ card, cardId, identity, playable }) => {
 
     const timeout = 1000;
 
-    const handleClick = () => {
-        const mainDeckDOM = document.getElementById("mainDeck").getBoundingClientRect();
-        const selectedCardDOM = document.getElementById(`${cardId}`).getBoundingClientRect();
+    
 
-        switch (identity) {
-            case "player": {
-                setTravelFromDeck({
-                    x: mainDeckDOM.x - selectedCardDOM.x,
-                    y: mainDeckDOM.y - selectedCardDOM.y
-                })
-                setInAProp(false);
-                setTimeout(() => {
-                    console.log("here")
-                    setInAProp(true);
-                    dispatch(playCard(card));
-                }, timeout);
-
+    useEffect(() => {
+         console.log(botPlay)
+        if (botPlay) {
+            console.log("im true")
+            const mainDeckDOM = document.getElementById("mainDeck").getBoundingClientRect();
+            const selectedCardDOM = document.getElementById(`${cardId}`).getBoundingClientRect();
+    
+            switch (identity) {
+                case "bot": {
+                    setTravelFromDeck({
+                        x: mainDeckDOM.x - selectedCardDOM.x,
+                        y: mainDeckDOM.y - selectedCardDOM.y
+                    })
+                    setInAProp(false);
+                    setTimeout(() => {
+                        console.log("here")
+                        setInAProp(true);
+                        console.log("im updating bot played card")
+                        setBotPlayedCard(false)
+                        dispatch(playBotCard(card));
+                    }, timeout);
+    
+                }
+                default: 
+                break;
             }
-            default: 
-            break;
-        }
-        
-    }
+            
+        } 
+          
+    }, [botPlay]);
+
+  
 
     const defaultStyle = {
 
@@ -78,15 +90,8 @@ const Card = ({ card, cardId, identity, playable }) => {
                             ...transitionStyles[state]
                         }}
                         // className="p1cards"
-                        onClick={() => {
-                            console.log("clicked");
-                            console.log("isplayable");
-                            if (card.playable){
-                                handleClick();
-                            }
-                        }}
                     >
-                        {playable === undefined || playable === false ?
+                        
                             <img
                                 className="img-responsive"
                                 style={{ width: 70 }}
@@ -95,16 +100,6 @@ const Card = ({ card, cardId, identity, playable }) => {
                                     card.image_file.slice(8)
                                 }
                             />
-                            :
-                            <img
-                                className="img-responsive isplayable"
-                                style={{ width: 70 }}
-                                src={
-                                    process.env.REACT_APP_API_URL + "/api/uno/images/" +
-                                    card.image_file.slice(8)
-                                }
-                            />
-                        }
 
                     </div>
                 );
@@ -114,4 +109,4 @@ const Card = ({ card, cardId, identity, playable }) => {
 
     );
 }
-export default Card;
+export default BotCard;

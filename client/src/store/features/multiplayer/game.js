@@ -52,6 +52,9 @@ export const getAllCards = async () => {
 }
 
 export const dealCards = (cardarray, numOfPlayers) => {
+    cardarray.map((card)=>{
+        card["botPlayCard"] = false
+    })
     var dealplayers = {};
     for (var players = 0; players < numOfPlayers; players++) {
         dealplayers["player" + players] = []
@@ -64,6 +67,7 @@ export const dealCards = (cardarray, numOfPlayers) => {
 }
 
 export const filterPlayableCards = (currentCard, playerDeck, myTurn) => {
+
     playerDeck.map((cards) => {
         if (checkFirstCardPlayable(cards, currentCard) && myTurn) {
             cards.playable = true
