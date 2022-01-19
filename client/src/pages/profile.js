@@ -62,8 +62,7 @@ const Profile = () => {
             setNotif({open : true, type: 'success', message: 'Update Successful'})
           }
           else {
-            alert("Error Occured!")
-            setNotif({open : true, type: 'error', message: 'Oops something went wrong'})
+            setNotif({open : true, type: 'error', message: 'Error Occured!'})
           }
         } catch (err) {
           // console.error(err.message);
@@ -137,14 +136,10 @@ const Profile = () => {
       // console.log(newpassword)
       // console.log(checkpassword)
       if (newpassword !== checkpassword || newpassword === " " || newpassword === "" || checkpassword === " " || checkpassword === "") {
-        setError("Password is not similar");
-        setWarning(true);
-        setNotif({open : true, type: 'error', message: 'Oops something went wrong'})
+        setNotif({open : true, type: 'error', message: 'Password is not similar'})
         setTimeout(() =>{window.location.reload(true);}, 3000);
       } else if (!passwordRegex.test(newpassword)) {
-        setError("Password must contain 1 lowercase, 1 uppercase, 1 number, 1 special character and must be 8 characters long.");
-        setWarning(true);
-        setNotif({open : true, type: 'error', message: 'Oops something went wrong'})
+        setNotif({open : true, type: 'error', message: 'Password must contain 1 lowercase, 1 uppercase, 1 number, 1 special character and must be 8 characters long.'})
         setTimeout(() =>{window.location.reload(true);}, 3000);
       } else {
         try {
@@ -161,13 +156,11 @@ const Profile = () => {
             })
           })
           if (response.status === 204) {
+            setNotif({open : true, type: 'success', message: 'Password Change Successful!'})
             setTimeout(() =>{window.location.reload(true);}, 3000);
-            setNotif({open : true, type: 'success', message: 'Update Successful'})
           }
           else {
-            setError("Password was not changed. Please check your inputs!");
-            setWarning(true);
-            setNotif({open : true, type: 'error', message: 'Oops something went wrong'})
+            setNotif({open : true, type: 'error', message: 'Password was not changed. Please check your inputs!'})
             setTimeout(() =>{window.location.reload(true);}, 3000);
             //alert("Error Occured!")
           }
@@ -205,11 +198,6 @@ const Profile = () => {
             onChange={(e) => { setCheckPassword(e.target.value) }}
           />
         </p>
-        {
-          ifWarning ?
-            <div className="alert alert-danger">{error}</div> :
-            null
-        }
         <input className="btn btn-danger" type="submit" onClick={handlePasswordChange} />
         <br />
         <br />
@@ -226,9 +214,8 @@ const Profile = () => {
       // console.log(newusername);
       // console.log(newemail);
       if (newusername === "" || newemail === "") {
-        setError("Username and/or Email field is empty");
-        setWarning(true);
-        setNotif({open : true, type: 'error', message: 'Oops something went wrong'})
+        setNotif({open : true, type: 'error', message: 'Username and/or Email field is empty'})
+        setTimeout(() =>{window.location.reload(true);}, 3000);
       } else {
         try {
           const uid = localStorage.getItem('userid')
@@ -248,14 +235,12 @@ const Profile = () => {
             setNotif({open : true, type: 'success', message: 'Update Successful'})
           }
           else {
-            setError("User Info was not changed. Please check your inputs");
-            setWarning(true);
-            setNotif({open : true, type: 'error', message: 'Oops something went wrong'})
+            setTimeout(() =>{window.location.reload(true);}, 3000);
+            setNotif({open : true, type: 'error', message: 'User Info was not changed. Please check your inputs'})
           }
         } catch (err) {
-          setError("User Info was not changed. Please check your inputs");
-          setWarning(true);
-          setNotif({open : true, type: 'error', message: 'Oops something went wrong'})
+          setTimeout(() =>{window.location.reload(true);}, 3000);
+          setNotif({open : true, type: 'error', message: 'User Info was not changed. Please check your inputs'})
           console.error(err.message);
         } 
       }
@@ -289,12 +274,11 @@ const Profile = () => {
             </p>
           </div>
           <div className="col">
-            {
+            {/* {
               ifWarning ?
                 <div className="alert alert-danger m-3">{error}</div> :
                 null
-            }
-
+            } */}
             <input className="btn btn-danger m-3" type="submit" onClick={handleInfoChange} />
             <button className="btn btn-primary m-3" onClick={toggleEdit}> Cancel </button>
           </div>
