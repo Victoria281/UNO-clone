@@ -8,7 +8,7 @@ import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import EndPage from "./pages/end";
 import AccountPage from "./pages/account";
 import RegisterPage from "./pages/register";
-import ProfilePage from "./pages/profile";
+import ProfilePage from "./Component/ProfileComponents/ProfilePage";
 import LeaderboardPage from "./Component/Leaderboard/tabs";
 import Music from "./components/Music";
 import Room from "./pages/multiplayer/room";
