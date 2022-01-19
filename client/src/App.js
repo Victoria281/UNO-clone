@@ -9,7 +9,7 @@ import EndPage from "./pages/end";
 import AccountPage from "./pages/account";
 import RegisterPage from "./pages/register";
 import ProfilePage from "./pages/profile";
-import LeaderboardPage from "./Component/Leaderboard/tabs";
+import LeaderboardPage from "./Component/Leaderboard/tabs.jsx";
 import Music from "./components/Music";
 import Room from "./pages/multiplayer/room";
 import MultiPlayer from "./pages/multiplayer/multiplayer";

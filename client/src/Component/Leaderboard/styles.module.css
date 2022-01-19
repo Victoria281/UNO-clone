@@ -67,7 +67,6 @@
     position: relative;
     animation: growth1 3s 1;
     animation-direction: normal;
-    -webkit-animation-direction: reverse;
     height: 100%;
     width: 90%
 }
@@ -127,7 +126,6 @@
     position: relative;
     animation: growth2 3s 1;
     animation-direction: normal;
-    -webkit-animation-direction: reverse;
     height: 75%;
     width: 90%
 }
@@ -174,7 +172,6 @@
     position: relative;
     animation: growth3 3s 1;
     animation-direction: normal;
-    -webkit-animation-direction: reverse;
     height: 50%;
     width: 90%
 }
