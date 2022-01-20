@@ -16,14 +16,10 @@ export interface UserScores {
 
 export interface Leaderboard {
     user_leaderboard: UserLeaderboard;
-    p1: Player1;
-    p2: Player2;
-    p3: Player3;
+    topPlayers: topPlayers;
 }
 
 export type UserLeaderboard = UserScores[];
-type Player1 = UserScores;
-type Player2 = UserScores;
-type Player3 = UserScores;
+type topPlayers = [];
 
 export type RootState = ReturnType<typeof rootReducers>;

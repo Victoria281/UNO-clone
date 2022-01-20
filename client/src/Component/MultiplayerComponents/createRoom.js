@@ -10,7 +10,19 @@ import { useHistory } from "react-router-dom";
 const CreateRoom = ({ socket }) => {
     const dispatch = useDispatch();
     let history = useHistory();
-
+    const leaderboard = useSelector(
+        /**
+         * Selector function to get player 1 (top player) from the store
+         * 
+         * @param {RootState} state 
+         * Takes in the state of the store
+         * 
+         * @returns 
+         * Returns player 1 (top player) from the store
+         */
+        (state) => state.leaderboard_leaderboard
+    );
+    console.log(leaderboard)
     const [roomname, setroomname] = useState("");
     const [username,] = useState(localStorage.getItem("username"))
 

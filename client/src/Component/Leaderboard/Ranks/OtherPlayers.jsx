@@ -65,18 +65,14 @@ const OtherPlayers =
                 <Box className={styles.leaderboard_body}>
                     {allPlayers.map((players, index) => {
 
-                        // if the logged in user is the current user
-                        if (players.userid === convUid && printed !== players.userid) {
-                            printed = players.userid;
-                            newIndex++;
+                        let date = new Date(players.created_at);
+                        let createdAtString = date.getDate() + " " + months[date.getMonth()] + " " + date.getFullYear() + " " + date.getHours() + ":" + date.getMinutes() + (date.getHours() > 12 ? "PM" : "AM");
 
-                            let date = new Date(players.created_at);
-                            let createdAtString = date.getDate() + " " + months[date.getMonth()] + " " + date.getFullYear() + " " + date.getHours() + ":" + date.getMinutes() + (date.getHours() > 12 ? "PM" : "AM");
-
+                        if (players.userid === convUid) {
                             return (
                                 <Box className={`row no-gutters ${styles.leaderboard_player}`} key={players.userid}>
                                     <Box className='col-sm-2' sx={{ padding: 2 }}>
-                                        <Typography sx={{ fontWeight: 'bold', textAlign: 'center', paddingY: 2 }}>{newIndex - 1}</Typography>
+                                        <Typography sx={{ fontWeight: 'bold', textAlign: 'center', paddingY: 2 }}>{index + 3}</Typography>
                                     </Box>
 
                                     <Box className='col-sm-8 row no-gutters'>
@@ -97,87 +93,36 @@ const OtherPlayers =
                                         <Typography sx={{ padding: 2 }}>{players.score}</Typography>
                                     </Box>
                                 </Box>
-                            );
-                        }
-
-                        // if the row to print is after the current user
-                        else if (index >= 3 && printed !== players.userid) {
-                            printed = players.userid;
-                            newIndex++;
-
-                            let date = new Date(players.created_at);
-                            let createdAtString = date.getDate() + " " + months[date.getMonth()] + " " + date.getFullYear() + " " + date.getHours() + ":" + date.getMinutes() + (date.getHours() > 12 ? "PM" : "AM");
-
+                            )
+                        }else{
                             return (
                                 <Box className={`row no-gutters ${styles.leaderboard_row}`} key={players.userid}>
-                                    <Box className='col-sm-2' sx={{ padding: 2 }}>
-                                        <Typography sx={{ fontWeight: 'bold', textAlign: 'center', paddingY: 2 }}>{newIndex - 1}</Typography>
+                                <Box className='col-sm-2' sx={{ padding: 2 }}>
+                                    <Typography sx={{ fontWeight: 'bold', textAlign: 'center', paddingY: 2 }}>{index + 3}</Typography>
+                                </Box>
+
+                                <Box className='col-sm-8 row no-gutters'>
+                                    <Box className='col-sm-2' sx={{ paddingY: 2, paddingX: 2 }}>
+                                        <img
+                                            className={`img-responsive ${styles.ldbRowIcon}`}
+                                            alt="pic"
+                                            src={process.env.REACT_APP_API_URL + "/api/uno/profile_icons/" + players.profileicon + ".png"}
+                                        />
                                     </Box>
 
-                                    <Box className='col-sm-8 row no-gutters'>
-                                        <Box className='col-sm-2' sx={{ paddingY: 2, paddingX: 2 }}>
-                                            <img
-                                                className={`img-responsive ${styles.ldbRowIcon}`}
-                                                alt="pic"
-                                                src={process.env.REACT_APP_API_URL + "/api/uno/profile_icons/" + players.profileicon + ".png"}
-                                            />
-                                        </Box>
-
-                                        <Box className='col-sm-10' sx={{ paddingY: 2, paddingX: 3 }}>
-                                            <Typography sx={{ padding: 2 }}>{players.username}</Typography>
-                                        </Box>
-                                    </Box>
-
-                                    <Box className='col-sm-2' sx={{ paddingY: 2 }}>
-                                        <Typography sx={{ padding: 2 }}>{players.score}</Typography>
+                                    <Box className='col-sm-10' sx={{ paddingY: 2, paddingX: 3 }}>
+                                        <Typography sx={{ padding: 2 }}>{players.username}</Typography>
                                     </Box>
                                 </Box>
-                            );
-                        }
 
-                        // if the row to print is before the current user
-                        else if (index < 3 && printed !== players.userid) {
-                            printed = players.userid;
-                            newIndex++;
-
-                            let date = new Date(players.created_at);
-                            let createdAtString = date.getDate() + " " + months[date.getMonth()] + " " + date.getFullYear() + " " + date.getHours() + ":" + date.getMinutes() + (date.getHours() > 12 ? "PM" : "AM");
-
-
-                            return (
-                                <Box className={`row no-gutters ${styles.leaderboard_row}`} key={players.userid}>
-                                    <Box className='col-sm-2' sx={{ padding: 2 }}>
-                                        <Typography sx={{ fontWeight: 'bold', textAlign: 'center', paddingY: 2 }}>{newIndex - 1}</Typography>
-                                    </Box>
-
-                                    <Box className='col-sm-8 row no-gutters'>
-                                        <Box className='col-sm-2' sx={{ paddingY: 2, paddingX: 2 }}>
-                                            <img
-                                                className={`img-responsive ${styles.ldbRowIcon}`}
-                                                alt="pic"
-                                                src={process.env.REACT_APP_API_URL + "/api/uno/profile_icons/" + players.profileicon + ".png"}
-                                            />
-                                        </Box>
-
-                                        <Box className='col-sm-10' sx={{ paddingY: 2, paddingX: 2 }}>
-                                            <Typography sx={{ padding: 2 }}>{players.username}</Typography>
-                                        </Box>
-                                    </Box>
-
-                                    <Box className='col-sm-2' sx={{ paddingY: 2 }}>
-                                        <Typography sx={{ padding: 2 }}>{players.score}</Typography>
-                                    </Box>
+                                <Box className='col-sm-2' sx={{ paddingY: 2 }}>
+                                    <Typography sx={{ padding: 2 }}>{players.score}</Typography>
                                 </Box>
-                            );
+                            </Box>
+                            )
                         }
-
-                        // this handles all the extra rows that each player has
-                        // each row is a new entry of a score for that user (i.e. user played more than 1 game)
-                        else {
-                            // do nothing
-                        }
-
                     })}
+                    <p>Wei jIAN forgotz time of api call</p>
                 </Box>
             );
         }

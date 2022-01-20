@@ -1,12 +1,12 @@
-import { getPlayers } from '../../features/leaderboard/user';
+import { getPlayers } from '../../features/others/leaderboard';
 
-export const GET_TOP_30_PLAYERS = 'Get Top 30 Players';
+export const SET_LEADERBOARD = 'SET_LEADERBOARD';
 
 export const getTop30Players = () => async (dispatch) => {
     getPlayers()
         .then(data => {
             dispatch({
-                type: GET_TOP_30_PLAYERS,
+                type: SET_LEADERBOARD,
                 data,
             })
         })

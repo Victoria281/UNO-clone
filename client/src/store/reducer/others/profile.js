@@ -1,4 +1,6 @@
-import { UPDATE_CURRENT_USER_STATS } from '../../action/others/stats';
+import {
+    UPDATE_PROFILE,
+} from '../../action/others/stats';
 
 const initialState = {
     userStats: []
@@ -6,8 +8,7 @@ const initialState = {
 
 const reducer = (state = initialState, action) => {
     switch (action.type) {
-        case UPDATE_CURRENT_USER_STATS:
-            console.log(">>>>", action.data);
+        case UPDATE_PROFILE:
             return {
                 ...state,
                 userStats: action.data
@@ -15,6 +16,6 @@ const reducer = (state = initialState, action) => {
         default:
             return state;
     }
-}
+};
 
 export default reducer;

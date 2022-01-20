@@ -63,11 +63,11 @@
 
 /* Podium Pillar 1 */
 .podiumPillar1 {
-    bottom: 25px;
+    bottom: 0px;
     position: relative;
     animation: growth1 3s 1;
     animation-direction: normal;
-    height: 100%;
+    height: 100vh;
     width: 90%
 }
 
@@ -87,7 +87,7 @@
     height: 97.5%;
     margin-right: auto;
     margin-left: auto;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
     margin-top: 10px;
     -webkit-box-shadow: 0 0.5rem 1rem rgba(0, 0, 16, 0.19), 0 0.3rem 0.3rem rgba(0, 0, 16, 0.23);
     box-shadow: 0 0.5rem 1rem rgba(0, 0, 16, 0.19), 0 0.3rem 0.3rem rgba(0, 0, 16, 0.23);
@@ -126,7 +126,7 @@
     position: relative;
     animation: growth2 3s 1;
     animation-direction: normal;
-    height: 75%;
+    height: 75vh;
     width: 90%
 }
 
@@ -172,7 +172,7 @@
     position: relative;
     animation: growth3 3s 1;
     animation-direction: normal;
-    height: 50%;
+    height: 50vh;
     width: 90%
 }
 
@@ -245,7 +245,7 @@
     }
 
     to {
-        height: 100%;
+        height: 100vh;
     }
 }
 
@@ -255,7 +255,7 @@
     }
     
     to {
-        height: 75%;
+        height: 75vh;
     }
 }
 
@@ -265,6 +265,6 @@
     }
     
     to {
-        height: 50%;
+        height: 50vh;
     }
 }

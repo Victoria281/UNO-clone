@@ -33,16 +33,14 @@ var LeaderBoard = {
     getNumOfScores: function (num, callback) {
         const query = {
             name: 'getNumOfScores',
-            text: `SELECT 
-                        score, uno_leaderboard.created_at, username, uno_leaderboard.userid, profileicon 
-                    FROM 
-                        uno_leaderboard 
-                    LEFT JOIN 
-                        players 
-                    ON 
-                        uno_leaderboard.userid = players.userid 
-                    ORDER BY
-                        score DESC
+            text: `SELECT scores.score, scores.created_at, p.username, p.userid, p.profileicon 
+                    FROM players as p
+                    INNER JOIN (
+                        SELECT SUM(l.score) as score, MAX(l.created_at) as created_at, l.userid
+                        FROM uno_leaderboard as l
+                        GROUP BY (l.userid)
+                    ) AS scores ON scores.userid = p.userid
+                    ORDER BY 1 DESC
                     LIMIT $1;`,
             values: [num],
         }

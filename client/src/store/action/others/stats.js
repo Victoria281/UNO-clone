@@ -1,7 +1,7 @@
-import { getUser } from '../../features/leaderboard/user';
+import { getUser } from '../../features/others/stats';
 import { User } from '../../types';
 
-export const UPDATE_CURRENT_USER_STATS = "UPDATE_CURRENT_USER_STATS";
+export const UPDATE_PROFILE = "UPDATE_PROFILE";
 
 /**
  * Asynchronous function to get and update the user's information to the store.
@@ -15,12 +15,14 @@ export const UPDATE_CURRENT_USER_STATS = "UPDATE_CURRENT_USER_STATS";
 export const updateCurrentUserStats = (userInfo) => async (dispatch, getState) => {
     getUser(userInfo)
         .then(data => {
+            console.log("data");
+            console.log(data);
             dispatch({
-                type: UPDATE_CURRENT_USER_STATS,
+                type: UPDATE_PROFILE,
                 data,
             });
         })
-        
+
         .catch(err => {
             console.log("Error updating current user statistics!\n", err);
         });

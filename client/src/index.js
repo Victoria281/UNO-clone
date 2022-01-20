@@ -7,9 +7,8 @@ import App from './App';
 import rootReducers from "./store/reducer/index";
 import { createStore, applyMiddleware } from "redux";
 import { Provider } from "react-redux";
-import thunk from "redux-thunk"
-
-const store = createStore(rootReducers, applyMiddleware(thunk));
+import { store } from "./store/store"
+// const store = createStore(rootReducers, applyMiddleware(thunk));
 
 const loader = document.querySelector('.loader');
 const hideLoader = () => loader.hidden = true;

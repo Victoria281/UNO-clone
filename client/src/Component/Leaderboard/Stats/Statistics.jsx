@@ -26,7 +26,7 @@ const DisplayStatsData = () => {
          * @returns 
          * Returns the user's statistics from the store
          */
-        (state) => state.leaderboard_stats.userStats
+        (state) => state.profile_info.userStats
     );
     // console.log("userStats", userStats.score);
 
