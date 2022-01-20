@@ -27,7 +27,7 @@
   
   .startBtn {
     font-family:"RubikOne";
-    font-size: 1rem;
+    font-size: 1.5rem;
     letter-spacing: 0.2rem;
     padding: 0.8rem 2rem;
     margin: 1.5rem;
@@ -40,7 +40,7 @@
   
   .startMultiBtn {
     font-family: "RubikOne";
-    font-size: 1rem;
+    font-size: 1.5rem;
     letter-spacing: 0.2rem;
     margin: 1.5rem;
     padding: 0.8rem 2rem;
@@ -53,7 +53,7 @@
 
   .leaderBoardBtn {
     font-family: "RubikOne";
-    font-size: 1rem;
+    font-size: 1.5rem;
     letter-spacing: 0.2rem;
     margin: 1.5rem;
     padding: 0.8rem 2rem;
@@ -66,7 +66,7 @@
 
   .profileBtn {
     font-family: "RubikOne";
-    font-size: 1rem;
+    font-size: 1.5rem;
     letter-spacing: 0.2rem;
     margin: 1.5rem;
     padding: 0.8rem 2rem;
