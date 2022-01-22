@@ -1,6 +1,11 @@
 // @ts-nocheck
 import React, { Fragment, useState, useEffect } from "react";
 
+const dotenv = require('dotenv');
+dotenv.config();
+
+console.log(">>>>", process.env);
+
 //components
 import GamePage from "./pages/game";
 import HomePage from "./pages/home";

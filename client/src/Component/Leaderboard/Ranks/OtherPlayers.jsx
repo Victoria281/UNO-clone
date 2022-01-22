@@ -31,6 +31,9 @@ const UserLdbComponent = () => {
 
 const OtherPlayers =
     () => {
+        const displayHeight = window.innerHeight;
+        console.log("displayHeight:", displayHeight);
+
         /**
          * @type {UserLeaderboard}
          */
@@ -49,8 +52,13 @@ const OtherPlayers =
             convUid = parseInt(uid);
         }
 
-        if (allPlayers === undefined || allPlayers === null) {
-            return (
+        const updatedDate = new Date();
+        const formattedDate = `${updatedDate.getDate()} ${months[updatedDate.getMonth()]} ${updatedDate.getFullYear()} ${updatedDate.getHours()}:${updatedDate.getMinutes()}`;
+        // optional: ${(updatedDate.getHours() >= 12) ? 'PM' : 'AM'}
+        // console.log("Updated Date:", formattedDate);
+
+        return (allPlayers === undefined || allPlayers === null) ?
+            (
                 <Box className={styles.leaderboard_body}>
                     <Box className={`row no-gutters ${styles.leaderboard_player}`}>
                         <Typography>Uh Oh! This isn't supposed to happen!</Typography>
@@ -59,73 +67,74 @@ const OtherPlayers =
                         <Typography>Please re-login again!</Typography>
                     </Box>
                 </Box>
-            );
-        } else {
-            return (
-                <Box className={styles.leaderboard_body}>
-                    {allPlayers.map((players, index) => {
+            )
+            : (
+                <Box>
+                    <Box className={styles.leaderboard_body} sx={{ maxHeight: 'fit-content' }}>
+                        {allPlayers.map((players, index) => {
 
-                        let date = new Date(players.created_at);
-                        let createdAtString = date.getDate() + " " + months[date.getMonth()] + " " + date.getFullYear() + " " + date.getHours() + ":" + date.getMinutes() + (date.getHours() > 12 ? "PM" : "AM");
+                            let date = new Date(players.created_at);
+                            let createdAtString = date.getDate() + " " + months[date.getMonth()] + " " + date.getFullYear() + " " + date.getHours() + ":" + date.getMinutes() + (date.getHours() > 12 ? "PM" : "AM");
 
-                        if (players.userid === convUid) {
-                            return (
-                                <Box className={`row no-gutters ${styles.leaderboard_player}`} key={players.userid}>
-                                    <Box className='col-sm-2' sx={{ padding: 2 }}>
-                                        <Typography sx={{ fontWeight: 'bold', textAlign: 'center', paddingY: 2 }}>{index + 3}</Typography>
-                                    </Box>
-
-                                    <Box className='col-sm-8 row no-gutters'>
-                                        <Box className='col-sm-2' sx={{ paddingY: 2, paddingX: 2 }}>
-                                            <img
-                                                className={`img-responsive ${styles.ldbRowIcon}`}
-                                                alt="pic"
-                                                src={process.env.REACT_APP_API_URL + "/api/uno/profile_icons/" + players.profileicon + ".png"}
-                                            />
+                            if (players.userid === convUid) {
+                                return (
+                                    <Box className={`row no-gutters ${styles.leaderboard_player}`} key={players.userid}>
+                                        <Box className='col-sm-2' sx={{ padding: 2 }}>
+                                            <Typography sx={{ fontWeight: 'bold', textAlign: 'center', paddingY: 2 }}>{index + 3}</Typography>
                                         </Box>
 
-                                        <Box className='col-sm-10' sx={{ paddingY: 2, paddingX: 2 }}>
-                                            <Typography sx={{ padding: 2 }}>{players.username}</Typography>
+                                        <Box className='col-sm-8 row no-gutters'>
+                                            <Box className='col-sm-2' sx={{ paddingY: 2, paddingX: 2 }}>
+                                                <img
+                                                    className={`img-responsive ${styles.ldbRowIcon}`}
+                                                    alt="pic"
+                                                    src={process.env.REACT_APP_API_URL + "/api/uno/profile_icons/" + players.profileicon + ".png"}
+                                                />
+                                            </Box>
+
+                                            <Box className='col-sm-10' sx={{ paddingY: 2, paddingX: 2 }}>
+                                                <Typography sx={{ padding: 2 }}>{players.username}</Typography>
+                                            </Box>
+                                        </Box>
+
+                                        <Box className='col-sm-2' sx={{ paddingY: 2 }}>
+                                            <Typography sx={{ padding: 2 }}>{players.score}</Typography>
                                         </Box>
                                     </Box>
+                                )
+                            } else {
+                                return (
+                                    <Box className={`row no-gutters ${styles.leaderboard_row}`} key={players.userid}>
+                                        <Box className='col-sm-2' sx={{ padding: 2 }}>
+                                            <Typography sx={{ fontWeight: 'bold', textAlign: 'center', paddingY: 2 }}>{index + 3}</Typography>
+                                        </Box>
 
-                                    <Box className='col-sm-2' sx={{ paddingY: 2 }}>
-                                        <Typography sx={{ padding: 2 }}>{players.score}</Typography>
+                                        <Box className='col-sm-8 row no-gutters'>
+                                            <Box className='col-sm-2' sx={{ paddingY: 2, paddingX: 2 }}>
+                                                <img
+                                                    className={`img-responsive ${styles.ldbRowIcon}`}
+                                                    alt="pic"
+                                                    src={process.env.REACT_APP_API_URL + "/api/uno/profile_icons/" + players.profileicon + ".png"}
+                                                />
+                                            </Box>
+
+                                            <Box className='col-sm-10' sx={{ paddingY: 2, paddingX: 3 }}>
+                                                <Typography sx={{ padding: 2 }}>{players.username}</Typography>
+                                            </Box>
+                                        </Box>
+
+                                        <Box className='col-sm-2' sx={{ paddingY: 2 }}>
+                                            <Typography sx={{ padding: 2 }}>{players.score}</Typography>
+                                        </Box>
                                     </Box>
-                                </Box>
-                            )
-                        }else{
-                            return (
-                                <Box className={`row no-gutters ${styles.leaderboard_row}`} key={players.userid}>
-                                <Box className='col-sm-2' sx={{ padding: 2 }}>
-                                    <Typography sx={{ fontWeight: 'bold', textAlign: 'center', paddingY: 2 }}>{index + 3}</Typography>
-                                </Box>
+                                )
+                            }
+                        })}
+                    </Box>
 
-                                <Box className='col-sm-8 row no-gutters'>
-                                    <Box className='col-sm-2' sx={{ paddingY: 2, paddingX: 2 }}>
-                                        <img
-                                            className={`img-responsive ${styles.ldbRowIcon}`}
-                                            alt="pic"
-                                            src={process.env.REACT_APP_API_URL + "/api/uno/profile_icons/" + players.profileicon + ".png"}
-                                        />
-                                    </Box>
-
-                                    <Box className='col-sm-10' sx={{ paddingY: 2, paddingX: 3 }}>
-                                        <Typography sx={{ padding: 2 }}>{players.username}</Typography>
-                                    </Box>
-                                </Box>
-
-                                <Box className='col-sm-2' sx={{ paddingY: 2 }}>
-                                    <Typography sx={{ padding: 2 }}>{players.score}</Typography>
-                                </Box>
-                            </Box>
-                            )
-                        }
-                    })}
-                    <p>Wei jIAN forgotz time of api call</p>
+                    <Typography textAlign={'right'} sx={{ padding: 1 }}>Last updated on: {formattedDate}</Typography>
                 </Box>
             );
-        }
     }
 
 export default OtherPlayers;

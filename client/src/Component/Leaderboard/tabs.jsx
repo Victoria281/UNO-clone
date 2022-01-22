@@ -68,7 +68,6 @@ const LeaderboardTab = () => {
                 <Suspense fallback={<Loader />}>
                     <DisplayLeaderboard />
                 </Suspense>
-
             </TabPanel>
 
             {/* Statistics Tab */}

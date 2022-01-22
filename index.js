@@ -2,7 +2,12 @@ const express = require('express')
 const app = express()
 const path = require("path");
 const cors = require("cors");
-const PORT = process.env.PORT || 5000;
+
+// Declare dotenv, and load it into the environment
+const dotenv = require("dotenv");
+dotenv.config();
+
+const PORT = process.env.PORT ;
 const createHttpErrors = require('http-errors');
 const ApiRouter = require('./src/controller/api');
 const http = require("http");
@@ -11,7 +16,7 @@ const { get_Current_User, user_Disconnect, join_User, get_All_Users, get_Excess_
 const { createNewRoom, joinNewRoom, leftRoom } = require("./roomControl");
 
 var corsOptions = {
-    origin: ["http://192.168.50.158:3000", "http://uno-clone.herokuapp.com", "http://localhost:3000"],
+    origin: ["http://uno-clone.herokuapp.com", "http://localhost:3000"],
     optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
 }
 //middleware
@@ -21,7 +26,7 @@ app.use(express.json());
 const server = http.createServer(app);
 const io = socketio(server, {
     cors: {
-        origin: ["http://192.168.50.158:3000", "http://uno-clone.herokuapp.com", "http://localhost:3000"],
+        origin: ["http://uno-clone.herokuapp.com", "http://localhost:3000"],
         methods: ["GET", "POST"],
         credentials: true
     }

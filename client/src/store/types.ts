@@ -20,6 +20,6 @@ export interface Leaderboard {
 }
 
 export type UserLeaderboard = UserScores[];
-type topPlayers = [];
+type topPlayers = UserScores[];
 
 export type RootState = ReturnType<typeof rootReducers>;

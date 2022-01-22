@@ -1,6 +1,6 @@
 .gameBody {
-    max-height: '750px';
-    overflow: 'visible';
+    height: auto;
+    overflow-y: scroll;
 }
 
 .leaderboard_player {
@@ -13,9 +13,8 @@
 }
 
 .leaderboard_body {
-    max-height: 600px;
     overflow-x: hidden;
-    overflow-y: visible;
+    overflow-y: scroll;
 }
 
 .leaderboard_body::-webkit-scrollbar {
@@ -63,11 +62,11 @@
 
 /* Podium Pillar 1 */
 .podiumPillar1 {
-    bottom: 0px;
+    /* bottom: 0px; */
     position: relative;
     animation: growth1 3s 1;
     animation-direction: normal;
-    height: 100vh;
+    height: 100%;
     width: 90%
 }
 
@@ -122,11 +121,11 @@
 
 /* Podium Pillar 2 */
 .podiumPillar2 {
-    bottom: 0px;
+    /* bottom: 0px; */
     position: relative;
     animation: growth2 3s 1;
     animation-direction: normal;
-    height: 75vh;
+    height: 75%;
     width: 90%
 }
 
@@ -168,11 +167,11 @@
 
 /* Podium Pillar 3 */
 .podiumPillar3 {
-    bottom: 0px;
+    /* bottom: 0px; */
     position: relative;
     animation: growth3 3s 1;
     animation-direction: normal;
-    height: 50vh;
+    height: 50%;
     width: 90%
 }
 
@@ -241,7 +240,7 @@
 
 @keyframes growth1 {
     from {
-        height: 0%;
+        height: 0vh;
     }
 
     to {
@@ -251,7 +250,7 @@
 
 @keyframes growth2 {
     from {
-        height: 0%;
+        height: 0vh;
     }
     
     to {
@@ -261,7 +260,7 @@
 
 @keyframes growth3 {
     from {
-        height: 0%;
+        height: 0vh;
     }
     
     to {
