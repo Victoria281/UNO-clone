@@ -1,7 +1,5 @@
 // @ts-nocheck
 
-import { ContactlessOutlined } from "@material-ui/icons";
-
 export const shuffleCards = (cardarray) => {
     for (var i = cardarray.length - 1; i > 0; i--) {
         var j = Math.floor(Math.random() * (i + 1));
@@ -97,6 +95,22 @@ export const getPrevTurn = (currentTurn, order) => {
     return order[playerInOrder];
 }
 
+export const runPlayerToDrawCard = (game_state) => {
+    for (var amtToDraw = 0; amtToDraw < game_state.getDrawnCard.num; amtToDraw++) {
+        game_state.playerdeck["player" + game_state.getDrawnCard.player].push(game_state.mainDeck[amtToDraw]);
+    }
+    game_state.mainDeck = game_state.mainDeck.slice(game_state.getDrawnCard.num)
+    return game_state
+}
+
+export const applyUnoPenalty = (game_state) => {
+    for (var amtToDraw = 0; amtToDraw < 2; amtToDraw++) {
+        game_state.playerdeck["player" + game_state.unoPenalty].push(game_state.mainDeck[amtToDraw]);
+    }
+    game_state.mainDeck = game_state.mainDeck.slice(2)
+    return game_state
+}
+
 export const playSkip = (game_state) => {
     var skippedTurn = getNextTurn(game_state.turn, game_state.order)
     game_state.turn = getNextTurn(skippedTurn, game_state.order)
@@ -112,12 +126,12 @@ export const playReverse = (game_state) => {
 export const playDraw = (game_state, numOfCards, color) => {
     // console.log("in DRAW")
     var playerToDrawCard = getNextTurn(game_state.turn, game_state.order)
-    for (var amtToDraw = 0; amtToDraw < numOfCards; amtToDraw++) {
-        game_state.playerdeck["player" + playerToDrawCard].push(game_state.mainDeck[amtToDraw]);
-    }
-    game_state.mainDeck = game_state.mainDeck.slice(numOfCards)
     game_state.turn = getNextTurn(playerToDrawCard, game_state.order)
     game_state.current.color = color
+    game_state.getDrawnCard = {
+        player: playerToDrawCard,
+        num: numOfCards
+    }
     return game_state
 }
 
@@ -129,12 +143,14 @@ export const playWild = (game_state, color) => {
 }
 
 export const checkOneCardLeft = (game_state) => {
-    // if (game_state.playerdeck["player" + game_state.turn].length === 1 && game_state.unoPressed) {
-
-    // }
-    // return game_state
-    // console.log("check uno")
-    // console.log(game_state.unoPressed)
+    if (game_state.unoPressed.player !== false) {
+        game_state.unoPenalty = game_state.unoPressed.player
+    }
+    game_state.unoPressed = {
+        player: false,
+        pressed: false
+    }
+    return game_state
 }
 
 export const drawACard = (game_state) => {
@@ -153,17 +169,26 @@ export const drawACard = (game_state) => {
     return game_state
 }
 
-export const applyCard = (color, game_state, card, first) => {
+export const checkFirstCard =(game_state, first, card) => {
     if (first === null) {
         game_state.used.push(game_state.current)
         game_state.playerdeck["player" + game_state.turn] = game_state.playerdeck["player" + game_state.turn].filter(player_card => player_card !== card);
     } else {
         if (card.color === "wild"){
             var unoColors = ["red", "green", "blue", "yellow"]
-            color = unoColors[getRandomInt(4)]
+            var color = unoColors[getRandomInt(4)]
         }
         game_state.turn = getPrevTurn(game_state.turn, game_state.order)
     }
+    return [game_state, color]
+}
+export const applyCard = (color, game_state, card, first) => {
+    var result = checkFirstCard(game_state, first, card)
+    game_state = result[0]
+    if (result[1] != null){
+        color = result[1]
+    }
+
     console.log("------------------------------------------")
     console.log("Card has been played")
     console.log(card)
@@ -190,7 +215,7 @@ export const applyCard = (color, game_state, card, first) => {
         case "12":
             // // console.log("+2 played")
             // // console.log(game_state)
-            game_state = playDraw(game_state, 2)
+            game_state = playDraw(game_state, 2, card.color)
             break;
 
         //wild is 13

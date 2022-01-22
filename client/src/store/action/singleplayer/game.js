@@ -4,13 +4,15 @@ import {
     dealCards,
     getRandomInt,
     filterPlayableCards,
-    applyCard,
     getOrderArray,
     checkOneCardLeft,
+    runPlayerToDrawCard,
+    applyUnoPenalty
 } from "../../features/multiplayer/game"
 import {
     drawACard,
-    boyPlayCard
+    boyPlayCard,
+    applyCard,
 } from "../../features/singleplayer/game"
 
 
@@ -48,21 +50,32 @@ export const prepareGameMaterials = () => async (dispatch, getState) => {
 
 export const playCard = (card, color) => async (dispatch, getState) => {
     const game_state = getState().singleplayer_game;
-    const new_game_state = applyCard(color, game_state, card, null)
-    // // console.log(card)
-    // // console.log(game_state)
-    // // console.log(new_game_state)
-    // if (game_state.playerdeck["player0"].length ===new_game_state 1) {
-    //     // console.log("Times start")
-    //     setTimeout(() => {
-    //         // console.log("Times up")
-    //         const timeout_game_state = getState().multiplayer_game;
-    //         checkOneCardLeft(timeout_game_state)
-    //     }, 5000);
-    // }
+    const playerWhoPlayedCard = game_state.turn
+    var new_game_state = applyCard(color, game_state, card, null)
+    // console.log(card)
+    // console.log(game_state)
+    // console.log(new_game_state)
+    console.log("fwsujifbverigbvnedrgbvrtdhgrdthdrtyhjr")
+    console.log(playerWhoPlayedCard)
+    console.log(new_game_state.playerdeck["player" + playerWhoPlayedCard].length)
+    if (new_game_state.playerdeck["player" + playerWhoPlayedCard].length === 1) {
+        new_game_state.unoPressed = {
+            player: playerWhoPlayedCard,
+            pressed: false
+        }
+    }
+    dispatch({
+        type: SINGLEPLAYER_UPDATE_GAME,
+        new_game_state
+    });
 
+}
+
+export const checkCard = () => async (dispatch, getState) => {
+    const game_state = getState().singleplayer_game;
+    const new_game_state = checkOneCardLeft(game_state)
     new_game_state.playerdeck["player0"] = filterPlayableCards(new_game_state.current, new_game_state.playerdeck["player0"], new_game_state.turn == new_game_state.playerTurn)
-
+    
     dispatch({
         type: SINGLEPLAYER_UPDATE_GAME,
         new_game_state
@@ -80,7 +93,7 @@ export const playBotCard = (card) => async (dispatch, getState) => {
     }
 
     const new_game_state = applyCard(color, game_state, card, null)
-    
+
     new_game_state.botPlayingCard = false
     // // console.log(card)
     // // console.log(game_state)
@@ -129,11 +142,14 @@ export const botTurn = () => async (dispatch, getState) => {
 
 
 
-export const callUNO = (state) => async (dispatch, getState) => {
+export const callUNO = () => async (dispatch, getState) => {
     // console.log("uno button pressed")
     dispatch({
         type: UPDATE_UNO_PRESSED,
-        press: true
+        unoPressed: {
+            player: false,
+            pressed: false
+        }
     });
 }
 
@@ -150,3 +166,26 @@ export const drawCard = () => async (dispatch, getState) => {
 }
 
 
+export const playerToDrawCard = () => async (dispatch, getState) => {
+    const game_state = getState().singleplayer_game;
+    const new_game_state = runPlayerToDrawCard(game_state);
+    new_game_state.playerdeck["player0"] = filterPlayableCards(new_game_state.current, new_game_state.playerdeck["player0"], new_game_state.turn == new_game_state.playerTurn)
+    new_game_state.getDrawnCard = false;
+
+    dispatch({
+        type: SINGLEPLAYER_UPDATE_GAME,
+        new_game_state
+    });
+}
+
+export const unoPenalty = () => async (dispatch, getState) => {
+    const game_state = getState().singleplayer_game;
+    const new_game_state = applyUnoPenalty(game_state);
+    new_game_state.playerdeck["player0"] = filterPlayableCards(new_game_state.current, new_game_state.playerdeck["player0"], new_game_state.turn == new_game_state.playerTurn)
+    new_game_state.unoPenalty = null;
+
+    dispatch({
+        type: SINGLEPLAYER_UPDATE_GAME,
+        new_game_state
+    });
+}

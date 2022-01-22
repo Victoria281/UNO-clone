@@ -14,21 +14,15 @@ import Bot from "./gameComponents/Bot"
 import {
     prepareGameMaterials,
     botTurn,
+    checkCard
 } from "../../store/action/singleplayer/game"
 
 const GameRoom = () => {
     const dispatch = useDispatch();
     const [otherPlayers, setOtherPlayers] = useState([])
     const game_state = useSelector(state => state.singleplayer_game)
-    const test = [
-        { card: "Blue_0.png", id: 1 },
-        { card: "Blue_1.png", id: 2 },
-        { card: "Blue_2.png", id: 3 },
-        { card: "Blue_3.png", id: 4 },
-        { card: "Blue_4.png", id: 5 },
-        { card: "Blue_5.png", id: 6 },
-    ]
     useEffect(() => {
+        console.log("hrerere")
         dispatch(prepareGameMaterials())
             .then((result) => {
                 console.log("Time to Start UNO")
@@ -41,7 +35,19 @@ const GameRoom = () => {
         console.log("Whose turn is it now?")
         console.log(game_state.turn)
 
-        if (game_state.turn !== 0 && game_state.mainDeck.length !== 0 && !game_state.botPlayingCard && !game_state.toDrawCard) {
+        if (game_state.unoPressed.player !== false) {
+            console.log("Times start")
+            setTimeout(() => {
+                console.log("Times up")
+                dispatch(checkCard())
+            }, 2000);
+        } else if (game_state.turn !== 0 &&
+            game_state.mainDeck.length !== 0 &&
+            !game_state.botPlayingCard &&
+            !game_state.toDrawCard &&
+            game_state.getDrawnCard == false &&
+            game_state.unoPenalty == null
+        ) {
             // console.log("Its the bots turn now")
             console.log("PlayerBot " + game_state.turn + " now")
             dispatch(botTurn())
@@ -68,7 +74,8 @@ const GameRoom = () => {
                     <Grid container
                         style={{ border: "1px solid grey", height: "50vh" }}>
                         <Grid item xs={3}
-                            style={{ border: "1px solid grey" }}>
+                            style={{ border: "1px solid grey", marginTop: "auto",
+                            marginBottom: "auto" }}>
                             <Bot
                                 number={1}
                                 placement={'Left'}
@@ -84,7 +91,8 @@ const GameRoom = () => {
                             <Deck current={game_state.current} used={game_state.used} />
                         </Grid>
                         <Grid item xs={3}
-                            style={{ border: "1px solid grey" }}>
+                            style={{ border: "1px solid grey", marginTop: "auto",
+                            marginBottom: "auto" }}>
                             <Bot
                                 number={3}
                                 placement={'Right'}
@@ -105,14 +113,6 @@ const GameRoom = () => {
                 </Box>
             }
 
-            {/* <Stack direction="row" spacing={1}>
-                {test.map((card, i) =>
-                    <Card
-                        image={card.card}
-                        cardId={"p1" + card.id}
-                    />
-                )}
-            </Stack> */}
         </>
     );
 }

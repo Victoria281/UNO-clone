@@ -90,7 +90,7 @@ const BotCard = ({ card, cardId, identity, botPlay }) => {
         },
         exited: {
             opacity: 1,
-            transform: `translate(${travelFromDeck.x}px, ${travelFromDeck.y}px) rotate(${90}deg)`,
+            transform: `scale(1.28) translate(${travelFromDeck.x / 1.28}px, ${travelFromDeck.y / 1.28}px) rotate(${90}deg)`,
             transition: `transform ${timeout}ms`,
             transitionTimingFunction: "linear"
         }

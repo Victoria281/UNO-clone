@@ -1,8 +1,8 @@
 // @ts-nocheck
 import { useState } from "react";
 import {
-    playCard,
-} from "../../../store/action/multiplayer/game"
+    callUNO,
+} from "../../../store/action/singleplayer/game"
 import { useDispatch } from 'react-redux'
 import { Stack } from '@mui/material';
 import Card from "./Card"
@@ -31,7 +31,7 @@ const Player = ({ playerDeck, current }) => {
                             alignItems: "center"
                         }}>
                         <button className="roomBtn" onClick={() => { 
-                            // console.log("herer"); dispatch(callUNO()) 
+                            console.log("herer"); dispatch(callUNO()) 
                         }}><p>UNO</p></button>
                     </div>
                 </div>
