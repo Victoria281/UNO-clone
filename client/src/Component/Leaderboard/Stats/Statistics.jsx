@@ -9,6 +9,9 @@ import { Typography, Box, Link } from '@mui/material';
 // CSS Module Imports
 import styles from '../styles.module.css';
 
+// Other Imports
+import Chart from 'chart.js/auto';
+
 /**
  * Checks the store for the user's information and display it 
  * when the statistics tab is clicked on
@@ -35,6 +38,42 @@ const DisplayStatsData = () => {
     let totalWins = 0;
     let lastGame = new Date();
 
+    const canvasContext = document.getElementById('statisticsChart');
+    const statisticsChart = new Chart(canvasContext, {
+        type: 'bar',
+        data: {
+            labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+            datasets: [{
+                label: '# of Votes',
+                data: [12, 19, 3, 4, 2, 3],
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 206, 86, 0.2)',
+                    'rgba(75, 192, 192, 0.2)',
+                    'rgba(153, 102, 255, 0.2',
+                    'rgba(255, 159, 64, 0.2)'
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)',
+                    'rgba(255, 159, 64, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+
     if (userStats.score !== undefined) {
         totalGames = userStats.score.length;
 
@@ -60,38 +99,35 @@ const DisplayStatsData = () => {
 
         return (
             <Box className={`row no-gutters ${styles.gameBody}`}>
-                <Box className={`col-xl-12 col-lg-12 col-md-12 col-sm-12 pt-3`}>
+                <Box className={`col-xl-5 col-lg-5 col-md-5 col-sm-5 pt-2`}>
                     <Box className='row no-gutters mt-4'>
-                        <Box className='col-sm-3'></Box>
-                        <Box className='col-sm-3'>
-                            <Typography align='right' variant='h6' sx={{ width: '100%', fontWeight: 'bold', padding: 1, }}>Total Games Played:</Typography>
-                            <Typography align='right' variant='h6' sx={{ width: '100%', fontWeight: 'bold', padding: 1, }}>Total Number of Wins:</Typography>
-                            <Typography align='right' variant='h6' sx={{ width: '100%', fontWeight: 'bold', padding: 1, }}>Latest Game:</Typography>
+                        <Box className='col-sm-5'>
+                            <Typography align='right' sx={{ width: '100%', fontWeight: 'bold', padding: 1, }}>Total Games Played:</Typography>
+                            <Typography align='right' sx={{ width: '100%', fontWeight: 'bold', padding: 1, }}>Total Number of Wins:</Typography>
+                            <Typography align='right' sx={{ width: '100%', fontWeight: 'bold', padding: 1, }}>Latest Game:</Typography>
                         </Box>
 
-                        <Box className='col-sm-2'>
-                            <Typography align='center' variant='h6' sx={{ width: '100%', padding: 1, }}>{totalGames}</Typography>
-                            <Typography align='center' variant='h6' sx={{ width: '100%', padding: 1, }}>{totalWins}</Typography>
-                            <Typography align='center' variant='h6' sx={{ width: '100%', padding: 1, }}>{latestGameDate}</Typography>
+                        <Box className='col-sm-7'>
+                            <Typography align='center' sx={{ width: '100%', padding: 1, }}>{totalGames}</Typography>
+                            <Typography align='center' sx={{ width: '100%', padding: 1, }}>{totalWins}</Typography>
+                            <Typography align='center' sx={{ width: '100%', padding: 1, }}>{latestGameDate}</Typography>
                         </Box>
-                        <Box className='col-sm-4'></Box>
                     </Box>
 
                     <Box className='row no-gutters mt-4'>
-                        <Box className='col-sm-3'></Box>
-                        <Box className='col-sm-6'>
+                        <Box className='col-sm-12'>
                             <Box className='row no-gutters' sx={{ marginTop: 4, paddingX: 2 }}>
                                 <Box className="col-sm-1" sx={{ paddingY: 2 }}>
-                                    <Typography variant='h6' align='center' sx={{ padding: 1, fontWeight: 'bold' }}></Typography>
+                                    <Typography align='center' sx={{ padding: 1, fontWeight: 'bold' }}></Typography>
                                 </Box>
                                 <Box className="col-sm-2" sx={{ paddingY: 2 }}>
-                                    <Typography variant='h6' align='center' sx={{ padding: 1, fontWeight: 'bold' }}>Status</Typography>
+                                    <Typography align='center' sx={{ padding: 1, fontWeight: 'bold' }}>Status</Typography>
                                 </Box>
                                 <Box className="col-sm-2" sx={{ paddingY: 2 }}>
-                                    <Typography variant='h6' align='center' sx={{ padding: 1, fontWeight: 'bold' }}>Score</Typography>
+                                    <Typography align='center' sx={{ padding: 1, fontWeight: 'bold' }}>Score</Typography>
                                 </Box>
                                 <Box className="col-sm-7" sx={{ paddingY: 2 }}>
-                                    <Typography variant='h6' align='center' sx={{ padding: 1, fontWeight: 'bold' }}>Played Date</Typography>
+                                    <Typography align='center' sx={{ padding: 1, fontWeight: 'bold' }}>Played Date</Typography>
                                 </Box>
                             </Box>
 
@@ -103,7 +139,7 @@ const DisplayStatsData = () => {
                                     let fullDate = pastDates.getDate() + " " + months[pastDates.getMonth()] + " " + pastDates.getFullYear() + ", " + pastDates.getHours() + ":" + pastDates.getMinutes() + " " + aP;
 
                                     return (
-                                        <Box className={styles.leaderboard_player}>
+                                        <Box className={styles.leaderboard_player} key={index}>
                                             <Box className='row no-gutters'>
                                                 <Box className="col-sm-1" sx={{ paddingY: 2 }}>
                                                     <Typography align='center' sx={{ padding: 1, fontWeight: 'bold' }}>{index + 1}</Typography>
@@ -124,8 +160,12 @@ const DisplayStatsData = () => {
                             </Box>
 
                         </Box>
-                        <Box className='col-sm-3'></Box>
                     </Box>
+                </Box>
+
+                <Box className='col-xl-7 col-lg-7 col-md-7 col-sm-7 pt-2'>
+                    <canvas id='statisticsChart' width="100%" height="100%"></canvas>
+                    {statisticsChart()}
                 </Box>
             </Box>
         );
