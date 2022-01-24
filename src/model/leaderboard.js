@@ -52,7 +52,7 @@ var LeaderBoard = {
                 callback(error, null);
                 return;
             } else {
-                console.log(result.rows)
+                console.log(result.rows);
                 return callback(null, result.rows);
             }
         },

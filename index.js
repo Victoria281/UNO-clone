@@ -2,7 +2,11 @@ const express = require('express')
 const app = express()
 const path = require("path");
 const cors = require("cors");
-const PORT = process.env.PORT || 5000;
+
+const dotenv = require('dotenv');
+dotenv.config();
+
+const PORT = process.env.PORT;
 const createHttpErrors = require('http-errors');
 const ApiRouter = require('./src/controller/api');
 const http = require("http");

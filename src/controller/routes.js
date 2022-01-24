@@ -513,15 +513,19 @@ app.get('/leaderboard/user/:id', printingDebuggingInfo, function (req, res, next
 app.get('/leaderboard/:num', printingDebuggingInfo, function (req, res, next) {
     const num = req.params.num;
 
+    console.log("num", num);
+
     LeaderBoard.getNumOfScores(num, function (err, result) {
         if (err) {
             if (err.code === '23505') {
                 return next(createHttpError(404, `Not found`));
             }
             else {
+                console.log("error:", err)
                 return next(err);
             }
         } else {
+            console.log("res:", result)
             return res.status(200).send({ scores: result });
         }
     });
