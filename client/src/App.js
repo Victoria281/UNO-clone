@@ -14,7 +14,7 @@ import AccountPage from "./Component/AccountComponents/LoginComponent/account";
 import RegisterPage from "./Component/AccountComponents/RegisterComponents/register";
 import ProfilePage from "./Component/ProfileComponents/ProfilePage";
 import LeaderboardPage from "./Component/Leaderboard/tabs.jsx";
-import Music from "./components/Music";
+import Music from "./Component/OtherComponents/MusicComponent/Music";
 import Room from "./pages/multiplayer/room";
 import MultiPlayer from "./pages/multiplayer/multiplayer";
 import PageRestriction from "./PageRestriction"
