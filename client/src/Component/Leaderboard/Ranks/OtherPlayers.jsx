@@ -52,11 +52,6 @@ const OtherPlayers =
             convUid = parseInt(uid);
         }
 
-        const updatedDate = new Date();
-        const formattedDate = `${updatedDate.getDate()} ${months[updatedDate.getMonth()]} ${updatedDate.getFullYear()} ${updatedDate.getHours()}:${updatedDate.getMinutes()}`;
-        // optional: ${(updatedDate.getHours() >= 12) ? 'PM' : 'AM'}
-        // console.log("Updated Date:", formattedDate);
-
         return (allPlayers === undefined || allPlayers === null) ?
             (
                 <Box className={styles.leaderboard_body}>
@@ -80,7 +75,7 @@ const OtherPlayers =
                                 return (
                                     <Box className={`row no-gutters ${styles.leaderboard_player}`} key={players.userid}>
                                         <Box className='col-sm-2' sx={{ padding: 2 }}>
-                                            <Typography sx={{ fontWeight: 'bold', textAlign: 'center', paddingY: 2 }}>{index + 3}</Typography>
+                                            <Typography sx={{ fontWeight: 'bold', textAlign: 'center', paddingY: 2 }}>{index + 4}</Typography>
                                         </Box>
 
                                         <Box className='col-sm-8 row no-gutters'>
@@ -106,7 +101,7 @@ const OtherPlayers =
                                 return (
                                     <Box className={`row no-gutters ${styles.leaderboard_row}`} key={players.userid}>
                                         <Box className='col-sm-2' sx={{ padding: 2 }}>
-                                            <Typography sx={{ fontWeight: 'bold', textAlign: 'center', paddingY: 2 }}>{index + 3}</Typography>
+                                            <Typography sx={{ fontWeight: 'bold', textAlign: 'center', paddingY: 2 }}>{index + 4}</Typography>
                                         </Box>
 
                                         <Box className='col-sm-8 row no-gutters'>
@@ -131,8 +126,6 @@ const OtherPlayers =
                             }
                         })}
                     </Box>
-
-                    <Typography textAlign={'right'} sx={{ padding: 1 }}>Last updated on: {formattedDate}</Typography>
                 </Box>
             );
     }

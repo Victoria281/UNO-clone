@@ -64,8 +64,8 @@ const DisplayStatsData = () => {
                     <Box className='row no-gutters mt-4'>
                         <Box className='col-sm-3'></Box>
                         <Box className='col-sm-3'>
-                            <Typography align='right' variant='h6' sx={{ width: '100%', fontWeight: 'bold', padding: 1, }}>Total Games:</Typography>
-                            <Typography align='right' variant='h6' sx={{ width: '100%', fontWeight: 'bold', padding: 1, }}>Total No. of Wins:</Typography>
+                            <Typography align='right' variant='h6' sx={{ width: '100%', fontWeight: 'bold', padding: 1, }}>Total Games Played:</Typography>
+                            <Typography align='right' variant='h6' sx={{ width: '100%', fontWeight: 'bold', padding: 1, }}>Total Number of Wins:</Typography>
                             <Typography align='right' variant='h6' sx={{ width: '100%', fontWeight: 'bold', padding: 1, }}>Latest Game:</Typography>
                         </Box>
 
@@ -80,7 +80,7 @@ const DisplayStatsData = () => {
                     <Box className='row no-gutters mt-4'>
                         <Box className='col-sm-3'></Box>
                         <Box className='col-sm-6'>
-                            <Box className='row no-gutters' sx={{ marginTop: 4 }}>
+                            <Box className='row no-gutters' sx={{ marginTop: 4, paddingX: 2 }}>
                                 <Box className="col-sm-1" sx={{ paddingY: 2 }}>
                                     <Typography variant='h6' align='center' sx={{ padding: 1, fontWeight: 'bold' }}></Typography>
                                 </Box>
@@ -109,7 +109,7 @@ const DisplayStatsData = () => {
                                                     <Typography align='center' sx={{ padding: 1, fontWeight: 'bold' }}>{index + 1}</Typography>
                                                 </Box>
                                                 <Box className="col-sm-2" sx={{ paddingY: 2 }}>
-                                                    <Typography align='center' sx={{ padding: 1 }}>{score.game_status === 0 ? "Loose" : "Win"}</Typography>
+                                                    <Typography align='center' sx={{ padding: 1 }}>{score.game_status === 0 ? "Lose" : "Win"}</Typography>
                                                 </Box>
                                                 <Box className="col-sm-2" sx={{ paddingY: 2 }}>
                                                     <Typography align='center' sx={{ padding: 1 }}>{score.score}</Typography>

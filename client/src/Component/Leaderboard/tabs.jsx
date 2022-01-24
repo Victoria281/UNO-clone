@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Suspense } from 'react';
+import { Suspense, useEffect } from 'react';
 
 // Type Imports
 import PropTypes from 'prop-types';
@@ -11,6 +11,7 @@ import { Tab, Tabs, Typography, Box } from '@mui/material';
 import Loader from '../OtherComponents/LoadingComponent/Loader';
 import DisplayStatsData from './Stats/Statistics';
 import DisplayLeaderboard from './Ranks/Leaderboard';
+import styles from './styles.module.css'
 
 const TabPanel = (props) => {
     const { children, value, index, ...other } = props;
@@ -24,8 +25,8 @@ const TabPanel = (props) => {
             {...other}
         >
             {value === index && (
-                <Box sx={{ p: 3 }}>
-                    <Typography>{children}</Typography>
+                <Box sx={{ p: 3, maxHeight: window.innerHeight - 160 }} className={styles.tabBody}>
+                    {children}
                 </Box>
             )}
         </div>
@@ -54,31 +55,52 @@ const LeaderboardTab = () => {
         setValue(newVal);
     };
 
+    const isLoggedIn = localStorage.getItem('token');
+
     return (
-        <Box sx={{ width: '100%', padding: 5 }}>
-            <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-                <Tabs value={value} onChange={handleChange} aira-label="Leaderboard Tabs">
-                    <Tab label="Leaderboard" {...a11yProps(0)} />
-                    <Tab label="My Statistics" {...a11yProps(1)} />
-                </Tabs>
+        isLoggedIn === null ?
+            <Box sx={{ width: '100%', padding: 5 }}>
+                <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+                    <Tabs value={value} onChange={handleChange} aira-label="Leaderboard Tabs">
+                        <Tab label="Leaderboard" {...a11yProps(0)} />
+                        <Tab label="My Statistics" {...a11yProps(1)} />
+                    </Tabs>
+                </Box>
+
+                {/* Leaderboard Tab */}
+                <TabPanel value={value} index={0}>
+                    <Suspense fallback={<Loader />}>
+                        <DisplayLeaderboard />
+                    </Suspense>
+                </TabPanel>
+
             </Box>
+            :
+            <Box sx={{ width: '100%', padding: 5 }}>
+                <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+                    <Tabs value={value} onChange={handleChange} aira-label="Leaderboard Tabs">
+                        <Tab label="Leaderboard" {...a11yProps(0)} />
+                        <Tab label="My Statistics" {...a11yProps(1)} />
+                    </Tabs>
+                </Box>
 
-            {/* Leaderboard Tab */}
-            <TabPanel value={value} index={0}>
-                <Suspense fallback={<Loader />}>
-                    <DisplayLeaderboard />
-                </Suspense>
-            </TabPanel>
+                {/* Leaderboard Tab */}
+                <TabPanel value={value} index={0}>
+                    <Suspense fallback={<Loader />}>
+                        <DisplayLeaderboard />
+                    </Suspense>
+                </TabPanel>
 
-            {/* Statistics Tab */}
-            <TabPanel value={value} index={1}>
-                <Suspense fallback={<Loader />}>
-                    <DisplayStatsData />
-                </Suspense>
-            </TabPanel>
+                {/* Statistics Tab */}
+                <TabPanel value={value} index={1}>
+                    <Suspense fallback={<Loader />}>
+                        <DisplayStatsData />
+                    </Suspense>
+                </TabPanel>
 
-        </Box>
+            </Box>
     )
+
 };
 
 export default LeaderboardTab;

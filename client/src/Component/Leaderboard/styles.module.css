@@ -1,6 +1,6 @@
 .gameBody {
     height: auto;
-    overflow-y: scroll;
+    overflow-y: hidden;
 }
 
 .leaderboard_player {
@@ -62,12 +62,14 @@
 
 /* Podium Pillar 1 */
 .podiumPillar1 {
-    /* bottom: 0px; */
-    position: relative;
+    bottom: 0px;
+    position: absolute;
     animation: growth1 3s 1;
     animation-direction: normal;
+    justify-content: end;
     height: 100%;
-    width: 90%
+    width: 90%;
+    vertical-align: bottom;
 }
 
 .lb1IconBorder {
@@ -93,7 +95,7 @@
 }
 
 .crown {
-    margin-bottom: -30px;
+    margin-bottom: -20px;
     width: 55px;
     height: 55px;
 }
@@ -121,12 +123,13 @@
 
 /* Podium Pillar 2 */
 .podiumPillar2 {
-    /* bottom: 0px; */
-    position: relative;
+    bottom: 0px;
+    position: absolute;
     animation: growth2 3s 1;
     animation-direction: normal;
-    height: 75%;
-    width: 90%
+    text-align: end;
+    height: 83%;
+    width: 90%;
 }
 
 .lb2IconBorder {
@@ -167,12 +170,13 @@
 
 /* Podium Pillar 3 */
 .podiumPillar3 {
-    /* bottom: 0px; */
-    position: relative;
+    bottom: 0px;
+    position: absolute;
     animation: growth3 3s 1;
     animation-direction: normal;
-    height: 50%;
-    width: 90%
+    text-align: end;
+    height: 75%;
+    width: 90%;
 }
 
 .lb3IconBorder {
@@ -240,30 +244,50 @@
 
 @keyframes growth1 {
     from {
-        height: 0vh;
+        height: 0%;
     }
 
     to {
-        height: 100vh;
+        height: 100%;
     }
 }
 
 @keyframes growth2 {
     from {
-        height: 0vh;
+        height: 0%;
     }
     
     to {
-        height: 75vh;
+        height: 83%;
     }
 }
 
 @keyframes growth3 {
     from {
-        height: 0vh;
+        height: 0%;
     }
     
     to {
-        height: 50vh;
+        height: 75%;
     }
+}
+
+
+.tabBody {
+    max-height: 450vh;
+    overflow-x: hidden;
+    overflow-y: scroll;
+}
+
+.tabBody::-webkit-scrollbar {
+    width: 0.3em;
+}
+
+.tabBody::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+}
+
+.tabBody::-webkit-scrollbar-thumb {
+    background-color: rgb(0, 0, 0);
+    outline: 1px solid slategrey;
 }
