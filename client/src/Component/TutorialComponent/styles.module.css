@@ -1,15 +1,31 @@
-.tutorialModalDiv {
+.tutorialModal {
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
+.container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.primaryDiv{
+    min-height: 121px;
+} 
+
+.secondaryDiv{
+    min-height: 250px;
+}
+
+
 .progress {
     border: 3px solid black !important;
     border-radius: 10px !important;
-    color: white !important;
+    background-color: white !important;
+    height: 30% !important;
+    min-width: 85% !important;
 }
-
 
 .carouselcontent {
     width: 100%;
@@ -18,9 +34,9 @@
 }
 
 .title {
-    font-family: "RubikOne";
-    color: black;
-    padding: 2rem;
+    font-family: "RubikOne" !important;
+    color: black !important;
+    padding: 2rem !important;
 }
 
 .image {
@@ -28,20 +44,18 @@
 }
 
 .description {
-    font-family: sans-serif !important;
+    font-family: "RubikOne" !important;
     color: black !important;
-    padding-left: 8rem;
-    padding-right: 8rem;
+    padding-left: 20%;
+    padding-right: 20%;
 }
 
-.tutorialModal {
+.tutorialModalBox {
     height: 70%;
     width: 50%;
     background-color: #FFC825 !important;
     border: 5px solid #ffffff !important;
     border-radius: 15px;
-    margin-left: 25%;
-    margin-top: 7%;
 }
 
 .tutorialCarousel {
@@ -62,14 +76,20 @@
     background-color: #E71E1E !important;
 }
 
-/* .highlight {
-    color: #E71E1E ;
-} */
-
 .next {
     font-size: 6rem;
     -webkit-text-stroke-width: 3px;
     -webkit-text-stroke-color: black;
     color: #E71E1E;
     text-shadow: 4px 4px 4px rgba(0, 0, 0, 0.582);
+}
+
+.startfinbtn{
+    border: 3px solid black !important;
+    border-radius: 10px !important;
+    background-color: #E71E1E !important;
+    padding:10px !important;
+    color: white !important;
+    font-family: "RubikOne" !important;
+    box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.582) !important;
 }

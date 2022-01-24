@@ -712,7 +712,7 @@ const Game = () => {
       <PlayerTurnModal />
       <AddCardModal />
       <Tutorial 
-        isTutorial = {isTutorialOpen}
+        isTutorialOpen = {isTutorialOpen}
         setisTutorialOpen = {setisTutorialOpen}
       />
 
