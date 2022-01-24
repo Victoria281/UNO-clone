@@ -10,7 +10,7 @@ import AccountPage from "./pages/account";
 import RegisterPage from "./pages/register";
 import ProfilePage from "./pages/profile";
 import LeaderboardPage from "./pages/leaderboard";
-import Music from "./components/Music";
+import Music from "./Component/OtherComponents/MusicComponent/Music";
 import Room from "./pages/multiplayer/room";
 import MultiPlayer from "./pages/multiplayer/multiplayer";
 import PageRestriction from "./PageRestriction"
@@ -40,6 +40,7 @@ const App=({hideLoader}) =>{
   });
 
   // console.log(process.env.REACT_APP_SECRET_KEY)
+  const [music, setMusic] = useState(false);
   const [loggedIn, setLoggedIn] = useState(localStorage.getItem("userid"));
   useEffect(() => {
         setInterval(() => {
@@ -97,7 +98,7 @@ const App=({hideLoader}) =>{
               </li>
               <li className="nav-item active navbarDesign" style={{ background: '#FFB967' }}>
                 <div className="borderHover" style={{ borderColor: '#FFB967' }}><p className="nav-link navBarWord">
-                <Music/>
+                <Music isPlaying={music} setisPlaying={setMusic}/>
                 </p></div>
               </li>
             </ul>
