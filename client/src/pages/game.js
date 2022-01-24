@@ -5,8 +5,11 @@ import shuffleCards from "../components/shuffle";
 import "../index.css";
 import "../css/card.css";
 
+import GameOptionModal from "../Component/OtherComponents/GameOptionsComponent/GameOptionModal";
+
 import { useHistory } from "react-router-dom";
 import { nextTurn } from "../components/nextPlayer";
+import { Button } from "@material-ui/core";
 
 const Game = () => {
   const [, setCards] = useState([]);
@@ -35,6 +38,7 @@ const Game = () => {
   const [playable, setPlayable] = useState([]);
   const [turn, setTurn] = useState(0);
   const [action, setAction] = useState(["",]);
+  const [open, setOpen] = useState(false)
 
   const CardActions = () => {
     return (
@@ -706,9 +710,12 @@ const Game = () => {
 
   return (
     <div class="gamePage">
+      <GameOptionModal open={open} setOpen={setOpen}/>
       <ChooseColorWild />
       <PlayerTurnModal />
       <AddCardModal />
+
+      <Button onClick={() => setOpen(true)}>Open Modal</Button>
 
       <div className="row my-3">
         <div className="col-2 p-0" id="bot-left">

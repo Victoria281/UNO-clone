@@ -1,0 +1,72 @@
+.modal{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.box{
+    background-color: #FFC825;
+    border: 5px black solid;
+    border-radius: 10px;
+    height: 60%;
+    width: 50%;
+}
+
+.title{
+font-family: 'RubikOne' !important;
+color: black !important;
+font-size: 2rem !important;
+display: flex;
+padding: 20px;
+justify-content: center;
+}
+
+.desc{
+    font-family: 'RubikOne' !important;
+    color: black !important;
+    padding-left: 20px;
+}
+
+.row{
+    display: flex;
+    align-items: center;
+    height: 65px;
+}
+
+.switch{
+    display: flex;
+    justify-content: flex-end;
+    padding-right: 20px;
+}
+
+.options{
+    margin-left: 20px;
+    margin-right: 20px;
+    background-color: white;
+    border-radius: 10px;
+}
+
+.startbtncontainer{
+    display: flex;
+    justify-content: center;
+}
+
+.startbtn{
+        width: 100px !important;
+        height: 40px !important;
+        margin: 10px 20px !important;
+        -moz-border-radius: 100px / 50px !important;
+        -webkit-border-radius: 100px / 50px !important; 
+        border-radius: 100px / 50px !important;
+        background: #6C01AD !important;
+        transform: matrix(0.99, 0.11, -0.14, 0.99, 0, 0) !important; 
+}
+
+.startbtntext{
+    font-family: "RubikOne" !important;
+    font-size: 25px !important;
+    color: black !important;
+    -webkit-text-stroke: 0.4px black !important;
+    -webkit-text-fill-color: white !important;
+    transform: rotate(-15deg) !important;
+}
