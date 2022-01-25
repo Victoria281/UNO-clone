@@ -19,20 +19,12 @@ const CustomNotification = ({ notif, setNotif }) => {
             autoHideDuration={3000}
             TransitionComponent={TransitionDown}
         >
-            {notif.type === "success"
-                ? <Box sx={{ width: '100%'}}>   
+             <Box sx={{ width: '100%'}}>   
                  <Alert onClose={handleClose} severity={notif.type} sx={{ width: '100%' }}>
                     {notif.message}
                 </Alert>
                     <LinearProgress color={notif.type} sx={{ width: '100%' }} />
                 </Box>
-                :
-                <Box sx={{ width: '100%'}}>
-                    <Alert onClose={handleClose} severity={notif.type} sx={{ width: '100%' }}>
-                        {notif.message}
-                    </Alert>
-                    <LinearProgress color={notif.type} sx={{ width: '100%' }} />
-                </Box>}
         </Snackbar>
     )
 }
