@@ -149,6 +149,25 @@ io.on("connection", (socket) => {
         }
     })
 
+    socket.on('requestRandomRoom', ({ username }) => {
+        const success = SocketFunctions.joinRandomRoom(socket.id, username)
+
+        console.log("Result...")
+        console.log(success)
+        console.log("==================================\n")
+        if (success.success) {
+            socket.emit("randomRoomFound", {
+                message: success.roomcode,
+            });
+            socket.join(success.roomcode);
+            io.sockets.in(success.roomcode).emit("roomUpdate", {
+                roomState: success.msg,
+            });
+        } else {
+            io.to(newState.roomcode).emit('errorOccured', success.msg)
+        }
+    })
+
     socket.on('askFriendForAGame', ({ username, friendUsername }) => {
         const success = SocketFunctions.findPlayer(socket.id, username, friendUsername)
 
