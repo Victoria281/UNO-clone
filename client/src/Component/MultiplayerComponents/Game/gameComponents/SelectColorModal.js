@@ -6,7 +6,7 @@ import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import {
     playCard,
-} from "../../../store/action/multiplayer/game"
+} from "../../../../store/action/multiplayer/game"
 import { useDispatch } from 'react-redux'
 
 const style = {

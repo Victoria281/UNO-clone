@@ -18,8 +18,8 @@ import { NavLink } from 'react-router-dom'
 import io from "socket.io-client";
 import Loader from "./Component/OtherComponents/LoadingComponent/Loader"
 //new
-import MultiplayerCreateRoom from "./Component/MultiplayerComponents/createRoom"
-import MultiplayerGameRoom from "./Component/MultiplayerComponents/gameRoom"
+import MultiplayerCreateRoom from "./Component/MultiplayerComponents/Dashboard/createRoom"
+import MultiplayerGameRoom from "./Component/MultiplayerComponents/Game/gameRoom"
 
 const socket = io.connect(process.env.REACT_APP_API_URL);
 
