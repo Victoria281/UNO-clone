@@ -213,3 +213,131 @@ p {
 .imageText {
   font-size: 13px;
 }
+
+.scene {
+  display: inline-block;
+  width: 200px;
+  height: 260px;
+ /* border: 1px solid #CCC;
+  */
+  margin: 40px 0;
+}
+.loadingcards {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  top: 65%;
+  left: 250%;
+  cursor: pointer;
+  transform-style: preserve-3d;
+  transform-origin: center right;
+  transition: transform 0.5s;
+  transform: rotateZ(-15deg) rotateY(35deg) rotateX(60deg);
+}
+.loadingcards img {
+  width: 180px;
+  height: 270px;
+}
+.loadingcards.is-flipped {
+  transform: translateX(-100%) rotateY(-180deg);
+}
+.card__face {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  line-height: 260px;
+  color: white;
+  text-align: center;
+  font-weight: bold;
+  font-size: 40px;
+  backface-visibility: hidden;
+}
+.card__face--back {
+  transform: rotateY(180deg);
+}
+.loadingcard {
+  position: absolute;
+  left: 60%;
+  top: 55%;
+  margin-left: calc(-200px/2);
+  margin-top: calc(-3*200px/4);
+  width: 200px;
+  height: 300px;
+  border: 10px solid #ccc;
+  border-radius: calc(3*200px/30);
+  background: #383838;
+  outline: #383838 solid 20px;
+  transform: rotateZ(-15deg) rotateY(35deg) rotateX(60deg);
+  opacity: 0;
+}
+h1 {
+  display: inline-block;
+  width: 300px;
+  margin-top: 25%;
+  margin-left: -25%;
+  transform: rotate(90deg);
+  font-size: calc(3.5*200px/10);
+  text-align: center;
+  line-height: 200px;
+  font-family: 'Calligraffitti', cursive;
+}
+.loadingcard:nth-of-type(1) {
+  margin-top: calc((-3*200px/5) - 1*200px/10);
+  animation: card_fade_1 5s ease infinite;
+}
+.loadingcard:nth-of-type(2) {
+  margin-top: calc((-3*200px/5) - 2*200px/10);
+  animation: card_fade_2 5s ease infinite;
+}
+.loadingcard:nth-of-type(3) {
+  margin-top: calc((-3*200px/5) - 3*200px/10);
+  animation: card_fade_3 5s ease infinite;
+}
+.loadingcard:nth-of-type(4) {
+  margin-top: calc((-3*200px/5) - 4*200px/10);
+  animation: card_fade_4 5s ease infinite;
+}
+.loadingcard:nth-of-type(5) {
+  margin-top: calc((-3*200px/5) - 5*200px/10);
+  animation: card_fade_5 5s ease infinite;
+}
+@keyframes card_fade_1 {
+  0% {
+    opacity: 0;
+ }
+  16% {
+    opacity: 1;
+ }
+}
+@keyframes card_fade_2 {
+  16% {
+    opacity: 0;
+ }
+  32% {
+    opacity: 1;
+ }
+}
+@keyframes card_fade_3 {
+  32% {
+    opacity: 0;
+ }
+  48% {
+    opacity: 1;
+ }
+}
+@keyframes card_fade_4 {
+  48% {
+    opacity: 0;
+ }
+  64% {
+    opacity: 1;
+ }
+}
+@keyframes card_fade_5 {
+  64% {
+    opacity: 0;
+ }
+  80% {
+    opacity: 1;
+ }
+}
