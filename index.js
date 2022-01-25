@@ -2,16 +2,23 @@ const express = require('express')
 const app = express()
 const path = require("path");
 const cors = require("cors");
-const PORT = process.env.PORT || 5000;
+
+// Declare dotenv, and load it into the environment
+const dotenv = require("dotenv");
+dotenv.config();
+
+const PORT = process.env.PORT ;
 const createHttpErrors = require('http-errors');
 const ApiRouter = require('./src/controller/api');
 const http = require("http");
 const socketio = require("socket.io");
 const { get_Current_User, user_Disconnect, join_User, get_All_Users, get_Excess_Players, get_Users_In_Room } = require("./users");
-const { createNewRoom, joinNewRoom, leftRoom } = require("./roomControl");
+const SocketFunctions = require("./SocketFunctions");
 
+const broadcastOne = 1;
+const broadcastAll = 0;
 var corsOptions = {
-    origin: ["http://localhost:3000", "http://uno-clone.herokuapp.com"],
+    origin: ["http://uno-clone.herokuapp.com", "http://localhost:3000"],
     optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
 }
 //middleware
@@ -21,7 +28,7 @@ app.use(express.json());
 const server = http.createServer(app);
 const io = socketio(server, {
     cors: {
-        origin: ["http://localhost:3000", "http://uno-clone.herokuapp.com"],
+        origin: ["http://uno-clone.herokuapp.com", "http://localhost:3000"],
         methods: ["GET", "POST"],
         credentials: true
     }
@@ -62,166 +69,162 @@ app.use((error, req, res, next) => {
 
 
 io.on("connection", (socket) => {
-    socket.on("createRoom", ({ username, roomcode }) => {
-        console.log("creating")
-        const success = createNewRoom(socket.id, username, roomcode);
-        if (success) {
-            socket.join(roomcode);
-            console.log("broadcasted")
-            io.sockets.in(roomcode).emit("newuser", {
-                user: success,
+    socket.on("enteredMultiplayer", (username) => {
+        var status = SocketFunctions.startMultiplayer(socket.id, username);
+        console.log("Result...")
+        console.log(status)
+        console.log("==================================\n")
+
+        if (status.success) {
+            io.sockets.emit('multiplayerUpdate', {
+                message: status.msg
             });
-        } else {
-            socket.emit("roomExists", {
-                message: "Room already exists. Please try again!"
-            });
+            if (status.removePlayer != undefined) {
+                socket.leave(status.removePlayer.roomcode)
+
+                io.sockets.in(status.removePlayer.roomcode).emit("playerLeft", {
+                    state: status.removePlayer.msg,
+                });
+            }
         }
-        console.log("created")
     });
 
-    socket.on("joinARoom", ({ username, roomcode }) => {
-        console.log("joining")
-        const success = joinNewRoom(socket.id, username, roomcode);
-        if (success) {
-            socket.join(roomcode);
-            console.log("broadcasted")
-            io.sockets.in(roomcode).emit("newuser", {
-                user: success,
+    socket.on("ownerCreateNewRoom", ({ username, roomcode }) => {
+        console.log("Player " + username + " requested to create a new room")
+        const success = SocketFunctions.createNewRoom(socket.id, username, roomcode);
+
+        console.log("Result...")
+        console.log(success)
+        console.log("==================================\n")
+
+        if (success.success) {
+            socket.join(success.roomcode);
+            io.sockets.in(success.roomcode).emit("roomUpdate", {
+                roomState: success.msg,
+            });
+        } else {
+            socket.emit("errorOccured", {
+                message: success.msg
             });
         }
-        console.log("joined")
+    });
+
+    socket.on("othersJoinRoom", ({ username, roomcode }) => {
+        console.log(username + " or " + socket.id + " is requesting to join room")
+        const success = SocketFunctions.joinNewRoom(socket.id, username, roomcode);
+
+        console.log("Result...")
+        console.log(success)
+        console.log("==================================\n")
+
+        if (success.success) {
+            socket.join(success.roomcode);
+            io.sockets.in(success.roomcode).emit("roomUpdate", {
+                roomState: success.msg,
+            });
+        } else {
+            socket.emit("errorOccured", {
+                message: success.msg
+            });
+        }
     });
 
     socket.on('sendStartGame', (newState) => {
-        io.to(newState.roomcode).emit('startGame', newState)
+        const success = SocketFunctions.startGame(newState)
+        if (success.success) {
+            io.to(newState.roomcode).emit('startGame', success.msg)
+        } else {
+            io.to(newState.roomcode).emit('errorOccured', success.msg)
+
+        }
     })
 
     socket.on('sendGameUpdate', (newState) => {
-        io.to(newState.roomcode).emit('updateGame', newState)
+        const success = SocketFunctions.startGame(newState)
+        if (success.success) {
+            io.to(newState.roomcode).emit('updateGame', success.msg)
+        } else {
+            io.to(newState.roomcode).emit('errorOccured', success.msg)
+
+        }
     })
 
-    //user has joined a room
-    socket.on("joinRoom", ({ username, roomname }) => {
-        //check if there are already 2 ppl in the room
-        const clients = get_Users_In_Room(roomname);
-        console.log(clients)
-        if (clients >= 2) {
-            console.log("user exceeds")
-            socket.emit("tooMuchUsers", {
-                message: "Room is Full"
+    socket.on('askFriendForAGame', ({ username, friendUsername }) => {
+        const success = SocketFunctions.findPlayer(socket.id, username, friendUsername)
+
+        console.log("Result...")
+        console.log(success)
+        console.log("==================================\n")
+        if (success.success) {
+            io.to(success.friend).emit('friendRequesting', {
+                message: success.msg,
+                requestedUser: success.requestedUser
             });
+
         } else {
-            //add user to the list of users
-            const p_user = join_User(socket.id, username, roomname);
-            console.log(typeof p_user)
-            if (typeof p_user !== 'object') {
-                socket.emit("alreadyConnected", {
-                    message: "You are connected to another Room! Please try again!"
-                });
-                const c_user = get_All_Users(p_user);
-                if (c_user) {
-                    console.log("p_user")
-                    console.log(p_user)
-                    console.log(c_user)
-                    socket.to(p_user).emit("getUserPlayerNum", { users: c_user });
-                }
-
-            } else {
-                //show message to room
-                socket.emit("message", {
-                    userId: p_user.id,
-                    username: "system",
-                    text: `Welcome ${p_user.username}`,
-                });
-
-                socket.join(p_user.room);
-
-                const c_user = get_All_Users(p_user);
-                if (c_user) {
-                    console.log("start update")
-                    console.log(p_user)
-                    console.log(c_user)
-                    socket.to(p_user.room).emit("getUserPlayerNum", { users: c_user });
-                }
-
-                socket.broadcast.to(p_user.room).emit("message", {
-                    userId: p_user.id,
-                    username: "system",
-                    newuser: p_user.username,
-                    text: `${p_user.username} has joined the chat`,
-                });
-            }
-        }
-    });
-
-
-
-    socket.on('startGame', newState => {
-        const p_user = get_Current_User(socket.id);
-        console.log("received start game signal")
-
-
-        if (p_user) {
-            const c_user = get_All_Users(p_user.room);
-            if (c_user)
-                socket.emit('getUserPlayerNum', { users: c_user })
-
-            const clients = get_Users_In_Room(p_user.room);
-            console.log("clients")
-            console.log(clients)
-            newState["usersInRoom"] = clients
-
-            const excess_players = get_Excess_Players(p_user.room);
-            console.log(excess_players)
-            if (excess_players.length === 0) {
-                io.to(p_user.room).emit('startGame', newState)
-            } else {
-                const checkExtra = excess_players.filter(player => player.username === p_user.username);
-                if (checkExtra.length === 1) {
-                    socket.emit("tooMuchUsers", {
-                        message: "Room is Full"
-                    });
-                } else {
-                    console.log("its not here")
-                    io.to(p_user.room).emit('startGame', newState)
-                }
-            }
-        } else {
-            socket.emit("userNotFound");
+            socket.emit("errorOccured", {
+                message: success.msg
+            });
         }
     })
 
-    socket.on('updateGameInfo', newState => {
-        const p_user = get_Current_User(socket.id);
-        console.log("received update game signal")
-        if (p_user)
-            io.to(p_user.room).emit('updateGameInfo', newState)
+    socket.on('acceptFriendRequest', ({ username, requestedUser }) => {
+        const success = SocketFunctions.onFriendRequestAccepted(requestedUser, socket.id, username)
+
+        console.log("Result...")
+        console.log(success)
+        console.log("==================================\n")
+        if (success.success) {
+            io.to(success.send).emit('friendRequestAccepted', {
+                message: success.roomcode
+            });
+            socket.emit("friendRequestAccepted", {
+                message: success.roomcode
+            });
+            socket.join(success.roomcode);
+            io.sockets.in(success.roomcode).emit("roomUpdate", {
+                roomState: success.msg,
+            });
+
+        } else {
+            socket.emit("errorOccured", {
+                message: success.msg
+            });
+        }
     })
 
+    socket.on('rejectFriendRequest', ({ username, requestedUser }) => {
 
-
-    socket.on("chat", (text) => {
-        const p_user = get_Current_User(socket.id);
-        console.log(p_user)
-        io.to(p_user.room).emit("message", {
-            userId: p_user.id,
-            username: p_user.username,
-            text: text,
+        console.log("Friend Request Rejected...")
+        console.log("==================================\n")
+        io.to(requestedUser.id).emit('friendRejected', {
+            message: username
         });
-    });
+
+    })
+
 
     //when the user gone
     socket.on("disconnect", () => {
-        console.log("disconnecting")
-        const { roomcode, success } = leftRoom(socket.id)
-        if (success) {
-            socket.leave(roomcode)
-            console.log("broadcasted")
-            socket.broadcast.to(roomcode).emit("newuser", {
-                user: success,
-            });
-        }
+        console.log("Player has disconnected")
+        const success = SocketFunctions.disconnectMultiplayer(socket.id)
+
+        console.log("Result...")
+        console.log(success)
+        console.log("==================================\n")
+
+        // if (success.success) {
+        //     if (success.roomcode != undefined){
+        //         socket.leave(success.roomcode)
+
+        //         io.sockets.in(success.roomcode).emit("playerLeft", {
+        //             state: success.msg,
+        //         });
+        //     } 
+        // }
         console.log("disconnected")
+
+
         // console.log("disconnected")
         // const p_user = user_Disconnect(socket.id);
 
@@ -245,3 +248,131 @@ io.on("connection", (socket) => {
 server.listen(PORT, () => {
     console.log(`App running on port ${PORT}`)
 })
+
+
+
+
+    // ============================== UNUSED =========
+
+    // socket.on("joinARoom", ({ username, roomcode }) => {
+    //     console.log("joining")
+    //     const success = joinNewRoom(socket.id, username, roomcode);
+    //     if (success) {
+    //         socket.join(roomcode);
+    //         console.log("broadcasted")
+    //         io.sockets.in(roomcode).emit("newuser", {
+    //             user: success,
+    //         });
+    //     }
+    //     console.log("joined")
+    // });
+
+    // //user has joined a room
+    // socket.on("joinRoom", ({ username, roomname }) => {
+    //     //check if there are already 2 ppl in the room
+    //     const clients = get_Users_In_Room(roomname);
+    //     console.log(clients)
+    //     if (clients >= 2) {
+    //         console.log("user exceeds")
+    //         socket.emit("tooMuchUsers", {
+    //             message: "Room is Full"
+    //         });
+    //     } else {
+    //         //add user to the list of users
+    //         const p_user = join_User(socket.id, username, roomname);
+    //         console.log(typeof p_user)
+    //         if (typeof p_user !== 'object') {
+    //             socket.emit("alreadyConnected", {
+    //                 message: "You are connected to another Room! Please try again!"
+    //             });
+    //             const c_user = get_All_Users(p_user);
+    //             if (c_user) {
+    //                 console.log("p_user")
+    //                 console.log(p_user)
+    //                 console.log(c_user)
+    //                 socket.to(p_user).emit("getUserPlayerNum", { users: c_user });
+    //             }
+
+    //         } else {
+    //             //show message to room
+    //             socket.emit("message", {
+    //                 userId: p_user.id,
+    //                 username: "system",
+    //                 text: `Welcome ${p_user.username}`,
+    //             });
+
+    //             socket.join(p_user.room);
+
+    //             const c_user = get_All_Users(p_user);
+    //             if (c_user) {
+    //                 console.log("start update")
+    //                 console.log(p_user)
+    //                 console.log(c_user)
+    //                 socket.to(p_user.room).emit("getUserPlayerNum", { users: c_user });
+    //             }
+
+    //             socket.broadcast.to(p_user.room).emit("message", {
+    //                 userId: p_user.id,
+    //                 username: "system",
+    //                 newuser: p_user.username,
+    //                 text: `${p_user.username} has joined the chat`,
+    //             });
+    //         }
+    //     }
+    // });
+
+
+
+    // socket.on('startGame', newState => {
+    //     const p_user = get_Current_User(socket.id);
+    //     console.log("received start game signal")
+
+
+    //     if (p_user) {
+    //         const c_user = get_All_Users(p_user.room);
+    //         if (c_user)
+    //             socket.emit('getUserPlayerNum', { users: c_user })
+
+    //         const clients = get_Users_In_Room(p_user.room);
+    //         console.log("clients")
+    //         console.log(clients)
+    //         newState["usersInRoom"] = clients
+
+    //         const excess_players = get_Excess_Players(p_user.room);
+    //         console.log(excess_players)
+    //         if (excess_players.length === 0) {
+    //             io.to(p_user.room).emit('startGame', newState)
+    //         } else {
+    //             const checkExtra = excess_players.filter(player => player.username === p_user.username);
+    //             if (checkExtra.length === 1) {
+    //                 socket.emit("tooMuchUsers", {
+    //                     message: "Room is Full"
+    //                 });
+    //             } else {
+    //                 console.log("its not here")
+    //                 io.to(p_user.room).emit('startGame', newState)
+    //             }
+    //         }
+    //     } else {
+    //         socket.emit("userNotFound");
+    //     }
+    // })
+
+    // socket.on('updateGameInfo', newState => {
+    //     const p_user = get_Current_User(socket.id);
+    //     console.log("received update game signal")
+    //     if (p_user)
+    //         io.to(p_user.room).emit('updateGameInfo', newState)
+    // })
+
+
+
+    // socket.on("chat", (text) => {
+    //     const p_user = get_Current_User(socket.id);
+    //     console.log(p_user)
+    //     io.to(p_user.room).emit("message", {
+    //         userId: p_user.id,
+    //         username: p_user.username,
+    //         text: text,
+    //     });
+    // });
