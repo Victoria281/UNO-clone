@@ -4,11 +4,15 @@ import React, { Fragment, useEffect, useState } from "react";
 import emailjs from 'emailjs-com'
 
 import { useLocation } from "react-router-dom";
-import "../css/verifyReset.css";
+// import "../../../css/verifyReset.css";
 // import { response } from "express";
 import axios from "axios";
 import VisibilityIcon from '@mui/icons-material/Visibility';
 
+import useSound from 'use-sound';
+import boopSfx from '../soundEffect/boop.wav';
+import styles from '../styles.module.css'
+import LockIcon from '@mui/icons-material/Lock';
 
 
 export default function App() {
@@ -21,6 +25,7 @@ export default function App() {
   const [wobble, setWobble] = React.useState(0);
   const [passwordShown1, setPasswordShown1] = useState(false);
   const [passwordShown2, setPasswordShown2] = useState(false);
+  const [play] = useSound(boopSfx);
 
   
 
@@ -148,10 +153,10 @@ export default function App() {
   return (
     <div className="App">
       <div className="wrapper">
-        <h1><b id="resetTxt" className="p-3">Reset Password</b></h1>
+        <h1><b className={`${styles.verifyTitle}`} style={{padding: 15}}>Reset Password</b></h1>
           
        
-        <div id="resetSection" className="pt-5 pl-5 pr-5 pb-2">
+        <div className={`${styles.resetSection}`} style={{padding: 30}}>
         
           <form
             className="form-group form"
@@ -160,48 +165,46 @@ export default function App() {
             onSubmit={handleFormSubmit}
           >
              {/* <h2>{id}</h2> */}
-            {successMsg && <div className="success-msg">{successMsg}</div>}
-            {storeMissing && <div>{storeMissing}</div>}
+            {/* {successMsg && <div className="success-msg">{successMsg}</div>}
+            {storeMissing && <div>{storeMissing}</div>} */}
 
-            <label>New Password (must be 8 characters):</label>
-            <div class="input-group mb-2">
-              <div class="input-group-prepend">
-                <span class="input-group-text"><i class="fa fa-lock fa-lg fa-fw" aria-hidden="true"></i></span>
+            <label style={{marginRight: 140}}>New Password (must be 8 characters):</label>
+            <div class="input-group">
+              <div class={`input-group-prepend`} >
+                <span class={`input-group-text ${styles.resetIcon}`}><LockIcon/></span>
               </div>
-              <input type={passwordShown1 ? "text" : "password"} className="form-control" style={{paddingRight: 40}} placeholder="Password" onChange={handlePasswordChange} value={password} autocomplete="off"/>
+              <input type={passwordShown1 ? "text" : "password"} className={`form-control ${styles.resetInput}`} style={{paddingRight: 40}} placeholder="Password" onChange={handlePasswordChange} value={password} autocomplete="off"/>
               <button onClick={togglePassword1}><VisibilityIcon style={{padding: 2, marginTop: 6}}/></button>
             </div>
 
-            {passwordError && <div className="error-msg">{passwordError}</div>}
+            {/* {passwordError && <div className="error-msg">{passwordError}</div>} */}
 
-            <label className="mt-3">
+            <label style={{marginRight: 280, marginTop: 10}}>
               Confirm Password:
             </label>
-            <div class="input-group mb-2">
-              <div class="input-group-prepend">
-                <span class="input-group-text"><i class="fa fa-lock fa-lg fa-fw" aria-hidden="true"></i></span>
+            <div class="input-group">
+              <div class={`input-group-prepend`}>
+                <span class={`input-group-text ${styles.resetIcon}`}><LockIcon/></span>
               </div>
-              <input type={passwordShown2 ? "text" : "password"} className="form-control" style={{paddingRight: 40}} placeholder="Confirm Password" onChange={handleCfmPasswordChange} value={confirmpassword} autocomplete="off"/>
+              <input type={passwordShown2 ? "text" : "password"} className={`form-control ${styles.resetInput}`} style={{paddingRight: 40}} placeholder="Confirm Password" onChange={handleCfmPasswordChange} value={confirmpassword} autocomplete="off"/>
               <button onClick={togglePassword2}><VisibilityIcon style={{padding: 2, marginTop: 6}}/></button>
             </div>
 
-            {passwordCfmError && (
-              <div className="error-msg">{passwordCfmError}</div>
-            )}
+            {/* {passwordCfmError && (<div className="error-msg">{passwordCfmError}</div>)} */}
 
             <button
-              id="resetBtn"
               type="submit"
-              className="btn btn-success btn-lg link pop-on-hover"
+              className={`${styles.resetBtn}`}
               style={{ width: "40%", marginTop: 30, height: 50, backgroundColor: '#45BDF8', borderRadius: '50%'}}
               onClick={() => {
                 setWobble(1);
+                play();
                 submitReset();
               }}
               onAnimationEnd={()=> setWobble(0)}
               wobble = {wobble}
             >
-            <p id="resetBtnTxt" style={{ fontSize: 42, fontWeight: 'bolder' , fontFamily: 'Rubik Mono One', color:'black', marginTop: -25}}>Reset</p>
+            <p className={`${styles.resetBtnTxt}`} style={{ fontSize: 42, fontWeight: 'bolder' , fontFamily: 'Rubik Mono One', color:'black', marginTop: -10}}>Reset</p>
             </button>
           </form>
         </div>

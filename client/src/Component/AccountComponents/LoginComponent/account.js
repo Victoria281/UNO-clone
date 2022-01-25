@@ -1,11 +1,15 @@
 //@ts-nocheck
 import React, { useState } from "react";
-import "../../../css/account.css";
+// import "../../../css/account.css";
+import styles from '../styles.module.css'
 // import { response } from "express";
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import axios from "axios";
 import ReCAPTCHA from "react-google-recaptcha";
-
+import useSound from 'use-sound';
+import boopSfx from '../soundEffect/boop.wav';
+import LockIcon from '@mui/icons-material/Lock';
+import EmailIcon from '@mui/icons-material/Email';
 
 export default function App() {
   const [email, setEmail] = useState("");
@@ -17,6 +21,11 @@ export default function App() {
   const [passwordShown1, setPasswordShown1] = useState(false);
   const [captcha, setCaptcha] = useState(false);
   const [captchaError, setCaptchaError] = useState("");
+  const [play] = useSound(boopSfx);
+
+  // Hooks to disable Form
+  const [attempt, setAttempt] = useState(0);
+  const [formDisabled, setFormDisabled] = useState(false);
 
 
   // Recaptcha on change function, value used to verify if user is really not a robot
@@ -40,7 +49,7 @@ export default function App() {
   function createPost() {
     var status = true;
 
-    if(status === true){
+ 
       // Check email field
       if(email===""){
         status = false;
@@ -55,7 +64,7 @@ export default function App() {
           setEmailError("Not a valid format")
         }
       }
-    }
+    
     // console.log("AFTERRRRRRRRRRRRRR EMAIL CHECK")
     // console.log(status);
 
@@ -78,12 +87,17 @@ export default function App() {
         status = false;
         setCaptchaError("Please ensure you are not a robot!")
       }else{
-        status = true;
         setCaptchaError("");
+        console.log("Attempt Number: " + attempt);
+        setAttempt(attempt+1);
+        localStorage.setItem("attempt", attempt)
       }
     }
     
-
+    
+    
+    
+    
     if(status){
       axios
       .post(process.env.REACT_APP_API_URL + "/api/uno/login", {
@@ -106,17 +120,24 @@ export default function App() {
           // console.log(error.response.status);
           // console.log(error.response.headers);
           setCredWrong("Wrong Credentials Entered!");
-        } else if (error.request) {
-          // The request was made but no response was received
-          // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
-          // http.ClientRequest in node.js
-          // console.log("------------------INSIDE ERROR REQUEST---------------------")
-          // console.log(error.request);
+
+          // If attempt is 5 times, disable form
+          if(attempt == 4){
+            status = false;
+            setFormDisabled(true);
+            alert("The form has been disabled. Please wait for a while")
+            // Enable form after 10 secs
+            setTimeout(() => {
+              setFormDisabled(false);
+              setAttempt(0);
+            }, 10000);
+
+            console.log("CANNOT SEND FORM DUE TO ATTEMPT")
+          }
+          console.log("Login Error")
         } else {
-          // Something happened in setting up the request that triggered an Error
-          // console.log("BIG FAT ERRORRRR")
-          // console.log('Error', error.message);
-        }
+          // console.log("Login Failed!")
+        } 
         // console.log(error.config);
       })
     }
@@ -173,46 +194,49 @@ export default function App() {
       setPasswordShown1(!passwordShown1);
     };
 
+
+  
+
+
   return (
     <div className="App">
       <div className="wrapper">
         
-        <h1><b id="loginTxt" className="p-3">Login</b></h1>
-        <div id="loginSection" className="p-5">
-          <h3>
-            
-          </h3>
+        <h1><b className={styles.accountTitle}>Login</b></h1>
+        <div className={styles.accountBody}>
+
 
           <form
-            className="form-group form"
+            className={`form-group form ${styles.accountForm}`}
             autoComplete="off"
             onSubmit={handleFormSubmit}
           >
-            {successMsg && <div className="success-msg">{successMsg}</div>}
-            <label>Email:</label>
+            <fieldset disabled={formDisabled}>
+            {/* {successMsg && <div className="success-msg">{successMsg}</div>} */}
+            <label style={{marginRight: 445}}>Email:</label>
 
 
-            <div className="input-group mb-3">
-              <div className="input-group-prepend">
-                <span className="input-group-text"><i className="fa fa-envelope fa-lg fa-fw" aria-hidden="true"></i></span>
+            <div className={`input-group ${styles.accountEmailDiv}`}>
+              <div className={`input-group-prepend`}>
+                <span className={`input-group-text ${styles.accountInputItems}`}><EmailIcon/></span>
               </div>
-              <input type="text" className="form-control pr-2" placeholder="Email Address" onChange={handleEmailChange} value={email} />
+              <input type="text" className={`form-control ${styles.accountInputItems}`} style={{paddingRight: 10}} placeholder="Email Address" onChange={handleEmailChange} value={email} />
             </div>
 
-            {emailError && <div className="error-msg">{emailError}</div>}
+            {/* {emailError && <div className="error-msg">{emailError}</div>} */}
 
-            <label>Password:</label>
-            <div className="input-group mb-3">
-              <div className="input-group-prepend">
-                <span className="input-group-text"><i className="fa fa-lock fa-lg fa-fw" aria-hidden="true"></i></span>
+            <label style={{marginRight: 415}}>Password:</label>
+            <div className={`input-group`} style={{marginBottom: 20}}>
+              <div className={`input-group-prepend`}>
+                <span className={`input-group-text ${styles.accountInputItems}`}><LockIcon /></span>
               </div>
-              <input type={passwordShown1 ? "text" : "password"} className="form-control" placeholder="Password" onChange={handlePasswordChange} value={password} />
+              <input type={passwordShown1 ? "text" : "password"} className={`form-control ${styles.accountInputItems}`} style={{paddingRight: 10}} placeholder="Password" onChange={handlePasswordChange} value={password} />
               <button onClick={togglePassword1}><VisibilityIcon style={{padding: 2, marginTop: 6}}/></button>
             </div>
 
-            {passwordError && <div className="error-msg">{passwordError}</div>}
+            {/* {passwordError && <div className="error-msg">{passwordError}</div>} */}
 
-            {credWrong && <div className="error-msg">{credWrong}</div>}
+            {/* {credWrong && <div className="error-msg">{credWrong}</div>} */}
 
 
             {/* Recaptcha section */}
@@ -222,19 +246,20 @@ export default function App() {
               type="image"
               onChange={onChange}
             />
-            {captchaError && <div className="error-msg">{captchaError}</div>}
+            {captchaError && <div>{captchaError}</div>}
 
             <button
               type="submit"
-              className="btn btn-success btn-lg"
-              style={{ marginTop: 15, height: 50, backgroundColor: '#FFB967', border: '1px solid #FFB967', borderRadius: '50%'}}
-              onClick={createPost}
-              id="submitBtn"
+              style={{ marginTop: 20, height: 50, backgroundColor: '#FFB967', border: '1px solid #FFB967', borderRadius: '50%'}}
+              onClick={()=>{createPost(); play();}}
+              className={styles.accountSubmitBtn}
             >
-              <p id="btnTxt" style={{ fontSize: 42, fontWeight: 'bolder' , fontFamily: 'Rubik Mono One', color:'black', marginTop: -20}}><b>Login</b></p>
+            <p className={styles.accountLoginText} style={{ fontSize: 48, fontWeight: 'bolder' , fontFamily: 'Rubik Mono One', color:'black', marginTop: -18}}><b>Login</b></p>
             </button><br/><br/>
-            <a href="/register" id="registerLink" className="p-4"> Create Account? </a>
-            <a href="/forgot" id="forgotLink" className="p-4"> Forgot Password? </a>
+            <a href="/register" style={{padding: 60}}> Create Account? </a>
+            <a href="/forgot" style={{padding: 60}}> Forgot Password? </a>
+
+            </fieldset>
           </form>
         </div>
       </div>

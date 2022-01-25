@@ -2,10 +2,16 @@
 import { useState } from "react";
 
 import axios from "axios";
-import "../../../css/register.css";
+// import "../../../css/register.css";
 import VisibilityIcon from '@mui/icons-material/Visibility';
-
+import useSound from 'use-sound';
+import boopSfx from '../soundEffect/boop.wav';
 import nodemailer from 'nodemailer';
+import styles from '../styles.module.css'
+import LockIcon from '@mui/icons-material/Lock';
+import EmailIcon from '@mui/icons-material/Email';
+import PersonIcon from '@mui/icons-material/Person';
+
 
 export default function App() {
   const [username, setUsername] = useState("");
@@ -25,22 +31,24 @@ export default function App() {
   const [passwordShown1, setPasswordShown1] = useState(false);
   const [passwordShown2, setPasswordShown2] = useState(false);
 
-  let transporter = nodemailer.createTransport({
-    service: "smtp.mailtrap.io",
-    auth: {
-      type: "OAuth2",
-      user: process.env.EMAIL,
-      pass: process.env.WORD,
-      clientId: process.env.OAUTH_CLIENTID,
-      clientSecret: process.env.OAUTH_CLIENT_SECRET,
-      refreshToken: process.env.OAUTH_REFRESH_TOKEN,
-    },
-   });
-   transporter.verify((err, success) => {
-    err
-      ? console.log(err)
-      : console.log(`=== Server is ready to take messages: ${success} ===`);
-   });
+  const [play] = useSound(boopSfx);
+
+  // let transporter = nodemailer.createTransport({
+  //   service: "smtp.mailtrap.io",
+  //   auth: {
+  //     type: "OAuth2",
+  //     user: process.env.EMAIL,
+  //     pass: process.env.WORD,
+  //     clientId: process.env.OAUTH_CLIENTID,
+  //     clientSecret: process.env.OAUTH_CLIENT_SECRET,
+  //     refreshToken: process.env.OAUTH_REFRESH_TOKEN,
+  //   },
+  //  });
+  //  transporter.verify((err, success) => {
+  //   err
+  //     ? console.log(err)
+  //     : console.log(`=== Server is ready to take messages: ${success} ===`);
+  //  });
 
 
   
@@ -192,77 +200,75 @@ export default function App() {
   return (
     <div className="App">
       <div className="wrapper">
-        <h1><b id="registerTxt" className="p-3">Register</b></h1>
+        <h1><b className={styles.registerTxt} style={{padding: 10}}>Register</b></h1>
 
 
-        <div id="registerSection" className="pt-5 pl-5 pr-5 pb-2">
+        <div className={`${styles.registerSection}`} style={{padding: 30}}>
 
-          {duplicateMsg && <div className="error-msg">{duplicateMsg}</div>}
+          {/* {duplicateMsg && <div className="error-msg">{duplicateMsg}</div>} */}
           <form
             className="form-group form"
             style={{marginTop: 10, marginRight: 70, marginLeft: 70, width: '400px'}}
             autoComplete="off"
             onSubmit={handleFormSubmit}
           >
-            {successMsg && <div className="success-msg">{successMsg}</div>}
-            <label className="mt-2">Username:</label>
+            {/* {successMsg && <div className="success-msg">{successMsg}</div>} */}
+            <label style={{marginTop: 20, marginRight: 320}}>Username:</label>
 
-            <div className="input-group mb-2">
+            <div className="input-group" style={{marginBottom: 10}}>
               <div className="input-group-prepend">
-                <span className="input-group-text"><i className="fa fa-user fa-lg fa-fw" aria-hidden="true"></i></span>
+                <span className={`input-group-text ${styles.registerInputItems}`}><PersonIcon/></span>
               </div>
-              <input type="text" className="form-control pr-5" placeholder="Username" onChange={handleUsernameChange} value={username} autocomplete="off"/>
+              <input type="text" className={`form-control ${styles.registerInputItems}`} style={{paddingRight: 10}} placeholder="Username" onChange={handleUsernameChange} value={username} autocomplete="off"/>
             </div>
 
-            {usernameError && <div className="error-msg">{usernameError}</div>}
+            {/* {usernameError && <div className="error-msg">{usernameError}</div>} */}
 
-            <label >Email:</label>
+            <label style={{marginRight: 360}}>Email:</label>
 
 
-            <div className="input-group mb-2">
+            <div className="input-group">
               <div className="input-group-prepend">
-                <span className="input-group-text"><i className="fa fa-envelope fa-lg fa-fw" aria-hidden="true"></i></span>
+                <span className={`input-group-text ${styles.registerInputItems}`}><EmailIcon/></span>
               </div>
-              <input type="text" className="form-control pr-4" placeholder="Email" onChange={handleEmailChange} value={email} autocomplete="off"/>
+              <input type="text" className={`form-control ${styles.registerInputItems}`} style={{paddingRight: 10}} placeholder="Email" onChange={handleEmailChange} value={email} autocomplete="off"/>
             </div>
 
-            {emailError && <div className="error-msg">{emailError}</div>}
+            {/* {emailError && <div className="error-msg">{emailError}</div>} */}
 
-            <label>Password (must be 8 characters):</label>
-            <div className="input-group mb-2">
+            <label style={{marginTop: 10, marginRight: 160}}>Password (must be 8 characters):</label>
+            <div className="input-group" style={{marginBottom: 10}}>
               <div className="input-group-prepend">
-                <span className="input-group-text"><i className="fa fa-lock fa-lg fa-fw" aria-hidden="true"></i></span>
+                <span className={`input-group-text ${styles.registerInputItems}`}><LockIcon/></span>
               </div>
-              <input type={passwordShown1 ? "text" : "password"} className="form-control" style={{paddingRight: 40}} placeholder="Password" onChange={handlePasswordChange} value={password} autocomplete="off"/>
+              <input type={passwordShown1 ? "text" : "password"} className={`form-control ${styles.registerInputItems}`} style={{paddingRight: 40}} placeholder="Password" onChange={handlePasswordChange} value={password} autocomplete="off"/>
               <button onClick={togglePassword1}><VisibilityIcon style={{padding: 2, marginTop: 6}}/></button>
             </div>
 
-            {passwordError && <div className="error-msg">{passwordError}</div>}
+            {/* {passwordError && <div className="error-msg">{passwordError}</div>} */}
 
-            <label className="mt-3">
+            <label style={{marginRight: 260}}>
               Confirm Password:
             </label>
-            <div className="input-group mb-2">
+            <div className="input-group">
               <div className="input-group-prepend">
-                <span className="input-group-text"><i className="fa fa-lock fa-lg fa-fw" aria-hidden="true"></i></span>
+                <span className={`input-group-text ${styles.registerInputItems}`}><LockIcon/></span>
               </div>
-              <input type={passwordShown2 ? "text" : "password"} className="form-control" style={{paddingRight: 40}} placeholder="Confirm Password" onChange={handleCfmPasswordChange} value={confirmpassword} autocomplete="off"/>
+              <input type={passwordShown2 ? "text" : "password"} className={`form-control ${styles.registerInputItems}`} style={{paddingRight: 40}} placeholder="Confirm Password" onChange={handleCfmPasswordChange} value={confirmpassword} autocomplete="off"/>
               <button onClick={togglePassword2}><VisibilityIcon style={{padding: 2, marginTop: 6}}/></button>
             </div>
 
-            {passwordCfmError && (
+            {/* {passwordCfmError && (
               <div className="error-msg">{passwordCfmError}</div>
-            )}
+            )} */}
 
             <button
-              id="registerBtn"
               type="submit"
-              className="btn btn-success btn-lg link pop-on-hover"
+              className={`${styles.registerBtn}`}
               style={{ width: "40%", marginTop: 30, height: 50, backgroundColor: '#45BDF8', borderRadius: '50%'}}
-              onClick={createPost}
-
+              onClick={()=>{createPost(); play()}}
             >
-              <p id="registerBtnTxt" style={{ fontSize: 36, fontWeight: 'bolder', fontFamily: 'Rubik Mono One', color: 'black', marginTop: -16, marginLeft: -20 }}>Register</p>
+              <p className={`${styles.registerBtnTxt}`} style={{ fontSize: 36, fontWeight: 'bolder', fontFamily: 'Rubik Mono One', color: 'black', marginTop: -5, marginLeft: -10 }}>Register</p>
             </button>
           </form>
         </div>
