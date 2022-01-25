@@ -21,8 +21,8 @@ import ForgotPage from './Component/AccountComponents/ResetComponent/forgot'
 import io from "socket.io-client";
 import Loader from "./Component/OtherComponents/LoadingComponent/Loader"
 //new
-import MultiplayerCreateRoom from "./Component/MultiplayerComponents/createRoom"
-import MultiplayerGameRoom from "./Component/MultiplayerComponents/gameRoom"
+import MultiplayerCreateRoom from "./Component/MultiplayerComponents/Dashboard/createRoom"
+import MultiplayerGameRoom from "./Component/MultiplayerComponents/Game/gameRoom"
 import DefaultNavBar from "./Component/OtherComponents/NavigationBar/DefaultNavBar"
 const socket = io.connect(process.env.REACT_APP_API_URL);
 
