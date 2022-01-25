@@ -1,6 +1,11 @@
 // @ts-nocheck
 import React, { Fragment, useState, useEffect } from "react";
 
+const dotenv = require('dotenv');
+dotenv.config();
+
+console.log(">>>>", process.env);
+
 //components
 import SingleplayerGame from "./Component/SingleplayerComponent/gameRoom"
 import GamePage from "./pages/game";
@@ -10,7 +15,7 @@ import EndPage from "./pages/end";
 import AccountPage from "./Component/AccountComponents/LoginComponent/account";
 import RegisterPage from "./Component/AccountComponents/RegisterComponents/register";
 import ProfilePage from "./pages/profile";
-import LeaderboardPage from "./pages/leaderboard";
+import LeaderboardPage from "./Component/Leaderboard/tabs.jsx";
 import Music from "./components/Music";
 import Room from "./pages/multiplayer/room";
 import MultiPlayer from "./pages/multiplayer/multiplayer";

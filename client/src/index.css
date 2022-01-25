@@ -270,17 +270,6 @@ p {
   transform: rotateZ(-15deg) rotateY(35deg) rotateX(60deg);
   opacity: 0;
 }
-h1 {
-  display: inline-block;
-  width: 300px;
-  margin-top: 25%;
-  margin-left: -25%;
-  transform: rotate(90deg);
-  font-size: calc(3.5*200px/10);
-  text-align: center;
-  line-height: 200px;
-  font-family: 'Calligraffitti', cursive;
-}
 .loadingcard:nth-of-type(1) {
   margin-top: calc((-3*200px/5) - 1*200px/10);
   animation: card_fade_1 5s ease infinite;

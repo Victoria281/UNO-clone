@@ -33,7 +33,15 @@ var LeaderBoard = {
     getNumOfScores: function (num, callback) {
         const query = {
             name: 'getNumOfScores',
-            text: 'SELECT score, uno_leaderboard.created_by, username, userid, profileicon FROM uno_leaderboard RIGHT JOIN players using (userid) ORDER BY uno_leaderboard.score DESC LIMIT $1;',
+            text: `SELECT scores.score, scores.created_at, p.username, p.userid, p.profileicon 
+                    FROM players as p
+                    INNER JOIN (
+                        SELECT SUM(l.score) as score, MAX(l.created_at) as created_at, l.userid
+                        FROM uno_leaderboard as l
+                        GROUP BY (l.userid)
+                    ) AS scores ON scores.userid = p.userid
+                    ORDER BY 1 DESC
+                    LIMIT $1;`,
             values: [num],
         }
 
@@ -68,6 +76,7 @@ var LeaderBoard = {
         },
         );
     },
+    
     insertNewScore: function (id, score, callback) {
         console.log(id)
         console.log(score)

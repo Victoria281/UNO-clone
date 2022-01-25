@@ -29,7 +29,7 @@ CREATE TABLE public.players (
     username character varying(45) NOT NULL,
     email character varying(255) NOT NULL,
     password character varying(255) NOT NULL,
-    created_by timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
     profileicon character varying(255) DEFAULT 'bird'::character varying NOT NULL
 );
 
@@ -134,10 +134,11 @@ ALTER SEQUENCE public.uno_effects_effectid_seq OWNED BY public.uno_effects.effec
 --
 
 CREATE TABLE public.uno_leaderboard (
-    id integer NOT NULL,
-    userid integer NOT NULL,
-    score numeric NOT NULL,
-    created_by timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
+  id SERIAL PRIMARY KEY,
+  userid INTEGER NOT NULL REFERENCES players(userid),
+  score INTEGER NOT NULL DEFAULT 0,
+  game_status INTEGER NOT NULL DEFAULT 0,
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 
@@ -197,7 +198,7 @@ ALTER TABLE ONLY public.uno_leaderboard ALTER COLUMN id SET DEFAULT nextval('pub
 -- Data for Name: players; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.players (userid, username, email, password, created_by, profileicon) FROM stdin;
+COPY public.players (userid, username, email, password, created_at, profileicon) FROM stdin;
 17	t3	t3@gmail.com	$2b$10$nx1gimQUduev11T/SocEde5JqeXEnT1/Gj/jqzBCvqlhBaOiaiDGe	2021-11-15 11:32:44.202216	bird
 26	t11	t11@gmail.com	$2b$10$mxfVRYC5b5jlV87rqnnIaO7b/WJz3ADnP.OReW5.eu/Le4qCM3DvO	2021-11-16 00:46:45.855368	bird
 27	t2	t2@gmail.com	$2b$10$UiJgTTntkPk9CPDFu3Kn2O5XyxMVOAzLwkX/V4BtTwXM3epkyINwy	2021-11-16 00:48:55.012633	bird
@@ -256,7 +257,7 @@ COPY public.uno_cards (card_id, color, "values", image_file) FROM stdin;
 37	blue	4	./cards/Blue_4.png
 38	blue	5	./cards/Blue_5.png
 39	blue	6	./cards/Blue_6.png
-40	blue	7	/cards/Blue_7.png
+40	blue	7	./cards/Blue_7.png
 41	blue	8	./cards/Blue_8.png
 42	blue	9	./cards/Blue_9.png
 43	blue	10	./cards/Blue_Skip.png
@@ -317,7 +318,7 @@ COPY public.uno_cards (card_id, color, "values", image_file) FROM stdin;
 98	yellow	3	./cards/Yellow_3.png
 99	yellow	4	./cards/Yellow_4.png
 100	yellow	5	./cards/Yellow_5.png
-101	yellow	6	/cards/Yellow_6.png
+101	yellow	6	./cards/Yellow_6.png
 102	yellow	7	./cards/Yellow_7.png
 103	yellow	8	./cards/Yellow_8.png
 104	yellow	9	./cards/Yellow_9.png
@@ -325,7 +326,6 @@ COPY public.uno_cards (card_id, color, "values", image_file) FROM stdin;
 106	yellow	11	./cards/Yellow_Reverse.png
 107	yellow	12	./cards/Yellow_Draw.png
 \.
-
 
 --
 -- Data for Name: uno_effects; Type: TABLE DATA; Schema: public; Owner: postgres
@@ -354,17 +354,36 @@ COPY public.uno_effects (effectid, uno_values, effect) FROM stdin;
 -- Data for Name: uno_leaderboard; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.uno_leaderboard (id, userid, score, created_by) FROM stdin;
-10	17	5975	2021-11-15 11:35:57.542435
-14	26	0	2021-11-16 00:46:45.864256
-15	27	0	2021-11-16 00:48:55.020625
-16	28	0	2021-11-16 00:49:01.542261
-17	29	0	2021-11-16 00:49:08.864403
-18	30	0	2021-11-16 00:49:13.201559
-19	31	0	2021-11-16 00:49:17.404178
-8	15	1	2021-11-25 12:19:06.55763
-20	33	0	2021-11-26 16:31:23.311176
-\.
+INSERT INTO
+  uno_leaderboard (userid, score, game_status)
+VALUES
+  (17, 5975, 1),
+  (26, 2311, 1),
+  (27, 2122, 0),
+  (28, 100, 0),
+  (29, 0, 0),
+  (30, 3441, 1),
+  (31, 11, 0),
+  (15, 211, 0),
+  (33, 222, 0),
+  (17, 5990, 1),
+  (26, 2312, 1),
+  (27, 2123, 0),
+  (28, 101, 0),
+  (29, 1, 0),
+  (30, 3442, 1),
+  (31, 12, 0),
+  (15, 212, 0),
+  (33, 223, 0),
+  (17, 5991, 1),
+  (26, 2313, 1),
+  (27, 2124, 0),
+  (28, 102, 0),
+  (29, 2, 0),
+  (30, 3443, 1),
+  (31, 13, 0),
+  (15, 213, 0),
+  (33, 224, 0);
 
 
 --
@@ -438,4 +457,3 @@ ALTER TABLE ONLY public.uno_leaderboard
 --
 -- PostgreSQL database dump complete
 --
-
