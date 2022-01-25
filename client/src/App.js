@@ -20,7 +20,7 @@ import VerifyReset from './Component/AccountComponents/ResetComponent/verifyRese
 import ForgotPage from './Component/AccountComponents/ResetComponent/forgot'
 import io from "socket.io-client";
 import Loader from "./Component/OtherComponents/LoadingComponent/Loader"
-//new
+
 import MultiplayerCreateRoom from "./Component/MultiplayerComponents/Dashboard/createRoom"
 import MultiplayerGameRoom from "./Component/MultiplayerComponents/Game/gameRoom"
 import DefaultNavBar from "./Component/OtherComponents/NavigationBar/DefaultNavBar"
