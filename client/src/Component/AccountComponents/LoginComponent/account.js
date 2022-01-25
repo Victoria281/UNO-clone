@@ -1,10 +1,7 @@
 //@ts-nocheck
 import React, { useState, useEffect } from "react";
-<<<<<<< HEAD
-=======
 import { useHistory } from "react-router-dom";
 // import "../../../css/account.css";
->>>>>>> 7df7f4e (added oauth v2.0 authentication to unoclone, however some functions are breaking atm)
 import styles from '../styles.module.css'
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import axios from "axios";
