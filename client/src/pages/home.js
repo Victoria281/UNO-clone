@@ -10,7 +10,7 @@ export default function App() {
       </div>
 
       <div className="row d-flex justify-content-between">
-        <a className="startBtn" href="./game">
+        <a className="startBtn" href="./newgame">
           Single Player
         </a>
         <a className="startMultiBtn" href="./createroom">
