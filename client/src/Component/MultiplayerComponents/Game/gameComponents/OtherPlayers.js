@@ -1,4 +1,4 @@
-// @ts-nocheck
+import React from 'react';
 import { Stack } from '@mui/material';
 import styles from "../styles.module.css"
 

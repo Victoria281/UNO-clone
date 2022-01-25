@@ -20,6 +20,7 @@ import {
     Grid
 } from '@mui/material';
 import SelectColorModal from "./gameComponents/SelectColorModal"
+import WaitingRoom from "./waitingRoom"
 
 //gets the data from the action object and reducers defined earlier
 const GameRoom = ({ socket, roomcode }) => {
@@ -41,9 +42,8 @@ const GameRoom = ({ socket, roomcode }) => {
         }
     }
 
-    const handleWildCard = (card) => {
-        setCardChosen(card)
-        setSelectColorModalOpen(true)
+    const handleStart = () => {
+       console.log("I wanna start game")
     }
 
     useEffect(() => {
@@ -92,11 +92,7 @@ const GameRoom = ({ socket, roomcode }) => {
         <>
             {
                 room_state.status = true ?
-                    <div>
-                        <p> Waiting room</p>
-
-                        {room_state.players.map((data) => <p>{data.username}</p>)}
-                    </div>
+                        <WaitingRoom roomcode={roomcode} handleStart={handleStart}/>
                     :
 
                     <>

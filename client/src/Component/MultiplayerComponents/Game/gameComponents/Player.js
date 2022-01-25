@@ -1,5 +1,4 @@
-// @ts-nocheck
-import { useState } from "react";
+import React from "react";
 import {
     playCard,
 } from "../../../../store/action/multiplayer/game"

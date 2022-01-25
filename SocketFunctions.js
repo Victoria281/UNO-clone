@@ -254,6 +254,68 @@ var SocketFunctions = {
         }
     },
 
+    createRandomRoom: function (id, username) {
+        var roomcode = SocketFunctions.generateCode(username);
+
+        var user = { id, username, roomcode };
+
+        console.log("==================================")
+        console.log("Servicing createRandomRoom...")
+        console.log("----------------------------------")
+        console.log(user)
+        console.log("requesting for a random room " + roomcode)
+
+
+        if (roomState[roomcode] == undefined && playerRooms[id] == undefined) {
+            roomState[roomcode] = {
+                status: false,
+                players: [user],
+                gameState: {},
+                owner: user,
+                private: false
+            }
+            playerRooms[id] = roomcode
+        } else {
+            return {
+                success: false,
+                send: broadcastOne,
+                msg: "Room could not be created. Player/Room exists"
+            };
+        }
+        return {
+            success: true,
+            roomcode: roomcode,
+            send: broadcastAll,
+            msg: roomState[roomcode]
+        };
+    },
+
+    joinRandomRoom: function (id, username) {
+
+        console.log("==================================")
+        console.log("Servicing joinRandomRoom...")
+        console.log("----------------------------------")
+        console.log(username + " requesting for a random room")
+
+        if (playerRooms[id] == undefined) {
+            var roomFound = false;
+            for (var key in roomState) {
+                if (roomState[key].status == false && roomState[key].private == false) {
+                    if (roomState[key].players.length < 4) {
+                        roomFound = true;
+                        console.log("Random Room found!")
+                        return SocketFunctions.joinNewRoom(id, username, key)
+                    }
+                }
+            }
+            if (roomFound == false) {
+                console.log("Random Room not found!")
+                return SocketFunctions.createRandomRoom(id, username)
+            }
+        }
+
+    },
+
     findPlayer: function (id, username, friendUsername) {
         var user = { id, username };
 
