@@ -16,13 +16,13 @@ import Room from "./pages/multiplayer/room";
 import MultiPlayer from "./pages/multiplayer/multiplayer";
 import PageRestriction from "./PageRestriction"
 import { NavLink } from 'react-router-dom'
-import VerifyReset from './pages/verifyReset'
-import ForgotPage from './pages/forgot'
+import VerifyReset from './Component/AccountComponents/ResetComponent/verifyReset'
+import ForgotPage from './Component/AccountComponents/ResetComponent/forgot'
 import io from "socket.io-client";
 import Loader from "./Component/OtherComponents/LoadingComponent/Loader"
 //new
-import MultiplayerCreateRoom from "./Component/MultiplayerComponents/createRoom"
-import MultiplayerGameRoom from "./Component/MultiplayerComponents/gameRoom"
+import MultiplayerCreateRoom from "./Component/MultiplayerComponents/Dashboard/createRoom"
+import MultiplayerGameRoom from "./Component/MultiplayerComponents/Game/gameRoom"
 import DefaultNavBar from "./Component/OtherComponents/NavigationBar/DefaultNavBar"
 const socket = io.connect(process.env.REACT_APP_API_URL);
 
@@ -76,8 +76,8 @@ const App = ({ hideLoader }) => {
   );
 }
 function Logout() {
-  localStorage.removeItem("userid");
-  localStorage.removeItem("token");
+
+  localStorage.clear();
   window.location = '/';
 }
 
