@@ -1,0 +1,21 @@
+.friendsAvatar {
+    width: 30px;
+    height: 30px;
+}
+
+.friendsName {
+    vertical-align: middle;
+    text-align: left;
+}
+
+.friendsBody {
+    background-color: lightcyan;
+    max-height: 190px;
+    border-radius: 10px;
+    margin: 2% 0% 2% 0%;
+    padding: 1%;
+}
+
+.accordionBody {
+    max-height: 220px;
+}

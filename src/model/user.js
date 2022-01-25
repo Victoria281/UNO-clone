@@ -20,6 +20,7 @@ const User = {
 
         return pool.query(query, function (error, result) {
             if (error) {
+                console.log("error:", error);
                 callback(error, null);
                 return;
             } else {
@@ -197,7 +198,7 @@ const User = {
             name: 'getFriend',
             text: `
                 SELECT
-                    u.userid, u.username, u.email
+                    u.userid, u.username, u.email, u.profileicon
                 FROM
                     friends AS f,
                     players AS u
@@ -302,7 +303,30 @@ const User = {
                 }
             }
         });
-    }
+    },
+
+    // deleteFriend
+    deleteFriend: function (userid, friendid, callback) {
+        const query = {
+            name: 'deleteFriend',
+            text: 'DELETE FROM friends WHERE userid = $1 AND fk_friendid = $2',
+            values: [userid, friendid],
+        }
+
+        return pool.query(query, function (error, result) {
+            console.log(error)
+            console.log(result)
+            if (error) {
+                callback(error, null);
+                return;
+            } else {
+                console.log(result);
+                return callback(null, result.rows);
+            }
+        },
+        );
+    },
+    
 }
 
 //---------------------------------------------

@@ -403,8 +403,8 @@ app.get('/user/friend/:uid', printingDebuggingInfo, verifyToken, (req, res, next
             code: 401
         };
         return res.status(401).json(message);
+    }
 
-    }  
     else {
         User.getFriend(uid, (err, result) => {
             if (err) {
@@ -427,6 +427,87 @@ app.get('/user/friend/:uid', printingDebuggingInfo, verifyToken, (req, res, next
         });
 
     }
+});
+
+//addFriends
+app.post('/user/friend/:uid', printingDebuggingInfo, verifyToken, (req, res, next) => {
+    let uid = req.params.uid;
+    let friendId = req.body.friendId;
+
+    if (isNaN(uid)) {
+        console.error("ERROR: uid is not a number");
+
+        const message = {
+            message: 'User id needs to be a number',
+            code: 400
+        };
+        return res.status(400).json(message);
+
+    } else {
+        uid = parseInt(uid);
+    }
+
+    if (isNaN(friendId)) {
+        console.error("ERROR: Friend id is not a number");
+        const message = {
+            message: 'Friend id needs to be a number',
+            code: 400
+        };
+        return res.status(400).json(message);
+
+    } else {
+        friendId = parseInt(friendId);
+    }
+
+    if (uid !== req.decodedToken.id) {
+        console.error("ERROR: uid is not the same as the user id");
+
+        const message = {
+            message: 'You are not authorized to perform this action',
+            code: 401
+        };
+
+        return res.status(401).json(message);
+
+    } else {
+        User.addFriend(uid, friendId, (error, result) => {
+            if (error) {
+                console.error("ERROR: Unable to add friend:", error);
+
+                return res.status(500).json(error);
+
+            } else {
+                const message = {
+                    code: 200,
+                    message: 'Friend added',
+                    rowsAffected: result.rowCount,
+                };
+
+                return res.status(200).json(message);
+            }
+        });
+    }
+});
+
+//deleteUser
+app.delete('/user/friend', printingDebuggingInfo, verifyToken, function (req, res, next) {
+    const uid = req.query.uid;
+    const friendid = req.query.fid;
+    console.log("uid:", uid);
+    console.log("friendid:", friendid);
+
+    User.deleteFriend(uid, friendid, function (err, result) {
+        if (err) {
+            if (err.code === '23505') {
+                return next(createHttpError(404, `Not found`));
+            }
+            else {
+                return next(err);
+            }
+        } else {
+            return res.status(200).json({ message: "deleted", res: result.rowsAffected });
+        }
+    });
 });
 
 app.post('/user/friend/:uid', printingDebuggingInfo, verifyToken, (req, res, next) => {
