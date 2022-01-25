@@ -13,7 +13,7 @@ import {
 	receiveRequestToPlay,
 	onFriendRequestGameRejected,
 	onFriendRequestGameAccepted,
-	acceptFriendRequestGame ,
+	acceptFriendRequestGame,
 	rejectFriendRequestGame
 } from "../../../store/action/multiplayer/rooms"
 import { useHistory } from "react-router-dom";
@@ -68,6 +68,12 @@ const CreateRoom = ({ socket }) => {
 		dispatch(rejectFriendRequestGame(username, socket, requestedUser))
 	}
 
+	const joinRandom = () => {
+		dispatch(joinRandomRoom(username, socket))
+	}
+
+
+
 
 	useEffect(() => {
 		if (username != undefined) {
@@ -84,6 +90,10 @@ const CreateRoom = ({ socket }) => {
 
 		socket.on("multiplayerUpdate", (data) => {
 			dispatch(receiveListOfClients(data))
+		});
+
+		socket.on("randomRoomFound", (data) => {
+			history.push(`/multiplayer/${data.message}`)
 		});
 
 		socket.on("friendRejected", (data) => {
@@ -144,7 +154,7 @@ const CreateRoom = ({ socket }) => {
 
 							<button className="" onClick={() => { create() }}>Create Room</button><br />
 							<button className="" onClick={() => { join() }}>Join Room</button><br />
-
+							<button className="" onClick={() => { joinRandom() }}>Join Random Room</button><br />
 						</div>
 						<div>
 							<p>Friend Requests</p>
