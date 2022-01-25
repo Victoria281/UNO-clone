@@ -26,7 +26,7 @@ export default function App() {
   // Hooks to disable Form
   const [attempt, setAttempt] = useState(0);
   const [formDisabled, setFormDisabled] = useState(false);
-
+  const [btnDisabled, setBtnDisabled] = useState(false);
 
   // Recaptcha on change function, value used to verify if user is really not a robot
   function onChange(value) {
@@ -125,10 +125,12 @@ export default function App() {
           if(attempt == 4){
             status = false;
             setFormDisabled(true);
+            setBtnDisabled(true);
             alert("The form has been disabled. Please wait for a while")
             // Enable form after 10 secs
             setTimeout(() => {
               setFormDisabled(false);
+              setBtnDisabled(false);
               setAttempt(0);
             }, 10000);
 
@@ -252,6 +254,7 @@ export default function App() {
               type="submit"
               style={{ marginTop: 20, height: 50, backgroundColor: '#FFB967', border: '1px solid #FFB967', borderRadius: '50%'}}
               onClick={()=>{createPost(); play();}}
+              disabled={btnDisabled}
               className={styles.accountSubmitBtn}
             >
             <p className={styles.accountLoginText} style={{ fontSize: 48, fontWeight: 'bolder' , fontFamily: 'Rubik Mono One', color:'black', marginTop: -18}}><b>Login</b></p>

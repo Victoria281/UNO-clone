@@ -62,6 +62,8 @@ const App = ({ hideLoader }) => {
         <PageRestriction exact path="/end" component={EndPage} />
         <Route exact path="/login" component={AccountPage} />
         <Route exact path="/register" component={RegisterPage} />
+        <Route exact path="/forgot" component={ForgotPage} />
+        <Route exact path="/verifyReset" component={VerifyReset} />
         <PageRestriction exact path="/profile" component={ProfilePage} />
         <PageRestriction exact path="/leaderboard" component={LeaderboardPage} />
         <Route exact path="/logout" component={Logout} />
