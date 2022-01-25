@@ -7,14 +7,17 @@ import GamePage from "./pages/game";
 import HomePage from "./pages/home";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import EndPage from "./pages/end";
-import AccountPage from "./pages/account";
-import RegisterPage from "./pages/register";
+import AccountPage from "./Component/AccountComponents/LoginComponent/account";
+import RegisterPage from "./Component/AccountComponents/RegisterComponents/register";
 import ProfilePage from "./pages/profile";
 import LeaderboardPage from "./pages/leaderboard";
 import Music from "./components/Music";
 import Room from "./pages/multiplayer/room";
 import MultiPlayer from "./pages/multiplayer/multiplayer";
 import PageRestriction from "./PageRestriction"
+import { NavLink } from 'react-router-dom'
+import VerifyReset from './pages/verifyReset'
+import ForgotPage from './pages/forgot'
 import io from "socket.io-client";
 import Loader from "./Component/OtherComponents/LoadingComponent/Loader"
 //new
