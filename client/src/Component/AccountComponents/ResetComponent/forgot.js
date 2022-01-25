@@ -12,7 +12,7 @@ import axios from "axios";
 
 import * as emailjs from "emailjs-com"
 import { handle } from "express/lib/application";
-import styles from '../../MultiplayerComponents/styles.module.css'
+import styles from '../styles.module.css'
 import Ripples from 'react-ripples'
 
 export default function App() {

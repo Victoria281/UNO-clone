@@ -1,7 +1,7 @@
 //@ts-nocheck
 import React, { useState } from "react";
 // import "../../../css/account.css";
-import styles from '../../MultiplayerComponents/styles.module.css'
+import styles from '../styles.module.css'
 // import { response } from "express";
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import axios from "axios";

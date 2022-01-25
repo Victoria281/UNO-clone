@@ -11,7 +11,7 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 
 import useSound from 'use-sound';
 import boopSfx from '../soundEffect/boop.wav';
-import styles from '../../MultiplayerComponents/styles.module.css'
+import styles from '../styles.module.css'
 import LockIcon from '@mui/icons-material/Lock';
 
 

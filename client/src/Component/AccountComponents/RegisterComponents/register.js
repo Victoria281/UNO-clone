@@ -7,7 +7,7 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import useSound from 'use-sound';
 import boopSfx from '../soundEffect/boop.wav';
 import nodemailer from 'nodemailer';
-import styles from '../../MultiplayerComponents/styles.module.css'
+import styles from '../styles.module.css'
 import LockIcon from '@mui/icons-material/Lock';
 import EmailIcon from '@mui/icons-material/Email';
 import PersonIcon from '@mui/icons-material/Person';
