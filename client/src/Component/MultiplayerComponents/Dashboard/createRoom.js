@@ -1,9 +1,21 @@
 // @ts-nocheck
-import { useCallback, useState } from "react";
+import { useCallback, useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import "../../../css/room.css"
 import { useSelector, useDispatch } from 'react-redux'
-import { createNewRoom } from "../../../store/action/multiplayer/rooms"
+import {
+	enterMultiplayer,
+	createNewRoom,
+	joinRoom,
+	joinRandomRoom,
+	receiveListOfClients,
+	sendRequestFriend,
+	receiveRequestToPlay,
+	onFriendRequestGameRejected,
+	onFriendRequestGameAccepted,
+	acceptFriendRequestGame ,
+	rejectFriendRequestGame
+} from "../../../store/action/multiplayer/rooms"
 import { useHistory } from "react-router-dom";
 import Friend from "./FriendComponents/Friend"
 import Room from "./Room"
@@ -14,35 +26,94 @@ import {
 const CreateRoom = ({ socket }) => {
 	const dispatch = useDispatch();
 	let history = useHistory();
+	const [errors, setErrors] = useState("");
 
 	const [roomname, setroomname] = useState("");
 	const [username,] = useState(localStorage.getItem("username"))
-	const [friends,] = useState([
-		{ username: "amanda1", status: true },
-		{ username: "aisyah", status: false },
-		{ username: "maryse", status: true },
-		{ username: "wwf", status: true },
-		{ username: "nic", status: false },
-		{ username: "fren2", status: true },
-	])
-	const [rooms,] = useState([
-		{ roomname: "amanda1" },
-		{ roomname: "aisyah" },
-		{ roomname: "maryse" },
-		{ roomname: "wwf" },
-		{ roomname: "nic" },
-		{ roomname: "fren2" },
-	])
+	const room_state = useSelector(state => state.multiplayer_rooms)
 
 	const create = () => {
 		if (roomname !== "") {
-			dispatch(createNewRoom(roomname, username, socket))
+			if (username == undefined) {
+				console.log("Please Login First")
+			} else {
+				dispatch(createNewRoom(roomname, username, socket))
+					.then(result => history.push(`/multiplayer/${result}`))
+			}
+		} else {
+			alert("Please enter room name!");
+			window.location.reload();
+		}
+	}
+
+	const join = () => {
+		if (roomname !== "") {
+			dispatch(joinRoom(roomname, username, socket))
 				.then(result => history.push(`/multiplayer/${result}`))
 		} else {
 			alert("Please enter room name!");
 			window.location.reload();
 		}
 	}
+
+	const requestFriend = (friendUsername) => {
+		dispatch(sendRequestFriend(username, socket, friendUsername))
+	}
+
+	const acceptFriend = (requestedUser) => {
+		dispatch(acceptFriendRequestGame(username, socket, requestedUser))
+	}
+
+	const rejectFriend = (requestedUser) => {
+		dispatch(rejectFriendRequestGame(username, socket, requestedUser))
+	}
+
+
+	useEffect(() => {
+		if (username != undefined) {
+			dispatch(enterMultiplayer(username, socket))
+		}
+	}, []);
+
+	useEffect(() => {
+		socket.on("errorOccured", (data) => {
+			console.log("ERROR")
+			console.log(data.msg)
+			setErrors(data.msg)
+		});
+
+		socket.on("multiplayerUpdate", (data) => {
+			dispatch(receiveListOfClients(data))
+		});
+
+		socket.on("friendRejected", (data) => {
+			dispatch(onFriendRequestGameRejected(data.message))
+		});
+
+		socket.on("friendRequestAccepted", (data) => {
+			history.push(`/multiplayer/${data.message}`)
+		});
+
+		socket.on("friendRequesting", (data) => {
+			console.log("someone wants to play with you")
+			console.log(data)
+			dispatch(receiveRequestToPlay(data))
+		});
+
+		// socket.on("friendRequestAccepted", (data) => {
+		// 	console.log("Your friend Request was accepted")
+		// 	console.log(data)
+		// 	var username = localStorage.getItem("username")
+		// 	var newRoom = {
+		// 		username: username,
+		// 		roomcode: data.message
+		// 	}
+		// 	socket.emit('othersJoinRoom', newRoom)
+		// });
+
+
+	}, [socket]);
+
 
 	return (
 		<>
@@ -51,14 +122,14 @@ const CreateRoom = ({ socket }) => {
 				<Grid
 					style={{ border: "1px solid grey", height: "95vh" }} item xs={2}>
 					<Stack direction="column" spacing={3}>
-						{friends.map((data) => <Friend data={data} />)}
+						{room_state.friends.map((data) => <Friend
+							data={data}
+							requestFriend={requestFriend}
+						/>)}
 					</Stack>
 				</Grid>
 				<Grid
 					style={{ border: "1px solid grey", height: "95vh" }} item xs={10}>
-					<Stack direction="column" spacing={3}>
-						{rooms.map((rdata) => <Room data={rdata} />)}
-					</Stack>
 
 					<div className="homepage">
 						{/* <h1 className="name">MULTIPLAYER</h1> */}
@@ -71,13 +142,25 @@ const CreateRoom = ({ socket }) => {
 							></input>
 							<br />
 
-							<button className="roomBtn" onClick={() => { create() }}><p>Create Room</p></button>
+							<button className="" onClick={() => { create() }}>Create Room</button><br />
+							<button className="" onClick={() => { join() }}>Join Room</button><br />
 
-							<Link to={`/multiplayer/${roomname}`}>
-								<button className="roomBtn"><p>Join</p></button>
-							</Link></div>
+						</div>
+						<div>
+							<p>Friend Requests</p>
+							{room_state.friendRequests.map((data) =>
+								<div>
+									<p>{data.username} has requested to play UNO</p>
+									<button className="" onClick={() => { acceptFriend(data) }}>accept</button><br />
+									<button className="" onClick={() => { rejectFriend(data) }}>Reject</button><br />
+									<hr />
+								</div>
+							)}
+						</div>
 
+						<div><p>{errors}</p></div>
 					</div>
+
 
 				</Grid>
 			</Grid>

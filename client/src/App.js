@@ -17,6 +17,7 @@ import PageRestriction from "./PageRestriction"
 import { NavLink } from 'react-router-dom'
 import io from "socket.io-client";
 
+import Test from "./Component/test"
 //new
 import MultiplayerCreateRoom from "./Component/MultiplayerComponents/Dashboard/createRoom"
 import MultiplayerGameRoom from "./Component/MultiplayerComponents/Game/gameRoom"
@@ -114,6 +115,7 @@ const App=() =>{
 
           {/* new */}
           <Route exact path="/createroom" render={()=><MultiplayerCreateRoom socket={socket}/>}/>
+          <Route exact path="/test" render={()=><Test socket={socket}/>}/>
           <Route path="/multiplayer/:roomcode" component={AppGameRoom}/>
         </Switch>
       </div>

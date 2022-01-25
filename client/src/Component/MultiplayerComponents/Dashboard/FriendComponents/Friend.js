@@ -7,7 +7,7 @@ import { Grid } from '@mui/material';
 
 
 //gets the data from the action object and reducers defined earlier
-const Friend = ({ data }) => {
+const Friend = ({ data, requestFriend }) => {
     const dispatch = useDispatch();
     return (
         <Grid
@@ -17,7 +17,20 @@ const Friend = ({ data }) => {
             alignItems="center"
         >
             <p>{data.username}</p>
-            {data.status ? <button>Play</button> : <p>Offline</p>}
+            {data.status ? <button onClick={() => { requestFriend(data.username) }}>
+
+                {
+                    data.requested === "rejected" ?
+                        <>Rejected</>
+                        :
+                        data.requested === false ?
+                            <>Play</>
+                            :
+                            <>Requested</>
+
+                }
+
+            </button> : <p>Offline</p>}
 
         </Grid>
     );
