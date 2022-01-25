@@ -52,8 +52,8 @@ export const startGameDetected = (data) => async (dispatch, getState) => {
         type: PREPARE_GAME,
         data
     });
-    console.log(data.order)
-    return data.order.filter((p) => p !== player)
+    // console.log(data.order)
+    return data.order.slice(player+1).concat(data.order.slice(0, player))
 }
 
 export const updateGameDetected = (data) => async (dispatch, getState) => {
@@ -71,9 +71,9 @@ export const playCard = (card, socket, color) => async (dispatch, getState) => {
     const roomcode = getState().multiplayer_rooms.roomcode;
 
     if (game_state.playerdeck["player" + game_state.turn].length === 1) {
-        console.log("Times start")
+        // console.log("Times start")
         setTimeout(() => {
-            console.log("Times up")
+            // console.log("Times up")
             const timeout_game_state = getState().multiplayer_game;
             checkOneCardLeft(timeout_game_state)
         }, 5000);
@@ -86,7 +86,7 @@ export const playCard = (card, socket, color) => async (dispatch, getState) => {
 }
 
 export const callUNO = (state) => async (dispatch, getState) => {
-    console.log("uno button pressed")
+    // console.log("uno button pressed")
     dispatch({
         type: UPDATE_UNO_PRESSED,
         press: true

@@ -6,7 +6,7 @@ import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import {
     playCard,
-} from "../../../store/action/multiplayer/game"
+} from "../../../store/action/singleplayer/game"
 import { useDispatch } from 'react-redux'
 
 const style = {
@@ -34,11 +34,11 @@ const SelectColorModal = ({ card, socket, selectColorModalOpen, setSelectColorMo
     const handleSelectColor = (color) =>{
         console.log("not closing?")
         handleClose()
-        dispatch(playCard(card, socket, color));
+        dispatch(playCard(card, color));
     }
     return (
         <Modal
-            open={open || selectColorModalOpen}
+            open={(open || selectColorModalOpen) && card !== undefined}
             onClose={handleClose}
             aria-labelledby="modal-modal-title"
             aria-describedby="modal-modal-description"

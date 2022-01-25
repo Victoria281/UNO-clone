@@ -1,8 +1,10 @@
 //@ts-nocheck
 import React, { useState } from "react";
-import "../css/account.css";
+import "../../../css/account.css";
 // import { response } from "express";
+import VisibilityIcon from '@mui/icons-material/Visibility';
 import axios from "axios";
+import ReCAPTCHA from "react-google-recaptcha";
 
 
 export default function App() {
@@ -12,10 +14,27 @@ export default function App() {
   const [passwordError, setPasswordError] = useState("");
   const [credWrong, setCredWrong] = useState("");
   const [successMsg, setSuccessMsg] = useState("");
+  const [passwordShown1, setPasswordShown1] = useState(false);
+  const [captcha, setCaptcha] = useState(false);
+  const [captchaError, setCaptchaError] = useState("");
 
 
+  // Recaptcha on change function, value used to verify if user is really not a robot
+  function onChange(value) {
+    console.log("Captcha value:", value);
+    if(value!=null){
+      console.log("Starts becoming valid")
+      setCaptcha(true);
+    }else{
 
+      // After 1 minute, the captcha would expire, requiring the user to revalidate again
+        console.log('Captcha has invalidated!')
+        alert("Captcha has been invalidated. Please verify again!")
+        setCaptcha(false);
 
+    }
+    
+  }
 
   // Function called when login button is clicked
   function createPost() {
@@ -53,7 +72,17 @@ export default function App() {
     // console.log("AFTERRRRRRR PASSWORD CHECK")
     // console.log(status)
 
-
+    // Check if status has been validated
+    if(status){
+      if(captcha === false){
+        status = false;
+        setCaptchaError("Please ensure you are not a robot!")
+      }else{
+        status = true;
+        setCaptchaError("");
+      }
+    }
+    
 
     if(status){
       axios
@@ -139,6 +168,11 @@ export default function App() {
     e.preventDefault();
   };
 
+    // Password visibility function
+    const togglePassword1 = () => {
+      setPasswordShown1(!passwordShown1);
+    };
+
   return (
     <div className="App">
       <div className="wrapper">
@@ -162,7 +196,7 @@ export default function App() {
               <div className="input-group-prepend">
                 <span className="input-group-text"><i className="fa fa-envelope fa-lg fa-fw" aria-hidden="true"></i></span>
               </div>
-              <input type="text" className="form-control" placeholder="Email Address" onChange={handleEmailChange} value={email} />
+              <input type="text" className="form-control pr-2" placeholder="Email Address" onChange={handleEmailChange} value={email} />
             </div>
 
             {emailError && <div className="error-msg">{emailError}</div>}
@@ -172,12 +206,23 @@ export default function App() {
               <div className="input-group-prepend">
                 <span className="input-group-text"><i className="fa fa-lock fa-lg fa-fw" aria-hidden="true"></i></span>
               </div>
-              <input type="password" className="form-control" placeholder="Password" onChange={handlePasswordChange} value={password} />
+              <input type={passwordShown1 ? "text" : "password"} className="form-control" placeholder="Password" onChange={handlePasswordChange} value={password} />
+              <button onClick={togglePassword1}><VisibilityIcon style={{padding: 2, marginTop: 6}}/></button>
             </div>
 
             {passwordError && <div className="error-msg">{passwordError}</div>}
 
             {credWrong && <div className="error-msg">{credWrong}</div>}
+
+
+            {/* Recaptcha section */}
+            <ReCAPTCHA
+              sitekey="6LcitAkeAAAAAE9MsKKtc5-CFwLhZiRTrlxNfOYK"
+              size="normal"
+              type="image"
+              onChange={onChange}
+            />
+            {captchaError && <div className="error-msg">{captchaError}</div>}
 
             <button
               type="submit"
@@ -189,7 +234,7 @@ export default function App() {
               <p id="btnTxt" style={{ fontSize: 42, fontWeight: 'bolder' , fontFamily: 'Rubik Mono One', color:'black', marginTop: -20}}><b>Login</b></p>
             </button><br/><br/>
             <a href="/register" id="registerLink" className="p-4"> Create Account? </a>
-            <a href="/register" id="forgotLink" className="p-4"> Forgot Password? </a>
+            <a href="/forgot" id="forgotLink" className="p-4"> Forgot Password? </a>
           </form>
         </div>
       </div>

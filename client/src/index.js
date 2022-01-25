@@ -8,8 +8,9 @@ import rootReducers from "./store/reducer/index";
 import { createStore, applyMiddleware } from "redux";
 import { Provider } from "react-redux";
 import thunk from "redux-thunk"
+import logger from "redux-logger"
 
-const store = createStore(rootReducers, applyMiddleware(thunk));
+const store = createStore(rootReducers, applyMiddleware(thunk, logger));
 
 const loader = document.querySelector('.loader');
 const hideLoader = () => loader.hidden = true;

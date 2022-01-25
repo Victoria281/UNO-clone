@@ -1,7 +1,7 @@
 // @ts-nocheck
 import {
     drawCard, callUNO
-} from "../../../store/action/multiplayer/game"
+} from "../../../../store/action/multiplayer/game"
 import { useDispatch } from 'react-redux'
 import { Stack } from '@mui/material';
 
@@ -52,9 +52,11 @@ const Deck = ({ handleWildCard, current, used, socket, playing }) => {
                     src={
                         process.env.REACT_APP_API_URL + "/api/uno/images/Deck.png"
                     }
-                    onClick={() => { console.log("drawing"); if (playing) dispatch(drawCard(socket)).then((result)=>{
-                        if (result.color === "wild"){ handleWildCard(result) }
-                    }) }}
+                    onClick={() => {
+                        console.log("drawing"); if (playing) dispatch(drawCard(socket)).then((result) => {
+                            if (result.color === "wild") { handleWildCard(result) }
+                        })
+                    }}
                     alt={current.values + " " + current.color}
                 />
                 <p>{current.color}</p>
@@ -63,7 +65,8 @@ const Deck = ({ handleWildCard, current, used, socket, playing }) => {
                         display: "flex",
                         alignItems: "center"
                     }}>
-                    <button className="roomBtn" onClick={() => { console.log("herer"); dispatch(callUNO()) }}><p>UNO</p></button></div>
+                    <button className="roomBtn" onClick={() => { console.log("herer"); dispatch(callUNO()) }}><p>UNO</p></button>
+                    </div>
             </Stack>
         </div>
     );
