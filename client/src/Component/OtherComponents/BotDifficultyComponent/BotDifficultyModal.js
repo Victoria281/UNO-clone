@@ -1,10 +1,9 @@
 import { Fragment, useState } from 'react';
 import { Modal, Slider, Box, Typography, Grid, Button, Paper} from '@mui/material';
 
-const BotDifficultyModal = ({open}) => {
-    console.log(open)
+const BotDifficultyModal = ({open, setOpen}) => {
     function handleClose() {
-        console.log('it closed.')
+        setOpen(false);
     }
 
     return (
