@@ -4,13 +4,25 @@ import { useState } from "react";
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import { purple, blue } from '@mui/material/colors';
 import { Link } from "react-router-dom";
+import { useSelector, useDispatch } from 'react-redux'
 
-const WaitingRoom = () => {
+const WaitingRoom = ({roomcode, handleStart}) => {
+    const dispatch = useDispatch();
     const [progress, setProgress] = useState(25);
     const [noOfPeople, setnoOfPeople] = useState(1);
-    const [roomname,] = useState(localStorage.getItem("roomname"));
     const uname = localStorage.getItem('username');
     const [buttonDisabled, setButtonDisabled] = useState(false);
+    const {room_state, unconnected} = useSelector(state => {
+        const room_state = state.multiplayer_rooms
+        const unconnected = []
+        for (var i=0; i<4 - state.multiplayer_rooms.players.length; i++){
+            unconnected.push("Waiting")
+        }
+        return {room_state, unconnected}
+    })
+
+    console.log("room_state")
+    console.log(unconnected)
 
     const boxColor = purple['200'];
     const boxBorder = purple['500'];
@@ -40,7 +52,7 @@ const WaitingRoom = () => {
                     }}
                 >
                     <Typography variant="h6" component="div" color="text.primary">
-                        {noOfPeople}/4
+                        {room_state.players.length}/4
                     </Typography>
                 </Box>
             </Box>
@@ -85,7 +97,7 @@ const WaitingRoom = () => {
                 }}
             >
                 <Grid item xs={7} sx={{ textAlign: 'center' }}>
-                    <Typography variant="h5">{roomname}</Typography>
+                    <Typography variant="h5">{roomcode}</Typography>
 
                 </Grid>
 
@@ -146,7 +158,7 @@ const WaitingRoom = () => {
                 }}
             >
                 <Grid item xs={7} sx={{ textAlign: 'center', pt: 0.5 }}>
-                    <Typography variant="subtitle2">https://uno-clone.herokuapp.com/multiplayer/{roomname}</Typography>
+                    <Typography variant="subtitle2">https://uno-clone.herokuapp.com/multiplayer/{roomcode}</Typography>
                 </Grid>
 
                 <Divider orientation="vertical" />
@@ -155,7 +167,7 @@ const WaitingRoom = () => {
                     <Button
                         sx={{
                             width: 310,
-                            height:50,
+                            height: 50,
                             borderTopRightRadius: 20,
                             borderBottomRightRadius: 20,
                             ':hover': {
@@ -193,7 +205,47 @@ const WaitingRoom = () => {
 
 
                 <Grid container sx={{ pl: 10, pt: 5 }}>
-                    <Grid item xs={3}>
+
+                    {room_state.players.map((data) =>
+
+                        <Grid item xs={3}>
+                            <Avatar
+                                sx={{ width: 135, height: 135, bgcolor: blue[500] }}
+                            // src={process.env.REACT_APP_API_URL + "/api/uno/profile_icons/" + userInfo.profileicon + ".png"}
+                            >
+                                Player
+                            </Avatar>
+                            <Box
+                                sx={{
+                                    width: 180,
+                                    height: 40,
+                                    ml: -3,
+                                    mt: 2.3
+                                }} >
+                                <Typography variant="h5" sx={{ color: "#3C56AF", textAlign: "center", pt: 0.4 }}>{data.username}</Typography>
+                            </Box>
+                        </Grid>
+                    )}
+
+                    {unconnected.map((data) =>
+
+                       { console.log("herere"); return(<Grid item xs={3}>
+                            <CircularProgress color="warning" size='130px' />
+                            <Box
+                                sx={{
+                                    width: 180,
+                                    height: 40,
+                                    ml: -3.2,
+                                    mt: 2
+                                }} >
+                                <Typography variant="h5" sx={{ color: "#d46105", textAlign: "center", pt: 0.4 }}>{data}</Typography>
+                            </Box>
+                        </Grid>)}
+                    )}
+
+
+
+                    {/* <Grid item xs={3}>
                         <Avatar
                             sx={{ width: 135, height: 135, bgcolor: blue[500] }}
                         // src={process.env.REACT_APP_API_URL + "/api/uno/profile_icons/" + userInfo.profileicon + ".png"}
@@ -248,21 +300,19 @@ const WaitingRoom = () => {
                             }} >
                             <Typography variant="h5" sx={{ color: "#000000", textAlign: "center", pt: 0.4 }}>Guest 3</Typography>
                         </Box>
-                    </Grid>
+                    </Grid> */}
 
                     <Grid sx={{ mt: 4, ml: 35 }}>
                         <CircularProgressWithLabel />
                     </Grid>
 
                     <Grid sx={{ ml: 10, mt: 4 }}>
-                        <Link to={`/multiplayer/${roomname}`}>
-                            <button className="roomBtn">
+                            <button onClick={()=>{handleStart()}} className="roomBtn">
                                 <p>Start</p>
                             </button>
-                        </Link>
                     </Grid>
 
-                    <CopyCode copyCode={roomname} />
+                    <CopyCode copyCode={roomcode} />
                     <CopyLink copyLink={copyLink} />
                 </Grid>
             </Box >
