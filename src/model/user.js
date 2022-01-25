@@ -191,6 +191,39 @@ var User = {
         );
     },
 
+    resetUserPasswordMailtrap: function (userid, password, callback) {
+        const query = {
+            name: 'resetUserPassword',
+            text: 'UPDATE players SET password=$1 WHERE userid=$2',
+            values: [password, userid],
+        }
+
+        return pool.query(query, function (error, result) {
+            if (error) {
+                callback(error, null);
+                return;
+            } else {
+                return callback(null, result.rowCount);
+            }
+        });
+    },
+    
+    resetUserPasswordGmail: function (email, password, callback) {
+        const query = {
+            name: 'resetUserPassword',
+            text: 'UPDATE players SET password=$1 WHERE email=$2',
+            values: [password, email],
+        }
+
+        return pool.query(query, function (error, result) {
+            if (error) {
+                callback(error, null);
+                return;
+            } else {
+                return callback(null, result.rowCount);
+            }
+        });
+    },
 }
 
 //---------------------------------------------

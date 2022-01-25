@@ -1,0 +1,44 @@
+.CardPlayedDeck {
+    display: grid;
+}
+
+.TopCard , .BelowCard {
+    grid-column: 1;
+    grid-row: 1;
+}
+
+.BelowCard {
+    transform: rotate(-30deg) translateX(-5px) translateY(-5px);
+    z-index: 0;
+    opacity: 0.75;
+}
+
+.TopCard {
+    z-index: 10;
+}
+
+.DrawCardDeck {
+    display: grid;
+}
+
+.TopDrawCard , .BelowDrawCard {
+    grid-column: 1;
+    grid-row: 1;
+}
+
+.BelowDrawCard {
+    z-index: 0;
+}
+
+.TopDrawCard {
+    z-index: 10;
+}
+
+
+.mainDeckArea {
+    transform: matrix(1, 0.01, -0.29, 1, 0, 0);
+}
+
+.Playable:hover {
+    transform: translateY(-20px)
+}

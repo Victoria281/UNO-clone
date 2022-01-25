@@ -6,7 +6,7 @@ import './index.css';
 import App from './App';
 import { Provider } from "react-redux";
 import { store } from "./store/store"
-// const store = createStore(rootReducers, applyMiddleware(thunk));
+
 
 const loader = document.querySelector('.loader');
 const hideLoader = () => loader.hidden = true;
