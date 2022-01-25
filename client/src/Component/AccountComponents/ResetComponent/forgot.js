@@ -3,14 +3,17 @@ import React, { Fragment, useEffect, useState } from "react";
 // import emailjs from 'emailjs-com'
 
 import { useHistory } from "react-router-dom";
-import "../css/forgot.css";
+// import "../../../css/forgot.css";
+import useSound from 'use-sound';
+// @ts-ignore
+import boopSfx from '../soundEffect/boop.wav';
 // import { response } from "express";
 import axios from "axios";
-// npm install emailjs-com --save
+
 import * as emailjs from "emailjs-com"
 import { handle } from "express/lib/application";
-
-
+import styles from '../../MultiplayerComponents/styles.module.css'
+import Ripples from 'react-ripples'
 
 export default function App() {
 
@@ -18,6 +21,7 @@ export default function App() {
   const [email, setEmail] = useState("")  
   const [emailError, setEmailError] = useState("")
   const [emailSuccess, setEmailSuccess] = useState("")
+  const [play] = useSound(boopSfx);
 
   function submitReset(){
 
@@ -138,22 +142,26 @@ export default function App() {
   return (
     <div className="App">
       <div className="wrapper">
-      <h1><b id="forgotTxt" className="p-2">Reset Password</b></h1>
-        <div id="forgotSection" className="pt-5 pl-5 pr-5 pb-2">
+      <h1><b className={`${styles.forgotTitle}` } style={{padding: 10}}>Reset Password</b></h1>
+        <div className={`${styles.forgotBody}`} style={{padding: 40}}>
+        
         <form 
             className="form-group form"
             autoComplete="off"
             onSubmit={handleFormSubmit}
           >
-            {emailSuccess && <div>{emailSuccess}</div>}
-            {emailError && <div>{emailError}</div>}
-          
-                <input type="text" name="email" autoComplete="on" style={{marginTop: 20, marginBottom: 20,  borderRadius: 5}} size={38} value={email} onChange={(e) => setEmail(e.target.value)} />
+            <fieldset disabled={true}></fieldset>
+            {/* {emailSuccess && <div>{emailSuccess}</div>}
+            {emailError && <div>{emailError}</div>} */}
+                <label><b style={{paddingRight: 10}}>Enter email:</b></label>
+                <input type="text" name="email" autoComplete="on" style={{marginTop: 40, marginBottom: 20,  borderRadius: 5}} size={38} value={email} onChange={(e) => setEmail(e.target.value)} />
+                
+              
                 <button 
-                  id="forgotBtn"
-                  className="btn btn-success btn-lg link pop-on-hover" 
+                  className={`${styles.forgotBtn}`} 
                   style={{ width: "40%", marginTop: 20, height: 60, backgroundColor: 'orange', borderRadius: 40}} 
-                  type="submit" onClick={submitReset}><b style={{fontSize: 20, marginBottom: 20}}>Send Email</b>
+                  type="submit" onClick={()=>{submitReset(); play()}}><b style={{fontSize: 20, marginBottom: 20}}>Send Email</b>
+                  
                 </button>
           </form>
             
