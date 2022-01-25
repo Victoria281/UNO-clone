@@ -1,7 +1,7 @@
 // @ts-nocheck
 import {
     drawCard, callUNO
-} from "../../../store/action/multiplayer/game"
+} from "../../../../store/action/multiplayer/game"
 import { useDispatch } from 'react-redux'
 import { Stack } from '@mui/material';
 
