@@ -27,6 +27,7 @@ export const updatePlayerList = (player_list, id) => async dispatch => {
 export const prepareGameMaterials = (socket) => async (dispatch, getState) => {
     getAllCards()
         .then(result => {
+            console.log("gotton cards")
             const playerCount = getState().multiplayer_game.player_list.length;
             const roomcode = getState().multiplayer_rooms.roomcode;
             var arr = dealCards(result, playerCount);

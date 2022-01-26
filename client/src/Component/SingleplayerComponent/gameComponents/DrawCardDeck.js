@@ -21,7 +21,7 @@ const DrawCardDeck = ({ }) => {
         y: 0
     });
 
-    const timeout = 1000;
+    const timeout = 800;
 
 
     useEffect(() => {

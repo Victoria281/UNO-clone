@@ -20,7 +20,7 @@ const Card = ({ card, cardId, identity, playable }) => {
         y: 0
     });
 
-    const timeout = 1000;
+    const timeout = 800;
 
     const handleClick = () => {
         const mainDeckDOM = document.getElementById("mainDeck").getBoundingClientRect();

@@ -130,7 +130,13 @@ io.on("connection", (socket) => {
     });
 
     socket.on('sendStartGame', (newState) => {
+        console.log("herere")
+        console.log(newState)
         const success = SocketFunctions.startGame(newState)
+
+        console.log("Result...")
+        console.log(success)
+        console.log("==================================\n")
         if (success.success) {
             io.to(newState.roomcode).emit('startGame', success.msg)
         } else {
@@ -141,6 +147,10 @@ io.on("connection", (socket) => {
 
     socket.on('sendGameUpdate', (newState) => {
         const success = SocketFunctions.startGame(newState)
+
+        console.log("Result...")
+        console.log(success)
+        console.log("==================================\n")
         if (success.success) {
             io.to(newState.roomcode).emit('updateGame', success.msg)
         } else {

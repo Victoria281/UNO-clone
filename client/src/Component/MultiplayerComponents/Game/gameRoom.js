@@ -34,16 +34,12 @@ const GameRoom = ({ socket, roomcode }) => {
     const game_state = useSelector(state => state.multiplayer_game)
     const room_state = useSelector(state => state.multiplayer_rooms)
 
-    // console.log(game_state)
-    // console.log(room_state)
-    const startGamePressed = () => {
-        if (game_state.player_list.length > 1) {
-            dispatch(prepareGameMaterials(socket))
-        }
-    }
 
     const handleStart = () => {
-       console.log("I wanna start game")
+        console.log("start game pressed")
+        // if (room_state.players.length > 1) {
+            dispatch(prepareGameMaterials(socket))
+        // }
     }
 
     useEffect(() => {
@@ -67,6 +63,8 @@ const GameRoom = ({ socket, roomcode }) => {
 
 
         socket.on("startGame", (data) => {
+            console.log("Starting UNO Game")
+            console.log(data)
             dispatch(startGameDetected(data))
                 .then((result) => {
                     console.log(result)

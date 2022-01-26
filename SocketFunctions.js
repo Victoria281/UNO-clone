@@ -220,6 +220,10 @@ var SocketFunctions = {
     },
 
     startGame: function (game_state) {
+
+        console.log("==================================")
+        console.log("Servicing startGame...")
+        console.log("----------------------------------")
         if (roomState[game_state.roomcode] != undefined) {
             roomState[game_state.roomcode].status = true
             roomState[game_state.roomcode].gameState = game_state
@@ -238,6 +242,10 @@ var SocketFunctions = {
     },
 
     updateGameState: function (game_state) {
+
+        console.log("==================================")
+        console.log("Servicing updateGameState...")
+        console.log("----------------------------------")
         if (roomState[game_state.roomcode] != undefined) {
             roomState[game_state.roomcode].gameState = game_state
             return {
