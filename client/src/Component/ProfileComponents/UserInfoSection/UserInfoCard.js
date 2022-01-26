@@ -1,43 +1,22 @@
 //@ts-nocheck
 import { Fragment, useEffect, useState } from "react";
 
+import { useDispatch, useSelector } from 'react-redux';
+import { updateUserInfo } from "../../../store/action/others/profile";
+
 const UserInfoCard = () => {
-    const [userInfo, setUserInfo] = useState([]);
-
-    const getUser = async () => {
-      try {
-        const uid = localStorage.getItem('userid')
-        const response = await fetch(
-          process.env.REACT_APP_API_URL + `/api/uno/user/${uid}`,  {
-            method: 'GET',
-            headers: {
-              'authorization': localStorage.getItem('token'),
-            }}
-        );
-        console.log(response)
-        const jsonData = await response.json();
-        var userInformation = jsonData.user;
-        console.log("userInformation")
-        console.log(userInformation)
-        setUserInfo(userInformation);
-      } catch (err) {
-        console.error(err.message);
-      }
-  
-    };
-
-    useEffect(() => {
-        getUser();
-      }, []);
-
+    const dispatch = useDispatch();
+    const profile_state = useSelector(state => state.profile_info)
+    console.log("profile_state")
+    console.log(profile_state.userInfo)
   
   const ChangeUserInfo = () => {
-    const [newusername, setNewUsername] = useState(userInfo.username);
-    const [newemail, setNewEmail] = useState(userInfo.email);
+    const [newusername, setNewUsername] = useState(profile_state.userInfo.username);
+    const [newemail, setNewEmail] = useState(profile_state.userInfo.email);
     const [edit, setEdit] = useState(false);
     const [error, setError] = useState('');
     const [ifWarning, setWarning] = useState(false);
-
+    const uid = localStorage.getItem('userid')
 
     const handleInfoChange = async () => {
       // console.log(newusername);
@@ -47,31 +26,21 @@ const UserInfoCard = () => {
         setWarning(true);
       } else {
         try {
-          const uid = localStorage.getItem('userid')
-          const response = await fetch(process.env.REACT_APP_API_URL + `/api/uno/user/updateinfo/${uid}`, {
-            method: 'PUT',
-            headers: {
-              'Content-Type': 'application/json',
-              'authorization': localStorage.getItem('token'),
-            },
-            body: JSON.stringify({
-              username: newusername,
-              email: newemail
-            })
-          })
-          if (response.status === 204) {
-            alert("User Info updated!")
-            window.location.reload(true);
-          }
-          else {
-            setError("User Info was not changed. Please check your inputs");
-            setWarning(true);
-          }
-        } catch (err) {
-          setError("User Info was not changed. Please check your inputs");
-          setWarning(true);
-          console.error(err.message);
-        }
+          const response = dispatch(updateUserInfo(uid, newusername,newemail));
+          console.log(response + "-----------------------------------")
+           if (response.status === 204) {
+             alert("User Info updated!")
+             window.location.reload(true);
+           }
+           else {
+             setError("User Info was not changed. Please check your inputs");
+             setWarning(true);
+           }
+         } catch (err) {
+           setError("User Info was not changed. Please check your inputs");
+       setWarning(true);
+           console.error(err.message);
+         }
       }
     }
 
@@ -79,53 +48,55 @@ const UserInfoCard = () => {
       setEdit(!edit);
     }
 
-    if (edit) {
-      return (
-        <div className="row align-items-end">
-          <div className="rol">
-            <h5>Username:</h5>
-            <p>
-              <input
-                type="text"
-                value={newusername}
-                className="username"
-                onChange={(e) => { setNewUsername(e.target.value) }}
-              />
-            </p>
-            <h5>Email:</h5>
-            <p>
-              <input
-                type="text"
-                value={newemail}
-                className="email"
-                onChange={(e) => { setNewEmail(e.target.value) }}
-              />
-            </p>
-          </div>
-          <div className="col">
-              {
-                ifWarning ?
-                  <div className="alert alert-danger m-3">{error}</div> :
-                  null
-              }
-            <input className="btn btn-danger m-3" type="submit" onClick={handleInfoChange} />
-            <button className="btn btn-primary m-3" onClick={toggleEdit}> Cancel </button>
-          </div>
-        </div>);
-    } else {
-      return (
-        <div className="my-auto row">
-          <div className="col">
-            <div className="d-flex justify-content-between">
+    return(
+      <Fragment>
+        {edit ? 
+          <div className="row align-items-end">
+            <div className="rol">
               <h5>Username:</h5>
-              <button className="editBtn text-secondary" onClick={toggleEdit}>Edit</button>
+              <p>
+                <input
+                  type="text"
+                  value={newusername}
+                  className="username"
+                  onChange={(e) => { setNewUsername(e.target.value) }}
+                />
+              </p>
+              <h5>Email:</h5>
+              <p>
+                <input
+                  type="text"
+                  value={newemail}
+                  className="email"
+                  onChange={(e) => { setNewEmail(e.target.value) }}
+                />
+              </p>
             </div>
-            <p className="username">{userInfo.username}</p>
-            <h5>Email:</h5><p className="email">{userInfo.email}</p>
+            <div className="col">
+                {
+                  ifWarning ?
+                    <div className="alert alert-danger m-3">{error}</div> :
+                    null
+                }
+              <input className="btn btn-danger m-3" type="submit" onClick={handleInfoChange} />
+              <button className="btn btn-primary m-3" onClick={toggleEdit}> Cancel </button>
+            </div>
           </div>
-          <div className="col"></div>
-        </div>);
-    }
+          : 
+          <div className="my-auto row">
+            <div className="col">
+              <div className="d-flex justify-content-between">
+                <h5>Username:</h5>
+                <button className="editBtn text-secondary" onClick={toggleEdit}>Edit</button>
+              </div>
+              <p className="username">{profile_state.userInfo.username}</p>
+              <h5>Email:</h5><p className="email">{profile_state.userInfo.email}</p>
+            </div>
+            <div className="col"></div>
+          </div>
+      }
+      </Fragment>
+    );
   }
 
   return (
@@ -138,8 +109,8 @@ const UserInfoCard = () => {
       >
         <img
           className="img-responsive mainIcon"
-          alt={userInfo.profileicon + ".png"}
-          src={process.env.REACT_APP_API_URL + "/api/uno/profile_icons/" + userInfo.profileicon + ".png"}
+          alt={profile_state.userInfo.profileicon + ".png"}
+          src={process.env.REACT_APP_API_URL + "/api/uno/profile_icons/" + profile_state.userInfo.profileicon + ".png"}
         />
 
         <div className="middle">

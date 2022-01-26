@@ -11,16 +11,7 @@ const ProfileModal = () => {
       } else {
         try {
           const uid = localStorage.getItem('userid')
-          const response = await fetch(process.env.REACT_APP_API_URL + `/api/uno/user/icon/${uid}`, {
-            method: 'PUT',
-            headers: {
-              'Content-Type': 'application/json',
-              'authorization': localStorage.getItem('token'),
-            },
-            body: JSON.stringify({
-              icon: selectedIcon
-            })
-          })
+          
           if (response.status === 204) {
             alert("Profile icon updated!")
             window.location.reload(true);
