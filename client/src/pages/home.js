@@ -1,6 +1,6 @@
-import { useState } from "react";
-import BotDifficultyModal from "../Component/OtherComponents/BotDifficultyComponent/BotDifficultyModal";
 import "../css/home.css";
+import BotDifficultyModal from "../Component/OtherComponents/BotDifficultyComponent/BotDifficultyModal";
+import { useState } from "react";
 
 export default function App() {
 
@@ -16,7 +16,7 @@ export default function App() {
       <button onClick={()=>{setOpen(true)}}>Start</button>
       <BotDifficultyModal open={open} setOpen={setOpen}/>
       <div className="row d-flex justify-content-between">
-        <a className="startBtn" href="./game">
+        <a className="startBtn" href="./newgame">
           Single Player
         </a>
         <a className="startMultiBtn" href="./createroom">
