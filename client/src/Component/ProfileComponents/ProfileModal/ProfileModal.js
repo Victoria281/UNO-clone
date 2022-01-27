@@ -1,24 +1,31 @@
 //@ts-nocheck
 
 import { Fragment, useEffect, useState } from "react";
+import { useDispatch, useSelector } from 'react-redux';
+import { updateUserProfileImg } from "../../../store/action/others/profile";
+
    
 const ProfileModal = () => {
     const [selectedIcon, setSelectedIcon] = useState(null);
     const profileIcons = ['bird', 'cat', 'elephant', 'fox', 'frog', 'koala', 'shell', 'toucan', 'turtle', 'whale']
+    const dispatch = useDispatch();
+    const profile_state = useSelector(state => state.profile_info)
+    console.log("profile_state")
+    console.log(profile_state.userInfo)
+
     const changeIcon = async () => {
       if (selectedIcon == null) {
-        // console.log("no icon selected")
+        console.log("no icon selected")
       } else {
         try {
           const uid = localStorage.getItem('userid')
-          
-          if (response.status === 204) {
+          dispatch(updateUserProfileImg(uid, selectedIcon))
+          .then(()=>{
             alert("Profile icon updated!")
-            window.location.reload(true);
-          }
-          else {
+          })
+          .catch(()=>{
             alert("Error Occured!")
-          }
+          });
         } catch (err) {
           // console.error(err.message);
         }

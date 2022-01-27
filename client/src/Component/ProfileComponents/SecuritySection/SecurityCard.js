@@ -1,6 +1,7 @@
 //@ts-nocheck
 import { Fragment, useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from 'react-redux';
+import { updateUserPasswd } from "../../../store/action/others/profile";
 
 const SecurityCard = () => {
 
@@ -9,6 +10,7 @@ const SecurityCard = () => {
     const [checkpassword, setCheckPassword] = useState('');
     const [error, setError] = useState('');
     const [ifWarning, setWarning] = useState(false);
+    const dispatch = useDispatch();
 
     const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})/;
 
@@ -25,26 +27,15 @@ const SecurityCard = () => {
         } else {
             try {
                 const uid = localStorage.getItem('userid')
-                const response = await fetch(process.env.REACT_APP_API_URL + `/api/uno/user/update/${uid}`, {
-                    method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'authorization': localStorage.getItem('token'),
-                    },
-                    body: JSON.stringify({
-                        old_password: oldpassword,
-                        new_password: newpassword
-                    })
-                })
-                if (response.status === 204) {
+                dispatch(updateUserPasswd(uid, oldpassword, newpassword))
+                .then(()=>{
                     alert("Password changed!")
-                    window.location.reload(true);
-                }
-                else {
+                })
+                .catch(()=>{
                     setError("Password was not changed. Please check your inputs!");
                     setWarning(true);
-                    //alert("Error Occured!")
-                }
+                    alert("Error Occured!")
+                });
             } catch (err) {
                 // console.error(err.message);
             }

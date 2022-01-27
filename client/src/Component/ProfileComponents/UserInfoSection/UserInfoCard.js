@@ -26,20 +26,18 @@ const UserInfoCard = () => {
         setWarning(true);
       } else {
         try {
-          const response = dispatch(updateUserInfo(uid, newusername,newemail));
-          console.log(response + "-----------------------------------")
-           if (response.status === 204) {
-             alert("User Info updated!")
-             window.location.reload(true);
-           }
-           else {
-             setError("User Info was not changed. Please check your inputs");
-             setWarning(true);
-           }
+          dispatch(updateUserInfo(uid, newusername,newemail))
+          .then(()=>{
+            alert("User Info updated!")
+          })
+          .catch(()=>{
+            setError("User Info was not changed. Please check your inputs");
+            setWarning(true);
+           });
          } catch (err) {
-           setError("User Info was not changed. Please check your inputs");
-       setWarning(true);
-           console.error(err.message);
+            setError("User Info was not changed. Please check your inputs");
+            setWarning(true);
+            console.error(err.message);
          }
       }
     }

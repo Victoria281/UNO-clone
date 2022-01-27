@@ -5,6 +5,10 @@ import UserInfoCard from './UserInfoSection/UserInfoCard'
 import SecurityCard from './SecuritySection/SecurityCard'
 import ProfileModal from './ProfileModal/ProfileModal'
 import { useDispatch, useSelector } from 'react-redux'
+import {Box} from '@mui/material'
+import AccountBoxIcon from '@mui/icons-material/AccountBox';
+import LockIcon from '@mui/icons-material/Lock';
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 
 import {
   getUserInfo
@@ -15,57 +19,61 @@ const Profile = () => {
   const profile_state = useSelector(state => state.profile_info)
 
   useEffect(() => {
-    console.log('something')
+
     const uid = localStorage.getItem('userid')
     if(uid !== undefined){
       dispatch(getUserInfo(uid));
     }
+    console.log('profile_state returned')
+    console.log(profile_state)
   }, []);
 
   return (
     <Fragment>
       {
-        profile_state.userInfo.length === 0 ?
+        //profile_state.userInfo.length === 0 
+        profile_state.userInfo == undefined
+        ?
           <p>Loading</p>
           :
-          <div id="root">
+          <Box id="root">
             <ProfileModal />
-            <div className="gameProfileBody py-4">
-              <div className="row no-gutters">
-                <div id="accordion" className="w-100">
+            <Box className="gameProfileBody py-4">
+              <Box className="row no-gutters">
+                <Box id="accordion" className="w-100">
                   {/* Profile */}
-                  <div className="card my-3">
-                    <div id="headerOne" className="card-header d-flex justify-content-between" data-toggle="collapse" href="#collapseOne">
+                  <Box className="card my-3">
+                    <Box id="headerOne" className="card-header d-flex justify-content-between" data-toggle="collapse" href="#collapseOne">
                       <button className="collapsed card-link text-dark">
-                        <i className="fa fa-address-card-o"></i>    Profile
+                        <AccountBoxIcon/>    Profile
                       </button>
-                      <i className="fa fa-arrow-down p-1"></i>
-                    </div>
-                    <div id="collapseOne" className="collapse show" data-parent="#accordion">
-                      <div id="bodyOne" className="card-body">
+                      <KeyboardArrowDownIcon/>{/* <i className="fa fa-arrow-down p-1"></i> */}
+                    </Box>
+                    <Box id="collapseOne" className="collapse show" data-parent="#accordion">
+                      <Box id="bodyOne" className="card-body">
                         <UserInfoCard />
-                      </div>
-                    </div>
-                  </div>
+                      </Box>
+                    </Box>
+                  </Box>
 
                   {/* Change Password */}
-                  <div className="card my-3">
-                    <div id="headerTwo" className="card-header d-flex justify-content-between" data-toggle="collapse" href="#collapseTwo">
+                  <Box className="card my-3">
+                    <Box id="headerTwo" className="card-header d-flex justify-content-between" data-toggle="collapse" href="#collapseTwo">
                       <button className="collapsed card-link text-dark" >
-                        <i className="fa fa-lock"></i>    Change Password
+                        <LockIcon/>    Change Password
                       </button>
-                      <i className="fa fa-arrow-down p-1"></i>
-                    </div>
-                    <div id="collapseTwo" className="changePassword collapse" data-parent="#accordion">
-                      <div id="bodyTwo" className="card-body">
+                      <KeyboardArrowDownIcon/>
+                    </Box>
+                    <Box id="collapseTwo" className="changePassword collapse" data-parent="#accordion">
+                      <Box id="bodyTwo" className="card-body">
                         <SecurityCard />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+                      </Box>
+                    </Box>
+                  </Box>
+                </Box>
+              </Box>
+            </Box>
+          </Box>
       }
     </Fragment>
   );

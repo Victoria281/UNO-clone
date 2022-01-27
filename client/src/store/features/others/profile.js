@@ -20,7 +20,7 @@ export const getUser = async (uid) => {
 
 export const updateUser = async (uid, newusername, newemail) => {
     try {
-        const response = await fetch(process.env.REACT_APP_API_URL + `/api/uno/user/updateinfo/${uid}`, {
+        await fetch(process.env.REACT_APP_API_URL + `/api/uno/user/updateinfo/${uid}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -31,9 +31,6 @@ export const updateUser = async (uid, newusername, newemail) => {
                 email: newemail
             })
         })
-        console.log("Response to Update")
-        console.log(response)
-        return response;
     }
     catch (err) {
         console.error(err.message);
@@ -42,7 +39,7 @@ export const updateUser = async (uid, newusername, newemail) => {
 
 export const updateUserProfilePic = async (uid, selectedIcon) => {
     try {
-        const response = await fetch(process.env.REACT_APP_API_URL + `/api/uno/user/icon/${uid}`, {
+        await fetch(process.env.REACT_APP_API_URL + `/api/uno/user/icon/${uid}`, {
             method: 'PUT',
             headers: {
               'Content-Type': 'application/json',
@@ -52,8 +49,25 @@ export const updateUserProfilePic = async (uid, selectedIcon) => {
               icon: selectedIcon
             })
           })
-          console.log("Response to Update")
-          console.log(response)
+    }
+    catch (err) {
+        console.error(err.message);
+    }
+};
+
+export const updateUserPassword = async (uid, oldpassword, newpassword) => {
+    try {
+        await fetch(process.env.REACT_APP_API_URL + `/api/uno/user/update/${uid}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'authorization': localStorage.getItem('token'),
+            },
+            body: JSON.stringify({
+                old_password: oldpassword,
+                new_password: newpassword
+            })
+        })
     }
     catch (err) {
         console.error(err.message);

@@ -120,7 +120,7 @@ export default function App() {
             // console.log(error.response.status);
             // console.log(error.response.headers);
             //setCredWrong("Wrong Credentials Entered!");
-
+            setNotif({ open: true, type: 'error', message: 'Login Unsuccessful' })
             // If attempt is 5 times, disable form
             if (attempt == 4) {
               status = false;
