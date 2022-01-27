@@ -111,12 +111,12 @@ app.get('/cards', printingDebuggingInfo, function (req, res, next) {
                 return next(err);
             }
         } else {
-            if (result.length == 0){
+            if (result.length == 0) {
                 return next(createHttpError(404, `Not found`));
             } else {
                 return res.status(200).json({ cards: result });
             }
-            
+
         }
     });
 });
@@ -166,7 +166,7 @@ app.post('/login', printingDebuggingInfo, function (req, res, next) {
 //register
 app.post('/register', printingDebuggingInfo, function (req, res, next) {
     console.log('processRegister running.');
-    let userName = req.body.username;
+    let userName = req.body.userName;
     let email = req.body.email;
     let password = req.body.password;
 
@@ -212,6 +212,42 @@ app.post('/register', printingDebuggingInfo, function (req, res, next) {
 //=====================================
 //  User
 //=====================================
+//getUserStatistics
+app.get('/user/stat', printingDebuggingInfo, verifyToken, function (req, res, next) {
+    const uid = req.decodedToken.id;
+    console.log(">>>>", uid);
+    User.getUserStat(uid, function (err, result) {
+        if (err) {
+            if (err.code === '23505') {
+                return next(createHttpError(404, `Not found`));
+            }
+            else {
+                return next(err);
+            }
+        } else {
+            return res.status(200).send({ score: result });
+        }
+    });
+});
+
+//getUserOverallStatistics
+app.get('/user/stat/overall', printingDebuggingInfo, verifyToken, function (req, res, next) {
+    const uid = req.decodedToken.id;
+    console.log(">>>>", uid);
+
+    User.getUserOverallStat(uid, function (err, result) {
+        if (err) {
+            if (err.code === '23505') {
+                return next(createHttpError(404, `Not found`));
+            }
+            else {
+                return next(err);
+            }
+        } else {
+            return res.status(200).send({ score: result });
+        }
+    });
+});
 
 //findByUserId
 app.get('/user/:id', printingDebuggingInfo, verifyToken, function (req, res, next) {
@@ -226,7 +262,7 @@ app.get('/user/:id', printingDebuggingInfo, verifyToken, function (req, res, nex
                 return next(err);
             }
         } else {
-            if (result.length == 0){
+            if (result.length == 0) {
                 return next(createHttpError(404, `Not found`));
             } else {
                 return res.status(200).json({ user: result });
@@ -400,6 +436,39 @@ app.put('/leaderboard/update/:id', printingDebuggingInfo, verifyToken, function 
     });
 });
 
+// Resetting password when forget
+app.put('/user/reset', printingDebuggingInfo, function (req, res, next) {
+    const email = req.body.email;
+    const new_password = req.body.password;
+
+    try {       
+        // console.log("-----------------------------------------------------------------")
+        // console.log(results)
+        // console.log("-----------------------------------------------------------------")
+        console.log(email)
+                
+        bcrypt.hash(new_password, 10, async (err, hash) => {
+                            
+            results = User.resetUserPasswordGmail(email, hash, function (error, results) {
+                console.log(results)
+                if(results===0){
+                    console.log("There is no such user in the database! Ensure that you have registered with us!")
+                    return res.status(404).json({ statusMessage: 'No user found' })
+                }
+                if (results != null) {
+                    return res.status(204).json({ statusMessage: 'Completed reset.' });
+                }
+                if (error) {
+                    return res.status(500).json({ statusMessage: 'Unable to complete reset' });
+                }
+            });
+                            
+        });
+    } catch (error) {
+        return next(err);
+    }
+
+});
 
 
 module.exports = app;

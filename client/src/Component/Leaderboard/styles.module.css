@@ -1,0 +1,293 @@
+.gameBody {
+    height: auto;
+    overflow-y: hidden;
+}
+
+.leaderboard_player {
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 20px;
+    -webkit-box-shadow: 0 0.5rem 1rem rgba(0, 0, 16, 0.19), 0 0.3rem 0.3rem rgba(0, 0, 16, 0.23);
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 16, 0.19), 0 0.3rem 0.3rem rgba(0, 0, 16, 0.23);
+    background-color: #FFC825;
+}
+
+.leaderboard_body {
+    overflow-x: hidden;
+    overflow-y: scroll;
+}
+
+.leaderboard_body::-webkit-scrollbar {
+    width: 0.3em;
+}
+
+.leaderboard_body::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+}
+
+.leaderboard_body::-webkit-scrollbar-thumb {
+    background-color: rgb(0, 0, 0);
+    outline: 1px solid slategrey;
+}
+
+.ldbPodium {
+    height: 90%;
+    max-height: 90%;
+}
+
+.pillarBody {
+    position: relative;
+    justify-content: space-around;
+    align-items: end;
+}
+
+.lbuserheader {
+    padding-top: 20px;
+    text-align: center;
+    font-weight: bold;
+    color: black;
+}
+
+.lbuser {
+    text-align: center;
+    font-weight: bold;
+    color: black;
+}
+
+.createdDate {
+    font-size: small;
+    /* padding: 5%; */
+}
+
+
+/* Podium Pillar 1 */
+.podiumPillar1 {
+    bottom: 0px;
+    position: absolute;
+    animation: growth1 3s 1;
+    animation-direction: normal;
+    justify-content: end;
+    height: 100%;
+    width: 90%;
+    vertical-align: bottom;
+}
+
+.lb1IconBorder {
+    width: 85px;
+    padding: 15px;
+    border-radius: 75px;
+    border: 3px solid gold;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+.borderDesign1 {
+    overflow: hidden;
+    border-radius: 10px;
+    background-color: white;
+    height: 97.5%;
+    margin-right: auto;
+    margin-left: auto;
+    margin-bottom: 10px;
+    margin-top: 10px;
+    -webkit-box-shadow: 0 0.5rem 1rem rgba(0, 0, 16, 0.19), 0 0.3rem 0.3rem rgba(0, 0, 16, 0.23);
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 16, 0.19), 0 0.3rem 0.3rem rgba(0, 0, 16, 0.23);
+}
+
+.crown {
+    margin-bottom: -20px;
+    width: 55px;
+    height: 55px;
+}
+
+.crownBox {
+    display: flex;
+    justify-content: center;
+    padding-left: 50px;
+    padding-bottom: 15px;
+}
+
+.lb1Icons {
+    object-fit: contain;
+    width: 40px;
+    height: 40px;
+}
+
+.podiumTriangle1 {
+    background-color: gold;
+    height: 70px;
+    width: 100%;
+    clip-path: polygon(0 0, 100% 100%, 100% 0);
+}
+
+
+/* Podium Pillar 2 */
+.podiumPillar2 {
+    bottom: 0px;
+    position: absolute;
+    animation: growth2 3s 1;
+    animation-direction: normal;
+    text-align: end;
+    height: 83%;
+    width: 90%;
+}
+
+.lb2IconBorder {
+    width: 85px;
+    padding: 15px;
+    border-radius: 75px;
+    border: 3px solid grey;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+.borderDesign2 {
+    overflow: hidden;
+    border-radius: 10px;
+    background-color: white;
+    height: 100%;
+    margin-right: auto;
+    margin-left: auto;
+    margin-bottom: 10px;
+    margin-top: 10px;
+    -webkit-box-shadow: 0 0.5rem 1rem rgba(0, 0, 16, 0.19), 0 0.3rem 0.3rem rgba(0, 0, 16, 0.23);
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 16, 0.19), 0 0.3rem 0.3rem rgba(0, 0, 16, 0.23);
+}
+
+.lb2Icons {
+    object-fit: contain;
+    width: 40px;
+    height: 40px;
+}
+
+.podiumTriangle2 {
+    background-color: grey;
+    height: 70px;
+    width: 100%;
+    clip-path: polygon(0 0, 100% 100%, 100% 0);
+}
+
+
+/* Podium Pillar 3 */
+.podiumPillar3 {
+    bottom: 0px;
+    position: absolute;
+    animation: growth3 3s 1;
+    animation-direction: normal;
+    text-align: end;
+    height: 75%;
+    width: 90%;
+}
+
+.lb3IconBorder {
+    width: 85px;
+    padding: 15px;
+    border-radius: 75px;
+    border: 3px solid #CD7F32;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+.borderDesign3 {
+    overflow: hidden;
+    border-radius: 10px;
+    background-color: white;
+    height: 100%;
+    margin-right: auto;
+    margin-left: auto;
+    margin-bottom: 10px;
+    margin-top: 10px;
+    -webkit-box-shadow: 0 0.5rem 1rem rgba(0, 0, 16, 0.19), 0 0.3rem 0.3rem rgba(0, 0, 16, 0.23);
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 16, 0.19), 0 0.3rem 0.3rem rgba(0, 0, 16, 0.23);
+}
+
+.podiumTriangle3 {
+    background-color: #CD7F32;
+    height: 70px;
+    width: 100%;
+    clip-path: polygon(0 0, 100% 100%, 100% 0);
+}
+
+
+/* Leaderboard Row & Body */
+.leaderboard_row {
+    border: 1px solid black;
+    background-color: #ffc82580;
+    border-radius: 5px;
+    overflow: hidden;
+    color: black;
+    margin-bottom: 15px;
+}
+
+.leaderboard_row:hover {
+    border: 1px solid white;
+    background-color: #FFC825;
+    -webkit-box-shadow: 0 0.5rem 1rem rgba(0, 0, 16, 0.19), 0 0.3rem 0.3rem rgba(0, 0, 16, 0.23);
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 16, 0.19), 0 0.3rem 0.3rem rgba(0, 0, 16, 0.23);
+}
+
+.leaderboard_header {
+    padding: 0% 2% 0% 2%;
+}
+
+.leaderboard_body {
+    padding: 0% 2% 2% 2%;
+    max-height: 600px;
+    /* max-width: 97%; */
+    overflow-x: hidden;
+    overflow-y: visible;
+}
+
+.ldbRowIcon {
+    width: 40px;
+}
+
+@keyframes growth1 {
+    from {
+        height: 0%;
+    }
+
+    to {
+        height: 100%;
+    }
+}
+
+@keyframes growth2 {
+    from {
+        height: 0%;
+    }
+    
+    to {
+        height: 83%;
+    }
+}
+
+@keyframes growth3 {
+    from {
+        height: 0%;
+    }
+    
+    to {
+        height: 75%;
+    }
+}
+
+
+.tabBody {
+    max-height: 450vh;
+    overflow-x: hidden;
+    overflow-y: scroll;
+}
+
+.tabBody::-webkit-scrollbar {
+    width: 0.3em;
+}
+
+.tabBody::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+}
+
+.tabBody::-webkit-scrollbar-thumb {
+    background-color: rgb(0, 0, 0);
+    outline: 1px solid slategrey;
+}
