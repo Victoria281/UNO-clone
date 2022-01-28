@@ -4,7 +4,6 @@ import { useTheme } from '@mui/material/styles';
 import { Typography, Slide, Box, Modal, Button, MobileStepper, LinearProgress, Grid } from "@mui/material";
 import styles from './styles.module.css';
 import game from "../../img/game.png";
-import SwipeableViews from 'react-swipeable-views';
 
 const Tutorial = ({
     isTutorialOpen,
