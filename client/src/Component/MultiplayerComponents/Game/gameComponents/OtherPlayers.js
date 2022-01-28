@@ -1,31 +1,32 @@
 import React from 'react';
 import { Stack } from '@mui/material';
+import OtherPlayerCard from "./OtherPlayerCard"
 import styles from "../styles.module.css"
 
 //gets the data from the action object and reducers defined earlier
-const OtherPlayer = ({ playerDeck, playing, placement }) => {
+const OtherPlayer = ({ playerDeck, placement, number, pturn, isTurn }) => {
     return (
-        <Stack direction="row" spacing={1} className={`${styles.OtherPlayerStack} ${styles['OtherPlayerStack' + placement]}`}>
-            {playerDeck.map((card, i) =>
-                <div
-                    className="p1cards"
-                    key={i}>
-                    <img
-                        className="img-responsive"
-                        style={{ width: 70 }}
-                        src={
-                            process.env.REACT_APP_API_URL + "/api/uno/images/" +
-                            card.image_file.slice(8)
-                        }
-                        alt={card.values + " " + card.color}
-                    />
-                </div>
-            )}
+        <>
+            {
+                isTurn ?
+                    <p className={`${styles['PlayerName' + placement]} ${styles.PlayersTurn}`}>Player {pturn}...</p>
 
-            {playing && <div>
-                <p>Turn</p>
-            </div>}
-        </Stack >
+                    :
+                    <p className={`${styles['PlayerName' + placement]}`}>Player {pturn}</p>
+
+            }
+            <Stack direction="row" spacing={1} className={`${styles.OtherPlayerStack} ${styles['OtherPlayerStack' + placement]}`}>
+                {playerDeck.map((card, i) =>
+                    <OtherPlayerCard
+                        card={card}
+                        identity={"bot" + number}
+                        cardId={"p1" + card.id}
+                        botPlay={card.botPlayCard}
+                    />
+                )}
+            </Stack>
+
+        </>
     );
 }
 export default OtherPlayer;

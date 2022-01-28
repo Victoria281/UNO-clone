@@ -5,6 +5,7 @@ const testRoomState = {
     "testRoom": {
         status: "",
         players: [],
+        audience: [],
         gameState: {},
         owner: "",
         private: true
@@ -36,16 +37,9 @@ var SocketFunctions = {
             removePlayer = SocketFunctions.leftRoom(id, username)
 
             console.log("Result...")
-            console.log(removePlayer)
             console.log("==================================\n")
         }
         playersConnected[username] = id
-
-
-
-        console.log(username)
-        console.log(playersConnected)
-        console.log(removePlayer)
 
         return {
             success: true,
@@ -69,6 +63,7 @@ var SocketFunctions = {
             roomState[roomcode] = {
                 status: false,
                 players: [user],
+                audience: [],
                 gameState: {},
                 owner: user,
                 private: true
@@ -120,7 +115,7 @@ var SocketFunctions = {
         console.log(user)
         console.log("requesting to join room with code " + roomcode)
         if (roomState[roomcode] != undefined) {
-            if (roomState[roomcode].players.length >= 4) {
+            if ((roomState[roomcode].players.length + roomState[roomcode].audience.length) >= 10) {
                 return {
                     success: false,
                     send: broadcastOne,
@@ -129,7 +124,7 @@ var SocketFunctions = {
             } else {
 
                 if (user.username == undefined) {
-                    user.username = "Player " + roomState[roomcode].players.length
+                    user.username = "Guest User " + (roomState[roomcode].players.length + roomState[roomcode].audience.length)
                 }
 
                 var alreadyIn = false;
@@ -138,21 +133,33 @@ var SocketFunctions = {
                         alreadyIn = true;
                     }
                 })
+                roomState[roomcode].audience.map((data) => {
+                    if (data.id == id) {
+                        alreadyIn = true;
+                    }
+                })
+
 
                 if (alreadyIn == false) {
-                    roomState[roomcode].players.push(user)
+                    if (roomState[roomcode].players.length >= 4 || roomState[roomcode].status == true){
+                        roomState[roomcode].audience.push(user)
+                    } else {
+                        roomState[roomcode].players.push(user)
+                    }
                 }
                 playerRooms[id] = roomcode
 
                 console.log("Player has joined Room " + roomcode)
                 console.log("Player has been registered")
-                console.log(playerRooms)
 
                 return {
                     success: true,
                     roomcode: roomcode,
                     send: broadcastOne,
-                    msg: roomState[roomcode]
+                    msg: {
+                        room: roomState[roomcode],
+                        user: user
+                    }
                 };
             }
         } else {
@@ -251,7 +258,7 @@ var SocketFunctions = {
             return {
                 success: true,
                 send: broadcastAll,
-                msg: roomState[game_state.roomcode]
+                msg: roomState[game_state.roomcode].gameState
             };
         } else {
             return {

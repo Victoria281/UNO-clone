@@ -18,7 +18,15 @@ const SocketFunctions = require("./SocketFunctions");
 const broadcastOne = 1;
 const broadcastAll = 0;
 var corsOptions = {
-    origin: ["http://uno-clone.herokuapp.com", "http://localhost:3000"],
+    origin: [
+        "http://uno-clone.herokuapp.com", 
+        "https://uno-clone.herokuapp.com", 
+        "http://uno-clone-dev.herokuapp.com", 
+        "https://uno-clone-dev.herokuapp.com", 
+        "http://uno-ca1.herokuapp.com", 
+        "https://uno-ca1.herokuapp.com", 
+        "http://localhost:3000"
+    ],
     optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
 }
 //middleware
@@ -28,7 +36,15 @@ app.use(express.json());
 const server = http.createServer(app);
 const io = socketio(server, {
     cors: {
-        origin: ["http://uno-clone.herokuapp.com", "http://localhost:3000"],
+        origin: [
+            "http://uno-clone.herokuapp.com", 
+            "https://uno-clone.herokuapp.com", 
+            "http://uno-clone-dev.herokuapp.com", 
+            "https://uno-clone-dev.herokuapp.com", 
+            "http://uno-ca1.herokuapp.com", 
+            "https://uno-ca1.herokuapp.com", 
+            "http://localhost:3000"
+        ],
         methods: ["GET", "POST"],
         credentials: true
     }
@@ -72,7 +88,6 @@ io.on("connection", (socket) => {
     socket.on("enteredMultiplayer", (username) => {
         var status = SocketFunctions.startMultiplayer(socket.id, username);
         console.log("Result...")
-        console.log(status)
         console.log("==================================\n")
 
         if (status.success) {
@@ -94,7 +109,6 @@ io.on("connection", (socket) => {
         const success = SocketFunctions.createNewRoom(socket.id, username, roomcode);
 
         console.log("Result...")
-        console.log(success)
         console.log("==================================\n")
 
         if (success.success) {
@@ -114,13 +128,15 @@ io.on("connection", (socket) => {
         const success = SocketFunctions.joinNewRoom(socket.id, username, roomcode);
 
         console.log("Result...")
-        console.log(success)
         console.log("==================================\n")
 
         if (success.success) {
             socket.join(success.roomcode);
+            socket.emit("identity", {
+                user: success.msg.user
+            });
             io.sockets.in(success.roomcode).emit("roomUpdate", {
-                roomState: success.msg,
+                roomState: success.msg.room,
             });
         } else {
             socket.emit("errorOccured", {
@@ -130,12 +146,10 @@ io.on("connection", (socket) => {
     });
 
     socket.on('sendStartGame', (newState) => {
-        console.log("herere")
-        console.log(newState)
+        console.log("Room requested to Start game")
         const success = SocketFunctions.startGame(newState)
 
         console.log("Result...")
-        console.log(success)
         console.log("==================================\n")
         if (success.success) {
             io.to(newState.roomcode).emit('startGame', success.msg)
@@ -146,15 +160,14 @@ io.on("connection", (socket) => {
     })
 
     socket.on('sendGameUpdate', (newState) => {
-        const success = SocketFunctions.startGame(newState)
+        const success = SocketFunctions.updateGameState(newState.new_game_state)
 
         console.log("Result...")
-        console.log(success)
         console.log("==================================\n")
         if (success.success) {
-            io.to(newState.roomcode).emit('updateGame', success.msg)
+            io.to(newState.new_game_state.roomcode).emit('updateGame', success.msg)
         } else {
-            io.to(newState.roomcode).emit('errorOccured', success.msg)
+            io.to(newState.new_game_state.roomcode).emit('errorOccured', success.msg)
 
         }
     })
@@ -163,7 +176,6 @@ io.on("connection", (socket) => {
         const success = SocketFunctions.joinRandomRoom(socket.id, username)
 
         console.log("Result...")
-        console.log(success)
         console.log("==================================\n")
         if (success.success) {
             socket.emit("randomRoomFound", {
@@ -182,7 +194,6 @@ io.on("connection", (socket) => {
         const success = SocketFunctions.findPlayer(socket.id, username, friendUsername)
 
         console.log("Result...")
-        console.log(success)
         console.log("==================================\n")
         if (success.success) {
             io.to(success.friend).emit('friendRequesting', {
@@ -201,7 +212,6 @@ io.on("connection", (socket) => {
         const success = SocketFunctions.onFriendRequestAccepted(requestedUser, socket.id, username)
 
         console.log("Result...")
-        console.log(success)
         console.log("==================================\n")
         if (success.success) {
             io.to(success.send).emit('friendRequestAccepted', {
@@ -239,7 +249,6 @@ io.on("connection", (socket) => {
         const success = SocketFunctions.disconnectMultiplayer(socket.id)
 
         console.log("Result...")
-        console.log(success)
         console.log("==================================\n")
 
         // if (success.success) {

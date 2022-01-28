@@ -1,59 +1,54 @@
 import React from "react";
-import {
-    playCard,
-} from "../../../../store/action/multiplayer/game"
-import { useDispatch } from 'react-redux'
-import { Stack } from '@mui/material';
-import SelectColorModal from './SelectColorModal'
 
+import { useDispatch } from 'react-redux'
+import { Stack, Button } from '@mui/material';
+import Card from "./Card"
+import styles from "../styles.module.css"
 //gets the data from the action object and reducers defined earlier
-const Player = ({ handleWildCard, playerDeck, playing, socket }) => {
+const Player = ({ playerDeck, current, playerTurn, isTurn, socket }) => {
     const dispatch = useDispatch();
 
-    const handlePlayCard = () => {
-
-    }
     return (
-        <Stack direction="row" spacing={1}>
-            {playerDeck.map((card, i) =>
-                card.playable ?
-                    <div
-                        className="p1cards"
-                        key={i}
-                        onClick={() => handlePlayCard()}
-                    >
-                        <img
-                            className="img-responsive isplayable"
-                            style={{ width: 70 }}
-                            src={
-                                process.env.REACT_APP_API_URL + "/api/uno/images/" +
-                                card.image_file.slice(8)
-                            }
-                            alt={card.values + " " + card.color}
-                        />
-                    </div>
+        <>
+            {
+                isTurn ?
+                    <>
+                        <p className={`${styles.PlayerName} ${styles.PlayersTurn}`}>Player {playerTurn} Loading...</p>
+                    </>
                     :
-                    <div
-                        className="p1cards"
-                        key={i}
-                        onClick={() => handlePlayCard()}>
-                        <img
-                            className="img-responsive"
-                            style={{ width: 70 }}
-                            src={
-                                process.env.REACT_APP_API_URL + "/api/uno/images/" +
-                                card.image_file.slice(8)
-                            }
-                            alt={card.values + " " + card.color}
+                    <p className={styles.PlayerName}>Player {playerTurn}</p>
+            }
+            <div className={styles.PlayerArea}>
+                <Stack direction="row" spacing={1} className={styles.PlayerStack}>
+                    {playerDeck.map((card, i) =>
+                        <Card
+                            card={card}
+                            cardId={"p1" + card.id}
+                            playable={card.playable}
+                            identity={"player"}
+                            socket={socket}
                         />
+                    )}
+                    <div >
+                        <div className={`${styles.CurrentColor} ${styles[current.color]}`}> </div>
+                        <div
+                            style={{
+                                display: "flex",
+                                alignItems: "center"
+                            }}>
+                            <button className="roomBtn" onClick={() => {
+                                // console.log("herer"); dispatch(callUNO())
+                            }}><p>UNO</p></button>
+                        </div>
                     </div>
+                </Stack>
 
-
-            )}
-            {playing && <div>
-                <p>Turn</p>
-            </div>}
-        </Stack >
+                <Stack spacing={2} direction="row">
+                    {/* <Button variant="outlined" onClick={()=>{dispatch(sortCards("color"))}}>Sort By Color</Button> */}
+                    {/* <Button variant="outlined" onClick={()=>{dispatch(sortCards("number"))}}>Sort By Number</Button> */}
+                </Stack>
+            </div>
+        </>
     );
 }
 export default Player;

@@ -10,7 +10,8 @@ const persistedStore = loadState();
 export const store = createStore(
     rootReducers,
     persistedStore,
-    applyMiddleware(thunk, logger),
+    // applyMiddleware(thunk, logger),
+    applyMiddleware(thunk),
 );
 
 store.subscribe(() => {

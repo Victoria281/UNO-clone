@@ -1,3 +1,4 @@
+import { ContactSupportOutlined } from "@material-ui/icons"
 import {
     getAllCards,
     dealCards,
@@ -27,8 +28,7 @@ export const updatePlayerList = (player_list, id) => async dispatch => {
 export const prepareGameMaterials = (socket) => async (dispatch, getState) => {
     getAllCards()
         .then(result => {
-            console.log("gotton cards")
-            const playerCount = getState().multiplayer_game.player_list.length;
+            const playerCount = getState().multiplayer_rooms.players.length;
             const roomcode = getState().multiplayer_rooms.roomcode;
             var arr = dealCards(result, playerCount);
             var gameState = {
@@ -41,24 +41,33 @@ export const prepareGameMaterials = (socket) => async (dispatch, getState) => {
                 roomcode: roomcode
             }
             gameState = applyCard(null, gameState, arr[1][0], true)
+            console.log(gameState)
             socket.emit('sendStartGame', gameState)
         })
 }
 
 export const startGameDetected = (data) => async (dispatch, getState) => {
-    const player = getState().multiplayer_game.myTurnIs;
-    data.playerdeck["player" + player] = filterPlayableCards(data.current, data.playerdeck["player" + player], data.turn === player)
+    console.log(data)
+    const user = getState().multiplayer_rooms.user;
+    console.log(user)
+    const game_state = data.gameState;
+    game_state.myTurnIs = data.players.findIndex((u)=>u.username === user.username)
+
+    console.log(game_state.myTurnIs)
+    console.log(data.players)
+    game_state.playerdeck["player" + game_state.myTurnIs] = filterPlayableCards(game_state.current, game_state.playerdeck["player" + game_state.myTurnIs], game_state.turn === game_state.myTurnIs)
+    
     dispatch({
         type: PREPARE_GAME,
-        data
+        game_state,
+        status: data.status
     });
-    // console.log(data.order)
-    return data.order.slice(player+1).concat(data.order.slice(0, player))
+    return game_state.order.slice(game_state.myTurnIs+1).concat(game_state.order.slice(0, game_state.myTurnIs))
 }
 
 export const updateGameDetected = (data) => async (dispatch, getState) => {
-    const player = getState().multiplayer_game.myTurnIs;
-    data.playerdeck["player" + player] = filterPlayableCards(data.current, data.playerdeck["player" + player], data.turn === player)
+    data.playerdeck["player" + data.myTurnIs] = filterPlayableCards(data.current, data.playerdeck["player" + data.myTurnIs], data.turn === data.myTurnIs)
+
     dispatch({
         type: UPDATE_GAME,
         data
@@ -66,22 +75,25 @@ export const updateGameDetected = (data) => async (dispatch, getState) => {
 }
 
 export const playCard = (card, socket, color) => async (dispatch, getState) => {
-    const game_state = getState().multiplayer_game;
+    const game_state = getState().multiplayer_rooms.game_state;
     const new_game_state = applyCard(color, game_state, card, null)
-    const roomcode = getState().multiplayer_rooms.roomcode;
+    const playerWhoPlayedCard = game_state.turn
 
-    if (game_state.playerdeck["player" + game_state.turn].length === 1) {
-        // console.log("Times start")
-        setTimeout(() => {
-            // console.log("Times up")
-            const timeout_game_state = getState().multiplayer_game;
-            checkOneCardLeft(timeout_game_state)
-        }, 5000);
+    // console.log(card)
+    // console.log(game_state)
+    // console.log(new_game_state)
+    console.log("fwsujifbverigbvnedrgbvrtdhgrdthdrtyhjr")
+    console.log(playerWhoPlayedCard)
+    console.log(new_game_state.playerdeck["player" + playerWhoPlayedCard].length)
+    if (new_game_state.playerdeck["player" + playerWhoPlayedCard].length === 1) {
+        new_game_state.unoPressed = {
+            player: playerWhoPlayedCard,
+            pressed: false
+        }
     }
 
     socket.emit('sendGameUpdate', {
-        ...new_game_state,
-        roomcode: roomcode
+        new_game_state
     })
 }
 
