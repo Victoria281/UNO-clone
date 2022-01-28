@@ -9,6 +9,7 @@ import {Box} from '@mui/material'
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import LockIcon from '@mui/icons-material/Lock';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import CustomNotification from "../OtherComponents/NotificationComponent/Notifications";
 
 import {
   getUserInfo
@@ -17,9 +18,10 @@ import {
 const Profile = () => {
   const dispatch = useDispatch();
   const profile_state = useSelector(state => state.profile_info)
+  const [o_Notif, o_setNotif] = useState({ open: false, type: "", message: "" });
+  const [editUserInfo, setEditUserInfo] = useState(false);
 
   useEffect(() => {
-
     const uid = localStorage.getItem('userid')
     if(uid !== undefined){
       dispatch(getUserInfo(uid));
@@ -28,6 +30,15 @@ const Profile = () => {
     console.log(profile_state)
   }, []);
 
+  const setErrorNotif = (data) => {
+    o_setNotif(data)
+  }
+
+  const handleEditUserInfo = (data) =>{
+    setEditUserInfo(data)
+  }
+
+ 
   return (
     <Fragment>
       {
@@ -37,7 +48,11 @@ const Profile = () => {
           <p>Loading</p>
           :
           <Box id="root">
-            <ProfileModal />
+            <CustomNotification open={o_Notif} setOpen={o_setNotif} />
+            <ProfileModal 
+            setErrorNotif={setErrorNotif}
+            profile_state={profile_state}
+            />
             <Box className="gameProfileBody py-4">
               <Box className="row no-gutters">
                 <Box id="accordion" className="w-100">
@@ -51,7 +66,10 @@ const Profile = () => {
                     </Box>
                     <Box id="collapseOne" className="collapse show" data-parent="#accordion">
                       <Box id="bodyOne" className="card-body">
-                        <UserInfoCard />
+                        <UserInfoCard 
+                        edit={editUserInfo}
+                        handleEditUserInfo={handleEditUserInfo}
+                        setErrorNotif={setErrorNotif}/>
                       </Box>
                     </Box>
                   </Box>
@@ -66,7 +84,7 @@ const Profile = () => {
                     </Box>
                     <Box id="collapseTwo" className="changePassword collapse" data-parent="#accordion">
                       <Box id="bodyTwo" className="card-body">
-                        <SecurityCard />
+                        <SecurityCard setErrorNotif={setErrorNotif}/>
                       </Box>
                     </Box>
                   </Box>

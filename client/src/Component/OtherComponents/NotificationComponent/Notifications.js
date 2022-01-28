@@ -1,30 +1,35 @@
 import { Snackbar, LinearProgress, Alert, Box, Slide } from '@mui/material';
+import { Fragment, useEffect, useState } from "react";
 
-const CustomNotification = ({ notif, setNotif }) => {
+const CustomNotification = ({ open, setOpen }) => {
 
     function handleClose() {
         console.log("Snackbar Closed")
-        setNotif({open: false, type: 'secondary', message: ''});
+        setOpen({ open: false, type: 'secondary', message: '' });
     }
 
     function TransitionDown(props) {
-        return <Slide {...props} direction="down"/>;
+        return <Slide {...props} direction="down" />;
     }
 
     return (
         <Snackbar
             anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-            open={notif.open}
-            onClose={handleClose}
-            autoHideDuration={3000}
+            open={open.open}
+            onClose={()=>{handleClose()}}
+            autoHideDuration={1000}
             TransitionComponent={TransitionDown}
         >
-             <Box sx={{ width: '100%'}}>   
-                 <Alert onClose={handleClose} severity={notif.type} sx={{ width: '100%' }}>
-                    {notif.message}
-                </Alert>
-                    <LinearProgress color={notif.type} sx={{ width: '100%' }} />
-                </Box>
+            {
+                open.open &&
+                    <Box sx={{ width: '100%' }}>
+                        <Alert onClose={()=>handleClose()} severity={open.type} sx={{ width: '100%' }}>
+                            {open.message}
+                        </Alert>
+                        <LinearProgress color={open.type} sx={{ width: '100%' }} />
+                    </Box>
+            }
+
         </Snackbar>
     )
 }

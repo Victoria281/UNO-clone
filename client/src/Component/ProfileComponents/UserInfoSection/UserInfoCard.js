@@ -4,46 +4,40 @@ import { Fragment, useEffect, useState } from "react";
 import { useDispatch, useSelector } from 'react-redux';
 import { updateUserInfo } from "../../../store/action/others/profile";
 
-const UserInfoCard = () => {
+const UserInfoCard = ({edit, handleEditUserInfo, setErrorNotif}) => {
     const dispatch = useDispatch();
     const profile_state = useSelector(state => state.profile_info)
     console.log("profile_state")
     console.log(profile_state.userInfo)
   
-  const ChangeUserInfo = () => {
+  const ChangeUserInfo = ({edit, handleEditUserInfo}) => {
     const [newusername, setNewUsername] = useState(profile_state.userInfo.username);
     const [newemail, setNewEmail] = useState(profile_state.userInfo.email);
-    const [edit, setEdit] = useState(false);
-    const [error, setError] = useState('');
-    const [ifWarning, setWarning] = useState(false);
     const uid = localStorage.getItem('userid')
 
     const handleInfoChange = async () => {
       // console.log(newusername);
       // console.log(newemail);
       if (newusername === "" || newemail === "") {
-        setError("Username and/or Email field is empty");
-        setWarning(true);
+        setNotif({ open: true, type: 'error', message: 'Username and/or Email field is empty' })
       } else {
         try {
           dispatch(updateUserInfo(uid, newusername,newemail))
           .then(()=>{
-            alert("User Info updated!")
+            setErrorNotif({ open: true, type: 'success', message: 'Profile Info successfully changed!' })
           })
           .catch(()=>{
-            setError("User Info was not changed. Please check your inputs");
-            setWarning(true);
+            setErrorNotif({ open: true, type: 'error', message: "User Info was not changed. Please check your inputs" })
            });
          } catch (err) {
-            setError("User Info was not changed. Please check your inputs");
-            setWarning(true);
+            setErrorNotif({ open: true, type: 'error', message: 'User Info was not changed. Please check your inputs' })
             console.error(err.message);
          }
       }
     }
 
-    const toggleEdit = () => {
-      setEdit(!edit);
+    const toggleEdit = (data) => {
+      handleEditUserInfo(data);
     }
 
     return(
@@ -71,13 +65,8 @@ const UserInfoCard = () => {
               </p>
             </div>
             <div className="col">
-                {
-                  ifWarning ?
-                    <div className="alert alert-danger m-3">{error}</div> :
-                    null
-                }
               <input className="btn btn-danger m-3" type="submit" onClick={handleInfoChange} />
-              <button className="btn btn-primary m-3" onClick={toggleEdit}> Cancel </button>
+              <button className="btn btn-primary m-3" onClick={()=>toggleEdit(false)}> Cancel </button>
             </div>
           </div>
           : 
@@ -85,7 +74,7 @@ const UserInfoCard = () => {
             <div className="col">
               <div className="d-flex justify-content-between">
                 <h5>Username:</h5>
-                <button className="editBtn text-secondary" onClick={toggleEdit}>Edit</button>
+                <button className="editBtn text-secondary" onClick={()=>toggleEdit(true)}>Edit</button>
               </div>
               <p className="username">{profile_state.userInfo.username}</p>
               <h5>Email:</h5><p className="email">{profile_state.userInfo.email}</p>
@@ -117,7 +106,10 @@ const UserInfoCard = () => {
       </div>
     </div>
     <div className="col-8 py-2">
-      <ChangeUserInfo />
+      <ChangeUserInfo 
+      edit={edit}
+      handleEditUserInfo={handleEditUserInfo}
+      />
     </div>
   </div>
   );

@@ -33,7 +33,7 @@ export const updateUserInfo = (uid, newusername, newemail) => async (dispatch, g
 }
 
 export const updateUserProfileImg = (uid,icon) => async (dispatch,getState) => {
-    updateUserPassword(uid, icon).then((result)=>{
+    updateUserProfilePic(uid, icon).then((result)=>{
         const profile_state = getState().profile_info.userInfo;
         profile_state.profileicon = icon
         dispatch({
