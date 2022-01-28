@@ -10,8 +10,11 @@ export const shuffleCards = (cardarray) => {
     return cardarray;
 };
 
-export const getRandomInt = (num) => {
-    return Math.floor(Math.random() * num);
+export const getRandomInt = (num, start) => {
+    if (start === undefined){
+        start = 0
+    }
+    return Math.floor(Math.random() * (num - start) + start);
 };
 
 export const checkFirstCardPlayable = (c1, c2) => {
@@ -118,6 +121,11 @@ export const playSkip = (game_state) => {
 }
 
 export const playReverse = (game_state) => {
+    if (game_state.reverse === 0) {
+        game_state.reverse = 1
+    } else {
+        game_state.reverse = 0
+    }
     game_state.order = game_state.order.reverse();
     game_state.turn = getNextTurn(game_state.turn, game_state.order)
     return game_state

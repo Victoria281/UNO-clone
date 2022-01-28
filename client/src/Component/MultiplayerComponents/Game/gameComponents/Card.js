@@ -2,14 +2,14 @@
 import { useEffect, useState, useRef } from "react";
 import {
     playCard
-} from "../../../store/action/singleplayer/game"
+} from "../../../../store/action/multiplayer/game"
 import { useDispatch } from 'react-redux'
 import { Transition } from "react-transition-group";
 import SelectColorModal from "./SelectColorModal"
 import styles from "./styles.module.css"
 
 //gets the data from the action object and reducers defined earlier
-const Card = ({ card, cardId, identity, playable }) => {
+const Card = ({ card, cardId, identity, playable, socket }) => {
     const nodeRef = useRef(null);
     const dispatch = useDispatch();
     const [inAProp, setInAProp] = useState(true);
@@ -40,7 +40,7 @@ const Card = ({ card, cardId, identity, playable }) => {
                         setCardChosen(card)
                         setSelectColorModalOpen(true)
                     } else {
-                        dispatch(playCard(card));
+                        dispatch(playCard(card, socket));
                     }
                 }, timeout);
 

@@ -8,7 +8,26 @@ export const CREATE_NEW_ROOM = "CREATE_NEW_ROOM"
 export const JOIN_A_ROOM = "JOIN_A_ROOM"
 export const UPDATE_ROOM = "UPDATE_ROOM"
 export const UPDATE_FRIEND_REQUESTS = "UPDATE_FRIEND_REQUESTS"
+export const INIT_STATE = "INIT_STATE"
+export const UPDATE_IDENTITY = "UPDATE_IDENTITY"
 
+export const initialiseState = () => async dispatch => {
+    // API CALL FRIENDS
+    var start = {
+        roomcode: "",
+        status: false,
+        players: [],
+        owner: "",
+        private: null,
+        friends: [],
+        friendRequests: [],
+        gameState: {}
+      }
+    dispatch({
+        type: INIT_STATE,
+        start
+    });
+}
 
 export const enterMultiplayer = (username, socket) => async dispatch => {
     // API CALL FRIENDS
@@ -53,7 +72,8 @@ export const createNewRoom = (roomName, username, socket) => async dispatch => {
     return roomcode
 }
 
-export const joinRoom = (roomcode, username, socket) => async dispatch => {
+export const joinRoom = (roomcode, username, socket) => async (dispatch, getState) => {
+    console.log("in dispatch to join room")
     socket.emit("othersJoinRoom", { username, roomcode });
     if (roomcode != "") {
         dispatch({
@@ -143,7 +163,14 @@ export const onFriendRequestGameRejected = (friendUsername) => async (dispatch, 
     }, 5000);
 }
 
-
+export const updateOwnIdentity = (user) => async dispatch => {
+    console.log("Who am i?")
+    console.log(user)
+    dispatch({
+        type: UPDATE_IDENTITY,
+        user: user.user,
+    });
+}
 
 export const roomUpdated = (roomState) => async dispatch => {
     dispatch({

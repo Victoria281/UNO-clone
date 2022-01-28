@@ -1,10 +1,10 @@
 // @ts-nocheck
 import { useEffect, useState, useRef } from "react";
 import {
-    drawCard,
-    playerToDrawCard,
-    unoPenalty
-} from "../../../store/action/singleplayer/game"
+    // drawCard,
+    // playerToDrawCard,
+    // unoPenalty
+} from "../../../../store/action/multiplayer/game"
 import { useDispatch, useSelector } from 'react-redux'
 import { Transition } from "react-transition-group";
 import styles from "./styles.module.css"
@@ -39,7 +39,7 @@ const DrawCardDeck = ({ }) => {
             setTimeout(() => {
                 // console.log("here drawing for bot")
                 setInAProp(true);
-                dispatch(drawCard());
+                // dispatch(drawCard());
             }, timeout);
 
         } else if (game_state.getDrawnCard !== false) {
@@ -56,7 +56,7 @@ const DrawCardDeck = ({ }) => {
             setTimeout(() => {
                 // console.log("here drawing for bot")
                 setInAProp(true);
-                dispatch(playerToDrawCard());
+                // dispatch(playerToDrawCard());
             }, timeout);
         } else if (game_state.unoPenalty !== null) {
             const drawDeckDOM = document.getElementById("drawCardDeck").getBoundingClientRect();
@@ -72,7 +72,7 @@ const DrawCardDeck = ({ }) => {
             setTimeout(() => {
                 // console.log("here drawing for bot")
                 setInAProp(true);
-                dispatch(unoPenalty());
+                // dispatch(unoPenalty());
             }, timeout);
         }
 
@@ -93,7 +93,7 @@ const DrawCardDeck = ({ }) => {
                 setTimeout(() => {
                     // console.log("here")
                     setInAProp(true);
-                    dispatch(drawCard());
+                    // dispatch(drawCard());
                 }, timeout);
 
                 break;

@@ -1,18 +1,17 @@
 // @ts-nocheck
 import { useEffect, useState, useRef } from "react";
-import {
-    playCard,
-    playBotCard
-} from "../../../store/action/singleplayer/game"
+// import {
+//     // playBotCard
+// } from "../../../store/action/singleplayer/game"
 import {
     getRandomInt,
-} from "../../../store/features/multiplayer/game"
+} from "../../../../store/features/multiplayer/game"
 import { useDispatch } from 'react-redux'
 import { Transition } from "react-transition-group";
 
 
 //gets the data from the action object and reducers defined earlier
-const BotCard = ({ card, cardId, identity, botPlay }) => {
+const OtherPlayerCard = ({ card, cardId, identity, botPlay }) => {
     const nodeRef = useRef(null);
     const dispatch = useDispatch();
     const [inAProp, setInAProp] = useState(true);
@@ -70,7 +69,7 @@ const BotCard = ({ card, cardId, identity, botPlay }) => {
                 setInAProp(false);
                 setTimeout(() => {
                     setInAProp(true);
-                    dispatch(playBotCard(card))
+                    // dispatch(playBotCard(card))
                 }, timeout);
             }, hesitation);
 
@@ -135,4 +134,4 @@ const BotCard = ({ card, cardId, identity, botPlay }) => {
 
     );
 }
-export default BotCard;
+export default OtherPlayerCard;

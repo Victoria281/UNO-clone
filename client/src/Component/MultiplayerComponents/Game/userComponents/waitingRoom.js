@@ -21,9 +21,6 @@ const WaitingRoom = ({roomcode, handleStart}) => {
         return {room_state, unconnected}
     })
 
-    console.log("room_state")
-    console.log(unconnected)
-
     const boxColor = purple['200'];
     const boxBorder = purple['500'];
 
