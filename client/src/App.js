@@ -3,7 +3,7 @@ import React, { Fragment, useState, useEffect } from "react";
 
 //components
 import GamePage from "./pages/game";
-import HomePage from "./pages/home";
+import HomePage from "./Component/HomePageComponents/home";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import EndPage from "./pages/end";
 import AccountPage from "./pages/account";
