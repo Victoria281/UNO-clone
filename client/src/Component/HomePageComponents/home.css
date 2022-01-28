@@ -26,7 +26,7 @@
   
   .startBtn {
     font-family:"RubikOne";
-    font-size: 1.5rem;
+    font-size: 1rem;
     letter-spacing: 0.2rem;
     padding: 0.8rem 2rem;
     margin: 1.5rem;
@@ -39,14 +39,60 @@
   
   .startMultiBtn {
     font-family: "RubikOne";
-    font-size: 1.5rem;
+    font-size: 1rem;
     letter-spacing: 0.2rem;
     margin: 1.5rem;
     padding: 0.8rem 2rem;
     border: none;
+<<<<<<< HEAD:client/src/Component/HomePageComponents/home.css
     background: #6c01ad;
+=======
+    background: #9c27b0;
     color: white;
     transform: skewX(-10deg);
     transition: box-shadow 0.3s ease-in-out;
   }
+
+  .leaderBoardBtn {
+    font-family: "RubikOne";
+    font-size: 1rem;
+    letter-spacing: 0.2rem;
+    margin: 1.5rem;
+    padding: 0.8rem 2rem;
+    border: none;
+    background: #d32f2f;
+>>>>>>> parent of cb14cd2 (Revert "Updated Homepage"):client/src/css/home.css
+    color: white;
+    transform: skewX(-10deg);
+    transition: box-shadow 0.3s ease-in-out;
+  }
+<<<<<<< HEAD:client/src/Component/HomePageComponents/home.css
     
+=======
+
+  .profileBtn {
+    font-family: "RubikOne";
+    font-size: 1rem;
+    letter-spacing: 0.2rem;
+    margin: 1.5rem;
+    padding: 0.8rem 2rem;
+    border: none;
+    background: #2e7d32;
+    color: white;
+    transform: skewX(-10deg);
+    transition: box-shadow 0.3s ease-in-out;
+  }
+
+  .startBtn:hover{
+    color: black;
+  }
+  .startMultiBtn:hover{
+    color: black;
+  }
+  .leaderBoardBtn:hover{
+    color: black;
+  }
+  .profileBtn:hover{
+    color: black;
+  }
+>>>>>>> parent of cb14cd2 (Revert "Updated Homepage"):client/src/css/home.css
