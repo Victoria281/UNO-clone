@@ -40,11 +40,16 @@ const Game = () => {
     return (
       <div><p>{action[0]}</p></div>
     )
-  }
+  };
+
   const botplay = (arr) => {
     // console.log("Bot is playing card ----------");
+
+    // PULL OUT CURRENT AND REPLACE WITH SELECTOR STATE
     var normal_playable = arr.filter(
-      (item) => item.color === current.color || item.values === current.values
+      (item) => {
+        return item.color === current.color || item.values === current.values;
+      }
     );
     var wild_playable = arr.filter((item) => item.color === "wild");
     var r = Math.random();
@@ -383,7 +388,7 @@ const Game = () => {
         setTurn(nextTurn(turn));
         break;
     }
-  }
+  };
 
   const playCard = (cardInfo, player, bot) => {
     // console.log("A card was played by Player " + order[turn]);
@@ -393,17 +398,17 @@ const Game = () => {
     setIfShow(false);
     setIfDraw(false);
     // console.log(used)
-    if (used.length===0){
+    if (used.length === 0) {
       used.push(current)
       setUsed(used)
     }
-    else if (current.id !== used[used.length-1].id){
+    else if (current.id !== used[used.length - 1].id) {
       used.push(current)
       setUsed(used)
     }
-      
+
     setCurrent(cardInfo);
-    
+
     var player_new = player.filter((item) => item !== cardInfo);
     players["player" + order[turn]] = player_new;
     setPlayers(players);
@@ -660,7 +665,7 @@ const Game = () => {
     // console.log("Turn changed");
     // console.log(turn);
     // console.log("player"+order[turn]);
-  
+
     // console.log("player " + order[turn] + " turn --------");
     if (
       (players.player1.length === 0 ||
@@ -726,18 +731,18 @@ const Game = () => {
               {used.length > 0 &&
                 <img
                   className="img-responsive currentcard"
-                  alt={ used[used.length - 1].image_file.slice(8) }
+                  alt={used[used.length - 1].image_file.slice(8)}
                   style={{ width: 90, opacity: 0.5 }}
                   src={
                     process.env.REACT_APP_API_URL + "/api/uno/images/" +
                     used[used.length - 1].image_file.slice(8)
                   }
                 ></img>
-                }
+              }
               <img
                 className="img-responsive currentcard"
                 style={{ width: 90 }}
-                alt={ current.image_file.slice(8) }
+                alt={current.image_file.slice(8)}
                 src={
                   process.env.REACT_APP_API_URL + "/api/uno/images/" +
                   current.image_file.slice(8)

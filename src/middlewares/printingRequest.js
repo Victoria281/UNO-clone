@@ -1,7 +1,7 @@
 function printingDebugInfo(req, res, next) {
     console.log("------------[Debug Info]---------------");
     // console.log(`Servicing ${urlPattern}..`)
-    console.log("Servicing " + req.url + "..")
+    console.log("Servicing " + req.method + " " + req.url + "..")
 
     console.log("> req.params:" + JSON.stringify(req.params))
     console.log("> req.body: " + JSON.stringify(req.body))
