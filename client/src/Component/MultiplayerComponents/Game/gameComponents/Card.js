@@ -81,6 +81,7 @@ const Card = ({ card, cardId, identity, playable, socket }) => {
                 selectColorModalOpen={selectColorModalOpen}
                 setSelectColorModalOpen={setSelectColorModalOpen}
                 card={cardChosen}
+                socket={socket}
             />
             <Transition nodeRef={nodeRef} in={inAProp} timeout={timeout}>
                 {(state) => {

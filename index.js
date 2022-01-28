@@ -145,6 +145,43 @@ io.on("connection", (socket) => {
         }
     });
 
+    socket.on("moveToAudience", ({ moveToAuduser, roomcode }) => {
+        console.log(moveToAuduser + " is to be moved to the audience in room " + roomcode)
+        const success = SocketFunctions.moveToAudience(moveToAuduser, roomcode);
+
+        console.log("Result...")
+        console.log(success)
+        console.log("==================================\n")
+
+        if (success.success) {
+            io.sockets.in(success.roomcode).emit("roomUpdate", {
+                roomState: success.msg,
+            });
+        } else {
+            socket.emit("errorOccured", {
+                message: success.msg
+            });
+        }
+    });
+
+    socket.on("moveToPlayer", ({ moveToPlayerUser, roomcode }) => {
+        console.log(moveToPlayerUser + " is to be moved to the players in room " + roomcode)
+        const success = SocketFunctions.moveToPlayer(moveToPlayerUser, roomcode);
+
+        console.log("Result...")
+        console.log("==================================\n")
+
+        if (success.success) {
+            io.sockets.in(success.roomcode).emit("roomUpdate", {
+                roomState: success.msg,
+            });
+        } else {
+            socket.emit("errorOccured", {
+                message: success.msg
+            });
+        }
+    });
+
     socket.on('sendStartGame', (newState) => {
         console.log("Room requested to Start game")
         const success = SocketFunctions.startGame(newState)

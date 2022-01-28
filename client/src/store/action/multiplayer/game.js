@@ -7,7 +7,8 @@ import {
     applyCard,
     getOrderArray,
     checkOneCardLeft,
-    drawACard
+    drawACard,
+    runPlayerToDrawCard
 } from "../../features/multiplayer/game"
 
 export const UPDATE_PLAYER_LIST = "UPDATE_PLAYER_LIST"
@@ -51,23 +52,29 @@ export const startGameDetected = (data) => async (dispatch, getState) => {
     const user = getState().multiplayer_rooms.user;
     console.log(user)
     const game_state = data.gameState;
-    game_state.myTurnIs = data.players.findIndex((u)=>u.username === user.username)
+    data.myTurnIs = data.players.findIndex((u) => u.username === user.username)
 
-    console.log(game_state.myTurnIs)
+    console.log(data.myTurnIs)
     console.log(data.players)
-    game_state.playerdeck["player" + game_state.myTurnIs] = filterPlayableCards(game_state.current, game_state.playerdeck["player" + game_state.myTurnIs], game_state.turn === game_state.myTurnIs)
-    
+    if (data.myTurnIs != -1) {
+        game_state.playerdeck["player" + data.myTurnIs] = filterPlayableCards(game_state.current, game_state.playerdeck["player" + data.myTurnIs], game_state.turn === data.myTurnIs)
+    }
+
     dispatch({
         type: PREPARE_GAME,
         game_state,
+        myTurnIs: data.myTurnIs,
         status: data.status
     });
-    return game_state.order.slice(game_state.myTurnIs+1).concat(game_state.order.slice(0, game_state.myTurnIs))
+    console.log("after dispatch")
+
 }
 
 export const updateGameDetected = (data) => async (dispatch, getState) => {
-    data.playerdeck["player" + data.myTurnIs] = filterPlayableCards(data.current, data.playerdeck["player" + data.myTurnIs], data.turn === data.myTurnIs)
-
+    const myTurnIs = getState().multiplayer_rooms.myTurnIs;
+    if (myTurnIs != -1) {
+        data.playerdeck["player" + myTurnIs] = filterPlayableCards(data.current, data.playerdeck["player" + myTurnIs], data.turn === myTurnIs)
+    } 
     dispatch({
         type: UPDATE_GAME,
         data
@@ -77,7 +84,12 @@ export const updateGameDetected = (data) => async (dispatch, getState) => {
 export const playCard = (card, socket, color) => async (dispatch, getState) => {
     const game_state = getState().multiplayer_rooms.game_state;
     const new_game_state = applyCard(color, game_state, card, null)
-    const playerWhoPlayedCard = game_state.turn
+    var playerWhoPlayedCard;
+    if (game_state.turn == null) {
+        playerWhoPlayedCard = game_state.pauseTurn
+    } else {
+        playerWhoPlayedCard = game_state.turn
+    }
 
     // console.log(card)
     // console.log(game_state)
@@ -97,27 +109,29 @@ export const playCard = (card, socket, color) => async (dispatch, getState) => {
     })
 }
 
-export const callUNO = (state) => async (dispatch, getState) => {
-    // console.log("uno button pressed")
+
+export const drawCard = () => async (dispatch, getState) => {
+    const game_state = getState().singleplayer_game;
+    const new_game_state = drawACard(game_state);
+    new_game_state.playerdeck["player0"] = filterPlayableCards(new_game_state.current, new_game_state.playerdeck["player0"], new_game_state.turn == new_game_state.playerTurn)
+    new_game_state.toDrawCard = false
+
     dispatch({
-        type: UPDATE_UNO_PRESSED,
-        press: true
+        type: UPDATE_GAME,
+        new_game_state
     });
 }
 
-export const drawCard = (socket) => async (dispatch, getState) => {
-    const game_state = getState().multiplayer_game;
-    const new_drawn_game_state = drawACard(game_state);
-    if (new_drawn_game_state.color === "wild"){
-        return new_drawn_game_state
-    } else {
-        const roomcode = getState().multiplayer_rooms.roomcode;
-    
-        socket.emit('sendGameUpdate', {
-            ...new_drawn_game_state,
-            roomcode: roomcode
-        })
-    }
-}
 
+export const playerToDrawCard = () => async (dispatch, getState) => {
+    const game_state = getState().singleplayer_game;
+    const new_game_state = runPlayerToDrawCard(game_state);
+    new_game_state.playerdeck["player0"] = filterPlayableCards(new_game_state.current, new_game_state.playerdeck["player0"], new_game_state.turn == new_game_state.playerTurn)
+    new_game_state.getDrawnCard = false;
+
+    dispatch({
+        type: UPDATE_GAME,
+        new_game_state
+    });
+}
 
