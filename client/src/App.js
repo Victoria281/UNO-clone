@@ -9,7 +9,7 @@ console.log(">>>>", process.env);
 //components
 import SingleplayerGame from "./Component/SingleplayerComponent/gameRoom"
 import GamePage from "./pages/game";
-import HomePage from "./pages/home";
+import HomePage from "./Component/HomePageComponents/home";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import EndPage from "./pages/end";
 import AccountPage from "./Component/AccountComponents/LoginComponent/account";

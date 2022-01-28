@@ -1,4 +1,4 @@
-import "../css/home.css";
+import "./home.css";
 import { Grid, styled, Paper, Typography } from '@mui/material';
 import { homeAnimation } from "./homeAnimation";
 import { useEffect } from "react";
