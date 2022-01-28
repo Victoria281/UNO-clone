@@ -2,10 +2,24 @@ const createHttpError = require('http-errors');
 
 const app = require('express').Router();
 
+const dotenv = require('dotenv');
+dotenv.config();
+
 const bcrypt = require('bcrypt');
 const config = require('../../config');
 const jwt = require('jsonwebtoken');
+const redis = require('ioredis');
 
+console.log("REDIS_URL:", process.env.REDIS_URL);
+console.log("REDIS_PORT:", process.env.REDIS_PORT);
+console.log("REDIS_PASSWORD:", process.env.REDIS_PASSWORD);
+
+const redisClient = redis.createClient({
+    host: process.env.REDIS_URL,
+    port: process.env.REDIS_PORT,
+    password: process.env.REDIS_PASSWORD
+});
+// const redisClient = redis.createClient(process.env.REDIS_PORT, process.env.REDIS_URL);
 
 //ROUTES//
 const Card = require("../model/card")
@@ -192,6 +206,11 @@ app.post('/register', printingDebuggingInfo, function (req, res, next) {
                                 return next(err);
                             }
                         } else {
+
+                            // Deletes the allUsers key inside of Redis (if any)
+                            // So that a new allUsers list can be generated
+                            redisClient.del("allUsers");
+
                             return res.status(201).json({ statusMessage: 'Completed registration.' });
                         }
                     });
@@ -359,6 +378,7 @@ app.put('/user/update/:id', printingDebuggingInfo, verifyToken, function (req, r
 
 });
 
+
 //deleteUser
 app.delete('/user/delete/:id', printingDebuggingInfo, verifyToken, function (req, res, next) {
     const id = req.params.id;
@@ -372,14 +392,60 @@ app.delete('/user/delete/:id', printingDebuggingInfo, verifyToken, function (req
                 return next(err);
             }
         } else {
+            // Deletes the allUsers key that is currently in redis
+            // So that a new one can be generated when a user queries for the data
+            redisClient.del("allUsers");
             return res.status(204).json({ message: "deleted" });
         }
     });
 });
 
-//getFriends
-app.get('/user/friend/:uid', printingDebuggingInfo, verifyToken, (req, res, next) => {
-    let uid = req.params.uid;
+
+//getAllUsers
+app.get('/user', printingDebuggingInfo, async (req, res, next) => {
+
+    // Enable this line for debugging and testing purposes as the TTL of this key in redis is 1 hour
+    // redisClient.del("allUsers");
+
+    const allUsers = await redisClient.get("allUsers");
+    console.log(allUsers);
+
+    if (allUsers) {
+        console.log("Users Retrieved from Redis");
+
+        const response = JSON.parse(allUsers);
+
+        return res.status(200).json(response);
+    }
+
+    User.getAllUsers((err, response) => {
+        if (err) {
+            const message = {
+                code: 500,
+                message: "Internal server error, getting all users"
+            };
+
+            return res.status(500).json(message);
+
+        } else {
+            const message = {
+                code: 200,
+                rowCount: response.rowCout,
+                users: response.rows
+            };
+
+            // console.log(JSON.stringify(message));
+
+            redisClient.set("allUsers", JSON.stringify(response.rows), "EX", 60 * 60);
+
+            return res.status(200).json(message);
+        }
+    });
+});
+
+//getFriend
+app.get('/user/friend/:uid', printingDebuggingInfo, verifyToken, async (req, res, next) => {
+    let { uid } = req.params;
     // console.log("uid", uid);
     // console.log("req.decodedToken.id", req.decodedToken.id);
 
@@ -406,6 +472,24 @@ app.get('/user/friend/:uid', printingDebuggingInfo, verifyToken, (req, res, next
     }
 
     else {
+
+        const pf = await redisClient.keys(`pending_${uid}_*`);
+        console.log(">>>> pendingFriends", pf);
+
+        const friends = await redisClient.get(`friends_${uid}`);
+        // console.log('friends:', friends);
+        if (friends) {
+            console.log("friends from redis");
+
+            const message = {
+                code: 200,
+                message: 'Successfully retrieved friends from redis',
+                data: JSON.parse(friends)
+            };
+
+            return res.status(200).json(message);
+        }
+
         User.getFriend(uid, (err, result) => {
             if (err) {
                 const message = {
@@ -416,6 +500,10 @@ app.get('/user/friend/:uid', printingDebuggingInfo, verifyToken, (req, res, next
                 return res.status(500).json(message);
 
             } else {
+
+                // Set information into the redis cache, with 10s Expiry
+                redisClient.set(`friends_${uid}`, JSON.stringify(result), "EX", 10);
+
                 const message = {
                     code: 200,
                     message: 'Successfully retrieved friends',
@@ -429,11 +517,125 @@ app.get('/user/friend/:uid', printingDebuggingInfo, verifyToken, (req, res, next
     }
 });
 
-//addFriends
-app.post('/user/friend/:uid', printingDebuggingInfo, verifyToken, (req, res, next) => {
-    let uid = req.params.uid;
-    let friendId = req.body.friendId;
+/*
+    For Pending Friend Requests:
 
+    1. Create an endpoint that will return all pending friend requests for a user
+    2. Store the pending friend requests from the database in redis
+
+    When User A clicks "Add Friend" button:
+        User A request is stored in redis with TTL of 48 hours (demo can be 1 min if need be)
+        User B is alerted to the friend request via a push notification (Sub/Pub)
+        
+        Once TTL is up, the request is deleted, main database is not touched
+        Once User B accepts the request, the main database is updated, the redis key is deleted (allUsers, friends_${uid}, pendingFriends_${uid})
+
+*/
+
+app.get('/user/friend/pending/:uid', printingDebuggingInfo, verifyToken, async (req, res, next) => {
+    let { uid } = req.params;
+
+    try {
+        uid = parseInt(uid);
+    } catch (err) {
+        console.log("ERROR: uid must be a number", err);
+        const message = {
+            code: 400,
+            message: 'uid must be a number'
+        };
+        return res.status(400).json(message);
+    }
+
+    if (uid !== req.decodedToken.id) {
+        console.error("ERROR: uid is not the same as the user id");
+
+        const message = {
+            code: 401,
+            message: 'You are not authorized to view this user\'s pending friend requests',
+        };
+        return res.status(401).json(message);
+    }
+
+    const pendingFriends = await redisClient.scan(0, 'MATCH', `pendingFriends_*_${uid}`);
+
+    if (pendingFriends) {
+        console.log("pending friends from redis");
+        console.log(">>>>>LL", pendingFriends);
+
+        const message = {
+            code: 200,
+            message: 'Successfully retrieved pending friends from redis',
+            data: pendingFriends[1]
+        };
+
+        return res.status(200).json(message);
+    }
+
+    const message = {
+        code: 200,
+        message: 'You have no pending friend requests',
+        data: []
+    };
+
+    return res.status(200).json(message);
+
+});
+
+app.get('/user/friend/pending/sent/:uid', printingDebuggingInfo, verifyToken, async (req, res, next) => {
+    let { uid } = req.params;
+
+    try {
+        uid = parseInt(uid);
+    } catch (err) {
+        console.log("ERROR: uid must be a number", err);
+        const message = {
+            code: 400,
+            message: 'uid must be a number'
+        };
+        return res.status(400).json(message);
+    }
+
+    if (uid !== req.decodedToken.id) {
+        console.error("ERROR: uid is not the same as the user id");
+
+        const message = {
+            code: 401,
+            message: 'You are not authorized to view this user\'s pending friend requests',
+        };
+        return res.status(401).json(message);
+    }
+
+    const pendingFriends = await redisClient.scan(0, 'MATCH', `pendingFriends_${uid}_*`);
+
+    if (pendingFriends) {
+        console.log("pending friends from redis");
+        console.log(">>>>>", pendingFriends);
+
+        const message = {
+            code: 200,
+            message: 'Successfully retrieved sent pending friends from redis',
+            data: pendingFriends[1]
+        };
+
+        return res.status(200).json(message);
+    }
+
+    const message = {
+        code: 200,
+        message: 'You have no pending friend requests',
+        data: []
+    };
+
+    return res.status(200).json(message);
+
+});
+
+// addFriend / SendFriendRequest / ApproveFriendRequest / DenyFriendRequest
+app.post('/user/friend', printingDebuggingInfo, verifyToken, async (req, res, next) => {
+    let { uid, status } = req.body;
+    let friendId = req.body.fid;
+
+    // Ensure that uid is a number
     if (isNaN(uid)) {
         console.error("ERROR: uid is not a number");
 
@@ -447,8 +649,9 @@ app.post('/user/friend/:uid', printingDebuggingInfo, verifyToken, (req, res, nex
         uid = parseInt(uid);
     }
 
+    // Ensure that friendid is a number
     if (isNaN(friendId)) {
-        console.error("ERROR: Friend id is not a number");
+        console.error("ERROR: Friend id is not a number:", friendId);
         const message = {
             message: 'Friend id needs to be a number',
             code: 400
@@ -459,6 +662,7 @@ app.post('/user/friend/:uid', printingDebuggingInfo, verifyToken, (req, res, nex
         friendId = parseInt(friendId);
     }
 
+    // Ensure that the user is who they say they are based on token and issued userid
     if (uid !== req.decodedToken.id) {
         console.error("ERROR: uid is not the same as the user id");
 
@@ -470,29 +674,130 @@ app.post('/user/friend/:uid', printingDebuggingInfo, verifyToken, (req, res, nex
         return res.status(401).json(message);
 
     } else {
-        User.addFriend(uid, friendId, (error, result) => {
-            if (error) {
-                console.error("ERROR: Unable to add friend:", error);
 
-                return res.status(500).json(error);
+        /*
+            How the redisGetPendingFriends (pendingFriends_uid_fid) and redisGetFriend (friends_uid) 
+            key-vaue pair will look like inside redis
 
-            } else {
-                const message = {
-                    code: 200,
-                    message: 'Friend added',
-                    rowsAffected: result.rowCount,
-                };
+            -------------------------------------------------------------------------------
+            | key                              | value              | TTL                 |  
+            | FORMAT: pendingFriends_uid_fid   | FORMAT:            | FORMAT: seconds     |
+            | FORMAT: pendingFriends_uid_fid   | "pending", "deny"  | FORMAT: seconds     |
+            -------------------------------------------------------------------------------
+            | pendingFriends_1_2               | pending            | 48h                 |
+            | pendingFriends_2_1               | pending            | 48h                 |
+            | pendingFriends_3_2               | pending            | 48h                 |
+            -------------------------------------------------------------------------------
+        */
 
-                return res.status(200).json(message);
-            }
-        });
+        // Ensure that the user is not sending another friend request for someone who already has a pending request
+        const redisGetPendingFriends = await redisClient.get(`pendingFriends_${uid}_${friendId}`);
+
+        if (redisGetPendingFriends == "pending") {
+
+            const message = {
+                code: 400,
+                message: 'Friend request already sent',
+            };
+
+            return res.status(200).json(message);
+        }
+
+        // Ensure that the user is not adding a friend who is already his/her friend
+        const redisGetFriend = await redisClient.get(`friends_${uid}`);
+
+        if (redisGetFriend) {
+            const allFriends = JSON.parse(redisGetFriend);
+            console.log("allFriends:", allFriends);
+            const allFriendsData = allFriends.rows; //array
+
+            allFriendsData.forEach(friend => {
+                if (friend.id === friendId) {
+                    const message = {
+                        code: 400,
+                        message: 'Friend already exists',
+                    };
+
+                    return res.status(200).json(message);
+                }
+            });
+        }
+
+        // User already has a pending friend request from the other user
+        const redisUserFriends = await redisClient.get(`pendingFriends_${friendId}_${uid}`);
+
+
+        if (redisUserFriends === "pending") {
+
+            User.addFriend(uid, friendId, (error, result) => {
+                if (error) {
+                    console.error("ERROR: Unable to add friend:", error);
+
+                    return res.status(500).json(error);
+
+                } else {
+
+                    User.addFriend(friendId, uid, (error, result) => {
+                        if (error) {
+                            console.error("ERROR: Unable to add friend:", error);
+
+                            return res.status(500).json(error);
+
+                        } else {
+                            // Invalidate the cache for this user's friends and pending friends list
+                            // as well as the other friend's pending list for this particular user
+                            redisClient.del(`friends_${uid}`);
+                            redisClient.del(`pendingFriends_${uid}_${friendId}`);
+                            redisClient.del(`pendingFriends_${friendId}_${uid}`);
+
+                            const message = {
+                                code: 200,
+                                message: 'Friend added',
+                                rowsAffected: result.rowCount,
+                            };
+
+                            return res.status(200).json(message);
+                        }
+                    });
+                }
+            });
+
+        }
+
+
+        // User is denying request
+        if (status == 'deny') {
+            // User is denying a friend request
+
+            redisClient.del(`pendingFriends_${uid}_${friendId}`);
+            redisClient.del(`pendingFriends_${friendId}_${uid}`);
+            redisClient.del(`friends_${uid}`);
+            redisClient.del(`friends_${friendId}`);
+
+            const message = {
+                code: 200,
+                message: 'Friend request denied',
+            };
+
+            return res.status(200).json(message);
+        }
+
+        // Else, add the friend to pendingFriendRequests in Redis and set TTL to 48hrs
+        redisClient.set(`pendingFriends_${uid}_${friendId}`, 'pending', 'EX', 172800);
+
+        const message = {
+            code: 204,
+            message: 'Friend request sent',
+        };
+
+        return res.status(200).json(message);
     }
 });
 
-//deleteUser
+//deleteFriend
 app.delete('/user/friend', printingDebuggingInfo, verifyToken, function (req, res, next) {
-    const uid = req.query.uid;
-    const friendid = req.query.fid;
+    const uid = req.body.uid;
+    const friendid = req.body.fid;
     console.log("uid:", uid);
     console.log("friendid:", friendid);
 
@@ -505,7 +810,30 @@ app.delete('/user/friend', printingDebuggingInfo, verifyToken, function (req, re
                 return next(err);
             }
         } else {
-            return res.status(200).json({ message: "deleted", res: result.rowsAffected });
+
+            if (result <= 0) {
+                const response = {
+                    statusCode: 404,
+                    message: 'Friend Not Found',
+                };
+
+                return res.status(404).json(response);
+
+            } else {
+                // Invalidate the cache for this user's friends list and pending friends list
+                redisClient.del(`friends_${uid}`);
+
+                // This sentence is generally redundant as the chances of it happening is super duper slim
+                // However, i just added it to ensure the robustness of the web application
+                redisClient.del(`pendingFriends_${uid}_${friendid}`);
+
+                const response = {
+                    statusCode: 200,
+                    message: 'Friend Deleted'
+                };
+
+                return res.status(200).json(response);
+            }
         }
     });
 });

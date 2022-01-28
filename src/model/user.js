@@ -192,8 +192,39 @@ const User = {
         });
     },
 
+    // getAllUsers
+    getAllUsers: (callback) => {
+        const query = {
+            name: 'getAllUsers',
+            text: `
+                SELECT
+                    userid, username, profileicon
+                FROM
+                    players;
+            `,
+        };
+
+        return pool.query(query, (error, result) => {
+            if (error) {
+                console.log("Error Querying All Users:", error);
+                return callback(error, null);
+
+            } else {
+                // console.log("Result received:", result);
+                const message = {
+                    rowCount: result.rowCount,
+                    rows: result.rows,
+                };
+
+                return callback(null, message);
+
+            }
+        })
+    },
+
     // getFriend
     getFriend: (id, callback) => {
+
         const query = {
             name: 'getFriend',
             text: `
@@ -314,14 +345,12 @@ const User = {
         }
 
         return pool.query(query, function (error, result) {
-            console.log(error)
-            console.log(result)
             if (error) {
                 callback(error, null);
                 return;
             } else {
                 console.log(result);
-                return callback(null, result.rows);
+                return callback(null, result.rowCount);
             }
         },
         );

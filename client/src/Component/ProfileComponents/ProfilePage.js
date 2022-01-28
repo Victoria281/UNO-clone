@@ -4,6 +4,8 @@ import UserInfoCard from './UserInfoSection/UserInfoCard'
 import SecurityCard from './SecuritySection/SecurityCard'
 import ProfileModal from './ProfileModal/ProfileModal'
 import Friends from './FriendsSection/Friends';
+import PendingFriends from './FriendsSection/PendingFriends';
+import FindFriends from "./FriendsSection/FindFriends";
 
 // Styling Imports
 import styles from './styles.module.css';
@@ -46,6 +48,7 @@ const Profile = () => {
         <div className="gameProfileBody py-4">
           <div className="row no-gutters">
             <div id="accordion" className="w-100">
+
               {/* Profile */}
               <div className={`card my-3 ${styles.accordionBox}`}>
                 <div id="headerOne" className="card-header d-flex justify-content-between" data-toggle="collapse" href="#collapseOne">
@@ -80,18 +83,47 @@ const Profile = () => {
               <div className={`card my-3 ${styles.accordionBox}`}>
                 <div id="headerThree" className="card-header d-flex justify-content-between" data-toggle="collapse" href="#collapseThree">
                   <button className="collapsed card-link text-dark">
-                    <i className="fa fa-user-o"></i>    Friends
+                    <i className="fa fa-user-o"></i>    My Friends
                   </button>
                   <i className="fa fa-arrow-down p-1"></i>
                 </div>
-                <div id="collapseThree" className={`collapse ${styles.accordionBox}`} data-parent="#accordion">
+                <div id="collapseThree" className={`collapse ${styles.accordionBoxBody}`} data-parent="#accordion">
                   <div id="bodyThree" className={`card-body`}>
                     <Friends />
                   </div>
                 </div>
               </div>
 
+              {/* Pending Friend Requests */}
+              <div className={`card my-3 ${styles.accordionBox}`}>
+                <div id="headerFour" className="card-header d-flex justify-content-between" data-toggle="collapse" href="#collapseFour">
+                  <button className="collapsed card-link text-dark">
+                    <i className="fa fa-user-o"></i>    My Pending Friend Requests
+                  </button>
+                  <i className="fa fa-arrow-down p-1"></i>
+                </div>
+                <div id="collapseFour" className={`collapse ${styles.accordionBoxBody}`} data-parent="#accordion">
+                  <div id="bodyFour" className={`card-body`}>
+                    <PendingFriends />
+                  </div>
+                </div>
+              </div>
 
+              {/* Make Friend Requests */}
+              <div className={`card my-3 ${styles.accordionBox}`}>
+                <div id="headerFive" className="card-header d-flex justify-content-between" data-toggle="collapse" href="#collapseFive">
+                  <button className="collapsed card-link text-dark">
+                    <i className="fa fa-user-o"></i>    Find Friends
+                  </button>
+                  <i className="fa fa-arrow-down p-1"></i>
+                </div>
+                <div id="collapseFive" className={`collapse ${styles.accordionBoxBody}`} data-parent="#accordion">
+                  <div id="bodyFive" className={`card-body`}>
+                    <FindFriends />
+                  </div>
+                </div>
+              </div>
+              
             </div>
           </div>
         </div>
