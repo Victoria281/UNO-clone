@@ -2,6 +2,7 @@ import "../css/home.css";
 import { Grid, styled, Paper, Typography } from '@mui/material';
 import { homeAnimation } from "./homeAnimation";
 import { useEffect } from "react";
+import { typography } from "@mui/system";
 
 const Item = styled(Paper)(({ theme }) => ({
   ...theme.typography.body2,
