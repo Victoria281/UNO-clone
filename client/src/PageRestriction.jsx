@@ -1,4 +1,5 @@
 // @ts-nocheck
+import React from "react";
 import { Route, Redirect } from "react-router-dom";
 
 const Restrict = ({ component: Component, socket, ...props }) => (
