@@ -52,8 +52,51 @@ const PreLoginNavBar = ({ exact, path, component: Component, loggedIn, ...rest }
                                     </NavLink>
                                 </li>
 
-                                <div className="nav-item active navbarDesign" style={{ background: '#F5F93C' }}>
-                                    
+                                <div className="dropdown">
+                                    <button className="btn btn-primary dropdown-toggle nav-item active navbarDesign" type="button" data-toggle="dropdown" style={{ background: '#D27C2C' }}>
+                                        <SettingsIcon />
+                                        <span className="caret"></span>
+                                    </button>
+                                    <ul className="dropdown-menu">
+                                        <li
+                                            style={{
+                                                borderRadius: 100 / 50,
+                                                backgroundColor: "#DC9F66",
+                                                color: "black",
+                                                fontFamily: 'RubikOne'
+                                            }}
+                                        >
+                                            <Tooltip title="Music" placement="left">
+                                                <MusicNoteIcon />
+                                            </Tooltip>
+                                        </li>
+
+                                        <li
+                                            style={{
+                                                borderRadius: 100 / 50,
+                                                backgroundColor: "#DC9F66",
+                                                color: "black",
+                                                fontFamily: 'RubikOne'
+                                            }}
+                                        >
+                                            <Tooltip title="Background Animation" placement="left">
+                                                <ViewInArIcon />
+                                            </Tooltip>
+                                        </li>
+
+                                        <li
+                                            style={{
+                                                borderRadius: 100 / 50,
+                                                backgroundColor: "#DC9F66",
+                                                color: "black",
+                                                fontFamily: 'RubikOne'
+                                            }}
+                                        >
+                                            <Tooltip title="Tutorial" placement="left">
+                                                <QuestionMarkIcon />
+                                            </Tooltip>
+                                        </li>
+                                    </ul>
                                 </div>
 
                                 <li className="nav-item active navbarDesign" style={{ background: '#F5F93C' }}>
@@ -63,143 +106,6 @@ const PreLoginNavBar = ({ exact, path, component: Component, loggedIn, ...rest }
                         </div>
                     </nav>
                 </div>
-
-
-                {/* <Grid container>
-                    <Grid xs={8.1}>
-                        <p className="brand d-none d-sm-block">
-                            <div className="card1"></div>
-                            <div className="card2"></div>
-                            <p className="logomain">NOU</p>
-                            <p className="logosub">uno-clone</p>
-                        </p>
-                    </Grid>
-
-                    <Grid xs={1.3}>
-                        <Button
-                            variant="contained"
-                            sx={{
-                                height: 40,
-                                width: 100,
-                                mt: 2.5,
-                                borderRadius: 100 / 50,
-                                backgroundColor: "#E71E1E",
-                                color: "black",
-                                fontFamily: 'RubikOne',
-                                '&:hover': {
-                                    color: "white",
-                                    backgroundColor: "#B11C1C",
-                                }
-                            }}
-                            href="./leaderboard"
-                        >
-                            Ranks
-                        </Button>
-                    </Grid>
-
-                    <Grid xs={1.3}>
-                        <FormControl
-                            sx={{
-                                height: 40,
-                                width: 100,
-                                mt: 2.5,
-                                borderRadius: 100 / 50,
-                                backgroundColor: "#D27C2C",
-                                color: "black",
-                                fontFamily: 'RubikOne'
-                            }}>
-
-                            <InputLabel sx={{ color: "black", fontFamily: 'RubikOne', pb: 3, fontSize: 13 }}>Setting</InputLabel>
-
-                            <Select
-                                size='small'
-                            >
-                                <MenuItem
-                                    sx={{
-                                        width: 100
-                                    }}
-                                >
-                                    <Tooltip title="Music" placement="left">
-                                        <Button
-                                            variant="contained"
-                                            sx={{
-                                                borderRadius: 100 / 50,
-                                                backgroundColor: "#DC9F66",
-                                                color: "black",
-                                                fontFamily: 'RubikOne'
-                                            }}
-                                        >
-                                            <MusicNoteIcon />
-                                        </Button>
-                                    </Tooltip>
-                                </MenuItem>
-
-
-                                <MenuItem
-                                    sx={{
-                                        width: 100
-                                    }}
-                                >
-                                    <Tooltip title="Background Animation" placement="left">
-                                        <Button
-                                            variant="contained"
-                                            sx={{
-                                                borderRadius: 100 / 50,
-                                                backgroundColor: "#D9AD84",
-                                                color: "black",
-                                                fontFamily: 'RubikOne'
-                                            }}
-                                        >
-                                            <ViewInArIcon />
-                                        </Button>
-                                    </Tooltip>
-                                </MenuItem>
-
-
-                                <MenuItem
-                                    sx={{
-                                        width: 100
-                                    }}
-                                >
-                                    <Tooltip title="Tutorial" placement="left">
-                                        <Button
-                                            variant="contained"
-                                            sx={{
-                                                borderRadius: 100 / 50,
-                                                backgroundColor: "#E8B88B",
-                                                color: "black",
-                                                fontFamily: 'RubikOne'
-                                            }}
-                                        >
-                                            <QuestionMarkIcon />
-                                        </Button>
-                                    </Tooltip>
-                                </MenuItem>
-
-                            </Select>
-                        </FormControl>
-                    </Grid>
-
-                    <Grid xs={1.3}>
-                        <Button
-                            variant="contained"
-                            sx={{
-                                height: 40,
-                                width: 100,
-                                mt: 2.5,
-                                borderRadius: 100 / 50,
-                                backgroundColor: "#F5F93C",
-                                color: "white",
-                                fontFamily: 'RubikOne',
-                                '&:hover': {
-                                    color: "white",
-                                }
-                            }}
-                        >
-                            <Account isLoggedIn={null} />
-                        </Button>
-                    </Grid>
-                </Grid> */}
                 <Component {...routeProps} />
             </>
         )
