@@ -4,12 +4,9 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
-import rootReducers from "./store/reducer/index";
-import { createStore, applyMiddleware } from "redux";
 import { Provider } from "react-redux";
-import thunk from "redux-thunk"
+import { store } from "./store/store"
 
-const store = createStore(rootReducers, applyMiddleware(thunk));
 
 const loader = document.querySelector('.loader');
 const hideLoader = () => loader.hidden = true;
@@ -21,6 +18,7 @@ ReactDOM.render(
         hideLoader={hideLoader}
       />
     </Provider>
-  </React.StrictMode>,
+  </React.StrictMode>
+  ,
   document.getElementById('root')
 )

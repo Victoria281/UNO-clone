@@ -1,0 +1,64 @@
+.CardPlayedDeck {
+    display: grid;
+}
+
+.TopCard, .BelowCard {
+    grid-column: 1;
+    grid-row: 1;
+}
+
+.BelowCard {
+    transform: rotate(-30deg) translateX(-5px) translateY(-5px);
+    z-index: 0;
+    opacity: 0.75;
+}
+
+.TopCard {
+    z-index: 10;
+}
+
+.DrawCardDeck {
+    display: grid;
+}
+
+.TopDrawCard {
+    grid-column: 1;
+    grid-row: 1;
+}
+
+.TopDrawCard:nth-child(1) {
+    z-index: 10;
+}
+
+.TopDrawCard:nth-child(2) {
+    display: grid;
+}
+
+
+.mainDeckArea {
+    transform: matrix(1, 0.01, -0.29, 1, 0, 0);
+}
+
+.Playable:hover {
+    transform: translateY(-20px)
+}
+
+.Deck {
+    grid-column: 1;
+    grid-row: 1;
+}
+
+.Deck:nth-child(2) {
+    transform: translate(8px, 8px);
+    z-index: -1;
+}
+
+.Deck:nth-child(3) {
+    transform: translate(16px, 16px);
+    z-index: -2;
+}
+
+.Deck:nth-child(4) {
+    transform: translate(24px, 24px);
+    z-index: -3;
+}

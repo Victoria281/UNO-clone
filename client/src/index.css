@@ -3,19 +3,19 @@ html {
   height: 100%; */
   background: radial-gradient(48.15% 48.15% at 50% 51.85%, #FFFFFF 8.85%, rgba(132, 187, 238, 0.46) 61.46%, rgba(213, 111, 238, 0.5) 100%);
 }
-
+ 
 @font-face {
   font-family: "RubikOne";
   src: local("RubikOne"),
     url(./fonts/RubikOne-Regular.ttf) format("truetype");
 }
-
+ 
 @font-face {
   font-family: "Armata";
   src: local("Armata"),
     url(./fonts/Armata-Regular.ttf) format("truetype");
 }
-
+ 
 .brand {
   position: absolute;
   width: 70.24px;
@@ -23,82 +23,82 @@ html {
   left: -170px;
   top: -10px;
 }
-
+ 
 .card1 {
   position: absolute;
   width: 43.39px;
   height: 53.19px;
   left: 211px;
   top: 17.77px;
-
+ 
   background: #FFFFFF;
   border: 1px solid #000000;
   box-sizing: border-box;
   transform: rotate(-14.37deg);
-
+ 
 }
-
+ 
 .card2 {
   position: absolute;
   width: 43.39px;
   height: 53.19px;
   left: 226px;
   top: 27.77px;
-
+ 
   background: #FFFFFF;
   border: 1px solid #000000;
   box-sizing: border-box;
   transform: rotate(-14.37deg);
 }
-
+ 
 .logomain {
-
+ 
   position: absolute;
   width: 37px;
   height: 20px;
   left: 224.44px;
   top: 30px;
-
+ 
   font-family: "RubikOne";
   font-style: normal;
   font-weight: normal;
   font-size: 16px;
   line-height: 20px;
   /* identical to box height */
-
-
+ 
+ 
   color: #000000;
-
+ 
   transform: matrix(1, 0.02, -0.02, 1, 0, 0);
 }
-
+ 
 .logosub {
   position: absolute;
   width: 33px;
   height: 7px;
   left: 237.15px;
   top: 47px;
-
+ 
   font-family: "RubikOne";
   font-style: normal;
   font-weight: normal;
   font-size: 6px;
   line-height: 7px;
-
+ 
   color: #000000;
-
+ 
   transform: matrix(1, 0.02, -0.02, 1, 0, 0)
 }
-
+ 
 a {
   color: black;
   text-decoration: none;
 }
-
+ 
 a:hover {
   text-decoration: none;
 }
-
+ 
 .borderHover:hover {
   border: 2px solid;
   width: 120%;
@@ -110,11 +110,11 @@ a:hover {
   transform: rotate(-8deg) translateY(-10px) translateX(-5px);
   border-radius: 20px;
 }
-
+ 
 .borderHover:hover>.navBarWord {
   transform: rotate(-8deg) translateY(-10px);
 }
-
+ 
 .borderHover {
   width: 0%;
   height: 0%;
@@ -124,7 +124,7 @@ a:hover {
   padding-left: 0;
   border-radius: 0;
 }
-
+ 
 .activeIcon>.borderHover {
   border: 2px solid;
   width: 120%;
@@ -136,11 +136,11 @@ a:hover {
   transform: rotate(-8deg) translateY(-10px) translateX(-5px);
   border-radius: 20px;
 }
-
+ 
 .activeIcon>.borderHover>.navBarWord {
   transform: rotate(-8deg) translateY(-10px);
 }
-
+ 
 .navbarDesign {
   width: 100px;
   height: 40px;
@@ -148,11 +148,11 @@ a:hover {
   -moz-border-radius: 100px / 50px;
   -webkit-border-radius: 100px / 50px;
   border-radius: 100px / 50px;
-
+ 
   transform: matrix(0.99, 0.11, -0.14, 0.99, 0, 0);
 }
-
-
+ 
+ 
 .navBarWord {
   font-family: "RubikOne";
   font-size: 25px;
@@ -161,11 +161,11 @@ a:hover {
   -webkit-text-fill-color: black;
   transform: rotate(-15deg) translateY(10px) translateX(-5px);
 }
-
+ 
 body {
   background-color: transparent;
 }
-
+ 
 .App {
   font-family: sans-serif;
   text-align: center;
@@ -174,11 +174,11 @@ body {
   left: 50%;
   transform: translate(-50%, -50%);
 }
-
+ 
 .btn:hover {
   box-shadow: 1px 2px 6px 0 #91b2ff, -1px -1px 6px 0 #91b2ff;
 }
-
+ 
 .nextbtn {
   font-family: monospace;
   font-size: 1.5rem;
@@ -190,15 +190,15 @@ body {
   color: white;
   transition: box-shadow 0.3s ease-in-out;
 }
-
+ 
 .deck:hover {
   box-shadow: 1px 2px 6px 0 #d1d1d1, -1px -1px 6px 0 #d1d1d1;
 }
-
+ 
 p {
   letter-spacing: 2px;
 }
-
+ 
 .popup {
   background: black;
   color: white;
@@ -209,11 +209,11 @@ p {
   height: 100px;
   border: 3px solid #73ad21;
 }
-
+ 
 .imageText {
   font-size: 13px;
 }
-
+ 
 .scene {
   display: inline-block;
   width: 200px;
@@ -226,20 +226,31 @@ p {
   position: relative;
   width: 100%;
   height: 100%;
-  top: 65%;
-  left: 250%;
+  top: 135%;
+  left: 470%;
+  z-index: 2;
   cursor: pointer;
   transform-style: preserve-3d;
   transform-origin: center right;
   transition: transform 0.5s;
-  transform: rotateZ(-15deg) rotateY(35deg) rotateX(60deg);
+  transform: rotateZ(-15deg) rotateY(35deg) rotateX(60deg) scale(0.5);;
+}  .card__face--front:hover{
+  animation: shake 1s infinite;
+}
+@keyframes shake {
+  0% { transform: translate(2px, 2px) rotate(0deg) ; }
+20% { transform: translate(-2px, -3px) rotate(15deg) ; }
+40% { transform: translate(-4px, 0px) rotate(-25deg) ; }
+60% { transform: translate(4px, 3px) rotate(20deg) ; }
+80% { transform: translate(2px, -2px) rotate(-15deg) ; }
+100% { transform: translate(-2px, 4px) rotate(15deg) ;}
 }
 .loadingcards img {
   width: 180px;
   height: 270px;
 }
 .loadingcards.is-flipped {
-  transform: translateX(-100%) rotateY(-180deg);
+  transform: translateX(-210%) translateY(-100%) rotateY(-180deg);
 }
 .card__face {
   position: absolute;
@@ -257,29 +268,16 @@ p {
 }
 .loadingcard {
   position: absolute;
-  left: 60%;
+  left: 50%;
   top: 55%;
   margin-left: calc(-200px/2);
   margin-top: calc(-3*200px/4);
   width: 200px;
   height: 300px;
-  border: 10px solid #ccc;
+  border: 5px solid #ccc;
   border-radius: calc(3*200px/30);
-  background: #383838;
-  outline: #383838 solid 20px;
   transform: rotateZ(-15deg) rotateY(35deg) rotateX(60deg);
   opacity: 0;
-}
-h1 {
-  display: inline-block;
-  width: 300px;
-  margin-top: 25%;
-  margin-left: -25%;
-  transform: rotate(90deg);
-  font-size: calc(3.5*200px/10);
-  text-align: center;
-  line-height: 200px;
-  font-family: 'Calligraffitti', cursive;
 }
 .loadingcard:nth-of-type(1) {
   margin-top: calc((-3*200px/5) - 1*200px/10);
