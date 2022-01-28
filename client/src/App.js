@@ -15,7 +15,6 @@ import EndPage from "./pages/end";
 import AccountPage from "./Component/AccountComponents/LoginComponent/account";
 import RegisterPage from "./Component/AccountComponents/RegisterComponents/register";
 import ProfilePage from "./pages/profile";
-import Music from "./Component/OtherComponents/MusicComponent/Music";
 import LeaderboardPage from "./Component/Leaderboard/tabs.jsx";
 import Room from "./pages/multiplayer/room";
 import MultiPlayer from "./pages/multiplayer/multiplayer";
@@ -54,7 +53,7 @@ const App = ({ hideLoader }) => {
   });
 
   // console.log(process.env.REACT_APP_SECRET_KEY)
-  const [music, setMusic] = useState(false);
+  //const [music, setMusic] = useState(false);
   const [loggedIn, setLoggedIn] = useState(localStorage.getItem("userid"));
   useEffect(() => {
       setInterval(() => {

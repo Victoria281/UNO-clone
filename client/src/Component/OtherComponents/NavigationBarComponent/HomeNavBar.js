@@ -10,7 +10,9 @@ import ViewInArIcon from "@mui/icons-material/ViewInAr";
 import QuestionMarkIcon from '@mui/icons-material/QuestionMark';
 
 // Components Import
+// @ts-ignore
 import Account from "./Account";
+import Music from "../MusicComponent/Music";
 
 const HomeNavBar = ({ exact, path, component: Component, loggedIn, ...rest }) => {
     return <Route exact={exact} path={path} {...rest} render={(routeProps) => {
@@ -43,7 +45,7 @@ const HomeNavBar = ({ exact, path, component: Component, loggedIn, ...rest }) =>
                                 <li className="nav-item active navbarDesign" style={{ background: '#e71e1e' }}>
                                     <div className="borderHover" style={{ borderColor: '#e71e1e' }}>
                                         <p className="nav-link navBarWord">
-                                            <MusicNoteIcon />
+                                            <Music />
                                         </p>
                                     </div>
                                 </li>
