@@ -174,30 +174,30 @@ const FindFriends = () => {
       let tmpArray3 = [];
       console.log("filter | tmpArray3 ", tmpArray3);
 
-      // Filters out users who are already friends, user who is the same as the token holder
+      // Filters out users who are already friends, user who is the same as the token holder and users in pending requests
       allUsersData.forEach(user => {
-        let index = 0;
         if ((allFriendsData.data.rows).find(friend => friend.userid === user.userid) === undefined
           && user.userid !== parseInt(localStorage.getItem('userid')) && !(addedFriend.includes(user.userid))) {
           tmpArray3.push(user);
         }
       });
+
+
       console.log("filter | tmpArray3 ", tmpArray3);
       console.log("filter | array3xxx ", pendingFRs);
 
-      let tmpArray4 = [];
-      console.log("filter | tmpArray4 ", tmpArray4);
+      tmpArray3.sort();
+      pendingFRs.sort();
 
-      let xx = 0;
-      tmpArray3.forEach(user => {
-        for (let z = 0; z < pendingFRs.length; z++) {
-          if (user.userid !== pendingFRs[z].userid) {
-            tmpArray4.push(user);
-          }
+      let tmpArray4 = [];
+
+      tmpArray3.filter(user => {
+        if (!(pendingFRs.includes(user.userid))) {
+          tmpArray4.push(user);
         }
       });
 
-      console.log("filter | tmpArray4_After ", tmpArray4);
+      console.log("filter | tmpArray4", tmpArray4);
 
 
       setFilteredUsers(tmpArray4);
