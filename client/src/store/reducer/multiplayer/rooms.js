@@ -7,7 +7,8 @@ import {
   UPDATE_ROOM,
   UPDATE_FRIEND_REQUESTS,
   INIT_STATE,
-  UPDATE_IDENTITY
+  UPDATE_IDENTITY,
+  UPDATE_CHAT_MESSAGE
 } from '../../action/multiplayer/rooms';
 import {
   UPDATE_PLAYER_LIST,
@@ -21,28 +22,31 @@ const initialState = {
   roomcode: "",
   status: false,
   players: [],
+  audience: [],
   owner: "",
   private: null,
   friends: [],
   friendRequests: [],
+  myTurnIs: 0,
   game_state: {
-    myTurnIs: 0,
     mainDeck: [],
     used: [],
     current: {},
     playerdeck: [],
     turn: "",
+    pauseTurn: "",
     order: [],
     reverse: 0,
     unoPressed: {
-        player: false,
-        pressed: false
+      player: false,
+      pressed: false
     },
     unoPenalty: null,
     toDrawCard: false,
     getDrawnCard: false,
     otherPlayerPlayingCard: false,
-  }
+  },
+  chat: []
 };
 
 const reducer = (state = initialState, action) => {
@@ -56,6 +60,7 @@ const reducer = (state = initialState, action) => {
         owner: action.start.owner,
         private: action.start.private,
         friends: action.start.friends,
+        audience: action.start.audience,
         friendRequests: action.start.friendRequests,
       };
     case UPDATE_IDENTITY:
@@ -72,17 +77,20 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         roomcode: action.roomcode,
+        chat: []
       };
     case JOIN_A_ROOM:
       return {
         ...state,
-        roomcode: action.roomcode,
+        roomcode: action.start.roomcode,
+        status: action.start.status,
       };
     case UPDATE_ROOM:
       return {
         ...state,
         status: action.roomState.status,
         players: action.roomState.players,
+        audience: action.roomState.audience,
         owner: action.roomState.owner,
         private: action.roomState.private,
       };
@@ -91,17 +99,23 @@ const reducer = (state = initialState, action) => {
         ...state,
         friendRequests: action.friendRequests,
       };
-      case PREPARE_GAME:
-        return {
-          ...state,
-          game_state: action.game_state,
-          status: action.status
-        };
-      case UPDATE_GAME:
-        return {
-          ...state,
-          game_state: action.data
-        };
+    case PREPARE_GAME:
+      return {
+        ...state,
+        game_state: action.game_state,
+        status: action.status,
+        myTurnIs: action.myTurnIs
+      };
+    case UPDATE_GAME:
+      return {
+        ...state,
+        game_state: action.data
+      };
+    case UPDATE_CHAT_MESSAGE:
+      return {
+        ...state,
+        chat: action.roomstate.chat
+      };
     default:
       return state;
   }

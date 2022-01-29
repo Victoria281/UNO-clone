@@ -1,0 +1,37 @@
+.ChatDrawer {
+    width: 40vw;
+    background-color: #D8E7F5;
+    height: 100vh;
+    border: 1px solid #1B7CB1;
+    overflow: hidden;
+}
+
+.ChatHeader {
+    background-color: #65B9E9;
+    height: 10vh;
+    border: 1px solid #1B7CB1
+}
+
+.ChatBody {
+    overflow-y: scroll;
+    height: 82vh;
+    border: 1px solid #1B7CB1
+}
+
+.ChatMessage {
+    height: 8vh;
+    border: 1px solid #1B7CB1
+}
+
+.ChatMessage>input {
+    font-family: "Armata";
+    background-color: #D8E7F5;
+    border: none;
+    width: 90%;
+    height: 100%;
+    padding-left: 20px;
+}
+
+.ChatMessage>input:focus {
+    outline: none;
+}
