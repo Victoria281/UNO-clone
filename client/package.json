@@ -21,6 +21,7 @@
     "gapi-script": "^1.2.0",
     "nodemailer": "^6.7.2",
     "react": "^17.0.2",
+    "react-animated-cursor": "^2.2.0",
     "react-confetti": "^6.0.1",
     "react-dom": "^17.0.2",
     "react-google-login": "^5.2.2",
