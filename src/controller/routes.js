@@ -692,8 +692,8 @@ app.post('/user/friend', printingDebuggingInfo, verifyToken, async (req, res, ne
 
         // Ensure that the user is not sending another friend request for someone who already has a pending request
         const redisGetPendingFriends = await redisClient.get(`pendingFriends_${uid}_${friendId}`);
-
         if (redisGetPendingFriends == "pending") {
+            console.log("redisGetPendingFriends Pending!");
 
             const message = {
                 code: 400,
@@ -705,22 +705,47 @@ app.post('/user/friend', printingDebuggingInfo, verifyToken, async (req, res, ne
 
         // Ensure that the user is not adding a friend who is already his/her friend
         const redisGetFriend = await redisClient.get(`friends_${uid}`);
-
         if (redisGetFriend) {
             const allFriends = JSON.parse(redisGetFriend);
             console.log("allFriends:", allFriends);
             const allFriendsData = allFriends.rows; //array
 
+            let request = false;
+            let message = {};
+
             allFriendsData.forEach(friend => {
                 if (friend.id === friendId) {
-                    const message = {
+                    message = {
                         code: 400,
                         message: 'Friend already exists',
                     };
 
-                    return res.status(200).json(message);
+                    request = true;
                 }
             });
+
+            if (request === true) {
+                console.log("request is true!");
+                return res.status(200).json(message);
+            }
+        }
+
+        // User is denying request
+        if (status == 'deny') {
+            // User is denying a friend request
+            console.log("user is denying a friend request!");
+
+            redisClient.del(`pendingFriends_${uid}_${friendId}`);
+            redisClient.del(`pendingFriends_${friendId}_${uid}`);
+            redisClient.del(`friends_${uid}`);
+            redisClient.del(`friends_${friendId}`);
+
+            const message = {
+                code: 200,
+                message: 'Friend request denied',
+            };
+
+            return res.status(200).json(message);
         }
 
         // User already has a pending friend request from the other user
@@ -746,9 +771,12 @@ app.post('/user/friend', printingDebuggingInfo, verifyToken, async (req, res, ne
                         } else {
                             // Invalidate the cache for this user's friends and pending friends list
                             // as well as the other friend's pending list for this particular user
-                            redisClient.del(`friends_${uid}`);
+                            console.log("redisUserFriends: pending!");
+
                             redisClient.del(`pendingFriends_${uid}_${friendId}`);
                             redisClient.del(`pendingFriends_${friendId}_${uid}`);
+                            redisClient.del(`friends_${uid}`);
+                            redisClient.del(`friends_${friendId}`);
 
                             const message = {
                                 code: 200,
@@ -764,33 +792,22 @@ app.post('/user/friend', printingDebuggingInfo, verifyToken, async (req, res, ne
 
         }
 
+        if (status !== 'deny') {
+            // Else, add the friend to pendingFriendRequests in Redis and set TTL to 48hrs
 
-        // User is denying request
-        if (status == 'deny') {
-            // User is denying a friend request
+            console.log("user is sending a friend request!");
 
-            redisClient.del(`pendingFriends_${uid}_${friendId}`);
-            redisClient.del(`pendingFriends_${friendId}_${uid}`);
-            redisClient.del(`friends_${uid}`);
-            redisClient.del(`friends_${friendId}`);
+            redisClient.set(`pendingFriends_${uid}_${friendId}`, 'pending', 'EX', 172800);
 
             const message = {
-                code: 200,
-                message: 'Friend request denied',
+                code: 204,
+                message: 'Friend request sent',
             };
 
             return res.status(200).json(message);
         }
 
-        // Else, add the friend to pendingFriendRequests in Redis and set TTL to 48hrs
-        redisClient.set(`pendingFriends_${uid}_${friendId}`, 'pending', 'EX', 172800);
 
-        const message = {
-            code: 204,
-            message: 'Friend request sent',
-        };
-
-        return res.status(200).json(message);
     }
 });
 

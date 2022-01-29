@@ -177,7 +177,7 @@ const FindFriends = () => {
     try {
       // console.log("filter | allUsersData", allUsersData);
       // console.log("filter | friendsList", friendsList);
-      // console.log("filter | pendingFriends_tmpArray", pendingFriends_tmpArray);
+      console.log("filter | pendingFriends_tmpArray", pendingFriends_tmpArray);
       // console.log("filter | pendingFRs", pendingFRs);
 
       // Filters out users who are already friends, user who is the same as the token holder and users in pending requests
@@ -214,7 +214,7 @@ const FindFriends = () => {
           i = -1;
           x++;
         }
-        // console.log(">", allUsersData);
+        console.log(">", allUsersData);
       }
 
       console.log("filter | after deduction of friends", allUsersData);
@@ -222,6 +222,7 @@ const FindFriends = () => {
       let y = 0;
       for (let j = 0; j < allUsersData.length; j++) {
 
+        console.log("ppppp", pendingFriends_tmpArray);
         if (pendingFriends_tmpArray.length <= 0) {
           break;
         }
@@ -230,12 +231,12 @@ const FindFriends = () => {
           break;
         }
 
-        if (allUsersData[j].userid == pendingFriends_tmpArray[y].userid) {
+        if (allUsersData[j].userid == pendingFriends_tmpArray[y]) {
           allUsersData.splice(j, 1);
           j = -1;
           y++;
         }
-        // console.log(">>", allUsersData);
+        console.log(">>", allUsersData);
       }
 
       console.log("filter | after deduction of pending friends", allUsersData);
@@ -256,7 +257,7 @@ const FindFriends = () => {
           k = -1;
           z++;
         }
-        // console.log(">>>", k, ".", z, allUsersData);
+        console.log(">>>", k, ".", z, allUsersData);
       }
 
       console.log("filter | after deduction of pending FRs", allUsersData);

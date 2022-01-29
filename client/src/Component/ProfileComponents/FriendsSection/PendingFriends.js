@@ -57,22 +57,22 @@ const PendingFriends = () => {
         getRequest.forEach(friend => {
           let userid = parseInt(friend.split('_')[1]);
           for (let i = 0; i < allUsersData.length; i++) {
-            console.log("ABC", allUsersData[i])
             if (allUsersData[i].userid === userid) {
               let newData = {
-                userid: usersData[i].userid,
-                username: usersData[i].username,
-                email: usersData[i].email,
-                profileicon: usersData[i].profileicon,
+                userid: allUsersData[i].userid,
+                username: allUsersData[i].username,
+                email: allUsersData[i].email,
+                profileicon: allUsersData[i].profileicon,
                 origin: 'receive',
               };
 
+              console.log("pushing data", newData);
               tmpArray.push(newData);
             }
           }
         });
 
-        console.log("tmpArrayzzz:", tmpArray);
+        console.log("originReceive:", tmpArray);
 
         setFriendsList(tmpArray);
 
@@ -138,9 +138,9 @@ const PendingFriends = () => {
 
         console.log("originSent", originSent);
 
-        setFriendsList(originSent);
-
-        setPendingFR(originSent);
+        const concatSentReceive = tmpArray.concat(originSent);
+        setFriendsList(concatSentReceive);
+        setPendingFR(concatSentReceive);
 
       } catch (err) {
         console.error("error retrieving friends:", err);
