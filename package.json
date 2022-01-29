@@ -26,7 +26,7 @@
     "pg": "^8.7.1",
     "socket.io": "^4.4.0"
   },
-  "proxy": "http://localhost:5000",
+  "proxy": "https://localhost:5001",
   "devDependencies": {
     "eslint": "^7.32.0",
     "eslint-plugin-react": "^7.28.0"

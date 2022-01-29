@@ -1,7 +1,5 @@
 // @ts-nocheck
 
-import { ContactlessOutlined } from "@material-ui/icons";
-
 export const shuffleCards = (cardarray) => {
     for (var i = cardarray.length - 1; i > 0; i--) {
         var j = Math.floor(Math.random() * (i + 1));
@@ -12,20 +10,23 @@ export const shuffleCards = (cardarray) => {
     return cardarray;
 };
 
-export const getRandomInt = (num) => {
-    return Math.floor(Math.random() * num);
+export const getRandomInt = (num, start) => {
+    if (start === undefined){
+        start = 0
+    }
+    return Math.floor(Math.random() * (num - start) + start);
 };
 
 export const checkFirstCardPlayable = (c1, c2) => {
-    console.log(c1)
-    console.log(c2)
+    // // console.log(c1)
+    // // console.log(c2)
     if ((c1.color === c2.color ||
         c1.values === c2.values ||
         c1.color === "wild")) {
-            console.log("true")
+            // // console.log("true")
         return true
     } else {
-        console.log("false")
+        // // console.log("false")
         return false
     }
 };
@@ -46,12 +47,15 @@ export const getAllCards = async () => {
         var cards_retrieved = shuffleCards(jsonData.cards);
         return cards_retrieved
     } catch (err) {
-        console.log("error")
-        console.error(err.message);
+        // console.log("error")
+        // console.error(err.message);
     }
 }
 
 export const dealCards = (cardarray, numOfPlayers) => {
+    cardarray.map((card)=>{
+        card["botPlayCard"] = false
+    })
     var dealplayers = {};
     for (var players = 0; players < numOfPlayers; players++) {
         dealplayers["player" + players] = []
@@ -84,6 +88,32 @@ export const getNextTurn = (currentTurn, order) => {
     return order[playerInOrder];
 }
 
+export const getPrevTurn = (currentTurn, order) => {
+
+    var playerInOrder = order.findIndex(t => t === currentTurn)
+    playerInOrder -= 1;
+    if (playerInOrder == -1) {
+        playerInOrder = order.length-1;
+    }
+    return order[playerInOrder];
+}
+
+export const runPlayerToDrawCard = (game_state) => {
+    for (var amtToDraw = 0; amtToDraw < game_state.getDrawnCard.num; amtToDraw++) {
+        game_state.playerdeck["player" + game_state.getDrawnCard.player].push(game_state.mainDeck[amtToDraw]);
+    }
+    game_state.mainDeck = game_state.mainDeck.slice(game_state.getDrawnCard.num)
+    return game_state
+}
+
+export const applyUnoPenalty = (game_state) => {
+    for (var amtToDraw = 0; amtToDraw < 2; amtToDraw++) {
+        game_state.playerdeck["player" + game_state.unoPenalty].push(game_state.mainDeck[amtToDraw]);
+    }
+    game_state.mainDeck = game_state.mainDeck.slice(2)
+    return game_state
+}
+
 export const playSkip = (game_state) => {
     var skippedTurn = getNextTurn(game_state.turn, game_state.order)
     game_state.turn = getNextTurn(skippedTurn, game_state.order)
@@ -91,37 +121,44 @@ export const playSkip = (game_state) => {
 }
 
 export const playReverse = (game_state) => {
+    if (game_state.reverse === 0) {
+        game_state.reverse = 1
+    } else {
+        game_state.reverse = 0
+    }
     game_state.order = game_state.order.reverse();
     game_state.turn = getNextTurn(game_state.turn, game_state.order)
     return game_state
 }
 
 export const playDraw = (game_state, numOfCards, color) => {
-    console.log("in DRAW")
+    // console.log("in DRAW")
     var playerToDrawCard = getNextTurn(game_state.turn, game_state.order)
-    for (var amtToDraw = 0; amtToDraw < numOfCards; amtToDraw++) {
-        game_state.playerdeck["player" + playerToDrawCard].push(game_state.mainDeck[amtToDraw]);
-    }
-    game_state.mainDeck = game_state.mainDeck.slice(numOfCards)
     game_state.turn = getNextTurn(playerToDrawCard, game_state.order)
     game_state.current.color = color
+    game_state.getDrawnCard = {
+        player: playerToDrawCard,
+        num: numOfCards
+    }
     return game_state
 }
 
 export const playWild = (game_state, color) => {
-    console.log("in wikde")
+    // console.log("in wikde")
     game_state.turn = getNextTurn(game_state.turn, game_state.order)
     game_state.current.color = color
     return game_state
 }
 
 export const checkOneCardLeft = (game_state) => {
-    // if (game_state.playerdeck["player" + game_state.turn].length === 1 && game_state.unoPressed) {
-
-    // }
-    // return game_state
-    console.log("check uno")
-    console.log(game_state.unoPressed)
+    if (game_state.unoPressed.player !== false) {
+        game_state.unoPenalty = game_state.unoPressed.player
+    }
+    game_state.unoPressed = {
+        player: false,
+        pressed: false
+    }
+    return game_state
 }
 
 export const drawACard = (game_state) => {
@@ -140,18 +177,29 @@ export const drawACard = (game_state) => {
     return game_state
 }
 
-export const applyCard = (color, game_state, card, first) => {
+export const checkFirstCard =(game_state, first, card) => {
     if (first === null) {
         game_state.used.push(game_state.current)
         game_state.playerdeck["player" + game_state.turn] = game_state.playerdeck["player" + game_state.turn].filter(player_card => player_card !== card);
     } else {
         if (card.color === "wild"){
             var unoColors = ["red", "green", "blue", "yellow"]
-            color = unoColors[getRandomInt(4)]
+            var color = unoColors[getRandomInt(4)]
         }
+        game_state.turn = getPrevTurn(game_state.turn, game_state.order)
     }
-    console.log("apply card")
-    console.log(first)
+    return [game_state, color]
+}
+export const applyCard = (color, game_state, card, first) => {
+    var result = checkFirstCard(game_state, first, card)
+    game_state = result[0]
+    if (result[1] != null){
+        color = result[1]
+    }
+
+    console.log("------------------------------------------")
+    console.log("Card has been played")
+    console.log(card)
     console.log(game_state)
     game_state.current = card
 
@@ -159,49 +207,50 @@ export const applyCard = (color, game_state, card, first) => {
     // switch ("1") {
         //skip is 10
         case "10":
-            // console.log("skipped played")
-            // console.log(game_state)
+            // // console.log("skipped played")
+            // // console.log(game_state)
             game_state = playSkip(game_state)
             break;
 
         //reverse is 11
         case "11":
-            // console.log("reverse played")
-            // console.log(game_state)
+            // // console.log("reverse played")
+            // // console.log(game_state)
             game_state = playReverse(game_state)
             break;
 
         //+2 draw is 12
         case "12":
-            // console.log("+2 played")
-            // console.log(game_state)
-            game_state = playDraw(game_state, 2)
+            // // console.log("+2 played")
+            // // console.log(game_state)
+            game_state = playDraw(game_state, 2, card.color)
             break;
 
         //wild is 13
         case "13":
-            // console.log("wild played")
-            // console.log(game_state)
-            // console.log("i dunno")
+            // // console.log("wild played")
+            // // console.log(game_state)
+            // // console.log("i dunno")
             game_state = playWild(game_state, color)
             break;
 
         //+4 is 14
         case "14":
-            // console.log("+4 played")
-            // console.log(game_state)
+            // // console.log("+4 played")
+            // // console.log(game_state)
             game_state = playDraw(game_state, 4, color)
             break;
 
         default:
-            // console.log("normal card played")
-            // console.log(game_state)
+            // // console.log("normal card played")
+            // // console.log(game_state)
             game_state.turn = getNextTurn(game_state.turn, game_state.order)
             break;
     }
-    // console.log("-------------------END---------------")
-    // console.log(game_state)
-    // console.log("---------------------------------------------")
+    console.log("new")
+    console.log(game_state)
+    console.log("-------------------END---------------")
+    // // console.log("---------------------------------------------")
     return game_state
 }
 

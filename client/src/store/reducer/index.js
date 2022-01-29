@@ -1,17 +1,18 @@
 import SecurityReducer from "./secure_action";
 import multiplayer_rooms from "./multiplayer/rooms";
 import multiplayer_game from "./multiplayer/game";
-import leaderboard_stats from "./leaderboard/stats";
-import leaderboard_leaderboard from "./leaderboard/leaderboard";
+import leaderboard_leaderboard from "./others/leaderboard";
+import profile_info from "./others/profile"
+import singleplayer_game from "./singleplayer/game"
 
 import { combineReducers } from "redux";
 
 const rootReducers = combineReducers({
   SecurityReducer,
   multiplayer_rooms,
-  multiplayer_game,
-  leaderboard_stats,
   leaderboard_leaderboard,
+  profile_info,
+  singleplayer_game
 });
 
 export default rootReducers;
