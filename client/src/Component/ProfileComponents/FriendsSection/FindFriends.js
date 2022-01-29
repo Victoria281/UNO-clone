@@ -24,8 +24,9 @@ const FindFriends = () => {
 
 
   const loadData = async () => {
-    let allUsersData; //
-    let allFriendsData; //allFriendsData.data.rows
+    let allUsersData;
+    let backupAllUsersData;
+    let friendsList;
     let pendingFriends_tmpArray;
     let pendingFRs;
 
@@ -36,6 +37,7 @@ const FindFriends = () => {
       });
 
       allUsersData = await findFriendsResponse.json();
+      backupAllUsersData = allUsersData;
       setAllUsers(allUsersData);
 
       console.log("allUsers", allUsersData);
@@ -57,8 +59,8 @@ const FindFriends = () => {
       });
       // console.log(response);
 
-      allFriendsData = await response.json();
-      let friendsList = allFriendsData.data.rows;
+      const allFriendsData = await response.json();
+      friendsList = allFriendsData.data.rows;
       console.log("getAllFriends | friendsList", friendsList);
 
       setFriendsList(friendsList);
@@ -173,42 +175,95 @@ const FindFriends = () => {
 
     // Filter out all users that are already friends
     try {
-      let tmpArray3 = [];
-      console.log("filter | tmpArray3 ", tmpArray3);
+      // console.log("filter | allUsersData", allUsersData);
+      // console.log("filter | friendsList", friendsList);
+      // console.log("filter | pendingFriends_tmpArray", pendingFriends_tmpArray);
+      // console.log("filter | pendingFRs", pendingFRs);
 
       // Filters out users who are already friends, user who is the same as the token holder and users in pending requests
-      allUsersData.forEach(user => {
-        if ((allFriendsData.data.rows).find(friend => friend.userid === user.userid) === undefined
-          && user.userid !== parseInt(localStorage.getItem('userid')) && !(pendingFriends_tmpArray.includes(user.userid))) {
-          tmpArray3.push(user);
+
+      let userid = localStorage.getItem('userid');
+
+      try {
+        if (userid !== null) {
+          userid = parseInt(userid);
         }
-      });
 
-      console.log("filter | tmpArray3 ", tmpArray3);
-      console.log("filter | array3xxx ", pendingFRs);
-
-      // const concatArray = tmpArray3.concat(pendingFRs);
-      // const uniqueSet = new Set(concatArray);
-      // const uniqueArray = [...uniqueSet];
-
-
-      let y = 0;
-      for (let i = 0; i < tmpArray3.length; i++) {
-        console.log("1:", tmpArray3[i]);
-        console.log("2:", pendingFRs[y]);
-
-        if (tmpArray3[i] == pendingFRs[y]) {
-          tmpArray3.splice(i, 1);
-          y++;
-          i = 0;
+        for (let i = 0; i < allUsersData.length; i++) {
+          if (allUsersData[i].userid == userid) {
+            allUsersData.splice(i, 1);
+            break;
+          }
         }
+      } catch (err) {
+        console.error("error retrieving userid:", err);
       }
 
-      console.log("filter | tmpArray3", tmpArray3);
+      let x = 0;
+      for (let i = 0; i < allUsersData.length; i++) {
+        if (friendsList.length <= 0) {
+          break;
+        }
+
+        if (x > friendsList.length || friendsList[x] === undefined) {
+          break;
+        }
+
+        if (allUsersData[i].userid == friendsList[x].userid) {
+          allUsersData.splice(i, 1);
+          i = -1;
+          x++;
+        }
+        // console.log(">", allUsersData);
+      }
+
+      console.log("filter | after deduction of friends", allUsersData);
+
+      let y = 0;
+      for (let j = 0; j < allUsersData.length; j++) {
+
+        if (pendingFriends_tmpArray.length <= 0) {
+          break;
+        }
+
+        if (y > pendingFriends_tmpArray.length || pendingFriends_tmpArray[y] === undefined) {
+          break;
+        }
+
+        if (allUsersData[j].userid == pendingFriends_tmpArray[y].userid) {
+          allUsersData.splice(j, 1);
+          j = -1;
+          y++;
+        }
+        // console.log(">>", allUsersData);
+      }
+
+      console.log("filter | after deduction of pending friends", allUsersData);
+
+      let z = 0;
+      for (let k = 0; k < allUsersData.length; k++) {
+
+        if (pendingFRs.length <= 0) {
+          break;
+        }
+
+        if (z > pendingFRs.length || pendingFRs[z] === undefined) {
+          break;
+        }
+
+        if (allUsersData[k] == pendingFRs[z]) {
+          allUsersData.splice(k, 1);
+          k = -1;
+          z++;
+        }
+        // console.log(">>>", k, ".", z, allUsersData);
+      }
+
+      console.log("filter | after deduction of pending FRs", allUsersData);
 
 
-      setFilteredUsers(tmpArray3);
-      setSearchFilter(tmpArray3);
+      setFilteredUsers(allUsersData);
+      setSearchFilter(allUsersData);
 
     } catch (error3) {
       console.error("error filtering users:", error3);
@@ -324,7 +379,7 @@ const FindFriends = () => {
                   console.log("index: ", index);
 
                   return (
-                    <Box id={"userRow" + index} key={user.userid} className={`row no-gutters justify-content-center`}>
+                    <Box id={"userRow" + user.userid} key={user.userid} className={`row no-gutters justify-content-center`}>
                       {/* <Box className="col-xl-3 col-lg-3 col-md-3 col-sm-3 col-xs-3"></Box> */}
                       <Box className="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-xs-6">
                         <Box className={`row no-gutters ${styles.usersBody}`}>
