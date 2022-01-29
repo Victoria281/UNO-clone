@@ -197,8 +197,9 @@ const PendingFriends = () => {
     });
 
     const deniedDataJson = await deniedData.json();
+    console.log("deniedDataJson!!!!", deniedDataJson);
 
-    if (deniedDataJson.status == 204) {
+    if (deniedDataJson.code == 200) {
       console.log("Friend request denied");
 
       document.getElementById(`deny${friendid}`).disabled = true;
