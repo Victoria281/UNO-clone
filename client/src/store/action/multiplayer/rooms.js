@@ -10,6 +10,7 @@ export const UPDATE_ROOM = "UPDATE_ROOM"
 export const UPDATE_FRIEND_REQUESTS = "UPDATE_FRIEND_REQUESTS"
 export const INIT_STATE = "INIT_STATE"
 export const UPDATE_IDENTITY = "UPDATE_IDENTITY"
+export const UPDATE_CHAT_MESSAGE = "UPDATE_CHAT_MESSAGE"
 
 export const initialiseState = () => async dispatch => {
     // API CALL FRIENDS
@@ -47,6 +48,31 @@ export const enterMultiplayer = (username, socket) => async dispatch => {
     });
     socket.emit('enteredMultiplayer', username)
 }
+
+export const receivedMessage = (message) => async (dispatch, getState) => {
+    const roomstate = getState().multiplayer_rooms;
+    console.log(message)
+    roomstate.chat.push({
+        username: message.user.username,
+        text: message.message
+    })
+    dispatch({
+        type: UPDATE_CHAT_MESSAGE,
+        roomstate
+    });
+}
+
+export const sendMessage = (message, socket) => async (dispatch, getState) => {
+    const roomstate = getState().multiplayer_rooms;
+    var data = {
+        message: message,
+        user: roomstate.user,
+    }
+    console.log("telling socket of the message")
+    socket.emit('sendMessage', data)
+}
+
+
 
 export const movePlayerToAudience = (moveToAuduser, socket) => async (dispatch, getState) => {
     const roomcode = getState().multiplayer_rooms.owner.roomcode;

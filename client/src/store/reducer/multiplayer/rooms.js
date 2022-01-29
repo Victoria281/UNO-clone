@@ -7,7 +7,8 @@ import {
   UPDATE_ROOM,
   UPDATE_FRIEND_REQUESTS,
   INIT_STATE,
-  UPDATE_IDENTITY
+  UPDATE_IDENTITY,
+  UPDATE_CHAT_MESSAGE
 } from '../../action/multiplayer/rooms';
 import {
   UPDATE_PLAYER_LIST,
@@ -36,14 +37,15 @@ const initialState = {
     order: [],
     reverse: 0,
     unoPressed: {
-        player: false,
-        pressed: false
+      player: false,
+      pressed: false
     },
     unoPenalty: null,
     toDrawCard: false,
     getDrawnCard: false,
     otherPlayerPlayingCard: false,
-  }
+  },
+  chat: []
 };
 
 const reducer = (state = initialState, action) => {
@@ -74,6 +76,7 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         roomcode: action.roomcode,
+        chat: []
       };
     case JOIN_A_ROOM:
       return {
@@ -95,18 +98,23 @@ const reducer = (state = initialState, action) => {
         ...state,
         friendRequests: action.friendRequests,
       };
-      case PREPARE_GAME:
-        return {
-          ...state,
-          game_state: action.game_state,
-          status: action.status,
-          myTurnIs: action.myTurnIs
-        };
-      case UPDATE_GAME:
-        return {
-          ...state,
-          game_state: action.data
-        };
+    case PREPARE_GAME:
+      return {
+        ...state,
+        game_state: action.game_state,
+        status: action.status,
+        myTurnIs: action.myTurnIs
+      };
+    case UPDATE_GAME:
+      return {
+        ...state,
+        game_state: action.data
+      };
+    case UPDATE_CHAT_MESSAGE:
+      return {
+        ...state,
+        chat: action.roomstate.chat
+      };
     default:
       return state;
   }

@@ -379,7 +379,8 @@ var SocketFunctions = {
                 players: [user],
                 gameState: {},
                 owner: user,
-                private: false
+                private: false,
+                audience: []
             }
             playerRooms[id] = roomcode
         } else {
