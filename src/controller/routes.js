@@ -501,8 +501,8 @@ app.get('/user/friend/:uid', printingDebuggingInfo, verifyToken, async (req, res
 
             } else {
 
-                // Set information into the redis cache, with 10s Expiry
-                redisClient.set(`friends_${uid}`, JSON.stringify(result), "EX", 10);
+                // Set information into the redis cache, with 30min Expiry
+                redisClient.set(`friends_${uid}`, JSON.stringify(result), "EX", 1800);
 
                 const message = {
                     code: 200,

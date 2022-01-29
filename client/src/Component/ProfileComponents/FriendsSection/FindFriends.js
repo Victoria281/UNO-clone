@@ -26,6 +26,7 @@ const FindFriends = () => {
   const loadData = async () => {
     let allUsersData; //
     let allFriendsData; //allFriendsData.data.rows
+    let pendingFriends_tmpArray;
     let pendingFRs;
 
     // Get all Users
@@ -97,6 +98,7 @@ const FindFriends = () => {
         });
 
         console.log("getPendingFriendsData | tmpArray:", tmpArray);
+        pendingFriends_tmpArray = tmpArray;
 
         setAddedFriend(tmpArray);
 
@@ -177,31 +179,36 @@ const FindFriends = () => {
       // Filters out users who are already friends, user who is the same as the token holder and users in pending requests
       allUsersData.forEach(user => {
         if ((allFriendsData.data.rows).find(friend => friend.userid === user.userid) === undefined
-          && user.userid !== parseInt(localStorage.getItem('userid')) && !(addedFriend.includes(user.userid))) {
+          && user.userid !== parseInt(localStorage.getItem('userid')) && !(pendingFriends_tmpArray.includes(user.userid))) {
           tmpArray3.push(user);
         }
       });
 
-
       console.log("filter | tmpArray3 ", tmpArray3);
       console.log("filter | array3xxx ", pendingFRs);
 
-      tmpArray3.sort();
-      pendingFRs.sort();
+      // const concatArray = tmpArray3.concat(pendingFRs);
+      // const uniqueSet = new Set(concatArray);
+      // const uniqueArray = [...uniqueSet];
 
-      let tmpArray4 = [];
 
-      tmpArray3.filter(user => {
-        if (!(pendingFRs.includes(user.userid))) {
-          tmpArray4.push(user);
+      let y = 0;
+      for (let i = 0; i < tmpArray3.length; i++) {
+        console.log("1:", tmpArray3[i]);
+        console.log("2:", pendingFRs[y]);
+
+        if (tmpArray3[i] == pendingFRs[y]) {
+          tmpArray3.splice(i, 1);
+          y++;
+          i = 0;
         }
-      });
+      }
 
-      console.log("filter | tmpArray4", tmpArray4);
+      console.log("filter | tmpArray3", tmpArray3);
 
 
-      setFilteredUsers(tmpArray4);
-      setSearchFilter(tmpArray4);
+      setFilteredUsers(tmpArray3);
+      setSearchFilter(tmpArray3);
 
     } catch (error3) {
       console.error("error filtering users:", error3);
