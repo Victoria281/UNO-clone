@@ -10,9 +10,9 @@ const config = require('../../config');
 const jwt = require('jsonwebtoken');
 const redis = require('ioredis');
 
-console.log("REDIS_URL:", process.env.REDIS_URL);
-console.log("REDIS_PORT:", process.env.REDIS_PORT);
-console.log("REDIS_PASSWORD:", process.env.REDIS_PASSWORD);
+// console.log("REDIS_URL:", process.env.REDIS_URL);
+// console.log("REDIS_PORT:", process.env.REDIS_PORT);
+// console.log("REDIS_PASSWORD:", process.env.REDIS_PASSWORD);
 
 const redisClient = redis.createClient({
     host: process.env.REDIS_URL,
@@ -753,6 +753,8 @@ app.post('/user/friend', printingDebuggingInfo, verifyToken, async (req, res, ne
 
 
         if (redisUserFriends === "pending") {
+            let stats = false;
+            let message = {};
 
             User.addFriend(uid, friendId, (error, result) => {
                 if (error) {
@@ -778,21 +780,29 @@ app.post('/user/friend', printingDebuggingInfo, verifyToken, async (req, res, ne
                             redisClient.del(`friends_${uid}`);
                             redisClient.del(`friends_${friendId}`);
 
-                            const message = {
+                            message = {
                                 code: 200,
                                 message: 'Friend added',
                                 rowsAffected: result.rowCount,
                             };
 
+                            console.log("message:", message);
+                            stats = true;
+                            console.log("stats:", stats);
+                            console.log("running to send response back!");
                             return res.status(200).json(message);
                         }
                     });
                 }
             });
 
-        }
+            // if (stats === true) {
+            //     console.log("running to send response back!");
+            //     return res.status(200).json(message);
+            // }
 
-        if (status !== 'deny') {
+        } else {
+
             // Else, add the friend to pendingFriendRequests in Redis and set TTL to 48hrs
 
             console.log("user is sending a friend request!");
@@ -805,7 +815,10 @@ app.post('/user/friend', printingDebuggingInfo, verifyToken, async (req, res, ne
             };
 
             return res.status(200).json(message);
+
         }
+
+
 
 
     }
