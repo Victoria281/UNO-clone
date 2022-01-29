@@ -1,7 +1,8 @@
 // @ts-nocheck
 import { useEffect, useState, useRef } from "react";
 import {
-    // drawCard,
+    sendPlayerAction,
+    startPlayerAction,
     // playerToDrawCard,
     // unoPenalty
 } from "../../../../store/action/multiplayer/game"
@@ -11,11 +12,12 @@ import styles from "./styles.module.css"
 import { Stack } from '@mui/material';
 
 //gets the data from the action object and reducers defined earlier
-const DrawCardDeck = ({ }) => {
+const DrawCardDeck = ({ socket }) => {
     const nodeRef = useRef(null);
     const dispatch = useDispatch();
     const [inAProp, setInAProp] = useState(true);
-    const game_state = useSelector(state => state.singleplayer_game)
+    const game_state = useSelector(state => state.multiplayer_rooms.game_state)
+    const room_state = useSelector(state => state.multiplayer_rooms)
     const [travelFromDrawDeck, setTravelFromDrawDeck] = useState({
         x: 0,
         y: 0
@@ -25,65 +27,13 @@ const DrawCardDeck = ({ }) => {
 
 
     useEffect(() => {
-        if (game_state.toDrawCard) {
-            // console.log("im drawing card for bot")
+        console.log(game_state.toDrawCard)
+        if (game_state.toDrawCard.player !== false) {
+            console.log("im drawing card for bot")
+            console.log(game_state.toDrawCard)
             const drawDeckDOM = document.getElementById("drawCardDeck").getBoundingClientRect();
-            const lastPlayerCard = document.getElementById(`p1${game_state.playerdeck["player" + game_state.turn].slice(-1)[0].id}`).getBoundingClientRect();
+                const lastPlayerCard = document.getElementById(`p1${game_state.playerdeck["player" + game_state.toDrawCard.player].slice(-1)[0].id}`).getBoundingClientRect();
 
-            setTravelFromDrawDeck({
-                x: lastPlayerCard.x - drawDeckDOM.x,
-                y: lastPlayerCard.y - drawDeckDOM.y
-            })
-
-            setInAProp(false);
-            setTimeout(() => {
-                // console.log("here drawing for bot")
-                setInAProp(true);
-                // dispatch(drawCard());
-            }, timeout);
-
-        } else if (game_state.getDrawnCard !== false) {
-            const drawDeckDOM = document.getElementById("drawCardDeck").getBoundingClientRect();
-            const lastPlayerCard = document.getElementById(`p1${game_state.playerdeck["player" + game_state.getDrawnCard.player].slice(-1)[0].id}`).getBoundingClientRect();
-
-            setTravelFromDrawDeck({
-                x: lastPlayerCard.x - drawDeckDOM.x,
-                y: lastPlayerCard.y - drawDeckDOM.y
-            })
-
-
-            setInAProp(false);
-            setTimeout(() => {
-                // console.log("here drawing for bot")
-                setInAProp(true);
-                // dispatch(playerToDrawCard());
-            }, timeout);
-        } else if (game_state.unoPenalty !== null) {
-            const drawDeckDOM = document.getElementById("drawCardDeck").getBoundingClientRect();
-            const lastPlayerCard = document.getElementById(`p1${game_state.playerdeck["player" + game_state.unoPenalty].slice(-1)[0].id}`).getBoundingClientRect();
-
-            setTravelFromDrawDeck({
-                x: lastPlayerCard.x - drawDeckDOM.x,
-                y: lastPlayerCard.y - drawDeckDOM.y
-            })
-
-
-            setInAProp(false);
-            setTimeout(() => {
-                // console.log("here drawing for bot")
-                setInAProp(true);
-                // dispatch(unoPenalty());
-            }, timeout);
-        }
-
-    }, [game_state]);
-
-    const handleClick = () => {
-        const drawDeckDOM = document.getElementById("drawCardDeck").getBoundingClientRect();
-        const lastPlayerCard = document.getElementById(`p1${game_state.playerdeck["player" + game_state.turn].slice(-1)[0].id}`).getBoundingClientRect();
-
-        switch (game_state.turn) {
-            case 0: {
                 setTravelFromDrawDeck({
                     x: lastPlayerCard.x - drawDeckDOM.x,
                     y: lastPlayerCard.y - drawDeckDOM.y
@@ -91,16 +41,20 @@ const DrawCardDeck = ({ }) => {
 
                 setInAProp(false);
                 setTimeout(() => {
-                    // console.log("here")
+                    if (game_state.toDrawCard.player === room_state.myTurnIs){
+                        dispatch(startPlayerAction("draw", socket))
+                    }
                     setInAProp(true);
                     // dispatch(drawCard());
                 }, timeout);
-
-                break;
-            }
-            default:
-                break;
         }
+        
+
+    }, [game_state]);
+
+    const handleClick = () => {
+        console.log("drawingcard")
+        dispatch(sendPlayerAction("draw", socket))
 
     }
 
@@ -138,11 +92,13 @@ const DrawCardDeck = ({ }) => {
                         }}
                         className={styles.TopDrawCard}
                         onClick={() => {
-                            handleClick();
+                            if (room_state.myTurnIs === game_state.turn){
+                                handleClick();
+                            }
                         }}
                     >
-                        {game_state.getDrawnCard !== false ?
-                            game_state.getDrawnCard.num === 2 ?
+                        {(game_state.toDrawCard.player !== false && game_state.toDrawCard.number !== 1) ?
+                            game_state.toDrawCard.number === 2 ?
                                 <img
                                     className="img-responsive"
                                     style={{ width: 90 }}

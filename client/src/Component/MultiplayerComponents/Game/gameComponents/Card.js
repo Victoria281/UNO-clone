@@ -1,9 +1,10 @@
 // @ts-nocheck
 import { useEffect, useState, useRef } from "react";
 import {
-    playCard
+    sendPlayerAction,
+    startPlayerAction
 } from "../../../../store/action/multiplayer/game"
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { Transition } from "react-transition-group";
 import SelectColorModal from "./SelectColorModal"
 import styles from "./styles.module.css"
@@ -14,7 +15,9 @@ const Card = ({ card, cardId, identity, playable, socket }) => {
     const dispatch = useDispatch();
     const [inAProp, setInAProp] = useState(true);
     const [selectColorModalOpen, setSelectColorModalOpen] = useState(false);
-    const [cardChosen, setCardChosen] = useState({});    
+    const game_state = useSelector(state => state.multiplayer_rooms.game_state)
+    const room_state = useSelector(state => state.multiplayer_rooms)
+    const [cardChosen, setCardChosen] = useState({});
     const [travelFromDeck, setTravelFromDeck] = useState({
         x: 0,
         y: 0
@@ -22,32 +25,42 @@ const Card = ({ card, cardId, identity, playable, socket }) => {
 
     const timeout = 800;
 
-    const handleClick = () => {
-        const mainDeckDOM = document.getElementById("mainDeck").getBoundingClientRect();
-        const selectedCardDOM = document.getElementById(`${cardId}`).getBoundingClientRect();
+    useEffect(() => {
+        if (game_state.otherPlayerPlayingCard.player !== false) {
+            if (game_state.otherPlayerPlayingCard.card.id === card.id) {
+                console.log(game_state.otherPlayerPlayingCard)
+                const mainDeckDOM = document.getElementById("mainDeck").getBoundingClientRect();
+                const selectedCardDOM = document.getElementById(`p1${game_state.otherPlayerPlayingCard.card.id}`).getBoundingClientRect();
 
-        switch (identity) {
-            case "player": {
                 setTravelFromDeck({
                     x: mainDeckDOM.x - selectedCardDOM.x,
                     y: mainDeckDOM.y - selectedCardDOM.y
                 })
                 setInAProp(false);
                 setTimeout(() => {
-                    // console.log("here")
-                    setInAProp(true);
-                    if (card.color === "wild"){
-                        setCardChosen(card)
-                        setSelectColorModalOpen(true)
-                    } else {
-                        dispatch(playCard(card, socket));
+                    if (game_state.otherPlayerPlayingCard.player === room_state.myTurnIs){
+                        dispatch(startPlayerAction("play", socket))
                     }
+                    setInAProp(true);
                 }, timeout);
 
             }
-            default:
-                break;
+
         }
+
+    }, [game_state]);
+
+
+    const handleClick = (card) => {
+
+        if (card.color === "wild") {
+            setCardChosen(card)
+            setSelectColorModalOpen(true)
+        } else {
+            dispatch(sendPlayerAction("play", socket, {card: card}))
+        }
+
+
 
     }
 
@@ -98,7 +111,7 @@ const Card = ({ card, cardId, identity, playable, socket }) => {
                                 // console.log("clicked");
                                 // console.log("isplayable");
                                 if (card.playable) {
-                                    handleClick();
+                                    handleClick(card);
                                 }
                             }}
                         >
@@ -113,7 +126,7 @@ const Card = ({ card, cardId, identity, playable, socket }) => {
                                 />
                                 :
                                 <img
-                                className={`img-responsive ${styles.Playable}`}
+                                    className={`img-responsive ${styles.Playable}`}
                                     style={{ width: 70 }}
                                     src={
                                         process.env.REACT_APP_API_URL + "/api/uno/images/" +

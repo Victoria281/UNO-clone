@@ -34,6 +34,7 @@ const initialState = {
     current: {},
     playerdeck: [],
     turn: "",
+    pauseTurn: "",
     order: [],
     reverse: 0,
     unoPressed: {
