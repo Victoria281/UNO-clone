@@ -48,6 +48,16 @@ function AppGameRoom(props) {
   );
 }
 
+function AppCreateRoom(props) {
+  return (
+    <React.Fragment>
+      <MultiplayerCreateRoom
+        socket={socket}
+      />
+    </React.Fragment>
+  );
+}
+
 const App = ({ hideLoader }) => {
   useEffect(() => {
     hideLoader()
@@ -68,7 +78,7 @@ const App = ({ hideLoader }) => {
       <Switch>
         <HomeNavBar exact path="/" component={HomePage} loggedIn={loggedIn}/>
         <PageRestriction exact path="/load" component={Loader} />
-        <InGameNavBar exact path="/game" component={GamePage} />
+        <InGameNavBar exact path="/game" component={SingleplayerGame} />
         <InGameNavBar exact path="/newgame" component={SingleplayerGame} />
         <PageRestriction exact path="/end" component={EndPage} />
         <PreLoginNavBar exact path="/login" component={AccountPage} />
@@ -80,7 +90,7 @@ const App = ({ hideLoader }) => {
         {/* <PageRestriction path="/multiplayer/:roomname/:username" component={Appmain} socket={socket}/> */}
 
         {/* new */}
-        <InGameNavBar exact path="/createroom" render={() => <MultiplayerCreateRoom socket={socket} />} />
+        <InGameNavBar exact path="/createroom" component={AppCreateRoom}/>
         <InGameNavBar path="/multiplayer/:roomcode" component={AppGameRoom} />
       </Switch>
     </Router >
