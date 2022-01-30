@@ -27,7 +27,7 @@ import GameArea from "./userComponents/gameArea"
 import ChatArea from "./userComponents/chatArea"
 import AudienceOptions from "./userComponents/audienceRooms"
 import AudienceIcon from "./userComponents/AudienceIcon"
-import Cheering from "./userComponents/audio/cheer.wav"
+import Cheering from "./userComponents/audio/clap.wav"
 import { useSpeechSynthesis } from "react-speech-kit";
 
 

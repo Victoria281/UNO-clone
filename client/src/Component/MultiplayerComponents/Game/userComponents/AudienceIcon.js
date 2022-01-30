@@ -3,7 +3,7 @@ import { useEffect, useState, useRef } from "react";
 import { useDispatch } from 'react-redux'
 import { Transition } from "react-transition-group";
 import styles from "./styles.module.css"
-import CheerIcon from "../../../../icons/profile.png"
+import CheerIcon from "./image/heart.png"
 import {
     getRandomInt,
 } from "../../../../store/features/multiplayer/game"
