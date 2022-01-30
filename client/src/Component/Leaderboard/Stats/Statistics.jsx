@@ -67,7 +67,6 @@ const DisplayStatsData = () => {
         const updatedDate = new Date();
         const formattedMin = updatedDate.getMinutes().toString().length === 1 ? `0${updatedDate.getMinutes()}` : updatedDate.getMinutes();
         const formattedDate = `${updatedDate.getDate()} ${months[updatedDate.getMonth()]} ${updatedDate.getFullYear()} ${updatedDate.getHours()}:${formattedMin}`;
-    
 
         return (
             <Box>
