@@ -10,7 +10,8 @@ import {
     applyDrawCard,
     pauseGame,
     continueGame,
-    applyUnoPenalty
+    applyUnoPenalty,
+    checkGameEnd
 } from "../../features/multiplayer/game"
 
 export const UPDATE_PLAYER_LIST = "UPDATE_PLAYER_LIST"
@@ -105,7 +106,12 @@ const playCard = (game_state, card, color) => {
     var playerWhoPlayedCard = game_state.turn
     var new_game_state = applyCard(color, game_state, card, null)
     console.log(new_game_state)
-    if (new_game_state.getDrawnCard.player !== false) {
+    if (checkGameEnd(new_game_state) === true){
+        new_game_state.end = true;
+    }
+
+
+    if (!new_game_state.end && new_game_state.getDrawnCard.player !== false) {
         new_game_state.toDrawCard = {
             player: new_game_state.getDrawnCard.player,
             number: new_game_state.getDrawnCard.num,
@@ -120,7 +126,7 @@ const playCard = (game_state, card, color) => {
     console.log("Checking for uno penalty")
     console.log(playerWhoPlayedCard)
     console.log(new_game_state)
-    if (new_game_state.playerdeck["player" + playerWhoPlayedCard].length === 1) {
+    if (!new_game_state.end && new_game_state.playerdeck["player" + playerWhoPlayedCard].length === 1) {
         new_game_state.unoPressed = {
             player: playerWhoPlayedCard,
             pressed: false

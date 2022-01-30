@@ -25,12 +25,18 @@ import WaitingRoom from "./userComponents/waitingRoom"
 import GameArea from "./userComponents/gameArea"
 import ChatArea from "./userComponents/chatArea"
 import AudienceOptions from "./userComponents/audienceRooms"
+import EndGameModal from "./gameComponents/EndGameModal"
+
+
 //gets the data from the action object and reducers defined earlier
 const GameRoom = ({ socket, roomcode }) => {
     const dispatch = useDispatch();
     const [username, setUsername] = useState(localStorage.getItem("username"))
     const [otherPlayers, setOtherPlayers] = useState([])
     const room_state = useSelector(state => state.multiplayer_rooms)
+    const game_state = useSelector(state => state.multiplayer_rooms.game_state)
+    const [endGameModalOpen, setEndGameModalOpen] = useState(false);
+
     const audienceMember = useSelector(state => {
         var isAud = true;
         state.multiplayer_rooms.players.map((player) => {
@@ -49,6 +55,12 @@ const GameRoom = ({ socket, roomcode }) => {
         dispatch(prepareGameMaterials(socket))
         // }
     }
+
+    useEffect(() => {
+        if (game_state.end === true) {
+            setEndGameModalOpen(true)
+        }
+    }, [game_state]);
 
     useEffect(() => {
         console.log("Joining the room")
@@ -97,6 +109,10 @@ const GameRoom = ({ socket, roomcode }) => {
 
     return (
         <>
+        <EndGameModal
+            endGameModalOpen={endGameModalOpen}
+            setEndGameModalOpen={setEndGameModalOpen}
+        />
             {
                 username === null || room_state.status !== true ?
                     <WaitingRoom

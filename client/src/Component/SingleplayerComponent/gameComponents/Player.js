@@ -40,7 +40,9 @@ const Player = ({ playerDeck, current, playerTurn, isTurn }) => {
                                 alignItems: "center"
                             }}>
                             <button className="roomBtn" onClick={() => {
-                                console.log("herer"); dispatch(callUNO())
+                                if (isTurn){
+                                    dispatch(callUNO())
+                                }
                             }}><p>UNO</p></button>
                         </div>
                     </div>

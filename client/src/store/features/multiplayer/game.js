@@ -10,6 +10,21 @@ export const shuffleCards = (cardarray) => {
     return cardarray;
 };
 
+export const checkGameEnd = (game_state) => {
+    var gameEnd = false;
+
+    console.log(game_state)
+
+
+    for (var key in game_state.playerdeck) {
+        if (game_state.playerdeck[key].length === 0) {
+            gameEnd = true;
+        }
+    }
+
+    return gameEnd;
+};
+
 export const pauseGame = (game_state, first) => {
     if (first === null) {
         game_state.pauseTurn = game_state.turn
@@ -75,7 +90,7 @@ export const dealCards = (cardarray, numOfPlayers) => {
     var dealplayers = {};
     for (var players = 0; players < numOfPlayers; players++) {
         dealplayers["player" + players] = []
-        for (var start = 0; start < 2; start++) {
+        for (var start = 0; start < 1; start++) {
             dealplayers["player" + players].push(cardarray[(start * numOfPlayers) + players]);
         }
     }
