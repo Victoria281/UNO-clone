@@ -71,11 +71,14 @@ function AppCreateRoom(props) {
 const App = ({ hideLoader }) => {
   useEffect(() => {
     hideLoader()
+    if (localStorage.getItem("username")!== undefined){
+      socket.emit("joinWeb", localStorage.getItem("username"))
+    }
   });
 
   
   useEffect(() => {
-    socket.on("informFriendPlayiong", (data) => {
+    socket.on("watchFriend", (data) => {
       console.log("your friend is playing now")
       console.log(data)
     });

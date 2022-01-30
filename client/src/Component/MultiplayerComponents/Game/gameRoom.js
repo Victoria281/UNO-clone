@@ -11,7 +11,8 @@ import {
     joinRoom,
     roomUpdated,
     updateOwnIdentity,
-    receivedMessage
+    receivedMessage,
+    notifyFriends
 } from "../../../store/action/multiplayer/rooms"
 import Player from "./gameComponents/Player"
 import OtherPlayer from "./gameComponents/OtherPlayers"
@@ -66,6 +67,9 @@ const GameRoom = ({ socket, roomcode }) => {
     useEffect(() => {
         console.log("Joining the room")
         dispatch(joinRoom(roomcode, username, socket))
+        if (localStorage.getItem("userid") !== undefined){
+            dispatch(notifyFriends(roomcode, username, socket))
+        }
     }, []);
 
     useEffect(() => {

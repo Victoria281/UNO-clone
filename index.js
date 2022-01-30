@@ -85,6 +85,11 @@ app.use((error, req, res, next) => {
 
 
 io.on("connection", (socket) => {
+
+    socket.on("joinWeb", (username) => {
+        SocketFunctions.joinWebsite(socket.id, username);
+    });
+
     socket.on("enteredMultiplayer", (username) => {
         var status = SocketFunctions.startMultiplayer(socket.id, username);
         console.log("Result...")
@@ -103,6 +108,24 @@ io.on("connection", (socket) => {
             }
         }
     });
+
+    socket.on("notifyFriend", ({friendUsername, roomcode, username}) => {
+        console.log(friendUsername)
+
+        var socketList = SocketFunctions.notifyFriend(friendUsername, roomcode, username);
+        console.log("Result...")
+        console.log(socketList)
+        console.log("==================================\n")
+
+        for (var i = 0; i < socketList.length; i++) {
+            io.to(socketList[i]).emit('watchFriend', {
+                username: username,
+                roomcode: roomcode
+            });
+        }
+        
+    });
+
     socket.on("exitMultiplayer", (username) => {
         const success = SocketFunctions.endMultiplayer(socket.id, username);
 
