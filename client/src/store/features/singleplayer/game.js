@@ -39,7 +39,7 @@ export const getCardForBot = (r, wild_playable, normal_playable) => {
     return cardplayed
 }
 
-export const boyPlayCard = (gameState) => {
+export const botPlayCard = (gameState) => {
     console.log("Bot is choosing card ----------");
 
     // console.log(gameState);

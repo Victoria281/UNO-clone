@@ -21,7 +21,12 @@ export const setBotSettings = (user_input) => {
 //Get current state of bot
 export const getCurrentState = (current_card, player_hand) => {
 
-    var state_current = current_card.color;
+    var state_current = current_card.color.charAt(0).toUpperCase();
+
+    console.log("Get State Player Hand------------------------")
+    console.log(player_hand[0].values);
+    console.log(player_hand.length);
+    console.log("---------------------------------------")
     var normalc_count = {
         R: 0,
         B: 0,
@@ -37,46 +42,56 @@ export const getCurrentState = (current_card, player_hand) => {
         PL4: 0
     }
 
-    for (var i; i < player_hand.length; i++) {
+    for (var i = 0; i < player_hand.length; i++) {
+        console.log("Did u go throuogh?")
         var card_value = player_hand[i].values;
         var card_color = player_hand[i].color;
 
         switch (card_value) {
-            case "10":
-                actionc_count.SKI++;
+            case 10:
+                console.log("Added")
+                actionc_count.SKI =+ 1;
                 break;
-            case "11":
-                actionc_count.REV++;
+            case 11:
+                console.log("Added")
+                actionc_count.REV=+ 1;
                 break;
-            case "12":
-                actionc_count.PL2++;
+            case 12:
+                console.log("Added")
+                actionc_count.PL2=+ 1;
                 break;
-            case "13":
-                actionc_count.COL++;
+            case 13:
+                console.log("Added")
+                actionc_count.COL=+ 1;
                 break;
-            case "14":
-                actionc_count.PL4++;
+            case 14:
+                console.log("Added")
+                actionc_count.PL4=+ 1;
                 break;
             default:
                 switch (card_color) {
                     case 'red':
-                        normalc_count.R++;
+                        console.log("Added")
+                        normalc_count.R=+ 1;
                         break;
                     case 'blue':
-                        normalc_count.B++;
+                        console.log("Added")
+                        normalc_count.B=+ 1;
                         break;
                     case 'yellow':
-                        normalc_count.Y++;
+                        console.log("Added")
+                        normalc_count.Y=+ 1;
                         break;
                     case 'green':
-                        normalc_count.G++;
+                        console.log("Added")
+                        normalc_count.G=+ 1;
                         break;
                 }
         }
     }
 
     var state_playable = "" + normalc_count.R + normalc_count.B + normalc_count.Y + normalc_count.G + actionc_count.SKI + actionc_count.REV + actionc_count.PL2 + actionc_count.COL + actionc_count.PL4;
-    var state = + state_current + state_playable;
+    var state = "" + state_current + state_playable;
 
     console.log("State ------------------------------------")
     console.log(state)
@@ -275,36 +290,33 @@ export const getCardForBot = (r, wild_playable, normal_playable) => {
         // switch ("1") {
             //skip is 10
             case "10":
-                action_value = "SKI"
+                action.action_value = getActionValue("SKI")
                 break;
     
             //reverse is 11
             case "11":
-                action_value = "REV"
+                action.action_value = getActionValue("REV")
                 break;
     
             //+2 draw is 12
             case "12":
-                action_value = "PL2"
+                action.action_value = getActionValue("PL2")
                 break;
     
             //wild is 13
             case "13":
-                action_value = "COL"
+                action.action_value = getActionValue("COL")
                 break;
     
             //+4 is 14
             case "14":
-                action_value = "PL4"
+                action.action_value = getActionValue("PL4")
                 break;
             default: 
-                action_value = cardplayed.color.toUpperCase()
+                action.action_value = getActionValue(cardplayed.color.toUpperCase())
     }
 
-    action = {
-        action_value: action_value,
-        action_taken: cardplayed
-    }
+        action.action_taken = cardplayed
 
     return action
 }
@@ -315,13 +327,20 @@ export const setCardPlay = (r, state, wild_playable, normal_playable) => {
     //var player_hand = normal_playable.concat(wild_playable);
 
     //var state = getCurrentState(current_card, playable_hand);
+
+    console.log("Error Message See State : ---------------------------------")
+    console.log(state);
+
     var list_of_actions = listStateActions(state).actions;
 
     var epsilon = 5
 
     var action;
 
-    if ((r * 10) > epsilon && !list_of_actions.err) {
+    console.log("Error Message : ---------------------------------")
+    console.log(list_of_actions);
+
+    if ((r * 10) > epsilon && list_of_actions !== undefined) {
         action = chooseAction(list_of_actions, player_hand)
     } else {
         action = getCardForBot(r, wild_playable, normal_playable);
@@ -369,7 +388,7 @@ export const insertQStateAction = async (state, action) => {
 }
 
 // Plays the card itself
-export const boyPlayCard = (gameState) => {
+export const botPlayCard = (gameState) => {
     console.log("Bot is choosing card ----------");
 
     // console.log(gameState);
@@ -379,6 +398,7 @@ export const boyPlayCard = (gameState) => {
     );
     var wild_playable = arr.filter((item) => item.color === "wild");
     var r = Math.random();
+
     var cardplayed = setCardPlay(r, gameState.botcurrentstate, normal_playable, wild_playable);
 
 
@@ -414,6 +434,10 @@ export const boyPlayCard = (gameState) => {
 // Get reward for action
 export const rewardFn = (current_card, cardplayed) => {
     var reward = 0.0;
+
+    console.log("Reward card played values------------------------------------")
+    console.log(cardplayed.values)
+    console.log("------------------------------------")
 
     if (cardplayed.values >= 10) {
         reward = (-1 / (5 / cardplayed.values) + 1.1) + 1.1

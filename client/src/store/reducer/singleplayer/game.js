@@ -47,6 +47,16 @@ const reducer = (state = initialState, action) => {
                 turn: action.gameState.turn,
                 order: action.gameState.order,
                 playerdeck: action.gameState.playerdeck,
+                reverse: 0,
+                unoPressed: {
+                    player: false,
+                    pressed: false
+                },
+                unoPenalty: null,
+                toDrawCard: false,
+                getDrawnCard: false,
+                botPlayingCard: false,
+                end: false
             };
         case UPDATE_UNO_PRESSED:
             return {

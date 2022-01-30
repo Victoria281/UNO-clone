@@ -16,7 +16,7 @@ import {
 import {
     setBotSettings,
     getCurrentState,
-    boyPlayCard,
+    botPlayCard,
     listStateActions,
     chooseAction,
     getCardForBot,
@@ -147,10 +147,14 @@ export const prepareBotSettings = (user_input) => async (dispatch, getState) => 
 
 //get the bot state id
 export const getBotState = () => async (dispatch, getState) => {
-    var game_state = getState().singleplayer_game;
-    const player_hand = filterPlayableCards(game_state.current, game_state.playerdeck["player0"], game_state.turn == game_state.playerTurn);
+    var new_game_state = getState().singleplayer_game;
+    const player_hand = filterPlayableCards(new_game_state.current, new_game_state.playerdeck["player" + new_game_state.turn], new_game_state.turn === new_game_state.playerTurn);
 
-    const bot_state = getCurrentState(game_state.current, player_hand);
+    console.log("Bot State (player_hand): --------------------")
+    console.log(player_hand)
+    console.log("---------------------------------")
+
+    const bot_state = getCurrentState(new_game_state.current, player_hand);
 
     new_game_state.botcurrentstate = bot_state;
 
@@ -166,7 +170,7 @@ export const botTurn = () => async (dispatch, getState) => {
 
     const game_state = getState().singleplayer_game;
 
-    const new_game_state = boyPlayCard(game_state);
+    const new_game_state = botPlayCard(game_state);
 
     //Still need to convert the used card into an action name/ value
     var action_name;
@@ -188,7 +192,7 @@ export const botTurn = () => async (dispatch, getState) => {
             action_name = "PL4"
             break;
         default:
-            action_name = new_game_state.current.toUpperCase();
+            action_name = new_game_state.current.color.toUpperCase();
     }
 
     const action = getActionValue(action_name);
