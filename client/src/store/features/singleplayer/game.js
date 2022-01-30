@@ -1,6 +1,5 @@
 // @ts-nocheck
 
-import { ContactlessOutlined } from "@material-ui/icons";
 import {
     getRandomInt,
     getNextTurn,

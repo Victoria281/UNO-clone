@@ -30,6 +30,7 @@ const Card = require("../model/card")
 const User = require("../model/user")
 const LeaderBoard = require("../model/leaderboard")
 const Auth = require("../model/auth")
+const Game = require("../model/game")
 
 //Middleware//
 const verifyGoogleToken = require('../middlewares/verifyGoogleToken');
@@ -136,6 +137,106 @@ app.get('/cards', printingDebuggingInfo, function (req, res, next) {
                 return next(createHttpError(404, `Not found`));
             } else {
                 return res.status(200).json({ cards: result });
+            }
+
+        }
+    });
+});
+
+//=====================================
+//  Game
+//=====================================
+
+//findbystate
+app.get('/game/:state', printingDebuggingInfo, function (req, res, next) {
+    const state = req.params.state;
+
+    Game.findByState(state, function (err, result) {
+        if (err) {
+            if (err.code === '23505') {
+                return next(createHttpError(404, `Not found`));
+            }
+            else {
+                return next(err);
+            }
+        } else {
+            if (result.length == 0) {
+                return next(createHttpError(404, `Not found`));
+            } else {
+                return res.status(200).json({ actions: result });
+            }
+
+        }
+    });
+});
+
+//findbystateaction
+app.get('/game/:state/:action', printingDebuggingInfo, function (req, res, next) {
+    const state = req.params.state
+    const action = req.params.action
+
+    Game.findByStateAction(state, function (err, result) {
+        if (err) {
+            if (err.code === '23505') {
+                return next(createHttpError(404, `Not found`));
+            }
+            else {
+                return next(err);
+            }
+        } else {
+            if (result.length == 0) {
+                return next(createHttpError(404, `Not found`));
+            } else {
+                return res.status(200).json({ actions: result });
+            }
+
+        }
+    });
+});
+
+//insertstateaction
+app.post('/game/', printingDebuggingInfo, function (req, res, next) {
+    const state = req.body.state
+    const action = req.body.action
+
+    Game.insertStateAction(state, action, function (err, result) {
+        if (err) {
+            if (err.code === '23505') {
+                return next(createHttpError(404, `Not found`));
+            }
+            else {
+                return next(err);
+            }
+        } else {
+            if (result.length == 0) {
+                return next(createHttpError(404, `Not found`));
+            } else {
+                return res.status(200).json({ statusMessage : 'StateAction insert complete' });
+            }
+
+        }
+    });
+});
+
+//updateqvalue
+app.put('/game/update/', printingDebuggingInfo, function (req, res, next) {
+    const qValue = req.body.qvalue
+    const state = req.body.state
+    const action = req.body.action
+
+    Game.updateQvalue(qValue,state, action, function (err, result) {
+        if (err) {
+            if (err.code === '23505') {
+                return next(createHttpError(404, `Not found`));
+            }
+            else {
+                return next(err);
+            }
+        } else {
+            if (result.length == 0) {
+                return next(createHttpError(404, `Not found`));
+            } else {
+                return res.status(200).json({ statusMessage : 'StateAction update complete' });
             }
 
         }

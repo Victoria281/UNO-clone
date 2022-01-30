@@ -16,11 +16,26 @@ import {
     applyCard,
     saveScore
 } from "../../features/singleplayer/game"
-
+import {
+    setBotSettings,
+    getCurrentState,
+    listStateActions,
+    chooseAction, 
+    getCardForBot,
+    setCardPlay,
+    insertQStateAction,
+    rewardFn,
+    getMaxQValue,
+    updateQ,
+    getQValue
+} from '../../features/singleplayer/game_logic'
 
 export const SINGLEPLAYER_PREPARE_GAME = "SINGLEPLAYER_PREPARE_GAME"
 export const SINGLEPLAYER_UPDATE_GAME = "SINGLEPLAYER_UPDATE_GAME"
 export const UPDATE_UNO_PRESSED = "UPDATE_UNO_PRESSED"
+export const SET_BOT_SETTINGS = "SET_BOT_SETTINGS"
+export const GET_BOT_STATE = "GET_BOT_STATE"
+
 
 export const endGame = (uid, token) => async (dispatch, getState) => {
     if (uid !== undefined && token !== undefined){
@@ -114,6 +129,7 @@ export const checkCard = () => async (dispatch, getState) => {
     });
 }
 
+// Plays the cards
 export const playBotCard = (card) => async (dispatch, getState) => {
     const game_state = getState().singleplayer_game;
     const playerWhoPlayedCard = game_state.turn
@@ -153,11 +169,57 @@ export const playBotCard = (card) => async (dispatch, getState) => {
     return;
 }
 
+// Set the bot learning variables
+export const prepareBotSettings = (user_input) => async (dispatch, getState) =>{
+    var new_game_state = getState().singleplayer_game;
 
+    new_game_state.bot_settings = setBotSettings(user_input);
 
+    dispatch({
+        type : SET_BOT_SETTINGS,
+        new_game_state
+    })
+}
+
+//get the bot state id
+export const getBotState = () => async (dispatch, getState) => {
+    var game_state = getState().singleplayer_game;
+    const player_hand = filterPlayableCards(game_state.current, game_state.playerdeck["player0"], game_state.turn == game_state.playerTurn);
+
+    const bot_state = getCurrentState(game_state.current, player_hand);
+
+    game_state.botcurrentstate = bot_state;
+
+    dispatch({
+        type: GET_BOT_STATE,
+        game_state
+    })
+}
+
+//The whole of the bot turn
 export const botTurn = () => async (dispatch, getState) => {
+    var qvalue;
+
     const game_state = getState().singleplayer_game;
+
     const new_game_state = boyPlayCard(game_state)
+
+    var current_qvalue = getQValue(game_state.botcurrentstate, )
+
+    if(current_qvalue.err){
+        qvalue = 0.0
+    } else {
+        qvalue = current_qvalue
+    }
+
+    const reward = rewardFn(game_state.current, new_game_state.current);
+
+    const playable_hand = filterPlayableCards(new_game_state.playerdeck["player" + game_state.turn])
+
+    const max_qvalue = getMaxQValue(new_game_state.current, playable_hand)
+
+    updateQ(qvalue,game_state.botcurrentstate, action, game_state.bot_settings,reward, max_qvalue);
+
     // // console.log(card)
     // // console.log(game_state)
     // // console.log(new_game_state)
