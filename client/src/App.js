@@ -4,8 +4,6 @@ import React, { useState, useEffect } from "react";
 const dotenv = require('dotenv');
 dotenv.config();
 
-console.log(">>>>", process.env);
-
 //components
 import SingleplayerGame from "./Component/SingleplayerComponent/gameRoom"
 import GamePage from "./pages/game";
