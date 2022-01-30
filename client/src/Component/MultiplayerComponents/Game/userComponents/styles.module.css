@@ -35,3 +35,59 @@
 .ChatMessage>input:focus {
     outline: none;
 }
+
+.movetoAudienceTxt{
+    position: absolute;
+    top: 35%;
+    bottom: 50%;
+    height:0px;
+    color: white;
+    visibility: hidden;
+    -webkit-transition: visibility 0s, opacity 0.5s linear; 
+    transition: visibility 0s, opacity 0.5s linear;
+    text-align: center;
+    font-size: 20px;
+}
+   
+.profile:hover{
+    cursor: pointer;
+    opacity: 0.3;
+}
+   
+.profile:hover div{
+    width: 150px;
+    padding: 8px 15px;
+    visibility: visible;
+}
+
+.bot{
+    display: none;
+    margin-left: -30px;
+}
+
+.botImage:hover + .bot, .bot:hover {
+    display: inline-block;
+}
+
+.addbot{
+    margin-right: 10px;
+    background-color: turquoise;
+    border: 2px solid #006f7a;
+    border-radius: 5px;
+}
+
+.minusbot{
+    background-color: #e86c6c;
+    border: 2px solid #cc3035;
+    border-radius: 5px;
+}
+
+.movebtn{
+    background-color: #ffc400;
+    border: 2px solid #ff9c24;
+    border-radius: 5px;
+}
+
+.txtStyle{
+    font-size: 20px;
+}
