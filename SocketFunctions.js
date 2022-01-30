@@ -49,6 +49,33 @@ var SocketFunctions = {
         };
     },
 
+    endMultiplayer: function (id, username) {
+        console.log("==================================")
+        console.log("Servicing endMultiplayer...")
+        console.log("----------------------------------")
+        console.log("Player has left multiplayer")
+
+        var removePlayer;
+        if (username != undefined) {
+            if (playerRooms[id] != undefined) {
+                removePlayer = SocketFunctions.leftRoom(id, username)
+    
+                console.log("Result...")
+                console.log("==================================\n")
+            }
+            if (playersConnected[username] = id) {
+                delete playersConnected[username]
+            }
+        }
+        
+        return {
+            success: true,
+            send: broadcastOne,
+            msg: playersConnected,
+            removePlayer: removePlayer
+        };
+    },
+
     createNewRoom: function (id, username, roomcode) {
         var user = { id, username, roomcode };
 
@@ -481,7 +508,8 @@ var SocketFunctions = {
                 players: [acceptedUser],
                 gameState: {},
                 owner: acceptedUser,
-                private: true
+                private: true,
+                audience: []
             }
             playerRooms[acceptedUser.id] = roomcode
             return {

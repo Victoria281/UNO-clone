@@ -4,7 +4,7 @@ import {
     sendPlayerAction,
     startPlayerAction,
     // playerToDrawCard,
-    // unoPenalty
+    unoPenalty
 } from "../../../../store/action/multiplayer/game"
 import { useDispatch, useSelector } from 'react-redux'
 import { Transition } from "react-transition-group";
@@ -32,23 +32,46 @@ const DrawCardDeck = ({ socket }) => {
             console.log("im drawing card for bot")
             console.log(game_state.toDrawCard)
             const drawDeckDOM = document.getElementById("drawCardDeck").getBoundingClientRect();
-                const lastPlayerCard = document.getElementById(`p1${game_state.playerdeck["player" + game_state.toDrawCard.player].slice(-1)[0].id}`).getBoundingClientRect();
+            const lastPlayerCard = document.getElementById(`p1${game_state.playerdeck["player" + game_state.toDrawCard.player].slice(-1)[0].id}`).getBoundingClientRect();
 
-                setTravelFromDrawDeck({
-                    x: lastPlayerCard.x - drawDeckDOM.x,
-                    y: lastPlayerCard.y - drawDeckDOM.y
-                })
+            setTravelFromDrawDeck({
+                x: lastPlayerCard.x - drawDeckDOM.x,
+                y: lastPlayerCard.y - drawDeckDOM.y
+            })
 
-                setInAProp(false);
-                setTimeout(() => {
-                    if (game_state.toDrawCard.player === room_state.myTurnIs){
-                        dispatch(startPlayerAction("draw", socket))
-                    }
-                    setInAProp(true);
-                    // dispatch(drawCard());
-                }, timeout);
+            setInAProp(false);
+            setTimeout(() => {
+                if (game_state.toDrawCard.player === room_state.myTurnIs) {
+                    dispatch(startPlayerAction("draw", socket))
+                }
+                setInAProp(true);
+                // dispatch(drawCard());
+            }, timeout);
         }
-        
+        if (game_state.unoPenalty !== false) {
+            console.log("imk applying penalty for UNO")
+            console.log(game_state.unoPenalty)
+            console.log(game_state.playerdeck["player" + game_state.unoPenalty])
+            console.log(game_state.playerdeck["player" + game_state.unoPenalty].slice(-1)[0])
+            console.log(game_state.playerdeck["player" + game_state.unoPenalty].slice(-1)[0].id)
+            const drawDeckDOM = document.getElementById("drawCardDeck").getBoundingClientRect();
+            const lastPlayerCard = document.getElementById(`p1${game_state.playerdeck["player" + game_state.unoPenalty].slice(-1)[0].id}`).getBoundingClientRect();
+
+            setTravelFromDrawDeck({
+                x: lastPlayerCard.x - drawDeckDOM.x,
+                y: lastPlayerCard.y - drawDeckDOM.y
+            })
+
+            setInAProp(false);
+            setTimeout(() => {
+                if (game_state.unoPenalty === room_state.myTurnIs) {
+                    dispatch(unoPenalty(socket))
+                }
+                setInAProp(true);
+                // dispatch(drawCard());
+            }, timeout);
+        }
+
 
     }, [game_state]);
 
@@ -92,13 +115,13 @@ const DrawCardDeck = ({ socket }) => {
                         }}
                         className={styles.TopDrawCard}
                         onClick={() => {
-                            if (room_state.myTurnIs === game_state.turn){
+                            if (room_state.myTurnIs === game_state.turn) {
                                 handleClick();
                             }
                         }}
                     >
                         {(game_state.toDrawCard.player !== false && game_state.toDrawCard.number !== 1) ?
-                            game_state.toDrawCard.number === 2 ?
+                            (game_state.toDrawCard.number === 2 || game_state.unoPenalty !== false) ?
                                 <img
                                     className="img-responsive"
                                     style={{ width: 90 }}

@@ -12,7 +12,7 @@ import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import EndPage from "./pages/end";
 import AccountPage from "./Component/AccountComponents/LoginComponent/account";
 import RegisterPage from "./Component/AccountComponents/RegisterComponents/register";
-import ProfilePage from "./pages/profile";
+import ProfilePage from "./Component/ProfileComponents/ProfilePage";
 import LeaderboardPage from "./Component/Leaderboard/tabs.jsx";
 import Music from "./components/Music";
 import Room from "./pages/multiplayer/room";
@@ -46,6 +46,16 @@ function AppGameRoom(props) {
   );
 }
 
+function AppHome(props) {
+  return (
+    <React.Fragment>
+      <HomePage
+        socket={socket}
+      />
+    </React.Fragment>
+  );
+}
+
 function AppCreateRoom(props) {
   return (
     <React.Fragment>
@@ -61,6 +71,14 @@ const App = ({ hideLoader }) => {
     hideLoader()
   });
 
+  
+  useEffect(() => {
+    socket.on("informFriendPlayiong", (data) => {
+      console.log("your friend is playing now")
+      console.log(data)
+    });
+}, [socket]);
+
   const [loggedIn, setLoggedIn] = useState(localStorage.getItem("userid"));
   useEffect(() => {
       setInterval(() => {
@@ -74,7 +92,7 @@ const App = ({ hideLoader }) => {
   return (
     <Router>
       <Switch>
-        <HomeNavBar exact path="/" component={HomePage} loggedIn={loggedIn}/>
+        <HomeNavBar exact path="/" component={AppHome} loggedIn={loggedIn}/>
         <PageRestriction exact path="/load" component={Loader} />
         <InGameNavBar exact path="/game" component={SingleplayerGame} />
         <InGameNavBar exact path="/newgame" component={SingleplayerGame} />
