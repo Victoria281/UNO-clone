@@ -103,6 +103,25 @@ io.on("connection", (socket) => {
             }
         }
     });
+    socket.on("exitMultiplayer", (username) => {
+        const success = SocketFunctions.endMultiplayer(socket.id, username);
+
+        console.log("Result...")
+        console.log("==================================\n")
+
+        if (success.success) {
+            io.sockets.emit('multiplayerUpdate', {
+                message: success.msg
+            });
+            if (success.removePlayer != undefined) {
+                socket.leave(success.removePlayer.roomcode)
+
+                io.sockets.in(success.removePlayer.roomcode).emit("playerLeft", {
+                    state: success.removePlayer.msg,
+                });
+            }
+        }
+    });
 
     socket.on("ownerCreateNewRoom", ({ username, roomcode }) => {
         console.log("Player " + username + " requested to create a new room")
@@ -232,15 +251,25 @@ io.on("connection", (socket) => {
         const success = SocketFunctions.joinRandomRoom(socket.id, username)
 
         console.log("Result...")
+        console.log(success)
         console.log("==================================\n")
         if (success.success) {
+            console.log("sending back and moving player")
+            console.log(success)
             socket.emit("randomRoomFound", {
                 message: success.roomcode,
             });
             socket.join(success.roomcode);
-            io.sockets.in(success.roomcode).emit("roomUpdate", {
-                roomState: success.msg,
-            });
+
+            if (success.msg.room === undefined) {
+                io.sockets.in(success.roomcode).emit("roomUpdate", {
+                    roomState: success.msg,
+                });
+            } else {
+                io.sockets.in(success.roomcode).emit("roomUpdate", {
+                    roomState: success.msg.room,
+                });
+            }
         } else {
             io.to(newState.roomcode).emit('errorOccured', success.msg)
         }

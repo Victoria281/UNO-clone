@@ -1,7 +1,7 @@
 // @ts-nocheck
 import { Fragment, useEffect, useState } from "react";
 import CustomNotification from '../Component/OtherComponents/NotificationComponent/Notifications'
-import "../css/profile.css";
+// import "../css/profile.css";
 
 const Profile = () => {
   const [userInfo, setUserInfo] = useState([]);

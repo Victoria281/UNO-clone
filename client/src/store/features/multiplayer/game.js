@@ -10,6 +10,21 @@ export const shuffleCards = (cardarray) => {
     return cardarray;
 };
 
+export const checkGameEnd = (game_state) => {
+    var gameEnd = false;
+
+    console.log(game_state)
+
+
+    for (var key in game_state.playerdeck) {
+        if (game_state.playerdeck[key].length === 0) {
+            gameEnd = true;
+        }
+    }
+
+    return gameEnd;
+};
+
 export const pauseGame = (game_state, first) => {
     if (first === null) {
         game_state.pauseTurn = game_state.turn
@@ -75,7 +90,7 @@ export const dealCards = (cardarray, numOfPlayers) => {
     var dealplayers = {};
     for (var players = 0; players < numOfPlayers; players++) {
         dealplayers["player" + players] = []
-        for (var start = 0; start < 7; start++) {
+        for (var start = 0; start < 1; start++) {
             dealplayers["player" + players].push(cardarray[(start * numOfPlayers) + players]);
         }
     }
@@ -156,7 +171,6 @@ export const playDraw = (game_state, numOfCards, color, first) => {
         player: playerToDrawCard,
         num: numOfCards
     }
-    pauseGame(game_state, first)
     return game_state
 }
 
@@ -194,10 +208,19 @@ export const drawACard = (game_state) => {
     return game_state
 }
 
+export const applyDrawCard = (game_state, num, player) => {
+    for (var amtToDraw = 0; amtToDraw < num; amtToDraw++) {
+        game_state.playerdeck["player" + player].push(game_state.mainDeck[amtToDraw]);
+    }
+    game_state.mainDeck = game_state.mainDeck.slice(num)
+    game_state.turn = getNextTurn(game_state.turn, game_state.order)
+    return game_state
+}
+
 export const checkFirstCard = (game_state, first, card) => {
     if (first === null) {
         game_state.used.push(game_state.current)
-        game_state.playerdeck["player" + game_state.turn] = game_state.playerdeck["player" + game_state.turn].filter(player_card => player_card !== card);
+        game_state.playerdeck["player" + game_state.turn] = game_state.playerdeck["player" + game_state.turn].filter(player_card => player_card.id !== card.id);
     } else {
         if (card.color === "wild") {
             var unoColors = ["red", "green", "blue", "yellow"]
