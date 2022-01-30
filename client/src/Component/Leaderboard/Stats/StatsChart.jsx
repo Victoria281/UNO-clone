@@ -81,7 +81,7 @@ const DisplayStatsData = () => {
                         <Label value="Score" angle={-90} position="insideLeft" />
                     </YAxis>
                     <Tooltip />
-                    <Legend />
+                    <Legend verticalAlign='top' />
                     
                     <Bar dataKey="score"  barSize={20} fill='#8884d8'>
                         <LabelList dataKey="score" position="top"/>
