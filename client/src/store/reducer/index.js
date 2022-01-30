@@ -1,6 +1,5 @@
 import SecurityReducer from "./secure_action";
 import multiplayer_rooms from "./multiplayer/rooms";
-import multiplayer_game from "./multiplayer/game";
 import leaderboard_leaderboard from "./others/leaderboard";
 import profile_info from "./others/profile"
 import singleplayer_game from "./singleplayer/game"

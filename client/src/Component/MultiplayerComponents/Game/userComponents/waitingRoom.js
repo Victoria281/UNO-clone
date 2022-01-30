@@ -249,7 +249,7 @@ const WaitingRoom = ({ roomcode, handleStart, socket }) => {
                     )}
 
                     {unconnected.map((data) => {
-                        console.log("herere"); return (<Grid item xs={3}>
+                        return (<Grid item xs={3}>
                             <CircularProgress color="warning" size='130px' />
                             <Box
                                 sx={{

@@ -18,9 +18,10 @@ const Item = styled(Paper)(({ theme }) => ({
   width: '75%'
 }));
 
-const Home = () => {
+const Home = ({ socket }) => {
   useEffect(() => {
     homeAnimation()
+    socket.emit("exitMultiplayer", localStorage.getItem("username"))
   }, [])
 
   return (

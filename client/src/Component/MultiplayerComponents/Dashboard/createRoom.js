@@ -79,7 +79,7 @@ const CreateRoom = ({ socket }) => {
 	useEffect(() => {
 		dispatch(initialiseState()).then(()=>{
 			if (username != undefined) {
-				dispatch(enterMultiplayer(username, socket))
+				dispatch(enterMultiplayer(username, socket, localStorage.getItem("userid"), localStorage.getItem("token")))
 			}
 		})
 	}, []);
@@ -96,6 +96,7 @@ const CreateRoom = ({ socket }) => {
 		});
 
 		socket.on("randomRoomFound", (data) => {
+			console.log("i FOUND A RANDOM ROMM")
 			history.push(`/multiplayer/${data.message}`)
 		});
 
