@@ -96,6 +96,7 @@ const CreateRoom = ({ socket }) => {
 		});
 
 		socket.on("randomRoomFound", (data) => {
+			console.log("i FOUND A RANDOM ROMM")
 			history.push(`/multiplayer/${data.message}`)
 		});
 

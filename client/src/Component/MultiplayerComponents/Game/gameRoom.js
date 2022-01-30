@@ -44,6 +44,7 @@ const GameRoom = ({ socket, roomcode }) => {
                 isAud = false;
             }
         })
+
         return isAud;
     })
 
@@ -79,7 +80,7 @@ const GameRoom = ({ socket, roomcode }) => {
         });
 
         socket.on("roomUpdate", (data) => {
-            console.log("ROOM STUFFFFF")
+            console.log("ROOM got updated")
             console.log(data)
             dispatch(roomUpdated(data.roomState))
         });
@@ -109,10 +110,10 @@ const GameRoom = ({ socket, roomcode }) => {
 
     return (
         <>
-        <EndGameModal
-            endGameModalOpen={endGameModalOpen}
-            setEndGameModalOpen={setEndGameModalOpen}
-        />
+            <EndGameModal
+                endGameModalOpen={endGameModalOpen}
+                setEndGameModalOpen={setEndGameModalOpen}
+            />
             {
                 username === null || room_state.status !== true ?
                     <WaitingRoom

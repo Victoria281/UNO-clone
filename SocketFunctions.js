@@ -481,7 +481,8 @@ var SocketFunctions = {
                 players: [acceptedUser],
                 gameState: {},
                 owner: acceptedUser,
-                private: true
+                private: true,
+                audience: []
             }
             playerRooms[acceptedUser.id] = roomcode
             return {

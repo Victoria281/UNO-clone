@@ -62,6 +62,24 @@ const reducer = (state = initialState, action) => {
         friends: action.start.friends,
         audience: action.start.audience,
         friendRequests: action.start.friendRequests,
+        game_state: {
+          mainDeck: [],
+          used: [],
+          current: {},
+          playerdeck: [],
+          turn: "",
+          pauseTurn: "",
+          order: [],
+          reverse: 0,
+          unoPressed: {
+            player: false,
+            pressed: false
+          },
+          unoPenalty: false,
+          toDrawCard: false,
+          getDrawnCard: false,
+          otherPlayerPlayingCard: false,
+        },
       };
     case UPDATE_IDENTITY:
       return {
@@ -86,6 +104,9 @@ const reducer = (state = initialState, action) => {
         status: action.start.status,
       };
     case UPDATE_ROOM:
+      console.log("Called teh reducer")
+      console.log(action)
+      console.log(action.roomState.status)
       return {
         ...state,
         status: action.roomState.status,
