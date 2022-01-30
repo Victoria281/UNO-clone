@@ -166,7 +166,7 @@ export default function App() {
     if (status) {
 
       axios
-        .post("http://localhost:5000/api/uno/register", {
+        .post(`${process.env.REACT_APP_API_URL}/api/uno/register`, {
           userName: username,
           email: email,
           password: password
@@ -254,7 +254,21 @@ export default function App() {
               <div className="input-group-prepend">
                 <span className={`input-group-text ${styles.registerInputItems}`}><LockIcon/></span>
               </div>
-              <input type={passwordShown2 ? "text" : "password"} className={`form-control ${styles.registerInputItems}`} style={{paddingRight: 40}} placeholder="Confirm Password" onChange={handleCfmPasswordChange} value={confirmpassword} autocomplete="off"/>
+              <input type={passwordShown2 ? "text" : "password"}
+                onPaste={(e)=>{
+                  e.preventDefault()
+                  return false;
+                }} 
+                onCopy={(e)=>{
+                  e.preventDefault()
+                  return false;
+                }}
+               className={`form-control ${styles.registerInputItems}`} 
+               style={{paddingRight: 40}} 
+               placeholder="Confirm Password" 
+               onChange={handleCfmPasswordChange} 
+               value={confirmpassword} 
+               autocomplete="off"/>
               <button onClick={togglePassword2}><VisibilityIcon style={{padding: 2, marginTop: 6}}/></button>
             </div>
 

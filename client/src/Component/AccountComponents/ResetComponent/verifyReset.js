@@ -127,7 +127,7 @@ export default function App() {
       if(status){
     
         axios
-          .put(`http://localhost:5000/api/uno/user/reset`, {
+          .put(`${process.env.REACT_APP_API_URL}/api/uno/user/reset`, {
             email: email,
             password: password,
           })
@@ -186,7 +186,21 @@ export default function App() {
               <div class={`input-group-prepend`}>
                 <span class={`input-group-text ${styles.resetIcon}`}><LockIcon/></span>
               </div>
-              <input type={passwordShown2 ? "text" : "password"} className={`form-control ${styles.resetInput}`} style={{paddingRight: 40}} placeholder="Confirm Password" onChange={handleCfmPasswordChange} value={confirmpassword} autocomplete="off"/>
+              <input type={passwordShown2 ? "text" : "password"} 
+                onPaste={(e)=>{
+                  e.preventDefault()
+                  return false;
+                }} 
+                onCopy={(e)=>{
+                  e.preventDefault()
+                  return false;
+                }}
+                className={`form-control ${styles.resetInput}`} 
+                style={{paddingRight: 40}} 
+                placeholder="Confirm Password" 
+                onChange={handleCfmPasswordChange} 
+                value={confirmpassword} 
+                autocomplete="off"/>
               <button onClick={togglePassword2}><VisibilityIcon style={{padding: 2, marginTop: 6}}/></button>
             </div>
 

@@ -1,5 +1,5 @@
 //@ts-nocheck
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 // import "../../../css/account.css";
 import styles from '../styles.module.css'
 // import { response } from "express";
@@ -28,6 +28,37 @@ export default function App() {
   // Hooks to disable Form
   const [attempt, setAttempt] = useState(0);
   const [formDisabled, setFormDisabled] = useState(false);
+  const [btnDisabled, setBtnDisabled] = useState(false);
+  const [seconds, setSeconds] = useState(10);
+  const [isActive, setIsActive] = useState(false);
+  const [isShown, setIsShown] = useState(false);
+
+
+
+  // Resets Timer Function
+  function reset() {
+    setSeconds(10);
+    setIsActive(false);
+    setIsShown(false);
+  }
+
+  useEffect(() => {
+    let interval = null;
+    if (formDisabled) {
+      setIsShown(true);
+      setIsActive(true);
+      interval = setInterval(() => {
+        setSeconds(seconds => seconds - 1);
+      }, 1000);
+    } else{
+      clearInterval(interval);
+    }
+    if(seconds === 0){
+      clearInterval(interval)
+      reset();
+    }
+    return () => clearInterval(interval);
+  }, [formDisabled, seconds]);
 
   // Recaptcha on change function, value used to verify if user is really not a robot
   function onChange(value) {
@@ -99,47 +130,44 @@ export default function App() {
 
     if (status) {
       axios
-        .post(process.env.REACT_APP_API_URL + "/api/uno/login", {
-          email: email,
-          password: password
-        })
-        .then((response) => {
-          // console.log(response)
-          localStorage.setItem('token', 'Bearer ' + response.data.token)
-          localStorage.setItem('userid', response.data.user_id)
-          localStorage.setItem('username', response.data.username)
-          setCredWrong("");
-          setNotif({ open: true, type: 'success', message: 'Login Successful' })
-          window.location = '/'
-          // alert("Login successful!")
-        })
-        .catch((error) => {
-          if (error.response) {
-            // console.log("ERROR RESPONSESSSSSSSSS")
-            // console.log(error.response.data)
-            // console.log(error.response.status);
-            // console.log(error.response.headers);
-            //setCredWrong("Wrong Credentials Entered!");
+      .post(process.env.REACT_APP_API_URL + "/api/uno/login", {
+        email: email,
+        password: password
+      })
+      .then((response) => {
+        // console.log(response)
+        localStorage.setItem('token', 'Bearer '+response.data.token)
+        localStorage.setItem('userid', response.data.user_id)
+        localStorage.setItem('username', response.data.username)
+        setCredWrong("");
+        window.location = '/'
+        // alert("Login successful!")
+      })
+      .catch((error) => {
+        if (error.response) {
+          // console.log("ERROR RESPONSESSSSSSSSS")
+          // console.log(error.response.data)
+          // console.log(error.response.status);
+          // console.log(error.response.headers);
+          setCredWrong("Wrong Credentials Entered!");
 
-            // If attempt is 5 times, disable form
-            if (attempt == 4) {
-              status = false;
-              setFormDisabled(true);
-              //alert("The form has been disabled. Please wait for a while")
-              setNotif({ open: true, type: 'error', message: 'Form is disabled' })
-              // Enable form after 10 secs
-              setTimeout(() => {
-                setFormDisabled(false);
-                setAttempt(0);
-              }, 10000);
+          // If attempt is 5 times, disable form
+          if(attempt == 4){
+            status = false;
+            setFormDisabled(true);
+            setBtnDisabled(true);
+            alert("The form has been disabled. Please wait for a while")
+            // Enable form after 10 secs
+            setTimeout(() => {
+              setFormDisabled(false);
+              setBtnDisabled(false);
+              setAttempt(0);
+            }, 10000);
 
-              console.log("CANNOT SEND FORM DUE TO ATTEMPT")
-            }
-            console.log("Login Error")
-          } else {
-            // console.log("Login Failed!")
+            console.log("CANNOT SEND FORM DUE TO ATTEMPT")
           }
           // console.log(error.config);
+        }
         })
     }
 
@@ -240,6 +268,7 @@ export default function App() {
                 style={{ marginTop: 20, height: 50, backgroundColor: '#FFB967', border: '1px solid #FFB967', borderRadius: '50%' }}
                 onClick={() => { createPost(); play(); }}
                 className={styles.accountSubmitBtn}
+                disabled={btnDisabled}
               >
                 <p className={styles.accountLoginText} style={{ fontSize: 48, fontWeight: 'bolder', fontFamily: 'Rubik Mono One', color: 'black', marginTop: -18 }}><b>Login</b></p>
               </button><br /><br />
@@ -248,6 +277,18 @@ export default function App() {
 
             </fieldset>
           </form>
+
+        {
+          isShown ? 
+          <div className="time">
+            Timeout: {seconds}s
+          </div> :
+          <div></div>
+          
+        }
+          
+
+
         </div>
       </div>
     </div>
