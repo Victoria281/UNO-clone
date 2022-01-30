@@ -1,12 +1,18 @@
+//@ts-nocheck
 import React from "react";
 
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { Stack, Button } from '@mui/material';
 import Card from "./Card"
 import styles from "../styles.module.css"
+import {
+    callUNO
+} from "../../../../store/action/multiplayer/game"
 //gets the data from the action object and reducers defined earlier
 const Player = ({ playerDeck, current, playerTurn, isTurn, socket }) => {
     const dispatch = useDispatch();
+    const game_state = useSelector(state => state.multiplayer_rooms.game_state)
+    const room_state = useSelector(state => state.multiplayer_rooms)
 
     return (
         <>
@@ -37,7 +43,9 @@ const Player = ({ playerDeck, current, playerTurn, isTurn, socket }) => {
                                 alignItems: "center"
                             }}>
                             <button className="roomBtn" onClick={() => {
-                                // console.log("herer"); dispatch(callUNO())
+                                if (game_state.unoPressed.player === room_state.myTurnIs) {
+                                    dispatch(callUNO(socket))
+                                }
                             }}><p>UNO</p></button>
                         </div>
                     </div>

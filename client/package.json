@@ -17,6 +17,7 @@
     "@testing-library/user-event": "^12.8.3",
     "chart.js": "^3.7.0",
     "dotenv": "^8.2.0",
+    "emailjs": "^3.7.0",
     "emailjs-com": "^3.2.0",
     "gapi-script": "^1.2.0",
     "gsap": "^3.9.1",
