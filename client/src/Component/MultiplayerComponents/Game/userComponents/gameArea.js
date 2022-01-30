@@ -8,6 +8,9 @@ import {
     Box,
     Grid
 } from '@mui/material';
+import {
+    checkCard
+} from "../../../../store/action/multiplayer/game"
 import styles from "../styles.module.css"
 //gets the data from the action object and reducers defined earlier
 const GameRoom = ({ socket }) => {
@@ -40,14 +43,15 @@ const GameRoom = ({ socket }) => {
         console.log("Whose turn is it now?")
         console.log(game_state.turn)
 
-        // if (game_state.unoPressed.player !== false) {
-        //     console.log("Times start")
-        //     setTimeout(() => {
-        //         console.log("Times up")
-        //         dispatch(checkCard())
-        //     }, 2000);
-        // } else 
-        if (game_state.turn == null) {
+        if (game_state.unoPressed.player !== false) {
+            if (game_state.unoPressed.player === room_state.myTurnIs) {
+                console.log("Times start")
+                setTimeout(() => {
+                    console.log("Times up")
+                    dispatch(checkCard(socket))
+                }, 2000);
+            }
+        } else if (game_state.turn == null) {
             // console.log("Its the bots turn now")
             console.log("Turn is null")
             console.log(game_state.pauseTurn)
