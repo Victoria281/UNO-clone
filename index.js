@@ -7,7 +7,7 @@ const cors = require("cors");
 const dotenv = require("dotenv");
 dotenv.config();
 
-const PORT = process.env.PORT ;
+const PORT = process.env.PORT;
 const createHttpErrors = require('http-errors');
 const ApiRouter = require('./src/controller/api');
 const http = require("http");
@@ -19,12 +19,12 @@ const broadcastOne = 1;
 const broadcastAll = 0;
 var corsOptions = {
     origin: [
-        "http://uno-clone.herokuapp.com", 
-        "https://uno-clone.herokuapp.com", 
-        "http://uno-clone-dev.herokuapp.com", 
-        "https://uno-clone-dev.herokuapp.com", 
-        "http://uno-ca1.herokuapp.com", 
-        "https://uno-ca1.herokuapp.com", 
+        "http://uno-clone.herokuapp.com",
+        "https://uno-clone.herokuapp.com",
+        "http://uno-clone-dev.herokuapp.com",
+        "https://uno-clone-dev.herokuapp.com",
+        "http://uno-ca1.herokuapp.com",
+        "https://uno-ca1.herokuapp.com",
         "http://localhost:3000"
     ],
     optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
@@ -37,12 +37,12 @@ const server = http.createServer(app);
 const io = socketio(server, {
     cors: {
         origin: [
-            "http://uno-clone.herokuapp.com", 
-            "https://uno-clone.herokuapp.com", 
-            "http://uno-clone-dev.herokuapp.com", 
-            "https://uno-clone-dev.herokuapp.com", 
-            "http://uno-ca1.herokuapp.com", 
-            "https://uno-ca1.herokuapp.com", 
+            "http://uno-clone.herokuapp.com",
+            "https://uno-clone.herokuapp.com",
+            "http://uno-clone-dev.herokuapp.com",
+            "https://uno-clone-dev.herokuapp.com",
+            "http://uno-ca1.herokuapp.com",
+            "https://uno-ca1.herokuapp.com",
             "http://localhost:3000"
         ],
         methods: ["GET", "POST"],
@@ -137,6 +137,49 @@ io.on("connection", (socket) => {
             });
             io.sockets.in(success.roomcode).emit("roomUpdate", {
                 roomState: success.msg.room,
+            });
+        } else {
+            socket.emit("errorOccured", {
+                message: success.msg
+            });
+        }
+    });
+
+    socket.on("sendMessage", (chat) => {
+        console.log(chat.user.username + " wants to say " + chat.message + " in " + chat.user.roomcode)
+
+        io.sockets.in(chat.user.roomcode).emit("chat", chat);
+
+    });
+
+    socket.on("moveToAudience", ({ moveToAuduser, roomcode }) => {
+        console.log(moveToAuduser + " is to be moved to the audience in room " + roomcode)
+        const success = SocketFunctions.moveToAudience(moveToAuduser, roomcode);
+
+        console.log("Result...")
+        console.log("==================================\n")
+
+        if (success.success) {
+            io.sockets.in(success.roomcode).emit("roomUpdate", {
+                roomState: success.msg,
+            });
+        } else {
+            socket.emit("errorOccured", {
+                message: success.msg
+            });
+        }
+    });
+
+    socket.on("moveToPlayer", ({ moveToPlayerUser, roomcode }) => {
+        console.log(moveToPlayerUser + " is to be moved to the players in room " + roomcode)
+        const success = SocketFunctions.moveToPlayer(moveToPlayerUser, roomcode);
+
+        console.log("Result...")
+        console.log("==================================\n")
+
+        if (success.success) {
+            io.sockets.in(success.roomcode).emit("roomUpdate", {
+                roomState: success.msg,
             });
         } else {
             socket.emit("errorOccured", {

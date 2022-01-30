@@ -10,11 +10,49 @@ import {
 } from '@mui/material';
 import styles from "../styles.module.css"
 //gets the data from the action object and reducers defined earlier
-const GameRoom = ({ otherPlayers, socket }) => {
+const GameRoom = ({ socket }) => {
     const dispatch = useDispatch();
-    const game_state = useSelector(state => state.multiplayer_rooms.game_state)
-    const room_state = useSelector(state => state.multiplayer_rooms)
 
+    const { game_state, room_state, otherPlayers } = useSelector(state => {
+
+        const game_state = state.multiplayer_rooms.game_state
+        const room_state = state.multiplayer_rooms
+        console.log("who am i")
+        console.log(room_state.myTurnIs)
+        var otherPlayers;
+        if (room_state.myTurnIs != -1) {
+            const indexOfPlayer = game_state.order.findIndex((i) => i === room_state.myTurnIs)
+            otherPlayers = game_state.order.slice(indexOfPlayer + 1).concat(game_state.order.slice(0, indexOfPlayer))
+        } else {
+            console.log("sending back order")
+            otherPlayers = game_state.order
+        }
+        console.log("whats other players")
+        console.log(otherPlayers)
+        return { game_state, room_state, otherPlayers }
+    })
+
+    console.log("ROOM START")
+    console.log(room_state)
+    console.log(otherPlayers)
+
+    useEffect(() => {
+        console.log("Whose turn is it now?")
+        console.log(game_state.turn)
+
+        // if (game_state.unoPressed.player !== false) {
+        //     console.log("Times start")
+        //     setTimeout(() => {
+        //         console.log("Times up")
+        //         dispatch(checkCard())
+        //     }, 2000);
+        // } else 
+        if (game_state.turn == null) {
+            // console.log("Its the bots turn now")
+            console.log("Turn is null")
+            console.log(game_state.pauseTurn)
+        }
+    }, [game_state]);
     return (
         <Box>
             <Grid container
@@ -30,7 +68,7 @@ const GameRoom = ({ otherPlayers, socket }) => {
                             pturn={otherPlayers[1]}
                             isTurn={otherPlayers[1] === game_state.turn}
                             socket={socket} />
-                            
+
                     }
                 </Grid>
             </Grid>
@@ -56,7 +94,7 @@ const GameRoom = ({ otherPlayers, socket }) => {
                     }}>
                     {<Deck
                         current={game_state.current}
-                        playing={game_state.turn === game_state.myTurnIs}
+                        playing={game_state.turn === room_state.myTurnIs}
                         mainDeck={game_state.mainDeck}
                         used={game_state.used}
                         socket={socket} />}
@@ -74,31 +112,45 @@ const GameRoom = ({ otherPlayers, socket }) => {
                     }
                 </Grid>
             </Grid>
-            <Grid container
-                style={{ border: "1px solid grey", height: "25vh" }}>
-                <Grid item xs={2}>
-                    <img className={styles.ProfileIcon} src={"./images/uno-reverse.png"} />
-                </Grid>
-                <Grid item xs={6}
-                    style={{ marginRight: "auto", marginLeft: "auto" }}>
-                    <Player
-                        playerDeck={game_state.playerdeck["player"+game_state.myTurnIs]}
-                        current={game_state.current}
-                        playerTurn={game_state.myTurnIs}
-                        isTurn={game_state.myTurnIs === game_state.turn}
-                        socket={socket}
-                    />
-                </Grid>
-                <Grid item xs={2}>
-                    {
-                        game_state.reverse === 0 ?
-                            <img className={`${styles.ReverseIcon}`} src={"./images/uno-reverse.png"} />
-                            :
-                            <img className={`${styles.ReverseIcon}  ${styles.Reversed}`} src={"./images/uno-reverse.png"} />
-                    }
+            {
+                room_state.myTurnIs === -1 ?
+                    (otherPlayers[3] !== undefined) &&
+                    <OtherPlayer
+                        placement={'Bottom'}
+                        number={4}
+                        playerDeck={game_state.playerdeck["player" + otherPlayers[3]]}
+                        pturn={otherPlayers[3]}
+                        isTurn={otherPlayers[3] === game_state.turn}
+                        socket={socket} />
+                    :
+                    <Grid container
+                        style={{ border: "1px solid grey", height: "25vh" }}>
+                        <Grid item xs={2}>
+                            <img className={styles.ProfileIcon} src={"./images/uno-reverse.png"} />
+                        </Grid>
+                        <Grid item xs={6}
+                            style={{ marginRight: "auto", marginLeft: "auto" }}>
+                            <Player
+                                playerDeck={game_state.playerdeck["player" + room_state.myTurnIs]}
+                                current={game_state.current}
+                                playerTurn={room_state.myTurnIs}
+                                isTurn={room_state.myTurnIs === game_state.turn}
+                                socket={socket}
+                            />
+                        </Grid>
+                        <Grid item xs={2}>
+                            {
+                                game_state.reverse === 0 ?
+                                    <img className={`${styles.ReverseIcon}`} src={"./images/uno-reverse.png"} />
+                                    :
+                                    <img className={`${styles.ReverseIcon}  ${styles.Reversed}`} src={"./images/uno-reverse.png"} />
+                            }
 
-                </Grid>
-            </Grid>
+                        </Grid>
+                    </Grid>
+
+
+            }
         </Box>
     );
 }

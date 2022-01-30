@@ -1,6 +1,7 @@
+//@ts-nocheck
 import React from 'react';
 import { Stack } from '@mui/material';
-import OtherPlayerCard from "./OtherPlayerCard"
+import Card from "./Card"
 import styles from "../styles.module.css"
 
 //gets the data from the action object and reducers defined earlier
@@ -17,11 +18,9 @@ const OtherPlayer = ({ playerDeck, placement, number, pturn, isTurn }) => {
             }
             <Stack direction="row" spacing={1} className={`${styles.OtherPlayerStack} ${styles['OtherPlayerStack' + placement]}`}>
                 {playerDeck.map((card, i) =>
-                    <OtherPlayerCard
+                    <Card
                         card={card}
-                        identity={"bot" + number}
                         cardId={"p1" + card.id}
-                        botPlay={card.botPlayCard}
                     />
                 )}
             </Stack>

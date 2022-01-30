@@ -10,7 +10,8 @@ import {
 import {
     joinRoom,
     roomUpdated,
-    updateOwnIdentity
+    updateOwnIdentity,
+    receivedMessage
 } from "../../../store/action/multiplayer/rooms"
 import Player from "./gameComponents/Player"
 import OtherPlayer from "./gameComponents/OtherPlayers"
@@ -22,18 +23,30 @@ import {
 import SelectColorModal from "./gameComponents/SelectColorModal"
 import WaitingRoom from "./userComponents/waitingRoom"
 import GameArea from "./userComponents/gameArea"
-
+import ChatArea from "./userComponents/chatArea"
+import AudienceOptions from "./userComponents/audienceRooms"
 //gets the data from the action object and reducers defined earlier
 const GameRoom = ({ socket, roomcode }) => {
     const dispatch = useDispatch();
-    const [username,] = useState(localStorage.getItem("username"))
+    const [username, setUsername] = useState(localStorage.getItem("username"))
     const [otherPlayers, setOtherPlayers] = useState([])
     const room_state = useSelector(state => state.multiplayer_rooms)
+    const audienceMember = useSelector(state => {
+        var isAud = true;
+        state.multiplayer_rooms.players.map((player) => {
+            if (player.username === username) {
+                isAud = false;
+            }
+        })
+        return isAud;
+    })
 
+    console.log("what ami")
+    console.log(audienceMember)
     const handleStart = () => {
         console.log("start game pressed")
         // if (room_state.players.length > 1) {
-            dispatch(prepareGameMaterials(socket))
+        dispatch(prepareGameMaterials(socket))
         // }
     }
 
@@ -45,9 +58,17 @@ const GameRoom = ({ socket, roomcode }) => {
     useEffect(() => {
         socket.on("identity", (data) => {
             dispatch(updateOwnIdentity(data))
+            setUsername(data.user.username)
+        });
+        socket.on("chat", (data) => {
+            console.log("received message update")
+            console.log(data)
+            dispatch(receivedMessage(data))
         });
 
         socket.on("roomUpdate", (data) => {
+            console.log("ROOM STUFFFFF")
+            console.log(data)
             dispatch(roomUpdated(data.roomState))
         });
 
@@ -59,17 +80,10 @@ const GameRoom = ({ socket, roomcode }) => {
         socket.on("startGame", (data) => {
             console.log("Socket wants to start the game")
             dispatch(startGameDetected(data))
-                .then((result) => {
-                    console.log(result)
-                    console.log("Changes in state")
-                    console.log(room_state)
-                    setOtherPlayers(result);
-                })
         });
 
         socket.on("updateGame", (data) => {
             console.log("update game detected")
-            console.log(data)
             dispatch(updateGameDetected(data))
         });
 
@@ -84,15 +98,29 @@ const GameRoom = ({ socket, roomcode }) => {
     return (
         <>
             {
-                room_state.status != true ?
-                    <WaitingRoom 
-                    roomcode={roomcode} 
-                    handleStart={handleStart} />
+                username === null || room_state.status !== true ?
+                    <WaitingRoom
+                        roomcode={roomcode}
+                        handleStart={handleStart}
+                        socket={socket}
+                    />
                     :
-                    <GameArea 
-                    otherPlayers={otherPlayers} 
-                    socket={socket} />
-                    
+                    <>
+                        <GameArea
+                            otherPlayers={otherPlayers}
+                            socket={socket} />
+                        {audienceMember &&
+                            <AudienceOptions />
+                        }
+                    </>
+            }
+            {
+                username !== null &&
+                <ChatArea
+                    roomcode={roomcode}
+                    username={username}
+                    socket={socket}
+                />
             }
         </>
     );

@@ -171,6 +171,98 @@ var SocketFunctions = {
         }
     },
 
+    moveToAudience: function (moveToAudUser, roomcode) {
+        console.log("==================================")
+        console.log("Servicing moveToAudience...")
+        console.log("----------------------------------")
+        console.log(moveToAudUser + " is to be moved to the audience in room " + roomcode)
+        
+        if (roomState[roomcode] != undefined) {
+            
+            var alreadyIn = false;
+            var movedUser;
+            var movedIndex;
+            roomState[roomcode].players.map((data, i) => {
+                if (data.username == moveToAudUser) {
+                    alreadyIn = true;
+                    movedUser = data
+                    movedIndex = i
+                }
+            })
+            roomState[roomcode].audience.map((data, i) => {
+                if (data.username == moveToAudUser) {
+                    movedUser = data
+                }
+            })
+
+            if (alreadyIn != false) {
+                if (movedUser != undefined && movedIndex != undefined) {
+                    roomState[roomcode].players = roomState[roomcode].players.slice(0, movedIndex).concat(roomState[roomcode].players.slice(movedIndex+1))
+                    roomState[roomcode].audience.push(movedUser)
+                }
+            }
+            return {
+                success: true,
+                send: broadcastOne,
+                roomcode: roomcode,
+                msg: roomState[roomcode]
+            };
+
+        } else {
+            return {
+                success: false,
+                send: broadcastOne,
+                msg: "Room does not exist"
+            };
+        }
+    },
+
+    moveToPlayer: function (moveToPlayerUser, roomcode) {
+        console.log("==================================")
+        console.log("Servicing moveToPlayer...")
+        console.log("----------------------------------")
+        console.log(moveToPlayerUser + " is to be moved to the players in room " + roomcode)
+        
+        if (roomState[roomcode] != undefined) {
+            
+            var alreadyIn = false;
+            var movedUser;
+            var movedIndex;
+            roomState[roomcode].players.map((data, i) => {
+                if (data.username == moveToPlayerUser) {
+                    movedUser = data
+                }
+            })
+            roomState[roomcode].audience.map((data, i) => {
+                if (data.username == moveToPlayerUser) {
+                    alreadyIn = true;
+                    movedUser = data
+                    movedIndex = i
+                }
+            })
+
+            if (alreadyIn != false) {
+                if (movedUser != undefined && movedIndex != undefined) {
+                    roomState[roomcode].audience = roomState[roomcode].audience.slice(0, movedIndex).concat(roomState[roomcode].audience.slice(movedIndex+1))
+                    roomState[roomcode].players.push(movedUser)
+                }
+            }
+            return {
+                success: true,
+                send: broadcastOne,
+                roomcode: roomcode,
+                msg: roomState[roomcode]
+            };
+
+        } else {
+            return {
+                success: false,
+                send: broadcastOne,
+                msg: "Room does not exist"
+            };
+        }
+    },
+
     leftRoom: function (id, username) {
         //Check if player exists
 
@@ -287,7 +379,8 @@ var SocketFunctions = {
                 players: [user],
                 gameState: {},
                 owner: user,
-                private: false
+                private: false,
+                audience: []
             }
             playerRooms[id] = roomcode
         } else {

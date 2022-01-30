@@ -5,32 +5,29 @@ import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import { purple, blue } from '@mui/material/colors';
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from 'react-redux'
-import {
-    movePlayerToAudience,
-    moveAudienceToPlayer
-} from "../../../../store/action/multiplayer/rooms"
 
-const WaitingRoom = ({ roomcode, handleStart, socket }) => {
+const WaitingRoom = ({roomcode, handleStart}) => {
     const dispatch = useDispatch();
     const [progress, setProgress] = useState(25);
     const [noOfPeople, setnoOfPeople] = useState(1);
-    const username = localStorage.getItem('username');
+    const uname = localStorage.getItem('username');
     const [buttonDisabled, setButtonDisabled] = useState(false);
-    const [owner, setOwner] = useState(false);
-
-    const { room_state, unconnected } = useSelector(state => {
+    const {room_state, unconnected} = useSelector(state => {
         const room_state = state.multiplayer_rooms
         const unconnected = []
-        for (var i = 0; i < 4 - state.multiplayer_rooms.players.length; i++) {
+        for (var i=0; i<4 - state.multiplayer_rooms.players.length; i++){
             unconnected.push("Waiting")
         }
-        return { room_state, unconnected }
+        return {room_state, unconnected}
     })
+
+    console.log("room_state")
+    console.log(unconnected)
 
     const boxColor = purple['200'];
     const boxBorder = purple['500'];
 
-    const copyLink = "https://uno-clone.herokuapp.com/multiplayer/" + username;
+    const copyLink = "https://uno-clone.herokuapp.com/multiplayer/" + uname;
 
     const theme = createTheme({
         typography: {
@@ -185,20 +182,6 @@ const WaitingRoom = ({ roomcode, handleStart, socket }) => {
         );
     }
 
-    const handleMoveToAudience = (audience_user, socket) => {
-        if (username === room_state.owner.username) {
-            console.log("im the owner. Moving player to audience")
-            dispatch(movePlayerToAudience(audience_user, socket))
-        }
-    }
-
-    const handleMoveToPlayer = (player_user, socket) => {
-        if (username === room_state.owner.username) {
-            console.log("im the owner. Moving audience to player")
-            dispatch(moveAudienceToPlayer(player_user, socket))
-        }
-    }
-
     return (
         <ThemeProvider theme={theme}>
             <Box
@@ -227,11 +210,7 @@ const WaitingRoom = ({ roomcode, handleStart, socket }) => {
 
                         <Grid item xs={3}>
                             <Avatar
-                                style={owner == true ? { color: "red" } : { color: "blue" }}
                                 sx={{ width: 135, height: 135, bgcolor: blue[500] }}
-                                onClick={() => {
-                                    handleMoveToAudience(data.username, socket)
-                                }}
                             // src={process.env.REACT_APP_API_URL + "/api/uno/profile_icons/" + userInfo.profileicon + ".png"}
                             >
                                 Player
@@ -248,8 +227,9 @@ const WaitingRoom = ({ roomcode, handleStart, socket }) => {
                         </Grid>
                     )}
 
-                    {unconnected.map((data) => {
-                        console.log("herere"); return (<Grid item xs={3}>
+                    {unconnected.map((data) =>
+
+                       { console.log("herere"); return(<Grid item xs={3}>
                             <CircularProgress color="warning" size='130px' />
                             <Box
                                 sx={{
@@ -260,8 +240,7 @@ const WaitingRoom = ({ roomcode, handleStart, socket }) => {
                                 }} >
                                 <Typography variant="h5" sx={{ color: "#d46105", textAlign: "center", pt: 0.4 }}>{data}</Typography>
                             </Box>
-                        </Grid>)
-                    }
+                        </Grid>)}
                     )}
 
 
@@ -280,7 +259,7 @@ const WaitingRoom = ({ roomcode, handleStart, socket }) => {
                                 ml: -3,
                                 mt: 2.3
                             }} >
-                            <Typography variant="h5" sx={{ color: "#3C56AF", textAlign: "center", pt: 0.4 }}>{username}</Typography>
+                            <Typography variant="h5" sx={{ color: "#3C56AF", textAlign: "center", pt: 0.4 }}>{uname}</Typography>
                         </Box>
                     </Grid>
 
@@ -328,21 +307,11 @@ const WaitingRoom = ({ roomcode, handleStart, socket }) => {
                     </Grid>
 
                     <Grid sx={{ ml: 10, mt: 4 }}>
-                        <button onClick={() => { handleStart() }} className="roomBtn">
-                            <p>Start</p>
-                        </button>
+                            <button onClick={()=>{handleStart()}} className="roomBtn">
+                                <p>Start</p>
+                            </button>
                     </Grid>
-                    {
-                        room_state.audience.map((data) =>
-                            <div>
 
-                                <p>{data.username}</p>
-                                <button onClick={() => {
-                                    handleMoveToPlayer(data.username, socket)
-                                }}>Move</button>
-                            </div>
-                        )
-                    }
                     <CopyCode copyCode={roomcode} />
                     <CopyLink copyLink={copyLink} />
                 </Grid>
