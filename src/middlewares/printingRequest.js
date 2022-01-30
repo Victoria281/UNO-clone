@@ -1,4 +1,4 @@
-function printingDebugInfo(req, res, next) {
+const printingDebugInfo = (req, res, next) => {
     console.log("------------[Debug Info]---------------");
     // console.log(`Servicing ${urlPattern}..`)
     console.log("Servicing " + req.method + " " + req.url + "..")
@@ -12,4 +12,4 @@ function printingDebugInfo(req, res, next) {
     next();
 }
 
-module.exports=printingDebugInfo;
+module.exports = printingDebugInfo;
