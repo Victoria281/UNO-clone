@@ -2,9 +2,7 @@
 import React, { useState, useEffect } from "react";
 
 const dotenv = require('dotenv');
-dotenv.config();
-
-console.log(">>>>", process.env);
+dotenv.config({ path: '../.env'});
 
 //components
 import SingleplayerGame from "./Component/SingleplayerComponent/gameRoom"
