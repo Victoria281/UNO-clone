@@ -10,6 +10,11 @@ import LockIcon from '@mui/icons-material/Lock';
 import EmailIcon from '@mui/icons-material/Email';
 import CustomNotification from '../../OtherComponents/NotificationComponent/Notifications';
 
+import dotenv from 'dotenv';
+dotenv.config();
+
+console.log(process.env);
+
 export default function App() {
   const [email, setEmail] = useState("");
   const [emailError, setEmailError] = useState("");
@@ -48,10 +53,10 @@ export default function App() {
       interval = setInterval(() => {
         setSeconds(seconds => seconds - 1);
       }, 1000);
-    } else{
+    } else {
       clearInterval(interval);
     }
-    if(seconds === 0){
+    if (seconds === 0) {
       clearInterval(interval)
       reset();
     }
@@ -125,43 +130,45 @@ export default function App() {
 
     if (status) {
       axios
-      .post(process.env.REACT_APP_API_URL + "/api/uno/login", {
-        email: email,
-        password: password
-      })
-      .then((response) => {
-        // console.log(response)
-        localStorage.setItem('token', 'Bearer '+response.data.token)
-        localStorage.setItem('userid', response.data.user_id)
-        localStorage.setItem('username', response.data.username)
-        setCredWrong("");
-        window.location = '/'
-        // alert("Login successful!")
-      })
-      .catch((error) => {
-        if (error.response) {
-          // console.log("ERROR RESPONSESSSSSSSSS")
-          // console.log(error.response.data)
-          // console.log(error.response.status);
-          // console.log(error.response.headers);
-          setCredWrong("Wrong Credentials Entered!");
+        .post(process.env.REACT_APP_API_URL + "/api/uno/login", {
+          email: email,
+          password: password
+        })
+        .then((response) => {
+          // console.log(response)
+          localStorage.setItem('token', 'Bearer ' + response.data.token)
+          localStorage.setItem('userid', response.data.user_id)
+          localStorage.setItem('username', response.data.username)
+          setCredWrong("");
+          window.location = '/'
+          // alert("Login successful!")
+        })
+        .catch((error) => {
+          if (error.response) {
+            // console.log("ERROR RESPONSESSSSSSSSS")
+            // console.log(error.response.data)
+            // console.log(error.response.status);
+            // console.log(error.response.headers);
+            setCredWrong("Wrong Credentials Entered!");
 
-          // If attempt is 5 times, disable form
-          if(attempt == 4){
-            status = false;
-            setFormDisabled(true);
-            setBtnDisabled(true);
-            alert("The form has been disabled. Please wait for a while")
-            // Enable form after 10 secs
-            setTimeout(() => {
-              setFormDisabled(false);
-              setBtnDisabled(false);
-              setAttempt(0);
-            }, 10000);
+            // If attempt is 5 times, disable form
+            if (attempt == 4) {
+              status = false;
+              setFormDisabled(true);
+              setBtnDisabled(true);
+              alert("The form has been disabled. Please wait for a while")
+              // Enable form after 10 secs
+              setTimeout(() => {
+                setFormDisabled(false);
+                setBtnDisabled(false);
+                setAttempt(0);
+              }, 10000);
 
-            console.log("CANNOT SEND FORM DUE TO ATTEMPT")
+              console.log("CANNOT SEND FORM DUE TO ATTEMPT")
+            }
+            // console.log(error.config);
           }
-        }
+
         })
     }
 
@@ -189,12 +196,45 @@ export default function App() {
     setPasswordShown1(!passwordShown1);
   };
 
+  // Google OAuth Button
+  const handleCredentialResponse = async (response) => {
+    console.log("Encoded JWT ID Token: " + response.credential);
+
+    const result = await fetch(process.env.REACT_APP_API_URL + "/api/uno/googlelogin", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer " + response.credential
+      }
+    });
+
+    const data = await result.json();
+    console.log(data);
+  }
+
+  const initializeGoogleAuth = () => {
+    google.accounts.id.initialize({
+      client_id: '991501856442-jcqllikm4b4jodj6s9bdkv0amfs5f2oi.apps.googleusercontent.com',
+      callback: handleCredentialResponse
+    });
+    google.accounts.id.renderButton(document.getElementById("google-auth-button"), { theme: 'outline', size: 'large', position: 'absolute', top: '300px' });
+    // google.accounts.id.prompt();
+  }
+
   return (
     <div className="App">
       <div className="wrapper">
         <CustomNotification notif={notif} setNotif={setNotif} />
         <h1><b className={styles.accountTitle}>Login</b></h1>
         <div className={styles.accountBody}>
+          {initializeGoogleAuth()}
+          <div className="container">
+            <div className="row no-gutters justify-content-center m-2">
+              <div className="col-xl-6 col-mlg-6 col-md-6 col-sm-6 col-xs-6">
+                <div id="google-auth-button" className={`m-2`}></div>
+              </div>
+            </div>
+          </div>
 
           <form
             className={`form-group form ${styles.accountForm}`}
@@ -253,16 +293,14 @@ export default function App() {
             </fieldset>
           </form>
 
-        {
-          isShown ? 
-          <div className="time">
-            Timeout: {seconds}s
-          </div> :
-          <div></div>
-          
-        }
-          
+          {
+            isShown ?
+              <div className="time">
+                Timeout: {seconds}s
+              </div> :
+              <div></div>
 
+          }
 
         </div>
       </div>
