@@ -850,19 +850,33 @@ app.delete('/user/friend', printingDebuggingInfo, verifyToken, function (req, re
                 return res.status(404).json(response);
 
             } else {
-                // Invalidate the cache for this user's friends list and pending friends list
-                redisClient.del(`friends_${uid}`);
 
-                // This sentence is generally redundant as the chances of it happening is super duper slim
-                // However, i just added it to ensure the robustness of the web application
-                redisClient.del(`pendingFriends_${uid}_${friendid}`);
+                User.deleteFriend(friendid, uid, (err, result) => {
+                    if (err) {
+                        if (err.code === '23505') {
+                            return next(createHttpError(404, `Not found`));
+                        }
+                        else {
+                            return next(err);
+                        }
+                    } else {
+                        // Invalidate the cache for this user's friends list and pending friends list
+                        redisClient.del(`friends_${uid}`);
+                        redisClient.del(`friends_${friendid}`);
 
-                const response = {
-                    statusCode: 200,
-                    message: 'Friend Deleted'
-                };
+                        // This sentence is generally redundant as the chances of it happening is super duper slim
+                        // However, i just added it to ensure the robustness of the web application
+                        redisClient.del(`pendingFriends_${uid}_${friendid}`);
+                        redisClient.del(`pendingFriends_${friendid}_${uid}`);
 
-                return res.status(200).json(response);
+                        const response = {
+                            statusCode: 200,
+                            message: 'Friend Deleted'
+                        };
+
+                        return res.status(200).json(response);
+                    }
+                });
             }
         }
     });
