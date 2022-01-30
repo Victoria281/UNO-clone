@@ -6,11 +6,6 @@ dotenv.config();
 
 console.log(">>>>", process.env);
 
-const dotenv = require('dotenv');
-dotenv.config();
-
-console.log(">>>>", process.env);
-
 //components
 import SingleplayerGame from "./Component/SingleplayerComponent/gameRoom"
 import GamePage from "./pages/game";
