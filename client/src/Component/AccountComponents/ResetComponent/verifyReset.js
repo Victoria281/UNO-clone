@@ -4,8 +4,6 @@ import React, { Fragment, useEffect, useState } from "react";
 import emailjs from 'emailjs-com'
 
 import { useLocation } from "react-router-dom";
-// import "../../../css/verifyReset.css";
-// import { response } from "express";
 import axios from "axios";
 import VisibilityIcon from '@mui/icons-material/Visibility';
 
@@ -27,12 +25,7 @@ export default function App() {
   const [passwordShown2, setPasswordShown2] = useState(false);
   const [play] = useSound(boopSfx);
 
-  
 
-
-
-  // const search = useLocation().search;
-  // const id = new URLSearchParams(search).get('u');
 
   const handlePasswordChange = (e) => {
     setSuccessMsg("");
@@ -53,7 +46,6 @@ export default function App() {
 
   window.addEventListener("storage", function () {
     // do your checks to detect
-    // changes in "e1", "e2" & "e3" here
     console.log("localstorage is being modified")
     window.localStorage.clear()
     console.log("localstorage is being cleared due to changes made!")
@@ -62,7 +54,6 @@ export default function App() {
   window.onunload = () => {
     // Clear the local storage when page refreshes
     window.localStorage.clear()
-    // console.log(localStorage.getItem('email'))
   }
 
     // Password visibility function
@@ -76,48 +67,46 @@ export default function App() {
   function submitReset(){
     let status = true;
     let email = localStorage.getItem('email');
-    
-    console.log(email)
 
     if(email === null){
       status = false;
-      setStoreMissing("Please send email again!")
+      // setStoreMissing("Please send email again!")
     }
-    if(status === true){
-      if(password==""){
-        status = false;
-        setPasswordError("Please enter a new password!")
-      }else{
+    
+    if(password==""){
+      status = false;
+      // setPasswordError("Please enter a new password!")
+    }else{
+      status = true;
+      // setPasswordError("")
+      // setStoreMissing("")
+      // Regex must contain 1 lowercase, 1 uppercase, 1 number, 1 special character (escapes reserved RegEx in case of conflict),
+      // string must be 8 chars or longer
+      const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/;
+      if(passwordRegex.test(password)){
         status = true;
-        setPasswordError("")
-        setStoreMissing("")
-        // Regex must contain 1 lowercase, 1 uppercase, 1 number, 1 special character (escapes reserved RegEx in case of conflict),
-        // string must be 8 chars or longer
-        const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/;
-        if(passwordRegex.test(password)){
-          status = true;
-          setPasswordError("")
-          setStoreMissing("")
-        }else{
-          status = false;
-          setPasswordError("Criteria: Upper and Lowercase, Number, Special Char")
-        }
+        // setPasswordError("")
+        // setStoreMissing("")
+      }else{
+        status = false;
+        // setPasswordError("Criteria: Upper and Lowercase, Number, Special Char")
       }
     }
+    
 
-    if(status===true){
+    if(status){
       // Check confirm password field
       if(confirmpassword == ""){
         status = false;
-        setPasswordCfmError("Confirm Password Required")
+        // setPasswordCfmError("Confirm Password Required")
       }else{
         if(confirmpassword == password){
           status = true;
-          setPasswordCfmError("");
-          setStoreMissing("")
+          // setPasswordCfmError("");
+          // setStoreMissing("")
         }else{
           status = false;
-          setPasswordCfmError("Password does not match confirm password");
+          // setPasswordCfmError("Password does not match confirm password");
         }
       }
     }
@@ -141,7 +130,6 @@ export default function App() {
               console.log(error.response)
               alert('It seems this email has yet been registered. Please register with us!')
               window.location="/register"
-              console.log("THERE IS AN ERROR OMGG!")
             }
           })
       }
