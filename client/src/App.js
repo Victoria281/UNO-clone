@@ -48,6 +48,16 @@ function AppGameRoom(props) {
   );
 }
 
+function AppHome(props) {
+  return (
+    <React.Fragment>
+      <HomePage
+        socket={socket}
+      />
+    </React.Fragment>
+  );
+}
+
 function AppCreateRoom(props) {
   return (
     <React.Fragment>
@@ -63,6 +73,14 @@ const App = ({ hideLoader }) => {
     hideLoader()
   });
 
+  
+  useEffect(() => {
+    socket.on("informFriendPlayiong", (data) => {
+      console.log("your friend is playing now")
+      console.log(data)
+    });
+}, [socket]);
+
   const [loggedIn, setLoggedIn] = useState(localStorage.getItem("userid"));
   useEffect(() => {
       setInterval(() => {
@@ -76,7 +94,7 @@ const App = ({ hideLoader }) => {
   return (
     <Router>
       <Switch>
-        <HomeNavBar exact path="/" component={HomePage} loggedIn={loggedIn}/>
+        <HomeNavBar exact path="/" component={AppHome} loggedIn={loggedIn}/>
         <PageRestriction exact path="/load" component={Loader} />
         <InGameNavBar exact path="/game" component={SingleplayerGame} />
         <InGameNavBar exact path="/newgame" component={SingleplayerGame} />

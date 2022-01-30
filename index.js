@@ -103,6 +103,25 @@ io.on("connection", (socket) => {
             }
         }
     });
+    socket.on("exitMultiplayer", (username) => {
+        const success = SocketFunctions.endMultiplayer(socket.id, username);
+
+        console.log("Result...")
+        console.log("==================================\n")
+
+        if (success.success) {
+            io.sockets.emit('multiplayerUpdate', {
+                message: success.msg
+            });
+            if (success.removePlayer != undefined) {
+                socket.leave(success.removePlayer.roomcode)
+
+                io.sockets.in(success.removePlayer.roomcode).emit("playerLeft", {
+                    state: success.removePlayer.msg,
+                });
+            }
+        }
+    });
 
     socket.on("ownerCreateNewRoom", ({ username, roomcode }) => {
         console.log("Player " + username + " requested to create a new room")

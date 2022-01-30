@@ -97,6 +97,8 @@ export const receiveListOfClients = (data) => async (dispatch, getState) => {
     friends.map((friendData, i) => {
         if (data.message[friendData.username] != undefined) {
             friendData.status = true;
+        } else {
+            friendData.status = false;
         }
     })
     dispatch({
