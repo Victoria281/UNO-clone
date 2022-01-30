@@ -51,6 +51,9 @@ const DrawCardDeck = ({ socket }) => {
         if (game_state.unoPenalty !== false) {
             console.log("imk applying penalty for UNO")
             console.log(game_state.unoPenalty)
+            console.log(game_state.playerdeck["player" + game_state.unoPenalty])
+            console.log(game_state.playerdeck["player" + game_state.unoPenalty].slice(-1)[0])
+            console.log(game_state.playerdeck["player" + game_state.unoPenalty].slice(-1)[0].id)
             const drawDeckDOM = document.getElementById("drawCardDeck").getBoundingClientRect();
             const lastPlayerCard = document.getElementById(`p1${game_state.playerdeck["player" + game_state.unoPenalty].slice(-1)[0].id}`).getBoundingClientRect();
 
@@ -118,7 +121,7 @@ const DrawCardDeck = ({ socket }) => {
                         }}
                     >
                         {(game_state.toDrawCard.player !== false && game_state.toDrawCard.number !== 1) ?
-                            game_state.toDrawCard.number === 2 ?
+                            (game_state.toDrawCard.number === 2 || game_state.unoPenalty !== false) ?
                                 <img
                                     className="img-responsive"
                                     style={{ width: 90 }}

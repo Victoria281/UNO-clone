@@ -42,12 +42,14 @@ const GameRoom = ({ socket }) => {
     useEffect(() => {
         console.log("Whose turn is it now?")
         console.log(game_state.turn)
+        console.log(game_state)
 
         if (game_state.unoPressed.player !== false) {
             if (game_state.unoPressed.player === room_state.myTurnIs) {
                 console.log("Times start")
                 setTimeout(() => {
                     console.log("Times up")
+                    console.log(socket)
                     dispatch(checkCard(socket))
                 }, 2000);
             }

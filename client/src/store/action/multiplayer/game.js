@@ -48,7 +48,7 @@ export const prepareGameMaterials = (socket) => async (dispatch, getState) => {
                     player: false,
                     pressed: false
                 },
-                unoPenalty: null,
+                unoPenalty: false,
                 toDrawCard: {
                     player: false,
                     number: false,
@@ -102,6 +102,7 @@ export const updateGameDetected = (data) => async (dispatch, getState) => {
 
 const playCard = (game_state, card, color) => {
     console.log("running thisss")
+    var playerWhoPlayedCard = game_state.turn
     var new_game_state = applyCard(color, game_state, card, null)
     console.log(new_game_state)
     if (new_game_state.getDrawnCard.player !== false) {
@@ -116,8 +117,9 @@ const playCard = (game_state, card, color) => {
         new_game_state = pauseGame(game_state, null)
     }
 
-
-    var playerWhoPlayedCard = game_state.turn
+    console.log("Checking for uno penalty")
+    console.log(playerWhoPlayedCard)
+    console.log(new_game_state)
     if (new_game_state.playerdeck["player" + playerWhoPlayedCard].length === 1) {
         new_game_state.unoPressed = {
             player: playerWhoPlayedCard,
@@ -200,23 +202,66 @@ export const checkCard = (socket) => async (dispatch, getState) => {
     const myTurnIs = getState().multiplayer_rooms.myTurnIs;
     if (myTurnIs != -1) {
         game_state.playerdeck["player" + myTurnIs] = filterPlayableCards(game_state.current, game_state.playerdeck["player" + myTurnIs], game_state.turn === myTurnIs)
-    }    
+    }
     socket.emit('sendGameUpdate', {
         new_game_state
     })
 }
 
-export const unoPenalty = () => async (dispatch, getState) => {
+export const unoPenalty = (socket) => async (dispatch, getState) => {
     const game_state = getState().multiplayer_rooms.game_state;
     var new_game_state = applyUnoPenalty(game_state);
     const myTurnIs = getState().multiplayer_rooms.myTurnIs;
     if (myTurnIs != -1) {
         new_game_state.playerdeck["player" + myTurnIs] = filterPlayableCards(new_game_state.current, new_game_state.playerdeck["player" + myTurnIs], new_game_state.turn === myTurnIs)
-    }      
-    new_game_state.unoPenalty = null;
+    }
+    new_game_state.unoPenalty = false;
 
     new_game_state = continueGame(game_state, null)
 
+    socket.emit('sendGameUpdate', {
+        new_game_state
+    })
+}
+
+
+export const sortCards = (sortby) => async (dispatch, getState) => {
+    const game_state = getState().singleplayer_game
+    console.log(game_state.playerdeck["player" + game_state.playerTurn])
+    if (sortby === "color") {
+        game_state.playerdeck["player" + game_state.playerTurn].sort(function (a, b) {
+            var keyA = a.color, keyB = b.color;
+            if (keyA < keyB) return -1;
+            if (keyA > keyB) return 1;
+            return 0;
+        });
+        console.log(game_state.playerdeck["player" + game_state.playerTurn])
+    } else {
+        game_state.playerdeck["player" + game_state.playerTurn].sort(function (a, b) {
+            var keyA = parseInt(a.values), keyB = parseInt(b.values);
+            if (keyA < keyB) return -1;
+            if (keyA > keyB) return 1;
+            return 0;
+        });
+        console.log(game_state.playerdeck["player" + game_state.playerTurn])
+    }
+    dispatch({
+        type: SINGLEPLAYER_UPDATE_GAME,
+        game_state
+    });
+}
+
+export const callUNO = (socket) => async (dispatch, getState) => {
+    // console.log("uno button pressed")
+    const game_state = getState().multiplayer_rooms.game_state;
+    if (game_state.turn === null) {
+        game_state = continueGame(game_state, null)
+    }
+    game_state.unoPressed = {
+        player: false,
+        pressed: false
+    }
+    var new_game_state = game_state
     socket.emit('sendGameUpdate', {
         new_game_state
     })

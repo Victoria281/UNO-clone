@@ -142,7 +142,7 @@ const DrawCardDeck = ({ }) => {
                         }}
                     >
                         {game_state.getDrawnCard !== false ?
-                            game_state.getDrawnCard.num === 2 ?
+                            (game_state.getDrawnCard.num === 2 || game_state.unoPenalty !== false) ?
                                 <img
                                     className="img-responsive"
                                     style={{ width: 90 }}

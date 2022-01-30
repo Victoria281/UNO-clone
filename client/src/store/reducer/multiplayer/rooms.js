@@ -41,7 +41,7 @@ const initialState = {
       player: false,
       pressed: false
     },
-    unoPenalty: null,
+    unoPenalty: false,
     toDrawCard: false,
     getDrawnCard: false,
     otherPlayerPlayingCard: false,
@@ -111,11 +111,18 @@ const reducer = (state = initialState, action) => {
         ...state,
         game_state: action.data
       };
-    case UPDATE_CHAT_MESSAGE:
-      return {
-        ...state,
-        chat: action.roomstate.chat
-      };
+      case UPDATE_CHAT_MESSAGE:
+        return {
+          ...state,
+          chat: action.roomstate.chat
+        };
+        case UPDATE_UNO_PRESSED:
+          return {
+            ...state,
+            unoPressed: action.data.unoPressed,
+            turn: action.data.turn,
+            pauseTurn: action.data.pauseTurn,
+          };
     default:
       return state;
   }
