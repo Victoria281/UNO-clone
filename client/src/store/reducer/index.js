@@ -10,7 +10,6 @@ import { combineReducers } from "redux";
 const rootReducers = combineReducers({
   SecurityReducer,
   multiplayer_rooms,
-  multiplayer_game,
   leaderboard_leaderboard,
   profile_info,
   singleplayer_game
