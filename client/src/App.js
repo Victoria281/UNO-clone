@@ -14,7 +14,7 @@ import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import EndPage from "./pages/end";
 import AccountPage from "./Component/AccountComponents/LoginComponent/account";
 import RegisterPage from "./Component/AccountComponents/RegisterComponents/register";
-import ProfilePage from "./pages/profile";
+import ProfilePage from "./Component/ProfileComponents/ProfilePage";
 import LeaderboardPage from "./Component/Leaderboard/tabs.jsx";
 import Music from "./components/Music";
 import Room from "./pages/multiplayer/room";

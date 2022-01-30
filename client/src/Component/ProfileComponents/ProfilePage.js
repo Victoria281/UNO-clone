@@ -1,3 +1,4 @@
+//@ts-nocheck
 import { Fragment, useEffect, useState } from "react";
 import "./profile.css";
 import UserInfoCard from './UserInfoSection/UserInfoCard'

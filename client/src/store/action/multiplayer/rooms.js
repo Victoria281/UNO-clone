@@ -2,6 +2,9 @@ import { LocalConvenienceStoreOutlined } from "@material-ui/icons"
 import {
     generateRoomCode
 } from "../../features/multiplayer/rooms"
+import {
+    getAllFriends
+} from "../../features/multiplayer/friends"
 
 export const UPDATE_FRIENDS = "UPDATE_FRIENDS"
 export const CREATE_NEW_ROOM = "CREATE_NEW_ROOM"
@@ -31,22 +34,48 @@ export const initialiseState = () => async dispatch => {
     });
 }
 
-export const enterMultiplayer = (username, socket) => async dispatch => {
+export const enterMultiplayer = (username, socket, uid, token) => async dispatch => {
     // API CALL FRIENDS
-    var friends = [
-        { username: "t2", status: false, requested: false },
-        { username: "t1", status: false, requested: false },
-        { username: "r1", status: false, requested: false },
-        { username: "r2", status: false, requested: false },
-        { username: "r3", status: false, requested: false },
-        { username: "r4", status: false, requested: false },
-        { username: "r5", status: false, requested: false },
-    ]
-    dispatch({
-        type: UPDATE_FRIENDS,
-        friends
-    });
-    socket.emit('enteredMultiplayer', username)
+    getAllFriends(uid, token).then((friends)=>{
+        friends.map((data)=>{
+            data["status"] = false;
+            data["requested"] = false
+        })
+        dispatch({
+            type: UPDATE_FRIENDS,
+            friends
+        });
+        socket.emit('enteredMultiplayer', username)
+    })
+    // var friends = [
+    //     { username: "t2", status: false, requested: false },
+    //     { username: "t1", status: false, requested: false },
+    //     { username: "r1", status: false, requested: false },
+    //     { username: "r2", status: false, requested: false },
+    //     { username: "r3", status: false, requested: false },
+    //     { username: "r4", status: false, requested: false },
+    //     { username: "r5", status: false, requested: false },
+    // ]
+    // dispatch({
+    //     type: UPDATE_FRIENDS,
+    //     friends
+    // });
+}
+
+export const notifyFriends = (username, socket, uid, token) => async dispatch => {
+    // API CALL FRIENDS
+    console.log("time to notify my friends")
+    // getAllFriends(uid, token).then((friends)=>{
+    //     friends.map((data)=>{
+    //         data["status"] = false;
+    //         data["requested"] = false
+    //     })
+    //     dispatch({
+    //         type: UPDATE_FRIENDS,
+    //         friends
+    //     });
+    //     socket.emit('enteredMultiplayer', username)
+    // })
 }
 
 export const receivedMessage = (message) => async (dispatch, getState) => {
