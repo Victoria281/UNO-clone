@@ -155,7 +155,7 @@ export default function App() {
             {emailError && <div>{emailError}</div>} */}
                 <label><b style={{paddingRight: 10}}>Enter email:</b></label>
                 <input type="text" name="email" autoComplete="on" style={{marginTop: 40, marginBottom: 20,  borderRadius: 5}} size={38} value={email} onChange={(e) => setEmail(e.target.value)} />
-                
+                <input type="hidden" name="url" value={process.env.REACT_APP_API_URL}></input>
               
                 <button 
                   className={`${styles.forgotBtn}`} 
