@@ -36,6 +36,80 @@
     outline: none;
 }
 
+.btnLove{
+    color: white;
+    background-color: #d73d6c;
+    border: 1px solid white;
+    margin-left: 85px;
+}
+
+.btnLove:hover{
+    color: black;
+    background-color: #ffc1a6;
+}
+
+.btnCheer{
+    color: white;
+    background-color: #7d7ba2;
+    border: 1px solid white;
+}
+
+.btnCheer:hover{
+    color: black;
+    background-color: #acacc4;
+    border: 1px solid black;
+}
+
+.btnModal{
+    color: black;
+    background-color: turquoise;
+    border: 1px solid black;
+    margin-top: 20px;
+    margin-left: 85px;
+    padding: 10px;
+}
+
+.btnModal:hover{
+    color: white;
+    background-color: #5b819f;
+}
+
+.txtModal{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 320px;
+    border: 2px solid #000;
+    box-shadow: 24;
+    padding: 40px;
+    background-color: white;
+}
+
+.smsIcon{
+    margin-top: 30px;
+    margin-right: 15px;
+}
+
+.message{
+    margin-top: 10px;
+}
+
+.btnVoice{
+    color: black;
+    background-color: #6284e6;
+    border: 1px solid black;
+    margin-left: 30px;
+    margin-top: 20px;
+}
+
+.btnVoice:hover{
+    color: white;
+    background-color: #3246a6;
+    border: 1px solid white;
+
+}
+
 .movetoAudienceTxt{
     position: absolute;
     top: 35%;

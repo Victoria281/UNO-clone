@@ -166,9 +166,22 @@ io.on("connection", (socket) => {
 
     socket.on("sendMessage", (chat) => {
         console.log(chat.user.username + " wants to say " + chat.message + " in " + chat.user.roomcode)
-
         io.sockets.in(chat.user.roomcode).emit("chat", chat);
 
+    });
+
+    socket.on("startCheer", (roomcode) => {
+        io.sockets.in(roomcode).emit("cheerReceived", {});
+    });
+
+    socket.on("startAudio", (roomcode) => {
+        io.sockets.in(roomcode).emit("audioReceived", {});
+    });
+
+    socket.on("sendAudioCheer", ({roomcode, text}) => {
+        console.log("to speak")
+        console.log(text)
+        io.sockets.in(roomcode).emit("speakReceived", text);
     });
 
     socket.on("moveToAudience", ({ moveToAuduser, roomcode }) => {
