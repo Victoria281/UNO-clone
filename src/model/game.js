@@ -95,7 +95,7 @@ var Game = {
         },
         );
     },
-    getActionValue: function (actionname, callback) {
+    findActionValue: function (actionname, callback) {
         const query = {
             name: 'findByState',
             text: 'SELECT action FROM uno_actions WHERE actionname = $1',

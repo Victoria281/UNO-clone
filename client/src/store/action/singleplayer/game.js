@@ -11,21 +11,22 @@ import {
 } from "../../features/multiplayer/game"
 import {
     drawACard,
-    boyPlayCard,
     applyCard,
 } from "../../features/singleplayer/game"
 import {
     setBotSettings,
     getCurrentState,
+    boyPlayCard,
     listStateActions,
-    chooseAction, 
+    chooseAction,
     getCardForBot,
     setCardPlay,
     insertQStateAction,
     rewardFn,
     getMaxQValue,
     updateQ,
-    getQValue
+    getQValue,
+    getActionValue
 } from '../../features/singleplayer/game_logic'
 
 export const SINGLEPLAYER_PREPARE_GAME = "SINGLEPLAYER_PREPARE_GAME"
@@ -90,7 +91,7 @@ export const checkCard = () => async (dispatch, getState) => {
     const game_state = getState().singleplayer_game;
     const new_game_state = checkOneCardLeft(game_state)
     new_game_state.playerdeck["player0"] = filterPlayableCards(new_game_state.current, new_game_state.playerdeck["player0"], new_game_state.turn == new_game_state.playerTurn)
-    
+
     dispatch({
         type: SINGLEPLAYER_UPDATE_GAME,
         new_game_state
@@ -133,13 +134,13 @@ export const playBotCard = (card) => async (dispatch, getState) => {
 }
 
 // Set the bot learning variables
-export const prepareBotSettings = (user_input) => async (dispatch, getState) =>{
+export const prepareBotSettings = (user_input) => async (dispatch, getState) => {
     var new_game_state = getState().singleplayer_game;
 
     new_game_state.bot_settings = setBotSettings(user_input);
 
     dispatch({
-        type : SET_BOT_SETTINGS,
+        type: SET_BOT_SETTINGS,
         new_game_state
     })
 }
@@ -151,11 +152,11 @@ export const getBotState = () => async (dispatch, getState) => {
 
     const bot_state = getCurrentState(game_state.current, player_hand);
 
-    game_state.botcurrentstate = bot_state;
+    new_game_state.botcurrentstate = bot_state;
 
     dispatch({
         type: GET_BOT_STATE,
-        game_state
+        new_game_state
     })
 }
 
@@ -165,11 +166,36 @@ export const botTurn = () => async (dispatch, getState) => {
 
     const game_state = getState().singleplayer_game;
 
-    const new_game_state = boyPlayCard(game_state)
+    const new_game_state = boyPlayCard(game_state);
 
-    var current_qvalue = getQValue(game_state.botcurrentstate, )
+    //Still need to convert the used card into an action name/ value
+    var action_name;
 
-    if(current_qvalue.err){
+    switch (new_game_state.current.values) {
+        case 10:
+            action_name = "SKI"
+            break;
+        case 11:
+            action_name = "REV"
+            break;
+        case 12:
+            action_name = "PL2"
+            break;
+        case 13:
+            action_name = "COL"
+            break;
+        case 14:
+            action_name = "PL4"
+            break;
+        default:
+            action_name = new_game_state.current.toUpperCase();
+    }
+
+    const action = getActionValue(action_name);
+
+    var current_qvalue = getQValue(game_state.botcurrentstate, action)
+
+    if (current_qvalue.err) {
         qvalue = 0.0
     } else {
         qvalue = current_qvalue
@@ -181,7 +207,7 @@ export const botTurn = () => async (dispatch, getState) => {
 
     const max_qvalue = getMaxQValue(new_game_state.current, playable_hand)
 
-    updateQ(qvalue,game_state.botcurrentstate, action, game_state.bot_settings,reward, max_qvalue);
+    updateQ(qvalue, game_state.botcurrentstate, action, game_state.bot_settings, reward, max_qvalue);
 
     // // console.log(card)
     // // console.log(game_state)

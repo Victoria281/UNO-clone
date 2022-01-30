@@ -57,13 +57,13 @@ const reducer = (state = initialState, action) => {
         case SET_BOT_SETTINGS:
             return {
                 ...state,
-                bot_settings: action.gameState.bot_settings
+                bot_settings: action.new_game_state.bot_settings
             };
         //Add case to set botcurrent state
         case GET_BOT_STATE:
             return {
                 ...state,
-                unoPressed: action.unoPressed
+                botcurrentstate: action.new_game_state.botcurrentstate
             };
         default:
             return state;

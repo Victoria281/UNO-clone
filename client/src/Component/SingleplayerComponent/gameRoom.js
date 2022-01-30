@@ -14,7 +14,8 @@ import Bot from "./gameComponents/Bot"
 import {
     prepareGameMaterials,
     botTurn,
-    checkCard
+    checkCard,
+    getBotState
 } from "../../store/action/singleplayer/game"
 
 const GameRoom = () => {
@@ -50,6 +51,7 @@ const GameRoom = () => {
         ) {
             // console.log("Its the bots turn now")
             console.log("PlayerBot " + game_state.turn + " now")
+            dispatch(getBotState())
             dispatch(botTurn())
         }
     }, [game_state]);

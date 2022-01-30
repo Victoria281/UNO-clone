@@ -2,7 +2,6 @@
 
 //Set variable for Q Learning algo
 export const setBotSettings = (user_input) => {
-    user_input = 20;
 
     var x = user_input / 100
 
@@ -86,6 +85,31 @@ export const getCurrentState = (current_card, player_hand) => {
     return state;
 }
 
+export const getActionValue = async (actionname) => {
+    try {
+        const response = await fetch(process.env.REACT_APP_API_URL + `/api/uno/game/${actionname}`, {
+            method: "GET",
+        });
+
+        console.log("response: " + response.statusText);
+
+        const data = await response.json();
+
+        console.log("Data from get stateaction ------------------------------------")
+        console.log(data)
+        console.log("------------------------------------")
+
+        return data.action_value;
+    } catch (err) {
+
+        const data = {
+            error: err
+        };
+
+        return data;
+    }
+}
+
 //Get Q value of the state and action if any
 export const getQValue  = async (state, action) => {
     try {
@@ -101,7 +125,7 @@ export const getQValue  = async (state, action) => {
         console.log(data)
         console.log("------------------------------------")
 
-        return data.qvalue;
+        return data.data.qvalue;
     } catch (err) {
 
         const data = {
@@ -291,13 +315,13 @@ export const setCardPlay = (r, state, wild_playable, normal_playable) => {
     //var player_hand = normal_playable.concat(wild_playable);
 
     //var state = getCurrentState(current_card, playable_hand);
-    var list_of_actions = listStateActions(state);
+    var list_of_actions = listStateActions(state).actions;
 
     var epsilon = 5
 
     var action;
 
-    if ((r * 10) > epsilon && list_of_actions.err !== undefined) {
+    if ((r * 10) > epsilon && !list_of_actions.err) {
         action = chooseAction(list_of_actions, player_hand)
     } else {
         action = getCardForBot(r, wild_playable, normal_playable);
@@ -409,7 +433,7 @@ export const rewardFn = (current_card, cardplayed) => {
 export const getMaxQValue = (current_card, player_hand) => {
 
     var new_state = getCurrentState(current_card, player_hand);
-    var possible_actions = listStateActions(new_state);
+    var possible_actions = listStateActions(new_state).actions;
 
     var highestQ = 0;
     var index = 0;
