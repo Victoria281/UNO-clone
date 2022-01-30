@@ -2,10 +2,21 @@
 import { Fragment, useState } from 'react';
 import { Modal, Slider, Box, Typography, Grid, Button, Paper} from '@mui/material';
 import styles from './styles.module.css';
+import { useDispatch } from 'react-redux';
+import { prepareBotSettings } from '../../../store/action/singleplayer/game';
 
 const BotDifficultyModal = ({open, setOpen}) => {
+    const dispatch = useDispatch();
+    const [sliderVal, setSliderVal] = useState(0);
+    
     function handleClose() {
         setOpen(false);
+    }
+
+    function setSettings(){
+        dispatch(prepareBotSettings(sliderVal));
+        console.log(sliderVal);
+        handleClose();
     }
 
     return (
@@ -25,18 +36,19 @@ const BotDifficultyModal = ({open, setOpen}) => {
                             <Grid item xs={12} className={styles.modalslidercontainer}>
                                 <Slider
                                     aria-label="Difficulty"
-                                    defaultValue={30}
+                                    defaultValue={0}
                                     valueLabelDisplay="auto"
                                     step={10}
                                     marks
                                     min={0}
                                     max={100}
                                     className={styles.modalslider}
+                                    onChangeCommitted={(e, val)=> {setSliderVal(val)}}
                                 />
                             </Grid>
                             <Grid item xs={12}>
                                <Box className={styles.modalendcontainer}>
-                                   <Button variant = "contained" className={styles.modalendbtn}>
+                                   <Button variant = "contained" className={styles.modalendbtn} onClick={() => setSettings()}>
                                        <Typography className={styles.modalendbtntext}>Confirm</Typography>
                                    </Button>
                                </Box>

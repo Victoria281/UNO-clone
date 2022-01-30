@@ -175,7 +175,7 @@ app.get('/game/:state/:action', printingDebuggingInfo, function (req, res, next)
     const state = req.params.state
     const action = req.params.action
 
-    Game.findByStateAction(state, function (err, result) {
+    Game.findByStateAction(state,action, function (err, result) {
         if (err) {
             if (err.code === '23505') {
                 return next(createHttpError(404, `Not found`));
@@ -187,7 +187,7 @@ app.get('/game/:state/:action', printingDebuggingInfo, function (req, res, next)
             if (result.length == 0) {
                 return next(createHttpError(404, `Not found`));
             } else {
-                return res.status(200).json({ actions: result });
+                return res.status(200).json({ data: result });
             }
 
         }
@@ -242,6 +242,30 @@ app.put('/game/update/', printingDebuggingInfo, function (req, res, next) {
         }
     });
 });
+
+//findbyactionname
+app.get('/game/:actionname', printingDebuggingInfo, function (req, res, next) {
+    const action = req.params.actionname
+
+    Game.findActionValue(action, function (err, result) {
+        if (err) {
+            if (err.code === '23505') {
+                return next(createHttpError(404, `Not found`));
+            }
+            else {
+                return next(err);
+            }
+        } else {
+            if (result.length == 0) {
+                return next(createHttpError(404, `Not found`));
+            } else {
+                return res.status(200).json({ action_value: result });
+            }
+
+        }
+    });
+});
+
 
 //=====================================
 //  Auth
