@@ -2,7 +2,6 @@
 import { useState } from "react";
 
 import axios from "axios";
-// import "../../../css/register.css";
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import useSound from 'use-sound';
 import boopSfx from '../soundEffect/boop.wav';
@@ -91,21 +90,21 @@ export default function App() {
 
   // Function called when register button is clicked
   function createPost() {
-    var status = true;
+    let status = true;
 
 
-    if (status === true) {
-      // Check Username Fields
-      if (username === "") {
-        status = false;
-        setUsernameError("Username Required");
-      } else {
-        status = true;
-        setUsernameError("");
-      }
+    
+    // Check Username Fields
+    if (username === "") {
+      status = false;
+      setUsernameError("Username Required");
+    } else {
+      status = true;
+      setUsernameError("");
     }
+    
 
-    if (status === true) {
+    if (status) {
       // Check Email Field
       if (email === "") {
         status = false;
@@ -122,7 +121,7 @@ export default function App() {
       }
     }
 
-    if (status === true) {
+    if (status) {
       // Check password field
       if (password === "") {
         status = false;
@@ -143,7 +142,7 @@ export default function App() {
       }
     }
 
-    if (status === true) {
+    if (status) {
       // Check confirm password field
       if (confirmpassword === "") {
         status = false;
@@ -180,19 +179,15 @@ export default function App() {
         .catch((error) => {
           if (error.response) {
             // Set state of duplicate msg
-            setDuplicateMsg("There is a duplicate of either username or email. Please change.")
-          } else if (error.request) {
+            // setDuplicateMsg("There is a duplicate of either username or email. Please change.")
+          } else {
             // The request was made but no response was received
             // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
             // http.ClientRequest in node.js
             // console.log("------------------INSIDE ERROR REQUEST---------------------")
             // console.log(error.request);
-          } else {
-            // Something happened in setting up the request that triggered an Error
-            // console.log("BIG FAT ERRORRRR")
-            // console.log('Error', error.message);
-          }
-          // console.log(error.config);
+          } 
+          
         })
     }
   }
