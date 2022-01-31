@@ -120,7 +120,7 @@ const DrawCardDeck = ({ }) => {
         },
         exited: {
             opacity: 1,
-            transform: `scale(0.78) translate(${travelFromDrawDeck.x}px, ${travelFromDrawDeck.y}px) rotate(${90}deg)`,
+            transform: `scale(0.833) translate(${travelFromDrawDeck.x}px, ${travelFromDrawDeck.y}px) rotate(${90}deg)`,
             transition: `transform ${timeout}ms`,
             transitionTimingFunction: "linear"
         }
@@ -145,7 +145,7 @@ const DrawCardDeck = ({ }) => {
                             (game_state.getDrawnCard.num === 2 || game_state.unoPenalty !== false) ?
                                 <img
                                     className="img-responsive"
-                                    style={{ width: 90 }}
+                                    style={{ width: 60 }}
                                     src={
                                         process.env.REACT_APP_API_URL + "/api/uno/images/Blue_2.png"
                                     }
@@ -153,7 +153,7 @@ const DrawCardDeck = ({ }) => {
                                 :
                                 <img
                                     className="img-responsive"
-                                    style={{ width: 90 }}
+                                    style={{ width: 60 }}
                                     src={
                                         process.env.REACT_APP_API_URL + "/api/uno/images/Blue_4.png"
                                     }
@@ -161,7 +161,7 @@ const DrawCardDeck = ({ }) => {
                             :
                             <img
                                 className="img-responsive"
-                                style={{ width: 90 }}
+                                style={{ width: 60 }}
                                 src={
                                     process.env.REACT_APP_API_URL + "/api/uno/images/Deck.png"
                                 }
