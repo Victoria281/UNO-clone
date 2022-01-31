@@ -1,4 +1,4 @@
-import { ContactSupportOutlined } from "@material-ui/icons"
+//@ts-nocheck
 import {
     getAllCards,
     dealCards,
@@ -7,7 +7,11 @@ import {
     applyCard,
     getOrderArray,
     checkOneCardLeft,
-    drawACard
+    applyDrawCard,
+    pauseGame,
+    continueGame,
+    applyUnoPenalty,
+    checkGameEnd
 } from "../../features/multiplayer/game"
 
 export const UPDATE_PLAYER_LIST = "UPDATE_PLAYER_LIST"
@@ -36,9 +40,28 @@ export const prepareGameMaterials = (socket) => async (dispatch, getState) => {
                 used: [],
                 current: {},
                 turn: getRandomInt(playerCount),
+                pauseTurn: "",
                 order: getOrderArray(playerCount),
                 playerdeck: arr[0],
-                roomcode: roomcode
+                roomcode: roomcode,
+                reverse: 0,
+                unoPressed: {
+                    player: false,
+                    pressed: false
+                },
+                unoPenalty: false,
+                toDrawCard: {
+                    player: false,
+                    number: false,
+                },
+                getDrawnCard: {
+                    player: false,
+                    num: false,
+                },
+                otherPlayerPlayingCard: {
+                    player: false,
+                    card: false,
+                },
             }
             gameState = applyCard(null, gameState, arr[1][0], true)
             console.log(gameState)
@@ -47,77 +70,207 @@ export const prepareGameMaterials = (socket) => async (dispatch, getState) => {
 }
 
 export const startGameDetected = (data) => async (dispatch, getState) => {
+    console.log("starting game herer")
     console.log(data)
     const user = getState().multiplayer_rooms.user;
-    console.log(user)
     const game_state = data.gameState;
-    game_state.myTurnIs = data.players.findIndex((u)=>u.username === user.username)
+    data.myTurnIs = data.players.findIndex((u) => u.username === user.username)
 
-    console.log(game_state.myTurnIs)
-    console.log(data.players)
-    game_state.playerdeck["player" + game_state.myTurnIs] = filterPlayableCards(game_state.current, game_state.playerdeck["player" + game_state.myTurnIs], game_state.turn === game_state.myTurnIs)
-    
+    if (data.myTurnIs != -1) {
+        game_state.playerdeck["player" + data.myTurnIs] = filterPlayableCards(game_state.current, game_state.playerdeck["player" + data.myTurnIs], game_state.turn === data.myTurnIs)
+    }
+
     dispatch({
         type: PREPARE_GAME,
         game_state,
+        myTurnIs: data.myTurnIs,
         status: data.status
     });
-    return game_state.order.slice(game_state.myTurnIs+1).concat(game_state.order.slice(0, game_state.myTurnIs))
+    console.log("after dispatch")
+
 }
 
 export const updateGameDetected = (data) => async (dispatch, getState) => {
-    data.playerdeck["player" + data.myTurnIs] = filterPlayableCards(data.current, data.playerdeck["player" + data.myTurnIs], data.turn === data.myTurnIs)
-
+    const myTurnIs = getState().multiplayer_rooms.myTurnIs;
+    if (myTurnIs != -1) {
+        data.playerdeck["player" + myTurnIs] = filterPlayableCards(data.current, data.playerdeck["player" + myTurnIs], data.turn === myTurnIs)
+    }
     dispatch({
         type: UPDATE_GAME,
         data
     });
 }
 
-export const playCard = (card, socket, color) => async (dispatch, getState) => {
-    const game_state = getState().multiplayer_rooms.game_state;
-    const new_game_state = applyCard(color, game_state, card, null)
-    const playerWhoPlayedCard = game_state.turn
+const playCard = (game_state, card, color) => {
+    console.log("running thisss")
+    var playerWhoPlayedCard = game_state.turn
+    var new_game_state = applyCard(color, game_state, card, null)
+    console.log(new_game_state)
+    if (checkGameEnd(new_game_state) === true){
+        new_game_state.end = true;
+    }
 
-    // console.log(card)
-    // console.log(game_state)
-    // console.log(new_game_state)
-    console.log("fwsujifbverigbvnedrgbvrtdhgrdthdrtyhjr")
+
+    if (!new_game_state.end && new_game_state.getDrawnCard.player !== false) {
+        new_game_state.toDrawCard = {
+            player: new_game_state.getDrawnCard.player,
+            number: new_game_state.getDrawnCard.num,
+        };
+        new_game_state.getDrawnCard = {
+            player: false,
+            number: false,
+        };
+        new_game_state = pauseGame(game_state, null)
+    }
+
+    console.log("Checking for uno penalty")
     console.log(playerWhoPlayedCard)
-    console.log(new_game_state.playerdeck["player" + playerWhoPlayedCard].length)
-    if (new_game_state.playerdeck["player" + playerWhoPlayedCard].length === 1) {
+    console.log(new_game_state)
+    if (!new_game_state.end && new_game_state.playerdeck["player" + playerWhoPlayedCard].length === 1) {
         new_game_state.unoPressed = {
             player: playerWhoPlayedCard,
             pressed: false
         }
+        if (new_game_state.pauseTurn === null) {
+            new_game_state = pauseGame(game_state, null)
+        }
     }
+    return new_game_state
+}
+
+export const sendPlayerAction = (actions, socket, other) => async (dispatch, getState) => {
+    console.log("Action to do: " + actions)
+    const game_state = getState().multiplayer_rooms.game_state;
+    switch (actions) {
+        case "play": {
+            game_state.otherPlayerPlayingCard = {
+                player: game_state.turn,
+                card: other.card,
+            };
+            if (other.card.color === "wild") {
+                game_state.otherPlayerPlayingCard["color"] = other.color
+            }
+            break;
+        }
+        case "draw": {
+            game_state.toDrawCard = {
+                player: game_state.turn,
+                number: 1,
+            };
+            break;
+        }
+        default:
+            break;
+    }
+    const new_game_state = pauseGame(game_state, null)
 
     socket.emit('sendGameUpdate', {
         new_game_state
     })
 }
 
-export const callUNO = (state) => async (dispatch, getState) => {
-    // console.log("uno button pressed")
+export const startPlayerAction = (actions, socket) => (dispatch, getState) => {
+    console.log("Time to do the action")
+    console.log("Action to do: " + actions)
+    const game_state = getState().multiplayer_rooms.game_state;
+    var new_game_state = continueGame(game_state, null)
+    switch (actions) {
+        case "play": {
+            new_game_state = playCard(new_game_state, new_game_state.otherPlayerPlayingCard.card, new_game_state.otherPlayerPlayingCard.color)
+            new_game_state.otherPlayerPlayingCard = {
+                player: false,
+                card: false,
+            }
+            break;
+        }
+        case "draw": {
+            new_game_state = applyDrawCard(new_game_state, game_state.toDrawCard.number, game_state.toDrawCard.player)
+            game_state.toDrawCard = {
+                player: false,
+                number: false,
+            };
+            break;
+        }
+        default:
+            break;
+    }
+
+    console.log("Action finished")
+    console.log(new_game_state)
+    socket.emit('sendGameUpdate', {
+        new_game_state
+    })
+}
+
+export const checkCard = (socket) => async (dispatch, getState) => {
+    const game_state = getState().multiplayer_rooms.game_state;
+    const new_game_state = checkOneCardLeft(game_state)
+    const myTurnIs = getState().multiplayer_rooms.myTurnIs;
+    if (myTurnIs != -1) {
+        game_state.playerdeck["player" + myTurnIs] = filterPlayableCards(game_state.current, game_state.playerdeck["player" + myTurnIs], game_state.turn === myTurnIs)
+    }
+    socket.emit('sendGameUpdate', {
+        new_game_state
+    })
+}
+
+export const unoPenalty = (socket) => async (dispatch, getState) => {
+    const game_state = getState().multiplayer_rooms.game_state;
+    var new_game_state = applyUnoPenalty(game_state);
+    const myTurnIs = getState().multiplayer_rooms.myTurnIs;
+    if (myTurnIs != -1) {
+        new_game_state.playerdeck["player" + myTurnIs] = filterPlayableCards(new_game_state.current, new_game_state.playerdeck["player" + myTurnIs], new_game_state.turn === myTurnIs)
+    }
+    new_game_state.unoPenalty = false;
+
+    new_game_state = continueGame(game_state, null)
+
+    socket.emit('sendGameUpdate', {
+        new_game_state
+    })
+}
+
+
+export const sortCards = (sortby) => async (dispatch, getState) => {
+    const game_state = getState().singleplayer_game
+    console.log(game_state.playerdeck["player" + game_state.playerTurn])
+    if (sortby === "color") {
+        game_state.playerdeck["player" + game_state.playerTurn].sort(function (a, b) {
+            var keyA = a.color, keyB = b.color;
+            if (keyA < keyB) return -1;
+            if (keyA > keyB) return 1;
+            return 0;
+        });
+        console.log(game_state.playerdeck["player" + game_state.playerTurn])
+    } else {
+        game_state.playerdeck["player" + game_state.playerTurn].sort(function (a, b) {
+            var keyA = parseInt(a.values), keyB = parseInt(b.values);
+            if (keyA < keyB) return -1;
+            if (keyA > keyB) return 1;
+            return 0;
+        });
+        console.log(game_state.playerdeck["player" + game_state.playerTurn])
+    }
     dispatch({
-        type: UPDATE_UNO_PRESSED,
-        press: true
+        type: SINGLEPLAYER_UPDATE_GAME,
+        game_state
     });
 }
 
-export const drawCard = (socket) => async (dispatch, getState) => {
-    const game_state = getState().multiplayer_game;
-    const new_drawn_game_state = drawACard(game_state);
-    if (new_drawn_game_state.color === "wild"){
-        return new_drawn_game_state
-    } else {
-        const roomcode = getState().multiplayer_rooms.roomcode;
-    
-        socket.emit('sendGameUpdate', {
-            ...new_drawn_game_state,
-            roomcode: roomcode
-        })
+export const callUNO = (socket) => async (dispatch, getState) => {
+    // console.log("uno button pressed")
+    const game_state = getState().multiplayer_rooms.game_state;
+    if (game_state.turn === null) {
+        game_state = continueGame(game_state, null)
     }
+    game_state.unoPressed = {
+        player: false,
+        pressed: false
+    }
+    var new_game_state = game_state
+    socket.emit('sendGameUpdate', {
+        new_game_state
+    })
 }
 
 

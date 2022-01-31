@@ -5,7 +5,7 @@ import { Stack } from '@mui/material';
 import styles from "./styles.module.css"
 import DrawCardDeck from "./DrawCardDeck"
 //gets the data from the action object and reducers defined earlier
-const Deck = () => {
+const Deck = ({ socket}) => {
     const { game_state, mainDeckState } = useSelector(state => {
         const game_state = state.multiplayer_rooms.game_state;
         const mainDeckState = []
@@ -44,7 +44,7 @@ const Deck = () => {
                 </div>
                 <div className={styles.DrawCardDeck}>
 
-                    <DrawCardDeck />
+                    <DrawCardDeck socket={socket}/>
 
                     <div className={styles.TopDrawCard}>
                         {mainDeckState.map((d, i) => 

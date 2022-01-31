@@ -3,11 +3,9 @@ import React, { Fragment, useEffect, useState } from "react";
 // import emailjs from 'emailjs-com'
 
 import { useHistory } from "react-router-dom";
-// import "../../../css/forgot.css";
 import useSound from 'use-sound';
 // @ts-ignore
 import boopSfx from '../soundEffect/boop.wav';
-// import { response } from "express";
 import axios from "axios";
 
 import * as emailjs from "emailjs-com"
@@ -128,7 +126,6 @@ export default function App() {
   window.onunload = () => {
     // Clear the local storage when page refreshes
     window.localStorage.clear()
-    // console.log(localStorage.getItem('email'))
   }
 
   const handleFormSubmit = (e) => {
@@ -155,7 +152,7 @@ export default function App() {
             {emailError && <div>{emailError}</div>} */}
                 <label><b style={{paddingRight: 10}}>Enter email:</b></label>
                 <input type="text" name="email" autoComplete="on" style={{marginTop: 40, marginBottom: 20,  borderRadius: 5}} size={38} value={email} onChange={(e) => setEmail(e.target.value)} />
-                
+                <input type="hidden" name="url" value={process.env.REACT_APP_API_URL}></input>
               
                 <button 
                   className={`${styles.forgotBtn}`} 

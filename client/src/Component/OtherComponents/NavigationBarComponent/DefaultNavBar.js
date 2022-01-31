@@ -34,12 +34,12 @@ const DefaultNavBar = ({ exact, path, component: Component, loggedIn, ...rest })
                             <span className="navbar-toggler-icon"></span>
                         </button>
 
-                        <p className="brand d-none d-sm-block">
+                        <div className="brand d-none d-sm-block">
                             <div className="card1"></div>
                             <div className="card2"></div>
                             <p className="logomain">NOU</p>
                             <p className="logosub">uno-clone</p>
-                        </p>
+                        </div>
 
                         <div className="collapse navbar-collapse" id="navbarTogglerDemo03">
                             <ul className="navbar-nav ml-auto mt-2 mt-lg-0">

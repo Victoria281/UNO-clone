@@ -2,6 +2,9 @@ import { LocalConvenienceStoreOutlined } from "@material-ui/icons"
 import {
     generateRoomCode
 } from "../../features/multiplayer/rooms"
+import {
+    getAllFriends
+} from "../../features/multiplayer/friends"
 
 export const UPDATE_FRIENDS = "UPDATE_FRIENDS"
 export const CREATE_NEW_ROOM = "CREATE_NEW_ROOM"
@@ -10,6 +13,7 @@ export const UPDATE_ROOM = "UPDATE_ROOM"
 export const UPDATE_FRIEND_REQUESTS = "UPDATE_FRIEND_REQUESTS"
 export const INIT_STATE = "INIT_STATE"
 export const UPDATE_IDENTITY = "UPDATE_IDENTITY"
+export const UPDATE_CHAT_MESSAGE = "UPDATE_CHAT_MESSAGE"
 
 export const initialiseState = () => async dispatch => {
     // API CALL FRIENDS
@@ -17,34 +21,104 @@ export const initialiseState = () => async dispatch => {
         roomcode: "",
         status: false,
         players: [],
+        audience: [],
         owner: "",
         private: null,
         friends: [],
         friendRequests: [],
         gameState: {}
-      }
+    }
     dispatch({
         type: INIT_STATE,
         start
     });
 }
 
-export const enterMultiplayer = (username, socket) => async dispatch => {
+export const enterMultiplayer = (username, socket, uid, token) => async dispatch => {
     // API CALL FRIENDS
-    var friends = [
-        { username: "t2", status: false, requested: false },
-        { username: "t1", status: false, requested: false },
-        { username: "r1", status: false, requested: false },
-        { username: "r2", status: false, requested: false },
-        { username: "r3", status: false, requested: false },
-        { username: "r4", status: false, requested: false },
-        { username: "r5", status: false, requested: false },
-    ]
+    getAllFriends(uid, token).then((friends)=>{
+        friends.map((data)=>{
+            data["status"] = false;
+            data["requested"] = false
+        })
+        dispatch({
+            type: UPDATE_FRIENDS,
+            friends
+        });
+        socket.emit('enteredMultiplayer', username)
+    })
+    // var friends = [
+    //     { username: "t2", status: false, requested: false },
+    //     { username: "t1", status: false, requested: false },
+    //     { username: "r1", status: false, requested: false },
+    //     { username: "r2", status: false, requested: false },
+    //     { username: "r3", status: false, requested: false },
+    //     { username: "r4", status: false, requested: false },
+    //     { username: "r5", status: false, requested: false },
+    // ]
+    // dispatch({
+    //     type: UPDATE_FRIENDS,
+    //     friends
+    // });
+}
+
+export const notifyFriends = (username, socket, uid, token) => async dispatch => {
+    // API CALL FRIENDS
+    console.log("time to notify my friends")
+    // getAllFriends(uid, token).then((friends)=>{
+    //     friends.map((data)=>{
+    //         data["status"] = false;
+    //         data["requested"] = false
+    //     })
+    //     dispatch({
+    //         type: UPDATE_FRIENDS,
+    //         friends
+    //     });
+    //     socket.emit('enteredMultiplayer', username)
+    // })
+}
+
+export const receivedMessage = (message) => async (dispatch, getState) => {
+    const roomstate = getState().multiplayer_rooms;
+    console.log(message)
+    roomstate.chat.push({
+        username: message.user.username,
+        text: message.message
+    })
     dispatch({
-        type: UPDATE_FRIENDS,
-        friends
+        type: UPDATE_CHAT_MESSAGE,
+        roomstate
     });
-    socket.emit('enteredMultiplayer', username)
+}
+
+export const sendMessage = (message, socket) => async (dispatch, getState) => {
+    const roomstate = getState().multiplayer_rooms;
+    var data = {
+        message: message,
+        user: roomstate.user,
+    }
+    console.log("telling socket of the message")
+    socket.emit('sendMessage', data)
+}
+
+
+
+export const movePlayerToAudience = (moveToAuduser, socket) => async (dispatch, getState) => {
+    const roomcode = getState().multiplayer_rooms.owner.roomcode;
+    var data = {
+        moveToAuduser: moveToAuduser,
+        roomcode: roomcode
+    }
+    socket.emit('moveToAudience', data)
+}
+
+export const moveAudienceToPlayer = (moveToPlayerUser, socket) => async (dispatch, getState) => {
+    const roomcode = getState().multiplayer_rooms.owner.roomcode;
+    var data = {
+        moveToPlayerUser: moveToPlayerUser,
+        roomcode: roomcode
+    }
+    socket.emit('moveToPlayer', data)
 }
 
 export const receiveListOfClients = (data) => async (dispatch, getState) => {
@@ -52,6 +126,8 @@ export const receiveListOfClients = (data) => async (dispatch, getState) => {
     friends.map((friendData, i) => {
         if (data.message[friendData.username] != undefined) {
             friendData.status = true;
+        } else {
+            friendData.status = false;
         }
     })
     dispatch({
@@ -78,10 +154,13 @@ export const joinRoom = (roomcode, username, socket) => async (dispatch, getStat
     if (roomcode != "") {
         dispatch({
             type: JOIN_A_ROOM,
-            roomcode,
+            start: {
+                roomcode: roomcode,
+                status: false
+            },
         });
-    }
-    return roomcode
+}
+return roomcode
 }
 
 export const joinRandomRoom = (username, socket) => async dispatch => {
@@ -113,7 +192,7 @@ export const receiveRequestToPlay = (data) => async (dispatch, getState) => {
         }
     })
 
-    if (hasRequested == false){
+    if (hasRequested == false) {
         friendRequests.push(data.requestedUser)
         dispatch({
             type: UPDATE_FRIEND_REQUESTS,
@@ -133,11 +212,11 @@ export const receiveRequestToPlay = (data) => async (dispatch, getState) => {
 }
 
 export const acceptFriendRequestGame = (username, socket, requestedUser) => async dispatch => {
-    socket.emit("acceptFriendRequest", { username, requestedUser});
+    socket.emit("acceptFriendRequest", { username, requestedUser });
 }
 
 export const rejectFriendRequestGame = (username, socket, requestedUser) => async dispatch => {
-    socket.emit("rejectFriendRequest", { username, requestedUser});
+    socket.emit("rejectFriendRequest", { username, requestedUser });
 }
 
 export const onFriendRequestGameRejected = (friendUsername) => async (dispatch, getState) => {
@@ -155,7 +234,7 @@ export const onFriendRequestGameRejected = (friendUsername) => async (dispatch, 
     });
     setTimeout(() => {
         console.log("Request time up")
-        friends[friendIndex].requested = false; 
+        friends[friendIndex].requested = false;
         dispatch({
             type: UPDATE_FRIENDS,
             friends

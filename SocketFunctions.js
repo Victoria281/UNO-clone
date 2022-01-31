@@ -49,6 +49,33 @@ var SocketFunctions = {
         };
     },
 
+    endMultiplayer: function (id, username) {
+        console.log("==================================")
+        console.log("Servicing endMultiplayer...")
+        console.log("----------------------------------")
+        console.log("Player has left multiplayer")
+
+        var removePlayer;
+        if (username != undefined) {
+            if (playerRooms[id] != undefined) {
+                removePlayer = SocketFunctions.leftRoom(id, username)
+    
+                console.log("Result...")
+                console.log("==================================\n")
+            }
+            if (playersConnected[username] = id) {
+                delete playersConnected[username]
+            }
+        }
+        
+        return {
+            success: true,
+            send: broadcastOne,
+            msg: playersConnected,
+            removePlayer: removePlayer
+        };
+    },
+
     createNewRoom: function (id, username, roomcode) {
         var user = { id, username, roomcode };
 
@@ -162,6 +189,98 @@ var SocketFunctions = {
                     }
                 };
             }
+        } else {
+            return {
+                success: false,
+                send: broadcastOne,
+                msg: "Room does not exist"
+            };
+        }
+    },
+
+    moveToAudience: function (moveToAudUser, roomcode) {
+        console.log("==================================")
+        console.log("Servicing moveToAudience...")
+        console.log("----------------------------------")
+        console.log(moveToAudUser + " is to be moved to the audience in room " + roomcode)
+        
+        if (roomState[roomcode] != undefined) {
+            
+            var alreadyIn = false;
+            var movedUser;
+            var movedIndex;
+            roomState[roomcode].players.map((data, i) => {
+                if (data.username == moveToAudUser) {
+                    alreadyIn = true;
+                    movedUser = data
+                    movedIndex = i
+                }
+            })
+            roomState[roomcode].audience.map((data, i) => {
+                if (data.username == moveToAudUser) {
+                    movedUser = data
+                }
+            })
+
+            if (alreadyIn != false) {
+                if (movedUser != undefined && movedIndex != undefined) {
+                    roomState[roomcode].players = roomState[roomcode].players.slice(0, movedIndex).concat(roomState[roomcode].players.slice(movedIndex+1))
+                    roomState[roomcode].audience.push(movedUser)
+                }
+            }
+            return {
+                success: true,
+                send: broadcastOne,
+                roomcode: roomcode,
+                msg: roomState[roomcode]
+            };
+
+        } else {
+            return {
+                success: false,
+                send: broadcastOne,
+                msg: "Room does not exist"
+            };
+        }
+    },
+
+    moveToPlayer: function (moveToPlayerUser, roomcode) {
+        console.log("==================================")
+        console.log("Servicing moveToPlayer...")
+        console.log("----------------------------------")
+        console.log(moveToPlayerUser + " is to be moved to the players in room " + roomcode)
+        
+        if (roomState[roomcode] != undefined) {
+            
+            var alreadyIn = false;
+            var movedUser;
+            var movedIndex;
+            roomState[roomcode].players.map((data, i) => {
+                if (data.username == moveToPlayerUser) {
+                    movedUser = data
+                }
+            })
+            roomState[roomcode].audience.map((data, i) => {
+                if (data.username == moveToPlayerUser) {
+                    alreadyIn = true;
+                    movedUser = data
+                    movedIndex = i
+                }
+            })
+
+            if (alreadyIn != false) {
+                if (movedUser != undefined && movedIndex != undefined) {
+                    roomState[roomcode].audience = roomState[roomcode].audience.slice(0, movedIndex).concat(roomState[roomcode].audience.slice(movedIndex+1))
+                    roomState[roomcode].players.push(movedUser)
+                }
+            }
+            return {
+                success: true,
+                send: broadcastOne,
+                roomcode: roomcode,
+                msg: roomState[roomcode]
+            };
+
         } else {
             return {
                 success: false,
@@ -287,7 +406,8 @@ var SocketFunctions = {
                 players: [user],
                 gameState: {},
                 owner: user,
-                private: false
+                private: false,
+                audience: []
             }
             playerRooms[id] = roomcode
         } else {
@@ -388,7 +508,8 @@ var SocketFunctions = {
                 players: [acceptedUser],
                 gameState: {},
                 owner: acceptedUser,
-                private: true
+                private: true,
+                audience: []
             }
             playerRooms[acceptedUser.id] = roomcode
             return {
