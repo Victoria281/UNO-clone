@@ -100,3 +100,62 @@
     margin-top: 80px;
     margin-left: 10vw;
 }
+
+/* Start of Styles for Modals */
+.colormodal{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.colormodalcontainer{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 40%;
+    width: 50%;
+    border: 5px solid black;
+    border-radius: 15px;
+}
+.colormodaltitle{
+    font-family: 'RubikOne' !important;
+    color: black !important;
+}
+.colormodaltitlecontainer{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.btncontainer{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.btnYellow{
+    
+    background-color: #FFC825 !important;
+    padding: 10px !important;
+    color: #FFC825 !important;
+}
+
+.btnGreen{
+    background-color: #33984B !important;
+    color: #33984B !important;
+    padding: 10px !important;
+}
+
+.btnBlue{
+    background-color: #1E9FE7 !important;
+    color: #1E9FE7 !important;
+    padding: 10px !important;
+}
+
+.btnRed{
+    background-color: #E71E1E !important;
+    color: #E71E1E !important;
+    padding: 10px !important;
+}
+
+/* End of Styles for Color Modal */

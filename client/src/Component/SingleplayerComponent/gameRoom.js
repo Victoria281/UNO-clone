@@ -86,7 +86,7 @@ const GameRoom = () => {
                         </Grid>
                     </Grid>
                     <Grid container
-                        style={{ height: "50vh" }}>
+                        style={{ height: "45vh" }}>
                         <Grid item xs={3}
                             style={{
                                 marginTop: "auto",
