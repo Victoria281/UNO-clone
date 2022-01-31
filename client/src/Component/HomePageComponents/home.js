@@ -37,7 +37,7 @@ const Home = ({ socket }) => {
         <Typography variant="h1" sx={{ mt: 10,mb:10 }}>Uno Clone</Typography>
 
         <Item sx={{ bgcolor: 'info.main' }}>
-        <div className="startBtn" onClick={()=>{setOpen(true)}}>
+        <div className={styles.startBtn} onClick={()=>{setOpen(true)}}>
             Single Player
           </div>
         </Item>

@@ -22,6 +22,9 @@ import VerifyReset from './Component/AccountComponents/ResetComponent/verifyRese
 import ForgotPage from './Component/AccountComponents/ResetComponent/forgot'
 import io from "socket.io-client";
 import Loader from "./Component/OtherComponents/LoadingComponent/Loader"
+import CustomNotification from "./Component/OtherComponents/NotificationComponent/Notifications";
+import FriendsNotification from "./Component/OtherComponents/NotificationComponent/FriendsNotifications";
+import MultiplayerNotification from "./Component/OtherComponents/NotificationComponent/MultiplayerNotification"
 
 import MultiplayerCreateRoom from "./Component/MultiplayerComponents/Dashboard/createRoom"
 import MultiplayerGameRoom from "./Component/MultiplayerComponents/Game/gameRoom"
@@ -66,14 +69,21 @@ function AppCreateRoom(props) {
 }
 
 const App = ({ hideLoader }) => {
+
+  const [o_Notif, o_setNotif] = useState({ open: false, type: "", message: "" });
+
   useEffect(() => {
     hideLoader()
+    if (localStorage.getItem("username")!== undefined){
+      socket.emit("joinWeb", localStorage.getItem("username"))
+    }
   });
 
   
   useEffect(() => {
-    socket.on("informFriendPlayiong", (data) => {
+    socket.on("watchFriend", (data) => {
       console.log("your friend is playing now")
+      o_setNotif({open: true, type: 'success', message : "Your friend "+data.username+" is playing now", room: data.roomcode})
       console.log(data)
     });
 }, [socket]);
@@ -89,26 +99,25 @@ const App = ({ hideLoader }) => {
   // console.log(process.env.REACT_APP_SECRET_KEY)
 
   return (
-    <Router>
-      <Switch>
-        <HomeNavBar exact path="/" component={AppHome} loggedIn={loggedIn}/>
-        <PageRestriction exact path="/load" component={Loader} />
-        <InGameNavBar exact path="/game" component={SingleplayerGame} />
-        <InGameNavBar exact path="/newgame" component={SingleplayerGame} />
-        <PageRestriction exact path="/end" component={EndPage} />
-        <PreLoginNavBar exact path="/login" component={AccountPage} />
-        <PreLoginNavBar exact path="/register" component={RegisterPage} />
-        <DefaultNavBar exact path="/profile" component={ProfilePage} />
-        <DefaultNavBar exact path="/leaderboard" component={LeaderboardPage} />
-        <Route exact path="/logout" component={Logout} />
-        {/* <PageRestriction exact path="/createroom" component={Room} socket={socket}/> */}
-        {/* <PageRestriction path="/multiplayer/:roomname/:username" component={Appmain} socket={socket}/> */}
-
-        {/* new */}
-        <InGameNavBar exact path="/createroom" component={AppCreateRoom}/>
-        <InGameNavBar path="/multiplayer/:roomcode" component={AppGameRoom} />
-      </Switch>
-    </Router >
+   <>
+      <MultiplayerNotification uopen={o_Notif} usetOpen={o_setNotif}/>
+      <Router>
+        <Switch>
+          <HomeNavBar exact path="/" component={AppHome} loggedIn={loggedIn}/>
+          <PageRestriction exact path="/load" component={Loader} />
+          <InGameNavBar exact path="/game" component={SingleplayerGame} />
+          <InGameNavBar exact path="/newgame" component={SingleplayerGame} />
+          <PageRestriction exact path="/end" component={EndPage} />
+          <PreLoginNavBar exact path="/login" component={AccountPage} />
+          <PreLoginNavBar exact path="/register" component={RegisterPage} />
+          <DefaultNavBar exact path="/profile" component={ProfilePage} />
+          <DefaultNavBar exact path="/leaderboard" component={LeaderboardPage} />
+          <Route exact path="/logout" component={Logout} />
+          <InGameNavBar exact path="/createroom" component={AppCreateRoom}/>
+          <InGameNavBar path="/multiplayer/:roomcode" component={AppGameRoom} />
+        </Switch>
+      </Router >
+   </>
   );
 }
 

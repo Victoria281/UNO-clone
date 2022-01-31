@@ -144,6 +144,7 @@ export default function App() {
           localStorage.setItem('userid', response.data.user_id)
           localStorage.setItem('username', response.data.username)
           setCredWrong("");
+          setNotif({ open: true, type: 'success', message: 'Login Successful' })
           window.location = '/'
           // alert("Login successful!")
         })
@@ -153,25 +154,27 @@ export default function App() {
             // console.log(error.response.data)
             // console.log(error.response.status);
             // console.log(error.response.headers);
-            setCredWrong("Wrong Credentials Entered!");
-
+            //setCredWrong("Wrong Credentials Entered!");
+            setNotif({ open: true, type: 'error', message: 'Login Unsuccessful' })
             // If attempt is 5 times, disable form
             if (attempt == 4) {
               status = false;
               setFormDisabled(true);
-              setBtnDisabled(true);
-              alert("The form has been disabled. Please wait for a while")
+              //alert("The form has been disabled. Please wait for a while")
+              setNotif({ open: true, type: 'error', message: 'Form is disabled' })
               // Enable form after 10 secs
               setTimeout(() => {
                 setFormDisabled(false);
-                setBtnDisabled(false);
                 setAttempt(0);
               }, 10000);
 
               console.log("CANNOT SEND FORM DUE TO ATTEMPT")
             }
-            // console.log(error.config);
+            console.log("Login Error")
+          } else {
+            // console.log("Login Failed!")
           }
+        
         })
     }
 
@@ -237,7 +240,7 @@ export default function App() {
   return (
     <div className="App">
       <div className="wrapper">
-        <CustomNotification notif={notif} setNotif={setNotif} />
+        <CustomNotification uopen={notif} usetOpen={setNotif} />
         <h1><b className={styles.accountTitle}>Login</b></h1>
 
         <div className={styles.accountBody}>
