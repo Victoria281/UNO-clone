@@ -39,7 +39,7 @@ const Player = ({ playerDeck, current, playerTurn, isTurn }) => {
                                 display: "flex",
                                 alignItems: "center"
                             }}>
-                            <button className="roomBtn" onClick={() => {
+                            <button className={styles.roomBtn} onClick={() => {
                                 if (isTurn){
                                     dispatch(callUNO())
                                 }
@@ -49,8 +49,8 @@ const Player = ({ playerDeck, current, playerTurn, isTurn }) => {
                 </Stack>
 
                 <Stack spacing={2} direction="row">
-                    <Button variant="outlined" onClick={()=>{dispatch(sortCards("color"))}}>Sort By Color</Button>
-                    <Button variant="outlined" onClick={()=>{dispatch(sortCards("number"))}}>Sort By Number</Button>
+                    <Button variant="outlined" className={styles.btn} onClick={()=>{dispatch(sortCards("color"))}}>Sort By Color</Button>
+                    <Button variant="outlined" className={styles.btn} onClick={()=>{dispatch(sortCards("number"))}}>Sort By Number</Button>
                 </Stack>
             </div>
         </>

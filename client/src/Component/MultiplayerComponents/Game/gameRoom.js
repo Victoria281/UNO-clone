@@ -35,6 +35,8 @@ import CustomNotification from "../../OtherComponents/NotificationComponent/Noti
 import FriendsNotification from "../../OtherComponents/NotificationComponent/FriendsNotifications";
 import { useHistory } from "react-router-dom"
 
+import { useRef } from "react";
+
 //gets the data from the action object and reducers defined earlier
 const GameRoom = ({ socket, roomcode }) => {
     const dispatch = useDispatch();
@@ -100,6 +102,14 @@ const GameRoom = ({ socket, roomcode }) => {
     }
 
     let history = useHistory();
+    const messagesEndRef = useRef(null);
+
+    const scrollToBottom = (messagesEndRef) => {
+        if (messagesEndRef && messagesEndRef.current)
+            messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
+    };
+
+
     useEffect(() => {
         socket.on("identity", (data) => {
             dispatch(updateOwnIdentity(data))
@@ -108,7 +118,9 @@ const GameRoom = ({ socket, roomcode }) => {
         socket.on("chat", (data) => {
             console.log("received message update")
             console.log(data)
-            dispatch(receivedMessage(data))
+            dispatch(receivedMessage(data)).then(()=>{
+                scrollToBottom(messagesEndRef)
+            })
         });
 
         socket.on("roomUpdate", (data) => {
@@ -194,6 +206,7 @@ const GameRoom = ({ socket, roomcode }) => {
                     roomcode={roomcode}
                     username={username}
                     socket={socket}
+                    messagesEndRef={messagesEndRef}
                 />
             }
         </>

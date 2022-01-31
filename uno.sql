@@ -211,6 +211,21 @@ COPY public.players (userid, username, email, password, created_at, profileicon)
 33	newname	a2@gmail.com	$2b$10$xB0EczHhQzNrvglq.3AuIe1KG54kA66PL.xP/xolnfdrT4T7r6smm	2021-11-26 16:31:23.30327	turtle
 \.
 
+INSERT INTO
+players
+(username, email, password, googleId, created_at, profileicon)
+VALUES
+('t3', 't3@gmail.com', '$2b$10$nx1gimQUduev11T/SocEde5JqeXEnT1/Gj/jqzBCvqlhBaOiaiDGe', null, '2021-11-15 11:32:44.202216', 'bird'),
+('t11', 't11@gmail.com', '$2b$10$mxfVRYC5b5jlV87rqnnIaO7b/WJz3ADnP.OReW5.eu/Le4qCM3DvO', null, '2021-11-16 00:46:45.855368', 'bird'),
+('t2', 't2@gmail.com', '$2b$10$UiJgTTntkPk9CPDFu3Kn2O5XyxMVOAzLwkX/V4BtTwXM3epkyINwy', null, '2021-11-16 00:48:55.012633', 'shell'),
+('t4', 't4@gmail.com', '$2b$10$uz5fs0L8Is52RAnmJ5VOie/sB2LxgNqR2mxBfds7jtNAMCCP/MiI6', null, '2021-11-16 00:49:01.538011', 'bird'),
+('t5', 't5@gmail.com', '$2b$10$nCfuu0OIAqMVxscX.gFzFubFH3TTzvSECFnMpzJxwmc8hfAVgDbE2', null, '2021-11-16 00:49:08.859845',  'shell'),
+('t6', 't6@gmail.com', '$2b$10$chGxCyEpnpZIzUdoIp72HezFiRI/ES.xcN1uXb7XmUX9LhUnXmfgq', null, '2021-11-16 00:49:13.195443',  'bird'),
+('t7', 't7@gmail.com', '$2b$10$uiD09YkoWR7fkFyVGYjetOXVO2o6bh9U9hT9Mw2XFn./XrkhyIfOW', null, '2021-11-16 00:49:17.39844', 'bird'),
+('t1', 't1@gmail.com', '$2b$10$EyDipLAUDFbyxnKMGn68G.Uzm1.qisY1dH/sDp/R8Oa/Lj8t7K9ue', null, '2021-11-15 11:32:27.967318',  'shell'),
+('a1', 'a1@gmail.com', '$2b$10$1uSjSr1R1Wqmy8mk0W8V7O.rZTLkT2cgem6yqH0pqTpQHyNoMAT7a', null, '2021-11-26 16:29:45.100289', 'bird'),
+('newname', 'a2@gmail.com', '$2b$10$xB0EczHhQzNrvglq.3AuIe1KG54kA66PL.xP/xolnfdrT4T7r6smm', null, '2021-11-26 16:31:23.30327', 'turtle');
+
 
 --
 -- Data for Name: uno_cards; Type: TABLE DATA; Schema: public; Owner: postgres

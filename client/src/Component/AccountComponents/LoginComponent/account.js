@@ -1,5 +1,8 @@
 //@ts-nocheck
 import React, { useState, useEffect } from "react";
+import { useHistory } from "react-router-dom";
+// import "../../../css/account.css";
+
 import styles from '../styles.module.css'
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import axios from "axios";
@@ -9,6 +12,11 @@ import boopSfx from '../soundEffect/boop.wav';
 import LockIcon from '@mui/icons-material/Lock';
 import EmailIcon from '@mui/icons-material/Email';
 import CustomNotification from '../../OtherComponents/NotificationComponent/Notifications';
+
+import dotenv from 'dotenv';
+dotenv.config();
+
+console.log(process.env);
 
 export default function App() {
   const [email, setEmail] = useState("");
@@ -31,6 +39,7 @@ export default function App() {
   const [isActive, setIsActive] = useState(false);
   const [isShown, setIsShown] = useState(false);
 
+  let history = useHistory();
 
 
   // Resets Timer Function
@@ -48,10 +57,10 @@ export default function App() {
       interval = setInterval(() => {
         setSeconds(seconds => seconds - 1);
       }, 1000);
-    } else{
+    } else {
       clearInterval(interval);
     }
-    if(seconds === 0){
+    if (seconds === 0) {
       clearInterval(interval)
       reset();
     }
@@ -193,12 +202,58 @@ export default function App() {
     setPasswordShown1(!passwordShown1);
   };
 
+  // Google OAuth Button
+  const handleCredentialResponse = async (response) => {
+    console.log("Encoded JWT ID Token: " + response.credential);
+
+    const result = await fetch(process.env.REACT_APP_API_URL + "/api/uno/login/google", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer " + response.credential
+      }
+    });
+
+    const data = await result.json();
+    console.log(data);
+
+    localStorage.setItem('token', 'Bearer ' + data.token);
+    localStorage.setItem('userid', data.user_id);
+    localStorage.setItem('username', data.username);
+
+    const redirectToHome = () => {
+      history.push('/');
+    };
+
+    redirectToHome();
+  }
+
+  const initializeGoogleAuth = () => {
+    google.accounts.id.initialize({
+      client_id: process.env.REACT_APP_GOOGLE_CLIENT_ID,
+      callback: handleCredentialResponse
+    });
+    google.accounts.id.renderButton(document.getElementById("google-auth-button"), { theme: 'outline', size: 'large', position: 'absolute', top: '300px' });
+    // google.accounts.id.prompt();
+  }
+
   return (
     <div className="App">
       <div className="wrapper">
         <CustomNotification uopen={notif} usetOpen={setNotif} />
         <h1><b className={styles.accountTitle}>Login</b></h1>
+
         <div className={styles.accountBody}>
+          {initializeGoogleAuth()}
+          <div className="container">
+            <div className="row no-gutters justify-content-center m-2">
+              <div className="col-xl-6 col-mlg-6 col-md-6 col-sm-6 col-xs-6">
+                <div id="google-auth-button" className={`m-2`}></div>
+              </div>
+            </div>
+          </div>
+
+          <h5 className={styles.oauthSeparator}><span>OR</span></h5>
 
           <form
             className={`form-group form ${styles.accountForm}`}
@@ -257,16 +312,14 @@ export default function App() {
             </fieldset>
           </form>
 
-        {
-          isShown ? 
-          <div className="time">
-            Timeout: {seconds}s
-          </div> :
-          <div></div>
-          
-        }
-          
+          {
+            isShown ?
+              <div className="time">
+                Timeout: {seconds}s
+              </div> :
+              <div></div>
 
+          }
 
         </div>
       </div>

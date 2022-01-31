@@ -1,0 +1,167 @@
+
+.box{
+    height: 90vh
+}
+
+.friendHead {
+    font-family: "RubikOne";
+    font-size: 1.2rem;
+    text-align: center;
+    margin-top: 20px;
+}
+.friendBottom {
+    padding-top: 10px;
+}
+
+.friends{
+    overflow-y: auto;
+    height: 30vh;
+    margin-bottom: 20px;
+}
+
+p {
+    text-align: center;
+}
+
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1; 
+}
+ 
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888; 
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555; 
+}
+
+.friendBox {
+    width: 70%;
+    background: white;
+    border-radius: 15px;
+    padding: 5px;
+    margin: 20px auto;
+}
+
+.friendUsername {
+    font-family: "RubikOne";
+    font-size: 1rem;
+    color: black;
+    text-align: center;
+    margin: 0;
+}
+
+.friendBtn {
+    font-family: "RubikOne";
+    font-size: 1rem;
+    color: white;
+    text-align: center;
+    margin: 0;
+    background: #C4C4C4;
+    border-radius: 15px;
+}
+
+.cardsHome {
+    width: 40%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 10vh;
+    margin-bottom: 2%;
+    justify-content: center;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(10px, max-content));
+    margin-bottom: 10vh;
+}
+
+
+.cardImage1 {
+    transform: rotate(-20deg);
+    height: 150px;
+}
+
+.cardImage2 {
+    transform: rotate(20deg);
+    height: 150px;
+}
+
+.startBtn {
+    font-family: "RubikOne";
+    font-size: 1rem;
+    letter-spacing: 0.2rem;
+    padding: 0.4rem 2rem;
+    margin: 1.5rem;
+    margin-bottom: 0;
+    border: none;
+    background: #0288d1;
+    color: white;
+    transform: skewX(-10deg);
+    transition: box-shadow 0.3s ease-in-out;
+}
+
+.startMultiBtn {
+    font-family: "RubikOne";
+    font-size: 1rem;
+    letter-spacing: 0.2rem;
+    margin: 1.5rem;    
+    margin-bottom: 0;
+    padding: 0.4rem 2rem;
+    border: none;
+    background: #9c27b0;
+    color: white;
+    transform: skewX(-10deg);
+    transition: box-shadow 0.3s ease-in-out;
+}
+.startBtn:hover {
+    color: grey;
+}
+
+.startMultiBtn:hover {
+    color: grey;
+}
+
+.play:hover {
+    background: grey;
+}
+
+.randomBtn {
+    font-family: "RubikOne";
+    font-size: 1rem;
+    letter-spacing: 0.2rem;
+    margin: 1.5rem;
+    padding: 0.8rem 2rem;
+    border: none;
+    color: white;
+    background: transparent;
+  text-decoration: underline;
+  text-decoration-thickness: 5px;
+}
+
+.randomBtn:hover {
+    color: grey;
+}
+
+
+
+.input-box {
+
+    font-family: "Armata";
+    text-align: center;
+}
+
+.roomInput {
+    margin-left: auto;
+    margin-right: auto;
+
+    width: 20%;
+    color: black;
+    font-size: 18px;
+    border-radius: 10px;
+    padding: 10px;
+}
