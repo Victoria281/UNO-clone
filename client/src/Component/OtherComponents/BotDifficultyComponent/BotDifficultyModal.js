@@ -4,9 +4,11 @@ import { Modal, Slider, Box, Typography, Grid, Button, Paper} from '@mui/materia
 import styles from './styles.module.css';
 import { useDispatch } from 'react-redux';
 import { prepareBotSettings } from '../../../store/action/singleplayer/game';
+import { useHistory } from 'react-router-dom';
 
 const BotDifficultyModal = ({open, setOpen}) => {
     const dispatch = useDispatch();
+    let history = useHistory()
     const [sliderVal, setSliderVal] = useState(0);
     
     function handleClose() {
@@ -15,7 +17,7 @@ const BotDifficultyModal = ({open, setOpen}) => {
 
     function setSettings(){
         dispatch(prepareBotSettings(sliderVal));
-        console.log(sliderVal);
+        history.push("/game")
         handleClose();
     }
 

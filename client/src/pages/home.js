@@ -20,7 +20,7 @@ const Item = styled(Paper)(({ theme }) => ({
   width: '75%'
 }));  const [open, setOpen] = useState(false);
 
-const Home = () => {s
+const Home = () => {
   useEffect(() => {
     homeAnimation()
   }, [])
