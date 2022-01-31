@@ -1,8 +1,18 @@
-import { Snackbar, LinearProgress, Alert, Box, Slide } from '@mui/material';
+import { Snackbar, LinearProgress, Alert, Box, Slide , Button} from '@mui/material';
 import { Fragment, useEffect, useState } from "react";
+import CompareArrowsIcon from '@mui/icons-material/CompareArrows';
+import styles from './styles.module.css';
+import { CompareArrows } from '@material-ui/icons';
+import { useHistory } from 'react-router-dom';
 
-const CustomNotification = ({ uopen, usetOpen }) => {
+const MultiplayerNotification = ({ uopen, usetOpen }) => {
     const [mopen, msetOpen] = useState(false)
+
+
+    function moveToMulti(){
+        window.location.href = './multiplayer/' + uopen.room
+        handleClose();
+    }
 
     function handleClose() {
         console.log("Snackbar Closed")
@@ -49,7 +59,15 @@ const CustomNotification = ({ uopen, usetOpen }) => {
             {
                 uopen.open &&
                 <Box sx={{ width: '100%' }}>
-                    <Alert severity={uopen.type} sx={{ width: '100%' }}>
+                    <Alert className={styles.messagecontainer} severity={uopen.type} sx={{ width: '100%' }} action={
+                       <div>
+                            <Button color="inherit" size="small" className={styles.moveBtn} onClick={()=>{
+                                moveToMulti()
+                            }}>
+                                <CompareArrowsIcon color='success'/>
+                            </Button>
+                       </div>
+                    }>
                         {uopen.message}
                     </Alert>
                     <Progress />
@@ -60,4 +78,4 @@ const CustomNotification = ({ uopen, usetOpen }) => {
     )
 }
 
-export default CustomNotification;
+export default MultiplayerNotification;

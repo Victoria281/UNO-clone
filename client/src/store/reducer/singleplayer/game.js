@@ -23,6 +23,8 @@ const initialState = {
     toDrawCard: false,
     getDrawnCard: false,
     botPlayingCard: false,
+    botcurrentstate: "",
+    bot_settings: {},
     end: false
     botcurrentstate: "",
     bot_settings: {},

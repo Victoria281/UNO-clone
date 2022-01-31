@@ -18,7 +18,6 @@ import Music from "../MusicComponent/Music";
 import Account from "./Account";
 import styles from "./styles.module.css"
 import BotDifficultyModal from "../BotDifficultyComponent/BotDifficultyModal";
-import { useState } from "react";
 
 const DefaultNavBar = ({ exact, path, component: Component, loggedIn, ...rest }) => {
     const [open, setOpen] = useState(false);

@@ -1,7 +1,10 @@
-import { Snackbar, LinearProgress, Alert, Box, Slide } from '@mui/material';
+import { Snackbar, LinearProgress, Alert, Box, Slide , Button} from '@mui/material';
 import { Fragment, useEffect, useState } from "react";
+import CheckIcon from '@mui/icons-material/Check';
+import ClearIcon from '@mui/icons-material/Clear';
+import styles from './styles.module.css';
 
-const CustomNotification = ({ uopen, usetOpen }) => {
+const FriendsNotification = ({ uopen, usetOpen }) => {
     const [mopen, msetOpen] = useState(false)
 
     function handleClose() {
@@ -49,7 +52,16 @@ const CustomNotification = ({ uopen, usetOpen }) => {
             {
                 uopen.open &&
                 <Box sx={{ width: '100%' }}>
-                    <Alert severity={uopen.type} sx={{ width: '100%' }}>
+                    <Alert className={styles.messagecontainer} severity={uopen.type} sx={{ width: '100%' }} action={
+                       <div>
+                            <Button variant='contained' color="inherit" size="small" className={styles.checkBtn}>
+                                <CheckIcon color="success"/>
+                            </Button>
+                            <Button variant='contained' color="inherit" size="small" className={styles.xBtn}>
+                                <ClearIcon color="error"/>
+                            </Button>
+                       </div>
+                    }>
                         {uopen.message}
                     </Alert>
                     <Progress />
@@ -60,4 +72,4 @@ const CustomNotification = ({ uopen, usetOpen }) => {
     )
 }
 
-export default CustomNotification;
+export default FriendsNotification;
