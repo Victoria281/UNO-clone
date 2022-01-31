@@ -2,8 +2,8 @@
 import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 // import "../../../css/account.css";
+
 import styles from '../styles.module.css'
-// import { response } from "express";
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import axios from "axios";
 import ReCAPTCHA from "react-google-recaptcha";
@@ -86,7 +86,7 @@ export default function App() {
 
   // Function called when login button is clicked
   function createPost() {
-    var status = true;
+    let status = true;
 
     // Check email field
     if (email === "") {
@@ -104,10 +104,9 @@ export default function App() {
       }
     }
 
-    // console.log("AFTERRRRRRRRRRRRRR EMAIL CHECK")
-    // console.log(status);
 
-    if (status === true) {
+
+    if (status) {
       // Check password field
       if (password === "") {
         status = false;
@@ -118,8 +117,6 @@ export default function App() {
         //setPasswordError("");
       }
     }
-    // console.log("AFTERRRRRRR PASSWORD CHECK")
-    // console.log(status)
 
     // Check if status has been validated
     if (status) {
@@ -179,25 +176,6 @@ export default function App() {
     }
 
 
-    // // checking if email is empty
-    // if (email !== "") {
-    //   // Checks email with regex expression
-    //   const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
-    //   if (emailRegex.test(email)) {
-    //     setEmailError("");
-    //   } else {
-    //     setEmailError("Invalid Email");
-    //   }
-    // } else {
-    //   setEmailError("Email Required");
-    // }
-
-    // // Check if password is empty
-    // if (password != "") {
-    //   // Do something here!
-    // } else {
-    //   setPasswordError("Password Required");
-    // }
   }
 
   const handleEmailChange = (e) => {

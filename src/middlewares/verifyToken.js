@@ -1,12 +1,13 @@
-const jwt = require("jsonwebtoken");
-const JWT_SECRET = require("../../config");
+// import { verify } from "jsonwebtoken";
+// import JWT_SECRET from "../../config";
+const jwt = require('jsonwebtoken');
+const JWT_SECRET = require('../../config');
 
-var verifyToken = (req, res, next) => {
+const verifyToken = (req, res, next) => {
   const authHeader = req.headers.authorization;
   if (authHeader === null || authHeader === undefined || !authHeader.startsWith("Bearer ")) {
     console.log("no verifyToken");
-    res.status(401).send();
-    return;
+    return res.status(401).send();
   }
   const token = authHeader.replace("Bearer ", "");
 
@@ -17,15 +18,13 @@ var verifyToken = (req, res, next) => {
 
   jwt.verify(token, JWT_SECRET, (error, decodedToken) => {
     if (error) {
-      res.status(401).send();
-      return;
+      return res.status(401).send();
     }
-    console.log("decodedToken")
-    console.log(decodedToken)
+    console.log("decodedToken", decodedToken)
     req.decodedToken = decodedToken;
     next();
   });
 };
 
 
-module.exports=verifyToken;
+module.exports = verifyToken;

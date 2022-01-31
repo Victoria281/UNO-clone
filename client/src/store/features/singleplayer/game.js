@@ -1,6 +1,5 @@
 // @ts-nocheck
 
-import { ContactlessOutlined } from "@material-ui/icons";
 import {
     getRandomInt,
     getNextTurn,
@@ -10,6 +9,7 @@ import {
     playDraw,
     playWild,
     checkFirstCard,
+    
 } from "../multiplayer/game"
 
 
@@ -41,7 +41,7 @@ export const getCardForBot = (r, wild_playable, normal_playable) => {
     return cardplayed
 }
 
-export const boyPlayCard = (gameState) => {
+export const botPlayCard = (gameState) => {
     console.log("Bot is choosing card ----------");
 
     // console.log(gameState);

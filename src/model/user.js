@@ -3,12 +3,13 @@
 //imports
 //---------------------------------------------
 
-const pool = require("../../db");
+const pool = require('../../db');
+// import pool from '../../db';
 
 //---------------------------------------------
 //object / functions
 //---------------------------------------------
-var User = {
+const User = {
 
     findByUserID: function (id, callback) {
         const query = {
@@ -19,10 +20,12 @@ var User = {
 
         return pool.query(query, function (error, result) {
             if (error) {
-                return callback(error, null);
+                console.log("error:", error);
+                callback(error, null);
+                return;
             } else {
                 if (result.rows.length == 0) {
-                    return callback("404", null);
+                    callback("404", null);
                 } else {
                     console.log(result.rows)
                     return callback(null, result.rows[0]);
@@ -185,6 +188,169 @@ var User = {
             } else {
                 console.log(result.rows)
                 return callback(null, result.rows);
+            }
+        });
+    },
+
+    // getAllUsers
+    getAllUsers: (callback) => {
+        const query = {
+            name: 'getAllUsers',
+            text: `
+                SELECT
+                    userid, username, profileicon
+                FROM
+                    players;
+            `,
+        };
+
+        return pool.query(query, (error, result) => {
+            if (error) {
+                console.log("Error Querying All Users:", error);
+                return callback(error, null);
+
+            } else {
+                // console.log("Result received:", result);
+                const message = {
+                    rowCount: result.rowCount,
+                    rows: result.rows,
+                };
+
+                return callback(null, message);
+
+            }
+        })
+    },
+
+    // getFriend
+    getFriend: (id, callback) => {
+
+        const query = {
+            name: 'getFriend',
+            text: `
+                SELECT
+                    u.userid, u.username, u.email, u.profileicon
+                FROM
+                    friends AS f,
+                    players AS u
+                WHERE
+                    f.userid = $1
+                    AND f.fk_friendid = u.userid
+            `,
+            values: [id],
+        };
+
+        return pool.query(query, (error, result) => {
+
+            if (error) {
+                console.log(error);
+                return callback(error, null);
+            } else {
+                console.log(result);
+                const message = {
+                    rowCount: result.rowCount,
+                    rows: result.rows,
+                };
+                return callback(null, message);
+            }
+
+        });
+    },
+
+    // addFriend
+    addFriend: async (userid, friendid, callback) => {
+        const selectQuery = {
+            name: 'getSpecificFriend',
+            text: `
+                SELECT
+                    u.userid, u.username, u.email
+                FROM
+                    friends AS f,
+                    players AS u
+                WHERE
+                    f.userid = $1
+                    AND f.fk_friendid = u.userid
+                    AND f.fk_friendid = $2
+            `,
+            values: [userid, friendid],
+        };
+
+        pool.query(selectQuery, (error, result) => {
+
+            if (error) {
+                console.error("ERROR: Unable to retrieve friend in addFriend function");
+
+                return callback(error, null);
+
+            } else {
+                // console.log(result);
+
+                if (result.rows.length > 0) {
+                    console.error("ERROR: User already has this friend");
+
+                    const message = {
+                        code: 500,
+                        message: 'You already friended this user',
+                    }
+
+                    return callback(message, null);
+
+                } else {
+                    console.log("running!");
+
+                    const query = {
+                        name: 'addFriend',
+                        text: `
+                            INSERT INTO
+                                friends
+                                (userid, fk_friendid)
+                            VALUES
+                                ($1, $2)
+                        `,
+                        values: [userid, friendid],
+                    };
+            
+                    if (userid === friendid) {
+                        const message = {
+                            code: 400,
+                            message: 'You cannot add yourself as a friend',
+                        };
+            
+                        return callback(message, null);
+            
+                    } else {
+                        return pool.query(query, (error, result) => {
+                            if (error) {
+                                console.log("Error Adding Friend:", error);
+                                return callback(error, null);
+            
+                            } else {
+                                return callback(null, result);
+            
+                            }
+                        });
+            
+                    }
+                }
+            }
+        });
+    },
+
+    // deleteFriend
+    deleteFriend: function (userid, friendid, callback) {
+        const query = {
+            name: 'deleteFriend',
+            text: 'DELETE FROM friends WHERE userid = $1 AND fk_friendid = $2',
+            values: [userid, friendid],
+        }
+
+        return pool.query(query, function (error, result) {
+            if (error) {
+                callback(error, null);
+                return;
+            } else {
+                console.log(result);
+                return callback(null, result.rowCount);
             }
         },
         );

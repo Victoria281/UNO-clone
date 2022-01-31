@@ -1,0 +1,44 @@
+.friendsAvatar {
+    width: 30px;
+    height: 30px;
+}
+
+.usersAvatar {
+    width: 30px;
+    height: 30px;
+    margin: auto;
+    
+}
+
+.alignAvatar {
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+.usersBody {
+    border-color: black;
+    border-width: 5px;
+    border-radius: 5px;
+}
+
+.friendsName {
+    vertical-align: middle;
+    text-align: left;
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+.friendsBody {
+    background-color: lightcyan;
+    border-radius: 10px;
+    margin: 2% 0% 2% 0%;
+    padding: 1%;
+}
+
+.friendsBorder {
+    max-height: 190px;
+}
+
+.accordionBody {
+    max-height: 220px;
+}
