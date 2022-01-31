@@ -5,7 +5,7 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import {
-    playCard,
+    sendPlayerAction
 } from "../../../../store/action/multiplayer/game"
 import { useDispatch } from 'react-redux'
 
@@ -31,10 +31,10 @@ const SelectColorModal = ({ card, socket, selectColorModalOpen, setSelectColorMo
     }
     const dispatch = useDispatch();
 
-    const handleSelectColor = (color) =>{
+    const handleSelectColor = (color) => {
         console.log("not closing?")
         handleClose()
-        dispatch(playCard(card, socket, color));
+        dispatch(sendPlayerAction("play", socket, { card: card, color: color }))
     }
     return (
         <Modal

@@ -4,17 +4,15 @@ import React, { useState, useEffect } from "react";
 const dotenv = require('dotenv');
 dotenv.config();
 
-console.log(">>>>", process.env);
-
 //components
 import SingleplayerGame from "./Component/SingleplayerComponent/gameRoom"
 import GamePage from "./pages/game";
-import HomePage from "./pages/home";
+import HomePage from "./Component/HomePageComponents/home";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import EndPage from "./pages/end";
 import AccountPage from "./Component/AccountComponents/LoginComponent/account";
 import RegisterPage from "./Component/AccountComponents/RegisterComponents/register";
-import ProfilePage from "./pages/profile";
+import ProfilePage from "./Component/ProfileComponents/ProfilePage";
 import LeaderboardPage from "./Component/Leaderboard/tabs.jsx";
 import Music from "./components/Music";
 import Room from "./pages/multiplayer/room";
@@ -48,10 +46,38 @@ function AppGameRoom(props) {
   );
 }
 
+function AppHome(props) {
+  return (
+    <React.Fragment>
+      <HomePage
+        socket={socket}
+      />
+    </React.Fragment>
+  );
+}
+
+function AppCreateRoom(props) {
+  return (
+    <React.Fragment>
+      <MultiplayerCreateRoom
+        socket={socket}
+      />
+    </React.Fragment>
+  );
+}
+
 const App = ({ hideLoader }) => {
   useEffect(() => {
     hideLoader()
   });
+
+  
+  useEffect(() => {
+    socket.on("informFriendPlayiong", (data) => {
+      console.log("your friend is playing now")
+      console.log(data)
+    });
+}, [socket]);
 
   const [loggedIn, setLoggedIn] = useState(localStorage.getItem("userid"));
   useEffect(() => {
@@ -66,9 +92,9 @@ const App = ({ hideLoader }) => {
   return (
     <Router>
       <Switch>
-        <HomeNavBar exact path="/" component={HomePage} loggedIn={loggedIn}/>
+        <HomeNavBar exact path="/" component={AppHome} loggedIn={loggedIn}/>
         <PageRestriction exact path="/load" component={Loader} />
-        <InGameNavBar exact path="/game" component={GamePage} />
+        <InGameNavBar exact path="/game" component={SingleplayerGame} />
         <InGameNavBar exact path="/newgame" component={SingleplayerGame} />
         <PageRestriction exact path="/end" component={EndPage} />
         <PreLoginNavBar exact path="/login" component={AccountPage} />
@@ -80,7 +106,7 @@ const App = ({ hideLoader }) => {
         {/* <PageRestriction path="/multiplayer/:roomname/:username" component={Appmain} socket={socket}/> */}
 
         {/* new */}
-        <InGameNavBar exact path="/createroom" render={() => <MultiplayerCreateRoom socket={socket} />} />
+        <InGameNavBar exact path="/createroom" component={AppCreateRoom}/>
         <InGameNavBar path="/multiplayer/:roomcode" component={AppGameRoom} />
       </Switch>
     </Router >
