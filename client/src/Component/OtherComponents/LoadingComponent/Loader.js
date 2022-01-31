@@ -1,7 +1,3 @@
-
-
-
-
 // @ts-ignore
 import { Fragment, useState } from "react";
 import "./loader.scss";
@@ -20,11 +16,12 @@ const Loader = () => {
         "Blue_3",
         "Red_6"
     ])
-
+ 
     const handleFlip = () => {
         if (!isFlipped) setSelected(Math.floor(Math.random() * cards.length))
         setIsFlipped(!isFlipped)
     }
+   
     return (
         <div className="loading">
             <div className="scene scene--card">
@@ -40,19 +37,16 @@ const Loader = () => {
                         <img className="" src={process.env.REACT_APP_API_URL + `/api/uno/images/${cards[selected]}.png`} />
                     </div>
                 </div>
-                <p> Click Me ! </p>
             </div>
-
+ 
             <div>
                 <img className="card" src={process.env.REACT_APP_API_URL + "/api/uno/images/Blue_Skip.png"} />
                 <img className="card" src={process.env.REACT_APP_API_URL + "/api/uno/images/Red_Reverse.png"} />
                 <img className="card" src={process.env.REACT_APP_API_URL + "/api/uno/images/Green_Draw.png"} />
                 <img className="card" src={process.env.REACT_APP_API_URL + "/api/uno/images/Yellow_0.png"} />
                 <img className="card" src={process.env.REACT_APP_API_URL + "/api/uno/images/Wild_Draw.png"} />
-                <h1>Loading</h1>
-
             </div>
         </div>);
 };
-
+ 
 export default Loader;

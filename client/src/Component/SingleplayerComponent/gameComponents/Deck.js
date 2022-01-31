@@ -2,13 +2,21 @@
 import {
     drawCard, callUNO
 } from "../../../store/action/multiplayer/game"
-import { useDispatch } from 'react-redux'
+import { useSelector } from 'react-redux'
 import { Stack } from '@mui/material';
 import styles from "./styles.module.css"
 import DrawCardDeck from "./DrawCardDeck"
 //gets the data from the action object and reducers defined earlier
-const Deck = ({ current, used }) => {
-    const dispatch = useDispatch();
+const Deck = () => {
+    const { game_state, mainDeckState } = useSelector(state => {
+        const game_state = state.singleplayer_game;
+        const mainDeckState = []
+        for (var i = 0; i < Math.floor(state.singleplayer_game.mainDeck.length / 27); i++) {
+                mainDeckState.push(1)
+        }
+        console.log(mainDeckState)
+        return { game_state, mainDeckState }
+    })
     return (
         <div>
             <Stack direction="row" spacing={3} className={styles.mainDeckArea}>
@@ -20,32 +28,37 @@ const Deck = ({ current, used }) => {
                         style={{ width: 90 }}
                         src={
                             process.env.REACT_APP_API_URL + "/api/uno/images/" +
-                            current.image_file.slice(8)
+                            game_state.current.image_file.slice(8)
                         }
-                        alt={current.values + " " + current.color}
+                        alt={game_state.current.values + " " + game_state.current.color}
                     />
-                    {used.length !== 0 &&
+                    {game_state.used.length !== 0 &&
                         <img
                             className={`img-responsive ${styles.BelowCard}`}
                             style={{ width: 90 }}
                             src={
                                 process.env.REACT_APP_API_URL + "/api/uno/images/" +
-                                used[used.length - 1].image_file.slice(8)
+                                game_state.used[game_state.used.length - 1].image_file.slice(8)
                             }
-                            alt={used[used.length - 1].values + " " + used[used.length - 1].color}
+                            alt={game_state.used[game_state.used.length - 1].values + " " + game_state.used[game_state.used.length - 1].color}
                         />
                     }
                 </div>
                 <div className={styles.DrawCardDeck}>
 
                     <DrawCardDeck />
-                    <img
-                        className={`img-responsive ${styles.BelowDrawCard}`}
-                        style={{ width: 90 }}
-                        src={
-                            process.env.REACT_APP_API_URL + "/api/uno/images/Deck.png"
-                        }
-                    />
+
+                    <div className={styles.TopDrawCard}>
+                        {mainDeckState.map((d, i) => 
+                            <img
+                                className={`img-responsive ${styles.Deck}`}
+                                style={{ width: 80 }}
+                                src={
+                                    process.env.REACT_APP_API_URL + "/api/uno/images/Deck.png"
+                                }
+                            />
+                        )}
+                    </div>
                 </div>
             </Stack>
         </div>

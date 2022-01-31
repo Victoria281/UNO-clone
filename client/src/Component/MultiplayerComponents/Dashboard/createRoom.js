@@ -14,7 +14,8 @@ import {
 	onFriendRequestGameRejected,
 	onFriendRequestGameAccepted,
 	acceptFriendRequestGame,
-	rejectFriendRequestGame
+	rejectFriendRequestGame,
+	initialiseState
 } from "../../../store/action/multiplayer/rooms"
 import { useHistory } from "react-router-dom";
 import Friend from "./FriendComponents/Friend"
@@ -38,7 +39,7 @@ const CreateRoom = ({ socket }) => {
 				console.log("Please Login First")
 			} else {
 				dispatch(createNewRoom(roomname, username, socket))
-					.then(result => history.push(`/multiplayer/${result}`))
+					.then(result =>history.push(`/multiplayer/${result}`))
 			}
 		} else {
 			alert("Please enter room name!");
@@ -76,9 +77,11 @@ const CreateRoom = ({ socket }) => {
 
 
 	useEffect(() => {
-		if (username != undefined) {
-			dispatch(enterMultiplayer(username, socket))
-		}
+		dispatch(initialiseState()).then(()=>{
+			if (username != undefined) {
+				dispatch(enterMultiplayer(username, socket, localStorage.getItem("userid"), localStorage.getItem("token")))
+			}
+		})
 	}, []);
 
 	useEffect(() => {
@@ -93,6 +96,7 @@ const CreateRoom = ({ socket }) => {
 		});
 
 		socket.on("randomRoomFound", (data) => {
+			console.log("i FOUND A RANDOM ROMM")
 			history.push(`/multiplayer/${data.message}`)
 		});
 

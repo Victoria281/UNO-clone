@@ -10,8 +10,42 @@ export const shuffleCards = (cardarray) => {
     return cardarray;
 };
 
-export const getRandomInt = (num) => {
-    return Math.floor(Math.random() * num);
+export const checkGameEnd = (game_state) => {
+    var gameEnd = false;
+
+    console.log(game_state)
+
+
+    for (var key in game_state.playerdeck) {
+        if (game_state.playerdeck[key].length === 0) {
+            gameEnd = true;
+        }
+    }
+
+    return gameEnd;
+};
+
+export const pauseGame = (game_state, first) => {
+    if (first === null) {
+        game_state.pauseTurn = game_state.turn
+        game_state.turn = null
+    }
+    return game_state
+};
+
+export const continueGame = (game_state, first) => {
+    if (first === null) {
+        game_state.turn = game_state.pauseTurn
+        game_state.pauseTurn = null
+    }
+    return game_state
+};
+
+export const getRandomInt = (num, start) => {
+    if (start === undefined) {
+        start = 0
+    }
+    return Math.floor(Math.random() * (num - start) + start);
 };
 
 export const checkFirstCardPlayable = (c1, c2) => {
@@ -20,7 +54,7 @@ export const checkFirstCardPlayable = (c1, c2) => {
     if ((c1.color === c2.color ||
         c1.values === c2.values ||
         c1.color === "wild")) {
-            // // console.log("true")
+        // // console.log("true")
         return true
     } else {
         // // console.log("false")
@@ -50,13 +84,13 @@ export const getAllCards = async () => {
 }
 
 export const dealCards = (cardarray, numOfPlayers) => {
-    cardarray.map((card)=>{
+    cardarray.map((card) => {
         card["botPlayCard"] = false
     })
     var dealplayers = {};
     for (var players = 0; players < numOfPlayers; players++) {
         dealplayers["player" + players] = []
-        for (var start = 0; start < 7; start++) {
+        for (var start = 0; start < 1; start++) {
             dealplayers["player" + players].push(cardarray[(start * numOfPlayers) + players]);
         }
     }
@@ -90,7 +124,7 @@ export const getPrevTurn = (currentTurn, order) => {
     var playerInOrder = order.findIndex(t => t === currentTurn)
     playerInOrder -= 1;
     if (playerInOrder == -1) {
-        playerInOrder = order.length-1;
+        playerInOrder = order.length - 1;
     }
     return order[playerInOrder];
 }
@@ -118,12 +152,17 @@ export const playSkip = (game_state) => {
 }
 
 export const playReverse = (game_state) => {
+    if (game_state.reverse === 0) {
+        game_state.reverse = 1
+    } else {
+        game_state.reverse = 0
+    }
     game_state.order = game_state.order.reverse();
     game_state.turn = getNextTurn(game_state.turn, game_state.order)
     return game_state
 }
 
-export const playDraw = (game_state, numOfCards, color) => {
+export const playDraw = (game_state, numOfCards, color, first) => {
     // console.log("in DRAW")
     var playerToDrawCard = getNextTurn(game_state.turn, game_state.order)
     game_state.turn = getNextTurn(playerToDrawCard, game_state.order)
@@ -157,7 +196,7 @@ export const drawACard = (game_state) => {
     var drawnCard = game_state.mainDeck[0]
     game_state.mainDeck = game_state.mainDeck.slice(1);
     if (checkFirstCardPlayable(drawnCard, game_state.current)) {
-        if (drawnCard.color !== undefined && drawnCard.color === "wild"){
+        if (drawnCard.color !== undefined && drawnCard.color === "wild") {
             return drawnCard
         } else {
             game_state = applyCard(null, game_state, drawnCard, null)
@@ -169,12 +208,21 @@ export const drawACard = (game_state) => {
     return game_state
 }
 
-export const checkFirstCard =(game_state, first, card) => {
+export const applyDrawCard = (game_state, num, player) => {
+    for (var amtToDraw = 0; amtToDraw < num; amtToDraw++) {
+        game_state.playerdeck["player" + player].push(game_state.mainDeck[amtToDraw]);
+    }
+    game_state.mainDeck = game_state.mainDeck.slice(num)
+    game_state.turn = getNextTurn(game_state.turn, game_state.order)
+    return game_state
+}
+
+export const checkFirstCard = (game_state, first, card) => {
     if (first === null) {
         game_state.used.push(game_state.current)
-        game_state.playerdeck["player" + game_state.turn] = game_state.playerdeck["player" + game_state.turn].filter(player_card => player_card !== card);
+        game_state.playerdeck["player" + game_state.turn] = game_state.playerdeck["player" + game_state.turn].filter(player_card => player_card.id !== card.id);
     } else {
-        if (card.color === "wild"){
+        if (card.color === "wild") {
             var unoColors = ["red", "green", "blue", "yellow"]
             var color = unoColors[getRandomInt(4)]
         }
@@ -182,10 +230,11 @@ export const checkFirstCard =(game_state, first, card) => {
     }
     return [game_state, color]
 }
+
 export const applyCard = (color, game_state, card, first) => {
     var result = checkFirstCard(game_state, first, card)
     game_state = result[0]
-    if (result[1] != null){
+    if (result[1] != null) {
         color = result[1]
     }
 
@@ -196,7 +245,7 @@ export const applyCard = (color, game_state, card, first) => {
     game_state.current = card
 
     switch (card.values) {
-    // switch ("1") {
+        // switch ("1") {
         //skip is 10
         case "10":
             // // console.log("skipped played")
@@ -215,7 +264,7 @@ export const applyCard = (color, game_state, card, first) => {
         case "12":
             // // console.log("+2 played")
             // // console.log(game_state)
-            game_state = playDraw(game_state, 2, card.color)
+            game_state = playDraw(game_state, 2, card.color, first)
             break;
 
         //wild is 13
@@ -230,7 +279,7 @@ export const applyCard = (color, game_state, card, first) => {
         case "14":
             // // console.log("+4 played")
             // // console.log(game_state)
-            game_state = playDraw(game_state, 4, color)
+            game_state = playDraw(game_state, 4, color, first)
             break;
 
         default:
