@@ -1,10 +1,12 @@
-import "./home.css";
 import { Grid, styled, Paper, Typography } from '@mui/material';
 import { homeAnimation } from "./homeAnimation";
+
+import styles from "./styles.module.css"
 import { useEffect, useState } from "react";
 import { typography } from "@mui/system";
 import BotDifficultyModal from "../OtherComponents/BotDifficultyComponent/BotDifficultyModal";
 import { useHistory } from "react-router-dom";
+
 
 const Item = styled(Paper)(({ theme }) => ({
   ...theme.typography.body2,
@@ -34,23 +36,27 @@ const Home = ({ socket }) => {
       <Grid item xs={6}>
       <BotDifficultyModal open={open} setOpen={setOpen}/>
         <Typography variant="h1" sx={{ mt: 10,mb:10 }}>Uno Clone</Typography>
+
         <Item sx={{ bgcolor: 'info.main' }}>
         <div className="startBtn" onClick={()=>{setOpen(true)}}>
             Single Player
           </div>
         </Item>
+
         <Item sx={{ bgcolor: 'secondary.main' }}>
-          <div className="startMultiBtn" onClick={()=>history.push("./createroom")}>
+          <div className={styles.startMultiBtn} onClick={()=>history.push("./createroom")}>
             Multiplayer
           </div>
         </Item>
+
         <Item sx={{ bgcolor: 'error.main' }}>
-          <div className="leaderBoardBtn" onClick={()=>history.push("./leaderboard")}>
+          <div className={styles.leaderBoardBtn} onClick={()=>history.push("./leaderboard")}>
             LeaderBoard
           </div>
         </Item>
+
         <Item sx={{ bgcolor: 'success.main' }}>
-          <div className="profileBtn" onClick={()=>history.push("./profile")}>
+          <div className={styles.profileBtn} onClick={()=>history.push("./profile")}>
             Profile
           </div>
         </Item>

@@ -372,7 +372,7 @@ const User = {
             }
         });
     },
-    
+
     resetUserPasswordGmail: function (email, password, callback) {
         const query = {
             name: 'resetUserPassword',
