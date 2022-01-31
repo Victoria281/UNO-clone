@@ -1,3 +1,4 @@
+//@ts-nocheck
 import { LocalConvenienceStoreOutlined } from "@material-ui/icons"
 import {
     generateRoomCode
@@ -36,8 +37,8 @@ export const initialiseState = () => async dispatch => {
 
 export const enterMultiplayer = (username, socket, uid, token) => async dispatch => {
     // API CALL FRIENDS
-    getAllFriends(uid, token).then((friends)=>{
-        friends.map((data)=>{
+    getAllFriends(uid, token).then((friends) => {
+        friends.map((data) => {
             data["status"] = false;
             data["requested"] = false
         })
@@ -159,8 +160,8 @@ export const joinRoom = (roomcode, username, socket) => async (dispatch, getStat
                 status: false
             },
         });
-}
-return roomcode
+    }
+    return roomcode
 }
 
 export const joinRandomRoom = (username, socket) => async dispatch => {
@@ -215,8 +216,14 @@ export const acceptFriendRequestGame = (username, socket, requestedUser) => asyn
     socket.emit("acceptFriendRequest", { username, requestedUser });
 }
 
-export const rejectFriendRequestGame = (username, socket, requestedUser) => async dispatch => {
+export const rejectFriendRequestGame = (username, socket, requestedUser) => async (dispatch, getState) => {
     socket.emit("rejectFriendRequest", { username, requestedUser });
+    var friendRequests = getState().multiplayer_rooms.friendRequests;
+    friendRequests = friendRequests.filter((fdata, index) => fdata.username != requestedUser.username);
+    dispatch({
+        type: UPDATE_FRIEND_REQUESTS,
+        friendRequests
+    });
 }
 
 export const onFriendRequestGameRejected = (friendUsername) => async (dispatch, getState) => {

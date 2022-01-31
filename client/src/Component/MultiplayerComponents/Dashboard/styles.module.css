@@ -9,11 +9,20 @@
     text-align: center;
     margin-top: 20px;
 }
+.friendBottom {
+    padding-top: 10px;
+}
 
 .friends{
     overflow-y: auto;
-    height: 70vh
+    height: 30vh;
+    margin-bottom: 20px;
 }
+
+p {
+    text-align: center;
+}
+
 ::-webkit-scrollbar {
   width: 5px;
 }

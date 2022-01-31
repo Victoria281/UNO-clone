@@ -20,10 +20,10 @@ const Friend = ({ data, requestFriend }) => {
                 justifyContent="center"
                 alignItems="center"
             >
-                <Grid item xs={7}>
+                <Grid item xs={6}>
                     <p className={styles.friendUsername}>{data.username}</p>
                 </Grid>
-                <Grid item xs={5}>
+                <Grid item xs={6}>
                     {data.status ?
                         <button
                             className={`${styles.play} ${styles.friendBtn}`}
