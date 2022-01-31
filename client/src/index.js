@@ -1,15 +1,23 @@
+// @ts-nocheck
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
-import rootReducers from "./store/reducer/index";
-import { createStore } from "redux";
 import { Provider } from "react-redux";
+import { store } from "./store/store"
 
-const store = createStore(rootReducers);
+
+const loader = document.querySelector('.loader');
+const hideLoader = () => loader.hidden = true;
+
 ReactDOM.render(
-  <Provider store={store}>
-    <App />
-  </Provider>,
+  <React.StrictMode>
+    <Provider store={store}>
+      <App
+        hideLoader={hideLoader}
+      />
+    </Provider>
+  </React.StrictMode>
+  ,
   document.getElementById('root')
-);
+)

@@ -1,0 +1,227 @@
+.CardPlayedDeck {
+    display: grid;
+}
+
+.TopCard, .BelowCard {
+    grid-column: 1;
+    grid-row: 1;
+}
+
+.BelowCard {
+    transform: rotate(-30deg) translateX(-5px) translateY(-5px);
+    z-index: 0;
+    opacity: 0.75;
+}
+
+.TopCard {
+    z-index: 10;
+}
+
+.DrawCardDeck {
+    display: grid;
+}
+
+.TopDrawCard {
+    grid-column: 1;
+    grid-row: 1;
+}
+
+.TopDrawCard:nth-child(1) {
+    z-index: 10;
+}
+
+.TopDrawCard:nth-child(2) {
+    display: grid;
+}
+
+
+.mainDeckArea {
+    transform: matrix(1, 0.01, -0.29, 1, 0, 0);
+}
+
+.Playable:hover {
+    transform: translateY(-20px)
+}
+
+.Deck {
+    grid-column: 1;
+    grid-row: 1;
+}
+
+.Deck:nth-child(2) {
+    transform: translate(8px, 8px);
+    z-index: -1;
+}
+
+.Deck:nth-child(3) {
+    transform: translate(16px, 16px);
+    z-index: -2;
+}
+
+.Deck:nth-child(4) {
+    transform: translate(24px, 24px);
+    z-index: -3;
+}
+
+
+.PlayerArea {
+    background-color: hsl(32, 100%, 70%);
+    border-radius: 30px;
+    padding: 20px;
+    padding-left: 60px;
+}
+
+.PlayerStack {
+    width: 90%;
+    justify-content: center;
+    display: grid !important;
+    grid-template-columns: repeat(auto-fit, minmax(10px, max-content));
+}
+
+.CurrentColor {
+    width: 50px;
+    height: 50px;
+    border-radius: 15px;
+    margin-left: 35px;
+    margin-bottom: 5px;
+}
+
+.red {
+    background-color: red;
+}
+
+.blue {
+    background-color: blue;
+}
+
+.green {
+    background-color: green;
+}
+
+.yellow {
+    background-color: yellow;
+}
+
+.OtherPlayerStack {
+    max-width: 50vh;
+    margin-left: auto;
+    margin-right: auto;
+    display: grid !important;
+    grid-template-columns: repeat(auto-fit, minmax(10px, max-content));
+}
+
+.OtherPlayerStackLeft {
+    transform: rotate(90deg) translateX(-18px)
+}
+
+.OtherPlayerStackRight {
+    transform: rotate(-90deg) translateX(-18px)
+}
+
+.OtherPlayerStackTop {
+    transform: rotate(180deg)
+}
+
+.PlayerNameLeft {
+    transform: rotate(90deg) translateX(60px) translateY(70px);
+    width: fit-content;
+    margin-left: auto;
+}
+
+.PlayerNameRight {
+    transform: rotate(-90deg) translateX(-60px) translateY(70px);
+    width: fit-content;
+    margin-right: auto;
+}
+
+.PlayerNameTop {
+    transform: rotate(180deg);
+    position: absolute;
+    top: 160px;
+    right: 48vw;
+}
+
+.PlayerName {
+    margin-left: auto;
+    margin-right: auto;
+    width: fit-content;
+}
+
+.PlayersTurn {
+    color: red;
+}
+
+.ReverseIcon {
+    width: 80px;
+    margin-top: 80px;
+    margin-right: 30vw;
+}
+
+.Reversed {
+    transform: scaleX(-1);
+}
+
+.ProfileIcon {
+    width: 80px;
+    margin-top: 80px;
+    margin-left: 10vw;
+}
+
+
+/* Start of Styles for Modals */
+.colormodal{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.colormodalcontainer{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 40%;
+    width: 50%;
+    border: 5px solid black;
+    border-radius: 15px;
+}
+.colormodaltitle{
+    font-family: 'RubikOne' !important;
+    color: black !important;
+}
+.colormodaltitlecontainer{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.btncontainer{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.btnYellow{
+    
+    background-color: #FFC825 !important;
+    padding: 10px !important;
+    color: #FFC825 !important;
+}
+
+.btnGreen{
+    background-color: #33984B !important;
+    color: #33984B !important;
+    padding: 10px !important;
+}
+
+.btnBlue{
+    background-color: #1E9FE7 !important;
+    color: #1E9FE7 !important;
+    padding: 10px !important;
+}
+
+.btnRed{
+    background-color: #E71E1E !important;
+    color: #E71E1E !important;
+    padding: 10px !important;
+}
+/* End of Styles for Color Modal */

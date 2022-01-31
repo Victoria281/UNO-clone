@@ -1,0 +1,95 @@
+.tutorialModal {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.primaryDiv{
+    min-height: 121px;
+} 
+
+.secondaryDiv{
+    min-height: 270px;
+}
+
+
+.progress {
+    border: 3px solid black !important;
+    border-radius: 10px !important;
+    background-color: white !important;
+    height: 30% !important;
+    min-width: 85% !important;
+}
+
+.carouselcontent {
+    width: 100%;
+    text-align: center;
+    padding: 9rem 0;
+}
+
+.title {
+    font-family: "RubikOne" !important;
+    color: black !important;
+    padding: 2rem !important;
+}
+
+.image {
+    width: 65%;
+}
+
+.description {
+    font-family: "RubikOne" !important;
+    color: black !important;
+    padding-left: 20%;
+    padding-right: 20%;
+}
+
+.tutorialModalBox {
+    height: 70%;
+    width: 50%;
+    background-color: #FFC825 !important;
+    border: 5px solid #ffffff !important;
+    border-radius: 15px;
+}
+
+.tutorialCarousel {
+    height: 100% !important;
+}
+
+.carouselindicators {
+    height: 20px !important;
+    width: 20px !important;
+    border: 3px solid black !important;
+    border-radius: 10px !important;
+    background-color: white !important;
+    overflow: hidden !important;
+    box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.582) !important;
+}
+
+.active {
+    background-color: #E71E1E !important;
+}
+
+.next {
+    font-size: 6rem;
+    -webkit-text-stroke-width: 3px;
+    -webkit-text-stroke-color: black;
+    color: #E71E1E;
+    text-shadow: 4px 4px 4px rgba(0, 0, 0, 0.582);
+}
+
+.startfinbtn{
+    border: 3px solid black !important;
+    border-radius: 10px !important;
+    background-color: #E71E1E !important;
+    padding:10px !important;
+    color: white !important;
+    font-family: "RubikOne" !important;
+    box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.582) !important;
+}

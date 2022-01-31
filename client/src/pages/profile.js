@@ -1,18 +1,25 @@
-import React, { Fragment, Suspense, useEffect, useState } from "react";
-import "../css/profile.css";
+// @ts-nocheck
+import { Fragment, useEffect, useState } from "react";
+import CustomNotification from '../Component/OtherComponents/NotificationComponent/Notifications'
+// import "../css/profile.css";
 
 const Profile = () => {
   const [userInfo, setUserInfo] = useState([]);
+  //const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+  const [ifWarning, setWarning] = useState(false);
+  const [notif, setNotif] = useState({open : false , type : "", message : ""});
 
   const getUser = async () => {
     try {
       const uid = localStorage.getItem('userid')
       const response = await fetch(
-        process.env.REACT_APP_API_URL + `/api/uno/user/${uid}`,  {
-          method: 'GET',
-          headers: {
-            'authorization': localStorage.getItem('token'),
-          }}
+        process.env.REACT_APP_API_URL + `/api/uno/user/${uid}`, {
+        method: 'GET',
+        headers: {
+          'authorization': localStorage.getItem('token'),
+        }
+      }
       );
       console.log(response)
       const jsonData = await response.json();
@@ -35,6 +42,7 @@ const Profile = () => {
     const profileIcons = ['bird', 'cat', 'elephant', 'fox', 'frog', 'koala', 'shell', 'toucan', 'turtle', 'whale']
     const changeIcon = async () => {
       if (selectedIcon == null) {
+        
         // console.log("no icon selected")
       } else {
         try {
@@ -50,11 +58,11 @@ const Profile = () => {
             })
           })
           if (response.status === 204) {
-            alert("Profile icon updated!")
-            window.location.reload(true);
+            setTimeout(() =>{window.location.reload(true);}, 3000);
+            setNotif({open : true, type: 'success', message: 'Update Successful'})
           }
           else {
-            alert("Error Occured!")
+            setNotif({open : true, type: 'error', message: 'Error Occured!'})
           }
         } catch (err) {
           // console.error(err.message);
@@ -67,32 +75,34 @@ const Profile = () => {
     const setIcon = (event) => {
       setSelectedIcon(event.target.value)
     }
+    
     return (
-      <div class="modal" id="myModal">
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
+      <div className="modal" id="myModal">
+        <div className="modal-dialog">
+          <div className="modal-content">
+            <div className="modal-header">
               <h6> Select your profile icon:</h6>
-              <button type="button" class="close" data-dismiss="modal">
+              <button type="button" className="close" data-dismiss="modal">
                 &times;
               </button>
             </div>
-            <div class="modal-body card">
-              <form class="rating-form">
+            <div className="modal-body card">
+              <form className="rating-form">
                 <div onChange={setIcon.bind(this)}>
                   {profileIcons.map((animal) => ((
 
-                    <label class="inputlabel" for={animal}>
+                    <label className="inputlabel" for={animal}>
                       <input
                         type="radio"
                         name="rating"
-                        class={animal}
+                        className={animal}
                         id={animal}
                         value={animal}
                       />
-                      <div class="profileIconBorder">
+                      <div className="profileIconBorder">
                         <img
-                          class="img-responsive profileIcons"
+                          className="img-responsive profileIcons"
+                          alt={animal + ".png"}
                           src={process.env.REACT_APP_API_URL + "/api/uno/profile_icons/" + animal + ".png"}
                         />
                       </div>
@@ -102,7 +112,7 @@ const Profile = () => {
               </form>
               <button
                 type="button"
-                class="btn btn-danger"
+                className="btn btn-danger"
                 data-dismiss="modal"
                 onClick={changeIcon}
               >
@@ -119,21 +129,19 @@ const Profile = () => {
     const [oldpassword, setOldPassword] = useState('');
     const [newpassword, setNewPassword] = useState('');
     const [checkpassword, setCheckPassword] = useState('');
-    const [error, setError] = useState('');
-    const [ifWarning, setWarning] = useState(false);
 
-    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/;
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})/;
 
     const handlePasswordChange = async () => {
       // console.log(oldpassword)
       // console.log(newpassword)
       // console.log(checkpassword)
       if (newpassword !== checkpassword || newpassword === " " || newpassword === "" || checkpassword === " " || checkpassword === "") {
-        setError("Password is not similar");
-        setWarning(true);
+        setNotif({open : true, type: 'error', message: 'Password is not similar'})
+        setTimeout(() =>{window.location.reload(true);}, 3000);
       } else if (!passwordRegex.test(newpassword)) {
-        setError("Password must contain 1 lowercase, 1 uppercase, 1 number, 1 special character and must be 8 characters long.");
-        setWarning(true);
+        setNotif({open : true, type: 'error', message: 'Password must contain 1 lowercase, 1 uppercase, 1 number, 1 special character and must be 8 characters long.'})
+        setTimeout(() =>{window.location.reload(true);}, 3000);
       } else {
         try {
           const uid = localStorage.getItem('userid')
@@ -149,16 +157,16 @@ const Profile = () => {
             })
           })
           if (response.status === 204) {
-            alert("Password changed!")
-            window.location.reload(true);
+            setNotif({open : true, type: 'success', message: 'Password Change Successful!'})
+            setTimeout(() =>{window.location.reload(true);}, 3000);
           }
           else {
-            setError("Password was not changed. Please check your inputs!");
-            setWarning(true);
+            setNotif({open : true, type: 'error', message: 'Password was not changed. Please check your inputs!'})
+            setTimeout(() =>{window.location.reload(true);}, 3000);
             //alert("Error Occured!")
           }
         } catch (err) {
-          // console.error(err.message);
+          console.error(err.message);
         }
       }
     }
@@ -169,7 +177,7 @@ const Profile = () => {
             type="password"
             placeholder="Enter Old Password"
             id="p1"
-            class="password"
+            className="password"
             onChange={(e) => { setOldPassword(e.target.value) }}
           />
         </p>
@@ -178,7 +186,7 @@ const Profile = () => {
             type="password"
             placeholder="Enter New Password"
             id="p2"
-            class="password"
+            className="password"
             onChange={(e) => { setNewPassword(e.target.value) }}
           />
         </p>
@@ -187,15 +195,10 @@ const Profile = () => {
             type="password"
             placeholder="Confirm New Password"
             id="p3"
-            class="password"
+            className="password"
             onChange={(e) => { setCheckPassword(e.target.value) }}
           />
         </p>
-        {
-          ifWarning ?
-            <div className="alert alert-danger">{error}</div> :
-            null
-        }
         <input className="btn btn-danger" type="submit" onClick={handlePasswordChange} />
         <br />
         <br />
@@ -207,16 +210,13 @@ const Profile = () => {
     const [newusername, setNewUsername] = useState(userInfo.username);
     const [newemail, setNewEmail] = useState(userInfo.email);
     const [edit, setEdit] = useState(false);
-    const [error, setError] = useState('');
-    const [ifWarning, setWarning] = useState(false);
-
 
     const handleInfoChange = async () => {
       // console.log(newusername);
       // console.log(newemail);
       if (newusername === "" || newemail === "") {
-        setError("Username and/or Email field is empty");
-        setWarning(true);
+        setNotif({open : true, type: 'error', message: 'Username and/or Email field is empty'})
+        setTimeout(() =>{window.location.reload(true);}, 3000);
       } else {
         try {
           const uid = localStorage.getItem('userid')
@@ -232,18 +232,18 @@ const Profile = () => {
             })
           })
           if (response.status === 204) {
-            alert("User Info updated!")
-            window.location.reload(true);
+            setTimeout(() =>{window.location.reload(true);}, 3000);
+            setNotif({open : true, type: 'success', message: 'Update Successful'})
           }
           else {
-            setError("User Info was not changed. Please check your inputs");
-            setWarning(true);
+            setTimeout(() =>{window.location.reload(true);}, 3000);
+            setNotif({open : true, type: 'error', message: 'User Info was not changed. Please check your inputs'})
           }
         } catch (err) {
-          setError("User Info was not changed. Please check your inputs");
-          setWarning(true);
+          setTimeout(() =>{window.location.reload(true);}, 3000);
+          setNotif({open : true, type: 'error', message: 'User Info was not changed. Please check your inputs'})
           console.error(err.message);
-        }
+        } 
       }
     }
 
@@ -260,7 +260,7 @@ const Profile = () => {
               <input
                 type="text"
                 value={newusername}
-                class="username"
+                className="username"
                 onChange={(e) => { setNewUsername(e.target.value) }}
               />
             </p>
@@ -269,17 +269,17 @@ const Profile = () => {
               <input
                 type="text"
                 value={newemail}
-                class="email"
+                className="email"
                 onChange={(e) => { setNewEmail(e.target.value) }}
               />
             </p>
           </div>
           <div className="col">
-              {
-                ifWarning ?
-                  <div className="alert alert-danger m-3">{error}</div> :
-                  null
-              }
+            {/* {
+              ifWarning ?
+                <div className="alert alert-danger m-3">{error}</div> :
+                null
+            } */}
             <input className="btn btn-danger m-3" type="submit" onClick={handleInfoChange} />
             <button className="btn btn-primary m-3" onClick={toggleEdit}> Cancel </button>
           </div>
@@ -290,10 +290,10 @@ const Profile = () => {
           <div className="col">
             <div className="d-flex justify-content-between">
               <h5>Username:</h5>
-              <a className="editBtn text-secondary" onClick={toggleEdit}>Edit</a>
+              <button className="editBtn text-secondary" onClick={toggleEdit}>Edit</button>
             </div>
-            <p class="username">{userInfo.username}</p>
-            <h5>Email:</h5><p class="email">{userInfo.email}</p>
+            <p className="username">{userInfo.username}</p>
+            <h5>Email:</h5><p className="email">{userInfo.email}</p>
           </div>
           <div className="col"></div>
         </div>);
@@ -303,34 +303,36 @@ const Profile = () => {
   return (
     <Fragment>
       <div id="root">
-        <div class="gameProfileBody py-4">
+        <CustomNotification notif={notif} setNotif={setNotif}/>
+        <div className="gameProfileBody py-4">
           <ProfileModal />
-          <div class="row no-gutters">
+          <div className="row no-gutters">
             <div id="accordion" className="w-100">
               {/* Profile */}
-              <div class="card my-3">
-                <div id="headerOne" class="card-header d-flex justify-content-between" data-toggle="collapse" href="#collapseOne">
-                  <a class="collapsed card-link text-dark">
-                    <i class="fa fa-address-card-o"></i>    Profile
-                  </a>
-                  <i class="fa fa-arrow-down p-1"></i>
+              <div className="card my-3">
+                <div id="headerOne" className="card-header d-flex justify-content-between" data-toggle="collapse" href="#collapseOne">
+                  <button className="collapsed card-link text-dark">
+                    <i className="fa fa-address-card-o"></i>    Profile
+                  </button>
+                  <i className="fa fa-arrow-down p-1"></i>
                 </div>
-                <div id="collapseOne" class="collapse show" data-parent="#accordion">
-                  <div id="bodyOne" class="card-body">
+                <div id="collapseOne" className="collapse show" data-parent="#accordion">
+                  <div id="bodyOne" className="card-body">
                     <div className="row">
                       <div className="col-4">
                         <div
-                          class="mainIconBorder"
+                          className="mainIconBorder"
                           data-toggle="modal"
                           data-target="#myModal"
                         >
                           <img
-                            class="img-responsive mainIcon"
+                            className="img-responsive mainIcon"
+                            alt={userInfo.profileicon + ".png"}
                             src={process.env.REACT_APP_API_URL + "/api/uno/profile_icons/" + userInfo.profileicon + ".png"}
                           />
 
-                          <div class="middle">
-                            <div class="text">Edit</div>
+                          <div className="middle">
+                            <div className="text">Edit</div>
                           </div>
                         </div>
                       </div>
@@ -343,32 +345,32 @@ const Profile = () => {
               </div>
 
               {/* Change Password */}
-              <div class="card my-3">
-                <div id="headerTwo" class="card-header d-flex justify-content-between" data-toggle="collapse" href="#collapseTwo">
-                  <a class="collapsed card-link text-dark" >
-                    <i class="fa fa-lock"></i>    Change Password
-                  </a>
-                  <i class="fa fa-arrow-down p-1"></i>
+              <div className="card my-3">
+                <div id="headerTwo" className="card-header d-flex justify-content-between" data-toggle="collapse" href="#collapseTwo">
+                  <button className="collapsed card-link text-dark" >
+                    <i className="fa fa-lock"></i>    Change Password
+                  </button>
+                  <i className="fa fa-arrow-down p-1"></i>
                 </div>
-                <div id="collapseTwo" class="changePassword collapse" data-parent="#accordion">
-                  <div id="bodyTwo" class="card-body">
+                <div id="collapseTwo" className="changePassword collapse" data-parent="#accordion">
+                  <div id="bodyTwo" className="card-body">
                     <ChangePassword />
                   </div>
                 </div>
               </div>
 
               {/* Game Statistics */}
-              <div class="card my-3">
-                <div id="headerThree" class="card-header d-flex justify-content-between" data-toggle="collapse" href="#collapseThree">
-                  <a class="collapsed card-link text-dark" >
-                    <i class="fa fa-line-chart"></i>    Game Statistics
-                  </a>
-                  <i class="fa fa-arrow-down p-1"></i>
+              <div className="card my-3">
+                <div id="headerThree" className="card-header d-flex justify-content-between" data-toggle="collapse" href="#collapseThree">
+                  <button className="collapsed card-link text-dark" >
+                    <i className="fa fa-line-chart"></i>    Game Statistics
+                  </button>
+                  <i className="fa fa-arrow-down p-1"></i>
                 </div>
-                <div id="collapseThree" class="collapse" data-parent="#accordion">
-                  <div id="bodyThree" class="card-body">
+                <div id="collapseThree" className="collapse" data-parent="#accordion">
+                  <div id="bodyThree" className="card-body">
                     <h6>Highest Score</h6>
-                    <div class="scoreBorder">
+                    <div className="scoreBorder">
                       <p>{userInfo.score}</p>
                       <p>
                         Highest score attained at <br /> {userInfo.created_by}

@@ -1,0 +1,12 @@
+.accordionBox {
+    cursor: pointer;
+}
+
+.accordionBoxBody {
+    max-height: 220px;
+    overflow-y: auto;
+}
+
+.Profile {
+    overflow: hidden;
+}
