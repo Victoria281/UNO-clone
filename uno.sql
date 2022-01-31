@@ -29,7 +29,7 @@ CREATE TABLE public.players (
     username character varying(45) NOT NULL,
     email character varying(255) NOT NULL,
     password character varying(255) NOT NULL,
-    created_by timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
     profileicon character varying(255) DEFAULT 'bird'::character varying NOT NULL
 );
 
@@ -134,10 +134,11 @@ ALTER SEQUENCE public.uno_effects_effectid_seq OWNED BY public.uno_effects.effec
 --
 
 CREATE TABLE public.uno_leaderboard (
-    id integer NOT NULL,
-    userid integer NOT NULL,
-    score numeric NOT NULL,
-    created_by timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
+  id SERIAL PRIMARY KEY,
+  userid INTEGER NOT NULL REFERENCES players(userid),
+  score INTEGER NOT NULL DEFAULT 0,
+  game_status INTEGER NOT NULL DEFAULT 0,
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 
@@ -197,7 +198,7 @@ ALTER TABLE ONLY public.uno_leaderboard ALTER COLUMN id SET DEFAULT nextval('pub
 -- Data for Name: players; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.players (userid, username, email, password, created_by, profileicon) FROM stdin;
+COPY public.players (userid, username, email, password, created_at, profileicon) FROM stdin;
 17	t3	t3@gmail.com	$2b$10$nx1gimQUduev11T/SocEde5JqeXEnT1/Gj/jqzBCvqlhBaOiaiDGe	2021-11-15 11:32:44.202216	bird
 26	t11	t11@gmail.com	$2b$10$mxfVRYC5b5jlV87rqnnIaO7b/WJz3ADnP.OReW5.eu/Le4qCM3DvO	2021-11-16 00:46:45.855368	bird
 27	t2	t2@gmail.com	$2b$10$UiJgTTntkPk9CPDFu3Kn2O5XyxMVOAzLwkX/V4BtTwXM3epkyINwy	2021-11-16 00:48:55.012633	bird
@@ -209,6 +210,21 @@ COPY public.players (userid, username, email, password, created_by, profileicon)
 32	a1	a1@gmail.com	$2b$10$1uSjSr1R1Wqmy8mk0W8V7O.rZTLkT2cgem6yqH0pqTpQHyNoMAT7a	2021-11-26 16:29:45.100289	bird
 33	newname	a2@gmail.com	$2b$10$xB0EczHhQzNrvglq.3AuIe1KG54kA66PL.xP/xolnfdrT4T7r6smm	2021-11-26 16:31:23.30327	turtle
 \.
+
+INSERT INTO
+players
+(username, email, password, googleId, created_at, profileicon)
+VALUES
+('t3', 't3@gmail.com', '$2b$10$nx1gimQUduev11T/SocEde5JqeXEnT1/Gj/jqzBCvqlhBaOiaiDGe', null, '2021-11-15 11:32:44.202216', 'bird'),
+('t11', 't11@gmail.com', '$2b$10$mxfVRYC5b5jlV87rqnnIaO7b/WJz3ADnP.OReW5.eu/Le4qCM3DvO', null, '2021-11-16 00:46:45.855368', 'bird'),
+('t2', 't2@gmail.com', '$2b$10$UiJgTTntkPk9CPDFu3Kn2O5XyxMVOAzLwkX/V4BtTwXM3epkyINwy', null, '2021-11-16 00:48:55.012633', 'shell'),
+('t4', 't4@gmail.com', '$2b$10$uz5fs0L8Is52RAnmJ5VOie/sB2LxgNqR2mxBfds7jtNAMCCP/MiI6', null, '2021-11-16 00:49:01.538011', 'bird'),
+('t5', 't5@gmail.com', '$2b$10$nCfuu0OIAqMVxscX.gFzFubFH3TTzvSECFnMpzJxwmc8hfAVgDbE2', null, '2021-11-16 00:49:08.859845',  'shell'),
+('t6', 't6@gmail.com', '$2b$10$chGxCyEpnpZIzUdoIp72HezFiRI/ES.xcN1uXb7XmUX9LhUnXmfgq', null, '2021-11-16 00:49:13.195443',  'bird'),
+('t7', 't7@gmail.com', '$2b$10$uiD09YkoWR7fkFyVGYjetOXVO2o6bh9U9hT9Mw2XFn./XrkhyIfOW', null, '2021-11-16 00:49:17.39844', 'bird'),
+('t1', 't1@gmail.com', '$2b$10$EyDipLAUDFbyxnKMGn68G.Uzm1.qisY1dH/sDp/R8Oa/Lj8t7K9ue', null, '2021-11-15 11:32:27.967318',  'shell'),
+('a1', 'a1@gmail.com', '$2b$10$1uSjSr1R1Wqmy8mk0W8V7O.rZTLkT2cgem6yqH0pqTpQHyNoMAT7a', null, '2021-11-26 16:29:45.100289', 'bird'),
+('newname', 'a2@gmail.com', '$2b$10$xB0EczHhQzNrvglq.3AuIe1KG54kA66PL.xP/xolnfdrT4T7r6smm', null, '2021-11-26 16:31:23.30327', 'turtle');
 
 
 --
@@ -256,7 +272,7 @@ COPY public.uno_cards (card_id, color, "values", image_file) FROM stdin;
 37	blue	4	./cards/Blue_4.png
 38	blue	5	./cards/Blue_5.png
 39	blue	6	./cards/Blue_6.png
-40	blue	7	/cards/Blue_7.png
+40	blue	7	./cards/Blue_7.png
 41	blue	8	./cards/Blue_8.png
 42	blue	9	./cards/Blue_9.png
 43	blue	10	./cards/Blue_Skip.png
@@ -317,7 +333,7 @@ COPY public.uno_cards (card_id, color, "values", image_file) FROM stdin;
 98	yellow	3	./cards/Yellow_3.png
 99	yellow	4	./cards/Yellow_4.png
 100	yellow	5	./cards/Yellow_5.png
-101	yellow	6	/cards/Yellow_6.png
+101	yellow	6	./cards/Yellow_6.png
 102	yellow	7	./cards/Yellow_7.png
 103	yellow	8	./cards/Yellow_8.png
 104	yellow	9	./cards/Yellow_9.png
@@ -325,7 +341,6 @@ COPY public.uno_cards (card_id, color, "values", image_file) FROM stdin;
 106	yellow	11	./cards/Yellow_Reverse.png
 107	yellow	12	./cards/Yellow_Draw.png
 \.
-
 
 --
 -- Data for Name: uno_effects; Type: TABLE DATA; Schema: public; Owner: postgres
@@ -353,18 +368,46 @@ COPY public.uno_effects (effectid, uno_values, effect) FROM stdin;
 --
 -- Data for Name: uno_leaderboard; Type: TABLE DATA; Schema: public; Owner: postgres
 --
-
-COPY public.uno_leaderboard (id, userid, score, created_by) FROM stdin;
-10	17	5975	2021-11-15 11:35:57.542435
-14	26	0	2021-11-16 00:46:45.864256
-15	27	0	2021-11-16 00:48:55.020625
-16	28	0	2021-11-16 00:49:01.542261
-17	29	0	2021-11-16 00:49:08.864403
-18	30	0	2021-11-16 00:49:13.201559
-19	31	0	2021-11-16 00:49:17.404178
-8	15	1	2021-11-25 12:19:06.55763
-20	33	0	2021-11-26 16:31:23.311176
-\.
+-- Participation (lose) - 10
+-- Participation (win) - 20
+-- min 35, max <150
+-- normal: 5
+-- wildcard: 10
+-- 
+INSERT INTO
+  uno_leaderboard (userid, score, game_status, created_at)
+VALUES
+  (15, 10, 0, '2022-01-14 21:22:29'),
+  (15, 10, 0, '2022-01-15 21:22:29'),
+  (15, 10, 0, '2022-01-20 21:22:29'),
+  (17, 140, 1, '2022-01-15 21:22:29'),
+  (17, 120, 1, '2022-01-15 21:22:29'),
+  (17, 75, 1, '2022-01-21 21:22:29'),
+  (26, 135, 1, '2022-01-15 21:22:29'),
+  (26, 100, 1, '2022-01-16 21:22:29'),
+  (26, 90, 1, '2022-01-24 21:22:29'),
+  (27, 10, 0, '2022-01-13 21:22:29'),
+  (27, 10, 0, '2022-01-15 21:22:29'),
+  (27, 10, 0, '2022-01-15 21:22:29'),
+  (27, 145, 1, '2022-01-15 21:22:29'),
+  (27, 55, 0, '2022-01-18 21:22:29'),
+  (27, 21, 3, '2022-01-18 21:22:29'),
+  (27, 10, 0, '2022-01-19 21:22:29'),
+  (28, 10, 0, '2022-01-14 21:22:29'),
+  (28, 10, 0, '2022-01-15 21:22:29'),
+  (28, 10, 0, '2022-01-17 21:22:29'),
+  (29, 10, 0, '2022-01-12 21:22:29'),
+  (29, 10, 0, '2022-01-14 21:22:29'),
+  (29, 10, 0, '2022-01-22 21:22:29'),
+  (30, 125, 1, '2022-01-14 21:22:29'),
+  (30, 50, 1, '2022-01-15 21:22:29'),
+  (30, 85, 1, '2022-01-15 21:22:29'),
+  (31, 10, 0, '2022-01-14 21:22:29'),
+  (31, 10, 0, '2022-01-14 21:22:29'),
+  (31, 10, 0, '2022-01-21 21:22:29'),
+  (33, 10, 0, '2022-01-13 21:22:29'),
+  (33, 10, 0, '2022-01-14 21:22:29'),
+  (33, 10, 0, '2022-01-20 21:22:29');
 
 
 --
@@ -439,3 +482,44 @@ ALTER TABLE ONLY public.uno_leaderboard
 -- PostgreSQL database dump complete
 --
 
+-- Create Friendship Table
+CREATE TABLE friends (
+    id SERIAL PRIMARY KEY NOT NULL,
+    userId INTEGER NOT NULL,
+    fk_friendId INTEGER NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (userId) REFERENCES players(userid) ON DELETE CASCADE,
+    FOREIGN KEY (fk_friendId) REFERENCES players(userid) ON DELETE CASCADE
+);
+
+INSERT INTO 
+    friends 
+    (userId, fk_friendId) 
+VALUES 
+    (27, 17),
+    (17, 27),
+    (15, 27),
+    (27, 15),
+    (15, 17),
+    (17, 15),
+    (15, 28),
+    (28, 15),
+    (27, 28);
+
+
+INSERT INTO
+    friends
+    (userid, fk_friendid)
+VALUES
+    (17, 27),
+    (27, 17),
+    (17, 15),
+    (15, 17),
+    (15, 28),
+    (28, 15),
+    (27, 15),
+    (15, 27),
+    (27, 28),
+    (28, 27),
+    (27, 29),
+    (29, 27);

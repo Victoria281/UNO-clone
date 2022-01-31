@@ -1,0 +1,37 @@
+.modalcontainer{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modalbox{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding:30px;
+    border: 5px solid black;
+    border-radius: 15px;
+}
+
+.modaltitle{
+    font-family: 'RubikOne' !important;
+    color: black !important;
+}
+
+.modalendcontainer{
+    display: flex !important;
+    justify-content: flex-end !important;
+}
+
+.modalendbtn{
+    background-color: #fc783b !important;
+}
+
+.modalendbtntext{
+    font-family: 'RubikOne' !important;
+    color: white !important;
+}
+
+.modalslider{
+    color:#6C01AD !important;
+}

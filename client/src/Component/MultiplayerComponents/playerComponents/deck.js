@@ -1,7 +1,7 @@
-// @ts-nocheck
 import {
     playCard,
 } from "../../../store/action/multiplayer/game"
+import React from "react";
 import { useDispatch } from 'react-redux'
 import { Stack } from '@mui/material';
 
