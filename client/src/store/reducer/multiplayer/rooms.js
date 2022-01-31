@@ -105,22 +105,7 @@ const reducer = (state = initialState, action) => {
         roomcode: action.start.roomcode,
         status: action.start.status,
         game_state: {
-          mainDeck: [],
-          used: [],
-          current: {},
-          playerdeck: [],
-          turn: "",
-          pauseTurn: "",
-          order: [],
-          reverse: 0,
-          unoPressed: {
-            player: false,
-            pressed: false
-          },
-          unoPenalty: false,
-          toDrawCard: false,
-          getDrawnCard: false,
-          otherPlayerPlayingCard: false,
+          ...state.game_state,
           end: false,
         },
       };

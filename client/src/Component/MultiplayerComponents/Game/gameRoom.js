@@ -31,6 +31,7 @@ import Cheering from "./userComponents/audio/clap.wav"
 import { useSpeechSynthesis } from "react-speech-kit";
 import EndGameModal from "./gameComponents/EndGameModal"
 
+import { useRef } from "react";
 
 //gets the data from the action object and reducers defined earlier
 const GameRoom = ({ socket, roomcode }) => {
@@ -92,6 +93,13 @@ const GameRoom = ({ socket, roomcode }) => {
         audio.play()
     }
 
+    const messagesEndRef = useRef(null);
+
+    const scrollToBottom = (messagesEndRef) => {
+        if (messagesEndRef && messagesEndRef.current)
+            messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
+    };
+
 
     useEffect(() => {
         socket.on("identity", (data) => {
@@ -101,7 +109,9 @@ const GameRoom = ({ socket, roomcode }) => {
         socket.on("chat", (data) => {
             console.log("received message update")
             console.log(data)
-            dispatch(receivedMessage(data))
+            dispatch(receivedMessage(data)).then(()=>{
+                scrollToBottom(messagesEndRef)
+            })
         });
 
         socket.on("roomUpdate", (data) => {
@@ -128,7 +138,6 @@ const GameRoom = ({ socket, roomcode }) => {
         socket.on("errorOccured", (data) => {
             console.log("ERRORRR")
             console.log(data)
-            // window.location = "/"
         });
 
         socket.on("cheerReceived", () => {
@@ -180,6 +189,7 @@ const GameRoom = ({ socket, roomcode }) => {
                     roomcode={roomcode}
                     username={username}
                     socket={socket}
+                    messagesEndRef={messagesEndRef}
                 />
             }
         </>
