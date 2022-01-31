@@ -11,7 +11,8 @@ import {
     joinRoom,
     roomUpdated,
     updateOwnIdentity,
-    receivedMessage
+    receivedMessage,
+    notifyFriends
 } from "../../../store/action/multiplayer/rooms"
 import Player from "./gameComponents/Player"
 import OtherPlayer from "./gameComponents/OtherPlayers"
@@ -30,6 +31,9 @@ import AudienceIcon from "./userComponents/AudienceIcon"
 import Cheering from "./userComponents/audio/clap.wav"
 import { useSpeechSynthesis } from "react-speech-kit";
 import EndGameModal from "./gameComponents/EndGameModal"
+import CustomNotification from "../../OtherComponents/NotificationComponent/Notifications";
+import FriendsNotification from "../../OtherComponents/NotificationComponent/FriendsNotifications";
+import { useHistory } from "react-router-dom"
 
 import { useRef } from "react";
 
@@ -37,6 +41,7 @@ import { useRef } from "react";
 const GameRoom = ({ socket, roomcode }) => {
     const dispatch = useDispatch();
     const [username, setUsername] = useState(localStorage.getItem("username"))
+    const [o_Notif, o_setNotif] = useState({ open: false, type: "", message: "" });
     const [otherPlayers, setOtherPlayers] = useState([])
     const [startCheer, setStartCheer] = useState(false)
     const [talk, setTalk] = useState(false)
@@ -76,12 +81,15 @@ const GameRoom = ({ socket, roomcode }) => {
     useEffect(() => {
         console.log("Joining the room")
         dispatch(joinRoom(roomcode, username, socket))
+        if (localStorage.getItem("userid") !== undefined) {
+            dispatch(notifyFriends(roomcode, username, socket))
+        }
     }, []);
 
     useEffect(() => {
         console.log("talk is changed")
         console.log(talk)
-        if (talk !== false){
+        if (talk !== false) {
             console.log("Im talkinggg")
             speak({ text: talk })
             setTalk(false)
@@ -93,6 +101,7 @@ const GameRoom = ({ socket, roomcode }) => {
         audio.play()
     }
 
+    let history = useHistory();
     const messagesEndRef = useRef(null);
 
     const scrollToBottom = (messagesEndRef) => {
@@ -138,6 +147,12 @@ const GameRoom = ({ socket, roomcode }) => {
         socket.on("errorOccured", (data) => {
             console.log("ERRORRR")
             console.log(data)
+            o_setNotif({ open: true, type: 'error', message: data.message })
+            setTimeout(() => {
+                history.push("../createroom")
+            }, 500);
+
+            // window.location = "/"
         });
 
         socket.on("cheerReceived", () => {
@@ -162,6 +177,8 @@ const GameRoom = ({ socket, roomcode }) => {
                 endGameModalOpen={endGameModalOpen}
                 setEndGameModalOpen={setEndGameModalOpen}
             />
+
+            <CustomNotification uopen={o_Notif} usetOpen={o_setNotif} />
             {
                 username === null || room_state.status !== true ?
                     <WaitingRoom

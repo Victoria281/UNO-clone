@@ -2,8 +2,27 @@
     width: 75%;
     margin: auto;
     padding-bottom: 5%;
-    overflow-y: scroll;
   }
+
+/* width */
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1; 
+}
+ 
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888; 
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555; 
+}
 
   .changePassword{
     height: 220px;
@@ -38,6 +57,13 @@
   #headerThree{
     background-color: rgba(51, 152, 75, 0.5);
   }
+  #headerFour{
+    background-color: rgba(107, 1, 173, 0.5)
+  }
+
+  #headerFive{
+    background-color:rgba(235, 106, 0, 0.5);
+  }
 
   #bodyOne{
     background-color: rgba(234, 58, 58, 0.2);
@@ -47,9 +73,6 @@
     background-color: rgba(0, 152, 220, 0.2);
   }
 
-  #bodyThree{
-    background-color: rgba(51, 152, 75, 0.2);
-  }
 
 
   .gameProfile {

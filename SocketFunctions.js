@@ -19,12 +19,35 @@ const testPlayerRooms = {
 const roomState = {}
 const playerRooms = {}
 const playersConnected = {}
+const playersOnline = {}
 const broadcastOne = 1;
 const broadcastAll = 0;
 
 
 
 var SocketFunctions = {
+    joinWebsite: function (id, username) {
+        console.log("==================================")
+        console.log("Servicing joinWebsite...")
+        console.log("----------------------------------")
+
+        playersOnline[username] = id
+        console.log(playersOnline)
+    },
+
+    notifyFriend: function (friendUsername, roomcode, username) {
+        console.log("==================================")
+        console.log("Servicing notifyFriend...")
+        console.log("----------------------------------")
+        var socketList = [];
+        for (var i = 0; i < friendUsername.length; i++) {
+            if (playersOnline[friendUsername[i].username] !== undefined) {
+                socketList.push(playersOnline[friendUsername[i].username])
+            }
+        }
+        return socketList;
+    },
+
     startMultiplayer: function (id, username) {
         console.log("==================================")
         console.log("Servicing startMultiplayer...")
