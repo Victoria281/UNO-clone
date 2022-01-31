@@ -14,6 +14,7 @@ import SettingsIcon from '@mui/icons-material/Settings';
 
 // Components Import
 import Account from "./Account";
+import styles from "./styles.module.css"
 
 const DefaultNavBar = ({ exact, path, component: Component, loggedIn, ...rest }) => {
     return <Route exact={exact} path={path} {...rest} render={(routeProps) => {
@@ -54,37 +55,43 @@ const DefaultNavBar = ({ exact, path, component: Component, loggedIn, ...rest })
                                 </li>
 
                                 <div className="dropdown">
-                                    <button className="btn btn-primary dropdown-toggle nav-item active navbarDesign" type="button" data-toggle="dropdown" style={{ background: '#1E9FE7' }}>
-                                        Games
-                                        <span className="caret"></span>
-                                    </button>
-                                    <ul className="dropdown-menu">
+                                    <li className="dropdown-toggle nav-item active navbarDesign" data-toggle="dropdown" style={{ background: '#1E9FE7' }}>
+                                        <div className="borderHover" style={{ borderColor: '#1E9FE7' }}>
+                                            <p className="nav-link navBarWord">
+                                                Games
+                                            </p>
+                                            <span className="caret"></span>
+                                        </div>
+                                    </li>
+                                    <ul className={`dropdown-menu ${styles.dropmenu}`}>
                                         <li
                                             style={{
-                                                borderRadius: 100 / 50,
+                                                borderRadius: 200,
                                                 backgroundColor: "#45B3F0",
                                                 color: "black",
                                                 fontFamily: 'RubikOne'
                                             }}
+                                            className={`navbarDesign ${styles.menu}`}
                                         >
                                             <NavLink to="/game">
                                                 <Tooltip title="SinglePlayer" placement="left">
-                                                    <PersonIcon />
+                                                    <PersonIcon className={styles.icons} />
                                                 </Tooltip>
                                             </NavLink>
                                         </li>
 
                                         <li
                                             style={{
-                                                borderRadius: 100 / 50,
+                                                borderRadius: 200,
                                                 backgroundColor: "#70BAE3",
                                                 color: "black",
                                                 fontFamily: 'RubikOne'
                                             }}
+                                            className={`navbarDesign ${styles.menu}`}
                                         >
-                                            <NavLink to="/leaderboard">
+                                            <NavLink to="/createroom">
                                                 <Tooltip title="MultiPlayer" placement="left">
-                                                    <SportsEsportsIcon />
+                                                    <SportsEsportsIcon className={styles.icons} />
                                                 </Tooltip>
                                             </NavLink>
 
@@ -104,46 +111,52 @@ const DefaultNavBar = ({ exact, path, component: Component, loggedIn, ...rest })
 
                                 <div className="dropdown">
                                     <button className="btn btn-primary dropdown-toggle nav-item active navbarDesign" type="button" data-toggle="dropdown" style={{ background: '#D27C2C' }}>
-                                        <SettingsIcon />
-                                        <span className="caret"></span>
+                                        <SettingsIcon style={{ fill: "black" }} />
+                                        <span className="caret" ></span>
                                     </button>
-                                    <ul className="dropdown-menu">
+
+                                    <ul className={`dropdown-menu ${styles.dropmenu}`}>
                                         <li
                                             style={{
-                                                borderRadius: 100 / 50,
+                                                borderRadius: 200,
                                                 backgroundColor: "#DC9F66",
                                                 color: "black",
-                                                fontFamily: 'RubikOne'
+                                                fontFamily: 'RubikOne',
+                                                marginBottom: 20,
                                             }}
+                                            className={`navbarDesign ${styles.menu}`}
                                         >
                                             <Tooltip title="Music" placement="left">
-                                                <MusicNoteIcon />
+                                                <MusicNoteIcon className={styles.icons} />
                                             </Tooltip>
                                         </li>
 
                                         <li
                                             style={{
-                                                borderRadius: 100 / 50,
-                                                backgroundColor: "#DC9F66",
+                                                borderRadius: 200,
+                                                backgroundColor: "#D9AD84",
                                                 color: "black",
-                                                fontFamily: 'RubikOne'
+                                                fontFamily: 'RubikOne',
+                                                marginBottom: 20,
                                             }}
+                                            className={`navbarDesign ${styles.menu}`}
                                         >
                                             <Tooltip title="Background Animation" placement="left">
-                                                <ViewInArIcon />
+                                                <ViewInArIcon className={styles.icons} />
                                             </Tooltip>
                                         </li>
 
                                         <li
                                             style={{
-                                                borderRadius: 100 / 50,
-                                                backgroundColor: "#DC9F66",
+                                                borderRadius: 200,
+                                                backgroundColor: "#E8B88B",
                                                 color: "black",
                                                 fontFamily: 'RubikOne'
                                             }}
+                                            className={`navbarDesign ${styles.menu}`}
                                         >
                                             <Tooltip title="Tutorial" placement="left">
-                                                <QuestionMarkIcon />
+                                                <QuestionMarkIcon className={styles.icons} />
                                             </Tooltip>
                                         </li>
                                     </ul>
