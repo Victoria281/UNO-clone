@@ -1,6 +1,5 @@
 import { Grid, styled, Paper, Typography } from '@mui/material';
 import { homeAnimation } from "./homeAnimation";
-
 import styles from "./styles.module.css"
 import { useEffect, useState } from "react";
 import { typography } from "@mui/system";
