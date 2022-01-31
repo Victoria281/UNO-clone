@@ -36,7 +36,7 @@ const Game = () => {
   const [playable, setPlayable] = useState([]);
   const [turn, setTurn] = useState(0);
   const [action, setAction] = useState(["",]);
-  const [isTutorialOpen, setisTutorialOpen] = useState(false);
+
 
   const CardActions = () => {
     return (
@@ -716,10 +716,7 @@ const Game = () => {
       <ChooseColorWild />
       <PlayerTurnModal />
       <AddCardModal />
-      <Tutorial 
-        isTutorialOpen = {isTutorialOpen}
-        setisTutorialOpen = {setisTutorialOpen}
-      />
+
 
       <button onClick={() => setisTutorialOpen(true)} >Tutorial Modal</button>
 

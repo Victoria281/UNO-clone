@@ -15,8 +15,11 @@ import SettingsIcon from '@mui/icons-material/Settings';
 // Components Import
 import Account from "./Account";
 import styles from "./styles.module.css"
+import Tutorial from "../../TutorialComponent/Tutorial";
+import { useState } from "react";
 
 const DefaultNavBar = ({ exact, path, component: Component, loggedIn, ...rest }) => {
+    const [isTutorialOpen, setisTutorialOpen] = useState(false);
     return <Route exact={exact} path={path} {...rest} render={(routeProps) => {
 
         return (
@@ -155,8 +158,14 @@ const DefaultNavBar = ({ exact, path, component: Component, loggedIn, ...rest })
                                             }}
                                             className={`navbarDesign ${styles.menu}`}
                                         >
+                                            <Tutorial
+                                                isTutorialOpen={isTutorialOpen}
+                                                setisTutorialOpen={setisTutorialOpen}
+                                            />
                                             <Tooltip title="Tutorial" placement="left">
-                                                <QuestionMarkIcon className={styles.icons} />
+                                                <Button onClick={() => setisTutorialOpen(true)}>
+                                                    <QuestionMarkIcon className={styles.icons} />
+                                                </Button>
                                             </Tooltip>
                                         </li>
                                     </ul>

@@ -11,8 +11,12 @@ import QuestionMarkIcon from '@mui/icons-material/QuestionMark';
 import SettingsIcon from '@mui/icons-material/Settings';
 
 import styles from "./styles.module.css"
+import Tutorial from "../../TutorialComponent/Tutorial";
+import { useState } from "react";
 
 const InGameNavBar = ({ exact, path, component: Component, ...rest }) => {
+    const [isTutorialOpen, setisTutorialOpen] = useState(false);
+
     return <Route exact={exact} path={path} {...rest} render={(routeProps) => {
 
         return (
@@ -86,8 +90,14 @@ const InGameNavBar = ({ exact, path, component: Component, ...rest }) => {
                                             }}
                                             className={`navbarDesign ${styles.menu}`}
                                         >
+                                             <Tutorial
+                                                isTutorialOpen={isTutorialOpen}
+                                                setisTutorialOpen={setisTutorialOpen}
+                                            />
                                             <Tooltip title="Tutorial" placement="left">
-                                                <QuestionMarkIcon className={styles.icons} />
+                                                <Button onClick={() => setisTutorialOpen(true)}>
+                                                    <QuestionMarkIcon className={styles.icons} />
+                                                </Button>
                                             </Tooltip>
                                         </li>
                                     </ul>
