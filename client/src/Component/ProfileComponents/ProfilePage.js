@@ -15,7 +15,7 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import CustomNotification from "../OtherComponents/NotificationComponent/Notifications";
 import styles from './styles.module.css';
 import FriendsNotification from "../OtherComponents/NotificationComponent/FriendsNotifications";
-//import MultiplayerNotification from "../OtherComponents/NotificationComponent/MultiplayerNotification";
+import MultiplayerNotification from "../OtherComponents/NotificationComponent/MultiplayerNotification";
 
 import {
   getUserInfo

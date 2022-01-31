@@ -16,12 +16,37 @@ const FriendsNotification = ({ uopen, usetOpen }) => {
         return <Slide {...props} direction="down" />;
     }
 
+    const Progress = () => {
+        const [progress, setProgress] = useState(0);
+
+        useEffect(() => {
+            const timer = setInterval(() => {
+                setProgress((oldProgress) => {
+                    if (oldProgress === 100) {
+                        console.log("Progress finished")
+                        handleClose();
+                        return 0;
+                    }
+                    const diff = Math.random() * 60;
+                    return Math.min(oldProgress + diff, 100);
+                });
+            }, 500);
+
+            return () => {
+                clearInterval(timer);
+            };
+        }, []);
+
+        return (
+            <LinearProgress color={uopen.type} sx={{ width: '100%' }} variant="determinate" value={progress} />
+        )
+    }
+
     return (
         <Snackbar
             anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
             open={mopen || uopen.open}
             onClose={() => { handleClose() }}
-            autoHideDuration={1000}
             TransitionComponent={TransitionDown}
         >
             {
@@ -39,7 +64,7 @@ const FriendsNotification = ({ uopen, usetOpen }) => {
                     }>
                         {uopen.message}
                     </Alert>
-                    <LinearProgress color={uopen.type} sx={{ width: '100%' }} />
+                    <Progress />
                 </Box>
             }
 
