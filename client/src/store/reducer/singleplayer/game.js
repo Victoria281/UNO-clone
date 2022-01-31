@@ -1,7 +1,7 @@
 import {
     SINGLEPLAYER_PREPARE_GAME,
     SINGLEPLAYER_UPDATE_GAME,
-    UPDATE_UNO_PRESSED,
+    SINGLE_UPDATE_UNO_PRESSED,
     GET_BOT_STATE,
     SET_BOT_SETTINGS
 } from '../../action/singleplayer/game';
@@ -56,7 +56,7 @@ const reducer = (state = initialState, action) => {
                 botPlayingCard: false,
                 end: false
             };
-        case UPDATE_UNO_PRESSED:
+        case SINGLE_UPDATE_UNO_PRESSED:
             return {
                 ...state,
                 unoPressed: action.unoPressed

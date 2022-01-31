@@ -33,7 +33,7 @@ import {
 
 export const SINGLEPLAYER_PREPARE_GAME = "SINGLEPLAYER_PREPARE_GAME"
 export const SINGLEPLAYER_UPDATE_GAME = "SINGLEPLAYER_UPDATE_GAME"
-export const UPDATE_UNO_PRESSED = "UPDATE_UNO_PRESSED"
+export const SINGLE_UPDATE_UNO_PRESSED = "SINGLE_UPDATE_UNO_PRESSED"
 export const SET_BOT_SETTINGS = "SET_BOT_SETTINGS"
 export const GET_BOT_STATE = "GET_BOT_STATE"
 
@@ -322,7 +322,7 @@ export const sortCards = (sortby) => async (dispatch, getState) => {
 export const callUNO = () => async (dispatch, getState) => {
     // console.log("uno button pressed")
     dispatch({
-        type: UPDATE_UNO_PRESSED,
+        type: SINGLE_UPDATE_UNO_PRESSED,
         unoPressed: {
             player: false,
             pressed: false
