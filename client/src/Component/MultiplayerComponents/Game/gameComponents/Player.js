@@ -47,14 +47,16 @@ const Player = ({ playerDeck, current, playerTurn, isTurn, socket }) => {
                                 if (game_state.unoPressed.player === room_state.myTurnIs) {
                                     dispatch(callUNO(socket))
                                 }
-                            }}><p>UNO</p></button>
+                            }}>
+                                <p>UNO</p>
+                            </button>
                         </div>
                     </div>
                 </Stack>
 
                 <Stack spacing={2} direction="row">
-                    <Button variant="outlined" onClick={()=>{dispatch(sortCards("color"))}}>Sort By Color</Button>
-                    <Button variant="outlined" onClick={()=>{dispatch(sortCards("number"))}}>Sort By Number</Button>
+                    <Button variant="outlined" onClick={() => { dispatch(sortCards("color")) }}>Sort By Color</Button>
+                    <Button variant="outlined" onClick={() => { dispatch(sortCards("number")) }}>Sort By Number</Button>
                 </Stack>
             </div>
         </>

@@ -19,6 +19,7 @@ import {
 } from "../../../store/action/multiplayer/rooms"
 import { useHistory } from "react-router-dom";
 import Friend from "./FriendComponents/Friend"
+import FriendRequest from "./FriendComponents/FriendRequest"
 import Room from "./Room"
 import {
 	List,
@@ -29,7 +30,6 @@ import styles from "./styles.module.css"
 const CreateRoom = ({ socket }) => {
 	const dispatch = useDispatch();
 	let history = useHistory();
-	const [errors, setErrors] = useState("");
 
 	const [roomname, setroomname] = useState("");
 	const [username,] = useState(localStorage.getItem("username"))
@@ -62,15 +62,6 @@ const CreateRoom = ({ socket }) => {
 	const requestFriend = (friendUsername) => {
 		dispatch(sendRequestFriend(username, socket, friendUsername))
 	}
-
-	const acceptFriend = (requestedUser) => {
-		dispatch(acceptFriendRequestGame(username, socket, requestedUser))
-	}
-
-	const rejectFriend = (requestedUser) => {
-		dispatch(rejectFriendRequestGame(username, socket, requestedUser))
-	}
-
 	const joinRandom = () => {
 		dispatch(joinRandomRoom(username, socket))
 	}
@@ -123,18 +114,36 @@ const CreateRoom = ({ socket }) => {
 			<Grid
 				className={styles.box} container spacing={2}>
 				<Grid
-					className={`${styles.box}`} item xs={3}>
-					<p
-						className={styles.friendHead}
-					>Friends</p>
-					<List className={styles.friends}>
-						{room_state.friends.map((data) =>
-							<Friend
-								data={data}
-								requestFriend={requestFriend}
-							/>
-						)}
-					</List>
+					className={`${styles.box}${styles.friendBox}`} item xs={3}>
+					<div>
+						<p >
+							Friends
+						</p>
+						<List className={styles.friends}>
+							{room_state.friends.map((data) =>
+								<Friend
+									data={data}
+									requestFriend={requestFriend}
+								/>
+							)}
+						</List>
+					</div>
+					<div >
+						<p className={styles.friendBottom}>
+							Friend Requests
+						</p>
+						<List className={styles.friends}>
+							{room_state.friendRequests.map((data) =>
+
+								<FriendRequest
+									data={data}
+									requestFriend={requestFriend}
+									socket={socket}
+								/>
+							)}
+						</List>
+					</div>
+
 				</Grid>
 				<Grid
 					className={styles.box} item xs={9}>
@@ -160,19 +169,6 @@ const CreateRoom = ({ socket }) => {
 
 							<button className={styles.randomBtn} onClick={() => { joinRandom() }}>JOIN RANDOM ROOM</button><br />
 						</div>
-						<div>
-							<p>Friend Requests</p>
-							{room_state.friendRequests.map((data) =>
-								<div>
-									<Typography>{data.username} has requested to play UNO</Typography>
-									<button className="" onClick={() => { acceptFriend(data) }}>accept</button><br />
-									<button className="" onClick={() => { rejectFriend(data) }}>Reject</button><br />
-									<hr />
-								</div>
-							)}
-						</div>
-
-						<div><p>{errors}</p></div>
 					</div>
 
 
