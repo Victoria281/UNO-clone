@@ -298,6 +298,9 @@ app.post('/login/google', printingDebuggingInfo, verifyGoogleToken, function (re
     const googlePayload = req.googlePayload;
     const googleToken = req.googleToken;
 
+    console.log("googlePayload:", googlePayload);
+    console.log("googleToken:", googleToken);
+
     try {
         Auth.login(googlePayload.email, function (error, results) {
             if (error) {
@@ -333,6 +336,14 @@ app.post('/login/google', printingDebuggingInfo, verifyGoogleToken, function (re
                             return res.status(500).json(message);
 
                         } else {
+
+                            const decodedToken = {
+                                id: results[0].userid,
+                            };
+
+                            req.decodedToken = decodedToken;
+                            console.log("decodedToken:", decodedToken);
+
                             const data = {
                                 user_id: results[0].userid,
                                 token: googleToken,
@@ -688,6 +699,9 @@ app.get('/user/friend/:uid', printingDebuggingInfo, verifyToken, async (req, res
     } else {
         uid = parseInt(uid);
     }
+
+    console.log("decodedToken:", req.decodedToken);
+
 
     if (uid !== req.decodedToken.id) {
         console.error("ERROR: uid is not the same as the user id");
