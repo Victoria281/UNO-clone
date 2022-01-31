@@ -7,8 +7,11 @@ import { updateUserInfo } from "../../../store/action/others/profile";
 const UserInfoCard = ({edit, handleEditUserInfo, setErrorNotif}) => {
     const dispatch = useDispatch();
     const profile_state = useSelector(state => state.profile_info)
-    console.log("profile_state")
-    console.log(profile_state.userInfo)
+    // console.log("profile_state")
+    // console.log(profile_state.userInfo)
+    console.log("hererererfgfgfgfg")
+
+    
   
   const ChangeUserInfo = ({edit, handleEditUserInfo}) => {
     const [newusername, setNewUsername] = useState(profile_state.userInfo.username);
@@ -16,15 +19,17 @@ const UserInfoCard = ({edit, handleEditUserInfo, setErrorNotif}) => {
     const uid = localStorage.getItem('userid')
 
     const handleInfoChange = async () => {
+      console.log("herererer")
       // console.log(newusername);
       // console.log(newemail);
       if (newusername === "" || newemail === "") {
-        setNotif({ open: true, type: 'error', message: 'Username and/or Email field is empty' })
+        setErrorNotif({ open: true, type: 'error', message: 'Username and/or Email field is empty' })
       } else {
         try {
           dispatch(updateUserInfo(uid, newusername,newemail))
           .then(()=>{
             setErrorNotif({ open: true, type: 'success', message: 'Profile Info successfully changed!' })
+            toggleEdit(false)
           })
           .catch(()=>{
             setErrorNotif({ open: true, type: 'error', message: "User Info was not changed. Please check your inputs" })

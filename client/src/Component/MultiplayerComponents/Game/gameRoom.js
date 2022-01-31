@@ -30,12 +30,15 @@ import AudienceIcon from "./userComponents/AudienceIcon"
 import Cheering from "./userComponents/audio/clap.wav"
 import { useSpeechSynthesis } from "react-speech-kit";
 import EndGameModal from "./gameComponents/EndGameModal"
+import CustomNotification from "../../OtherComponents/NotificationComponent/Notifications";
+import FriendsNotification from "../../OtherComponents/NotificationComponent/FriendsNotifications";
 
 
 //gets the data from the action object and reducers defined earlier
 const GameRoom = ({ socket, roomcode }) => {
     const dispatch = useDispatch();
     const [username, setUsername] = useState(localStorage.getItem("username"))
+    const [o_Notif, o_setNotif] = useState({ open: false, type: "", message: "" });
     const [otherPlayers, setOtherPlayers] = useState([])
     const [startCheer, setStartCheer] = useState(false)
     const [talk, setTalk] = useState(false)
@@ -80,7 +83,7 @@ const GameRoom = ({ socket, roomcode }) => {
     useEffect(() => {
         console.log("talk is changed")
         console.log(talk)
-        if (talk !== false){
+        if (talk !== false) {
             console.log("Im talkinggg")
             speak({ text: talk })
             setTalk(false)
@@ -128,6 +131,7 @@ const GameRoom = ({ socket, roomcode }) => {
         socket.on("errorOccured", (data) => {
             console.log("ERRORRR")
             console.log(data)
+            o_setNotif({ open: true, type: 'error', message: "Error Occured" })
             // window.location = "/"
         });
 
@@ -153,6 +157,8 @@ const GameRoom = ({ socket, roomcode }) => {
                 endGameModalOpen={endGameModalOpen}
                 setEndGameModalOpen={setEndGameModalOpen}
             />
+
+            <CustomNotification uopen={o_Notif} usetOpen={o_setNotif} />
             {
                 username === null || room_state.status !== true ?
                     <WaitingRoom

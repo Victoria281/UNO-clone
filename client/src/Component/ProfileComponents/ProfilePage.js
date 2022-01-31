@@ -14,6 +14,7 @@ import LockIcon from '@mui/icons-material/Lock';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import CustomNotification from "../OtherComponents/NotificationComponent/Notifications";
 import styles from './styles.module.css';
+import FriendsNotification from "../OtherComponents/NotificationComponent/FriendsNotifications";
 
 import {
   getUserInfo
@@ -52,7 +53,8 @@ const Profile = () => {
           <p>Loading</p>
           :
           <Box id="root">
-            <CustomNotification open={o_Notif} setOpen={o_setNotif} />
+            <FriendsNotification uopen={o_Notif} usetOpen={o_setNotif} />
+
             <ProfileModal 
             setErrorNotif={setErrorNotif}
             profile_state={profile_state}
@@ -99,7 +101,7 @@ const Profile = () => {
                   <button className="collapsed card-link text-dark">
                     <i className="fa fa-user-o"></i>    My Friends
                   </button>
-                  <i className="fa fa-arrow-down p-1"></i>
+                  <KeyboardArrowDownIcon/>
                 </div>
                 <div id="collapseThree" className={`collapse ${styles.accordionBoxBody}`} data-parent="#accordion">
                   <div id="bodyThree" className={`card-body`}>
@@ -114,7 +116,7 @@ const Profile = () => {
                   <button className="collapsed card-link text-dark">
                     <i className="fa fa-user-o"></i>    My Pending Friend Requests
                   </button>
-                  <i className="fa fa-arrow-down p-1"></i>
+                  <KeyboardArrowDownIcon/>
                 </div>
                 <div id="collapseFour" className={`collapse ${styles.accordionBoxBody}`} data-parent="#accordion">
                   <div id="bodyFour" className={`card-body`}>
@@ -129,7 +131,7 @@ const Profile = () => {
                   <button className="collapsed card-link text-dark">
                     <i className="fa fa-user-o"></i>    Find Friends
                   </button>
-                  <i className="fa fa-arrow-down p-1"></i>
+                  <KeyboardArrowDownIcon/>
                 </div>
                 <div id="collapseFive" className={`collapse ${styles.accordionBoxBody}`} data-parent="#accordion">
                   <div id="bodyFive" className={`card-body`}>
