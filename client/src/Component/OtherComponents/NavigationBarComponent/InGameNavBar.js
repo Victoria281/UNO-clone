@@ -12,8 +12,12 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import Music from "../MusicComponent/Music";
 
 import styles from "./styles.module.css"
+import Tutorial from "../../TutorialComponent/Tutorial";
+import { useState } from "react";
 
-const InGameNavBar = ({ exact, path, component: Component,roomcode, loggedIn, ...rest }) => {
+const InGameNavBar = ({ exact, path, component: Component, ...rest }) => {
+    const [isTutorialOpen, setisTutorialOpen] = useState(false);
+
     return <Route exact={exact} path={path} {...rest} render={(routeProps) => {
 
         const id = localStorage.getItem("userid");
@@ -93,8 +97,14 @@ const InGameNavBar = ({ exact, path, component: Component,roomcode, loggedIn, ..
                                             }}
                                             className={`navbarDesign ${styles.menu}`}
                                         >
+                                             <Tutorial
+                                                isTutorialOpen={isTutorialOpen}
+                                                setisTutorialOpen={setisTutorialOpen}
+                                            />
                                             <Tooltip title="Tutorial" placement="left">
-                                                <QuestionMarkIcon className={styles.icons} />
+                                                <Button onClick={() => setisTutorialOpen(true)}>
+                                                    <QuestionMarkIcon className={styles.icons} />
+                                                </Button>
                                             </Tooltip>
                                         </li>
                                     </ul>

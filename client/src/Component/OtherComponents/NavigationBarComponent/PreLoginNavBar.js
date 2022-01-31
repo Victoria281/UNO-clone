@@ -14,9 +14,10 @@ import Music from "../MusicComponent/Music";
 // Components Import
 import Account from "./Account";
 import styles from "./styles.module.css"
+import { useState } from "react";
 
 const PreLoginNavBar = ({ exact, path, component: Component, loggedIn, ...rest }) => {
-
+    const [isTutorialOpen, setisTutorialOpen] = useState(false);
     return <Route exact={exact} path={path} {...rest} render={(routeProps) => {
 
         return (
@@ -92,7 +93,9 @@ const PreLoginNavBar = ({ exact, path, component: Component, loggedIn, ...rest }
                                             className={`navbarDesign ${styles.menu}`}
                                         >
                                             <Tooltip title="Tutorial" placement="left">
-                                                <QuestionMarkIcon className={styles.icons} />
+                                                <Button onClick={() => setisTutorialOpen(true)}>
+                                                    <QuestionMarkIcon className={styles.icons} />
+                                                </Button>
                                             </Tooltip>
                                         </li>
                                     </ul>

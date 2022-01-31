@@ -1,6 +1,6 @@
 // @ts-ignore
 import { BrowserRouter as Router, Switch, Route, Link ,Redirect} from "react-router-dom";
-import { Box, Button, AppBar, Grid } from '@mui/material';
+import { Box, Button, AppBar, Grid, Tooltip } from '@mui/material';
 
 import { NavLink } from 'react-router-dom'
 
@@ -14,8 +14,11 @@ import QuestionMarkIcon from '@mui/icons-material/QuestionMark';
 import Account from "./Account";
 import Music from "../MusicComponent/Music";
 import styles from "./styles.module.css"
+import Tutorial from "../../TutorialComponent/Tutorial";
+import { useState } from "react";
 
 const HomeNavBar = ({ exact, path, component: Component, loggedIn, ...rest }) => {
+    const [isTutorialOpen, setisTutorialOpen] = useState(false);
     return <Route exact={exact} path={path} {...rest} render={(routeProps) => {
 
         const id = localStorage.getItem("userid");
@@ -66,7 +69,13 @@ const HomeNavBar = ({ exact, path, component: Component, loggedIn, ...rest }) =>
 
                                 <li className="nav-item active navbarDesign" style={{ background: '#46E71E' }}>
                                     <div className="borderHover" style={{ borderColor: '#46E71E' }}>
-                                        <QuestionMarkIcon className={styles.icons} />
+                                        <Tutorial
+                                            isTutorialOpen={isTutorialOpen}
+                                            setisTutorialOpen={setisTutorialOpen}
+                                        />
+                                        <Button onClick={() => setisTutorialOpen(true)}>
+                                            <QuestionMarkIcon className={styles.icons} />
+                                        </Button>
                                     </div>
                                 </li>
 
