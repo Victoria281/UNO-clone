@@ -5,6 +5,6 @@ export const secure_action = (encrypt, text, cypher) => {
             encrypt,
             text,
             cypher,
-        },
+        }
     };
 };

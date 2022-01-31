@@ -14,6 +14,8 @@ import SportsEsportsIcon from '@mui/icons-material/SportsEsports';
 import SettingsIcon from '@mui/icons-material/Settings';
 import Music from "../MusicComponent/Music";
 
+import Tutorial from "../../TutorialComponent/Tutorial";
+
 // Components Import
 import Account from "./Account";
 import styles from "./styles.module.css"
@@ -21,6 +23,7 @@ import BotDifficultyModal from "../BotDifficultyComponent/BotDifficultyModal";
 
 const DefaultNavBar = ({ exact, path, component: Component, loggedIn, ...rest }) => {
     const [open, setOpen] = useState(false);
+    const [isTutorialOpen, setisTutorialOpen] = useState(false);
     return <Route exact={exact} path={path} {...rest} render={(routeProps) => {
 
         const id = localStorage.getItem("userid");
@@ -166,8 +169,14 @@ const DefaultNavBar = ({ exact, path, component: Component, loggedIn, ...rest })
                                             }}
                                             className={`navbarDesign ${styles.menu}`}
                                         >
+                                            <Tutorial
+                                                isTutorialOpen={isTutorialOpen}
+                                                setisTutorialOpen={setisTutorialOpen}
+                                            />
                                             <Tooltip title="Tutorial" placement="left">
-                                                <QuestionMarkIcon className={styles.icons} />
+                                                <Button onClick={() => setisTutorialOpen(true)}>
+                                                    <QuestionMarkIcon className={styles.icons} />
+                                                </Button>
                                             </Tooltip>
                                         </li>
                                     </ul>
