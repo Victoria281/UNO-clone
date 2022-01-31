@@ -33,7 +33,7 @@ import { useSpeechSynthesis } from "react-speech-kit";
 import EndGameModal from "./gameComponents/EndGameModal"
 import CustomNotification from "../../OtherComponents/NotificationComponent/Notifications";
 import FriendsNotification from "../../OtherComponents/NotificationComponent/FriendsNotifications";
-
+import { useHistory } from "react-router-dom"
 
 //gets the data from the action object and reducers defined earlier
 const GameRoom = ({ socket, roomcode }) => {
@@ -79,7 +79,7 @@ const GameRoom = ({ socket, roomcode }) => {
     useEffect(() => {
         console.log("Joining the room")
         dispatch(joinRoom(roomcode, username, socket))
-        if (localStorage.getItem("userid") !== undefined){
+        if (localStorage.getItem("userid") !== undefined) {
             dispatch(notifyFriends(roomcode, username, socket))
         }
     }, []);
@@ -99,7 +99,7 @@ const GameRoom = ({ socket, roomcode }) => {
         audio.play()
     }
 
-
+    let history = useHistory();
     useEffect(() => {
         socket.on("identity", (data) => {
             dispatch(updateOwnIdentity(data))
@@ -135,7 +135,11 @@ const GameRoom = ({ socket, roomcode }) => {
         socket.on("errorOccured", (data) => {
             console.log("ERRORRR")
             console.log(data)
-            o_setNotif({ open: true, type: 'error', message: "Error Occured" })
+            o_setNotif({ open: true, type: 'error', message: data.message })
+            setTimeout(() => {
+                history.push("../createroom")
+            }, 500);
+
             // window.location = "/"
         });
 
