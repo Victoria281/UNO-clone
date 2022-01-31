@@ -116,6 +116,8 @@ const App = ({ hideLoader }) => {
           <DefaultNavBar exact path="/profile" component={ProfilePage} />
           <DefaultNavBar exact path="/leaderboard" component={LeaderboardPage} />
           <Route exact path="/logout" component={Logout} />
+          <PreLoginNavBar exact path="/forgot" component={ForgotPage} />
+          <PreLoginNavBar exact path="/verifyReset" component={VerifyReset} />
           {/* <PageRestriction exact path="/createroom" component={Room} socket={socket}/> */}
           {/* <PageRestriction path="/multiplayer/:roomname/:username" component={Appmain} socket={socket}/> */}
   
