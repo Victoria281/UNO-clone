@@ -33,7 +33,15 @@ var LeaderBoard = {
     getNumOfScores: function (num, callback) {
         const query = {
             name: 'getNumOfScores',
-            text: 'SELECT score, uno_leaderboard.created_by, username, userid, profileicon FROM uno_leaderboard RIGHT JOIN players using (userid) ORDER BY uno_leaderboard.score DESC LIMIT $1;',
+            text: `SELECT scores.score, scores.created_at, p.username, p.userid, p.profileicon 
+                    FROM players as p
+                    INNER JOIN (
+                        SELECT SUM(l.score) as score, MAX(l.created_at) as created_at, l.userid
+                        FROM uno_leaderboard as l
+                        GROUP BY (l.userid)
+                    ) AS scores ON scores.userid = p.userid
+                    ORDER BY 1 DESC
+                    LIMIT $1;`,
             values: [num],
         }
 
@@ -42,7 +50,7 @@ var LeaderBoard = {
                 callback(error, null);
                 return;
             } else {
-                console.log(result.rows)
+                console.log(result.rows);
                 return callback(null, result.rows);
             }
         },
@@ -68,14 +76,14 @@ var LeaderBoard = {
         },
         );
     },
-    insertNewScore: function (id, score, callback) {
-        console.log(id)
-        console.log(score)
+    
+    insertNewScore: function (score, id, game_status, callback) {
         const query = {
             name: 'insertNewScore',
-            text: 'INSERT INTO uno_leaderboard("userid", "score") VALUES($1, $2);',
-            values: [id, score],
+            text: 'INSERT INTO uno_leaderboard("userid", "score", "game_status", "created_at") VALUES($1, $2, $3, NOW());',
+            values: [id, score, game_status],
         }
+        console.log(query)
 
         return pool.query(query, function (error, result) {
             if (error) {

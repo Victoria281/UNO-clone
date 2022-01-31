@@ -1,0 +1,102 @@
+.loading {
+ 
+  .scene {
+    display: inline-block;
+    width: 200px;
+    height: 260px;
+  /*   border: 1px solid #CCC; */
+    margin: 40px 0;
+    // perspective: 600px;
+  }
+ 
+  .cards {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    top: 135%;
+    left: 470%;
+    z-index: 2;
+    cursor: pointer;
+    transform-style: preserve-3d;
+    transform-origin: center right;
+    transition: transform 0.5s;
+    // transform: rotateZ(-5deg)
+    //   rotateY(-15deg)
+    //   rotateX(60deg);
+    transform: rotateZ(-15deg)
+    rotateY(35deg)
+    rotateX(60deg)
+    scale(0.5);
+  }
+ 
+  .card__face--front:hover{
+    animation: shake 1s infinite;
+  }
+ 
+  @keyframes shake {
+    0% { transform: translate(2px, 2px) rotate(0deg) ; }
+  20% { transform: translate(-2px, -3px) rotate(15deg) ; }
+  40% { transform: translate(-4px, 0px) rotate(-25deg) ; }
+  60% { transform: translate(4px, 3px) rotate(20deg) ; }
+  80% { transform: translate(2px, -2px) rotate(-15deg) ; }
+  100% { transform: translate(-2px, 4px) rotate(15deg) ;}
+  }
+ 
+  .cards img {
+    width: 180px;
+    height: 1.5*180px;
+  }
+ 
+  .cards.is-flipped {
+    transform: translateX(-210%) translateY(-100%) rotateY(-180deg);
+  }
+ 
+  .card__face {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    line-height: 260px;
+    color: white;
+    text-align: center;
+    font-weight: bold;
+    font-size: 40px;
+    backface-visibility: hidden;
+  }
+ 
+  .card__face--back {
+    transform: rotateY(180deg);
+  }
+ 
+ 
+  .card {
+    position: absolute;
+    left: 50%;
+    top: 55%;
+    margin-left: calc(-200px/2);
+    margin-top: calc(-3*200px/4);
+    width: 200px;
+    height: 1.5*200px;
+    border: 200px/20 solid #ccc;
+    border-radius: calc(3*200px/30);
+    background: #383838;
+    outline: #383838 solid 200px/10;
+    transform: rotateZ(-15deg)
+      rotateY(35deg)
+      rotateX(60deg);
+    opacity: 0;
+  }
+ 
+  @for $i from 0 to 5 {
+    .card:nth-of-type(#{$i + 1}) {
+      margin-top:calc((-3*200px/5) - $i*200px/10);
+      animation: card_fade_#{$i+1} 5s ease infinite;
+    }
+  }
+ 
+  @for $i from 0 to 5 {
+    @keyframes card_fade_#{$i+1} {
+      #{$i*16%} { opacity: 0; }
+      #{($i+1)*16%} { opacity: 1; }
+    }
+  }
+}

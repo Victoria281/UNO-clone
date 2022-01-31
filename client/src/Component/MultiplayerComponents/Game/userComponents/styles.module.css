@@ -1,0 +1,228 @@
+.ChatDrawer {
+    width: 40vw;
+    background-color: #D8E7F5;
+    height: 100vh;
+    border: 1px solid #1B7CB1;
+    overflow: hidden;
+}
+
+.ChatHeader {
+    background-color: #65B9E9;
+    height: 10vh;
+    border: 1px solid #1B7CB1
+}
+
+.ChatBody {
+    overflow-y: scroll;
+    padding-top: 20px;
+    height: 82vh;
+    border: 1px solid #1B7CB1
+}
+
+.ChatMessage {
+    height: 8vh;
+    border: 1px solid #1B7CB1
+}
+
+.mymessage {
+    position: relative;
+    background: #67AEEF;
+    border-radius: .4em;
+    padding: 5px;
+    width: 30%;
+    margin-right: 10px;
+    margin-left: auto;
+    margin-bottom: 5px;
+}
+
+.myusername {
+    position: relative;
+    padding: 5px;
+    width: fit-content;
+    margin-right: 10px;
+    margin-left: auto;
+    margin-bottom: 30px;
+}
+
+p {
+    font-family: "Armata";
+    padding: 0;
+    margin: 0;
+    font-size: 18px;
+}
+
+.systemMessage {
+    color: #1B7CB1;
+    font-size: 14px;
+    text-align: center;
+}
+
+.othermessage {
+    position: relative;
+    background: #5FA5CC;
+    border-radius: .4em;
+    padding: 5px;
+    width: 30%;
+    margin-left: 10px;
+    margin-right: auto;
+    margin-bottom: 5px;
+}
+
+.otherusername {
+    position: relative;
+    padding: 5px;
+    width: fit-content;
+    margin-left: 5px;
+    margin-right: auto;
+    margin-bottom: 30px;
+}
+
+
+.ChatMessage>input {
+    font-family: "Armata";
+    background-color: #D8E7F5;
+    border: none;
+    width: 90%;
+    height: 100%;
+    padding-left: 20px;
+}
+
+.ChatMessage>input:focus {
+    outline: none;
+}
+
+.ChatIcon {
+    position: fixed;
+    right: 10px;
+    bottom: 10px;
+}
+
+.btnLove{
+    color: white;
+    background-color: #d73d6c;
+    border: 1px solid white;
+    margin-left: 85px;
+}
+
+.btnLove:hover{
+    color: black;
+    background-color: #ffc1a6;
+}
+
+.btnCheer{
+    color: white;
+    background-color: #7d7ba2;
+    border: 1px solid white;
+}
+
+.btnCheer:hover{
+    color: black;
+    background-color: #acacc4;
+    border: 1px solid black;
+}
+
+.btnModal{
+    color: black;
+    background-color: turquoise;
+    border: 1px solid black;
+    margin-top: 20px;
+    margin-left: 85px;
+    padding: 10px;
+}
+
+.btnModal:hover{
+    color: white;
+    background-color: #5b819f;
+}
+
+.txtModal{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 320px;
+    border: 2px solid #000;
+    box-shadow: 24;
+    padding: 40px;
+    background-color: white;
+}
+
+.smsIcon{
+    margin-top: 30px;
+    margin-right: 15px;
+}
+
+.message{
+    margin-top: 10px;
+}
+
+.btnVoice{
+    color: black;
+    background-color: #6284e6;
+    border: 1px solid black;
+    margin-left: 30px;
+    margin-top: 20px;
+}
+
+.btnVoice:hover{
+    color: white;
+    background-color: #3246a6;
+    border: 1px solid white;
+
+}
+
+.movetoAudienceTxt{
+    position: absolute;
+    top: 35%;
+    bottom: 50%;
+    height:0px;
+    color: white;
+    visibility: hidden;
+    -webkit-transition: visibility 0s, opacity 0.5s linear; 
+    transition: visibility 0s, opacity 0.5s linear;
+    text-align: center;
+    font-size: 20px;
+}
+   
+.profile:hover{
+    cursor: pointer;
+    opacity: 0.3;
+}
+   
+.profile:hover div{
+    width: 150px;
+    padding: 8px 15px;
+    visibility: visible;
+}
+
+.bot{
+    display: none;
+    margin-left: -30px;
+}
+
+.botImage:hover + .bot, .bot:hover {
+    display: inline-block;
+}
+
+.addbot{
+    margin-right: 10px;
+    background-color: turquoise;
+    border: 2px solid #006f7a;
+    border-radius: 5px;
+}
+
+.minusbot{
+    background-color: #e86c6c;
+    border: 2px solid #cc3035;
+    border-radius: 5px;
+}
+
+.movebtn{
+    background-color: #ffc400;
+    border: 2px solid #ff9c24;
+    border-radius: 5px;
+}
+
+.txtStyle{
+    font-size: 20px;
+}
