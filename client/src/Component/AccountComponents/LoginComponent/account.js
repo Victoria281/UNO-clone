@@ -1,5 +1,10 @@
 //@ts-nocheck
 import React, { useState, useEffect } from "react";
+<<<<<<< HEAD
+=======
+import { useHistory } from "react-router-dom";
+// import "../../../css/account.css";
+>>>>>>> 7df7f4e (added oauth v2.0 authentication to unoclone, however some functions are breaking atm)
 import styles from '../styles.module.css'
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import axios from "axios";
@@ -36,6 +41,7 @@ export default function App() {
   const [isActive, setIsActive] = useState(false);
   const [isShown, setIsShown] = useState(false);
 
+  let history = useHistory();
 
 
   // Resets Timer Function
@@ -200,7 +206,7 @@ export default function App() {
   const handleCredentialResponse = async (response) => {
     console.log("Encoded JWT ID Token: " + response.credential);
 
-    const result = await fetch(process.env.REACT_APP_API_URL + "/api/uno/googlelogin", {
+    const result = await fetch(process.env.REACT_APP_API_URL + "/api/uno/login/google", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -210,6 +216,16 @@ export default function App() {
 
     const data = await result.json();
     console.log(data);
+
+    localStorage.setItem('token', 'Bearer ' + data.token);
+    localStorage.setItem('userid', data.user_id);
+    localStorage.setItem('username', data.username);
+
+    const redirectToHome = () => {
+      history.push('/');
+    };
+
+    redirectToHome();
   }
 
   const initializeGoogleAuth = () => {
@@ -226,6 +242,7 @@ export default function App() {
       <div className="wrapper">
         <CustomNotification notif={notif} setNotif={setNotif} />
         <h1><b className={styles.accountTitle}>Login</b></h1>
+
         <div className={styles.accountBody}>
           {initializeGoogleAuth()}
           <div className="container">
@@ -235,6 +252,8 @@ export default function App() {
               </div>
             </div>
           </div>
+
+          <h5 className={styles.oauthSeparator}><span>OR</span></h5>
 
           <form
             className={`form-group form ${styles.accountForm}`}
