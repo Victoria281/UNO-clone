@@ -19,12 +19,35 @@ const testPlayerRooms = {
 const roomState = {}
 const playerRooms = {}
 const playersConnected = {}
+const playersOnline = {}
 const broadcastOne = 1;
 const broadcastAll = 0;
 
 
 
 var SocketFunctions = {
+    joinWebsite: function (id, username) {
+        console.log("==================================")
+        console.log("Servicing joinWebsite...")
+        console.log("----------------------------------")
+
+        playersOnline[username] = id
+        console.log(playersOnline)
+    },
+
+    notifyFriend: function (friendUsername, roomcode, username) {
+        console.log("==================================")
+        console.log("Servicing notifyFriend...")
+        console.log("----------------------------------")
+        var socketList = [];
+        for (var i = 0; i < friendUsername.length; i++) {
+            if (playersOnline[friendUsername[i].username] !== undefined) {
+                socketList.push(playersOnline[friendUsername[i].username])
+            }
+        }
+        return socketList;
+    },
+
     startMultiplayer: function (id, username) {
         console.log("==================================")
         console.log("Servicing startMultiplayer...")
@@ -59,7 +82,7 @@ var SocketFunctions = {
         if (username != undefined) {
             if (playerRooms[id] != undefined) {
                 removePlayer = SocketFunctions.leftRoom(id, username)
-    
+
                 console.log("Result...")
                 console.log("==================================\n")
             }
@@ -67,7 +90,7 @@ var SocketFunctions = {
                 delete playersConnected[username]
             }
         }
-        
+
         return {
             success: true,
             send: broadcastOne,
@@ -168,7 +191,7 @@ var SocketFunctions = {
 
 
                 if (alreadyIn == false) {
-                    if (roomState[roomcode].players.length >= 4 || roomState[roomcode].status == true){
+                    if (roomState[roomcode].players.length >= 4 || roomState[roomcode].status == true) {
                         roomState[roomcode].audience.push(user)
                     } else {
                         roomState[roomcode].players.push(user)
@@ -203,9 +226,9 @@ var SocketFunctions = {
         console.log("Servicing moveToAudience...")
         console.log("----------------------------------")
         console.log(moveToAudUser + " is to be moved to the audience in room " + roomcode)
-        
+
         if (roomState[roomcode] != undefined) {
-            
+
             var alreadyIn = false;
             var movedUser;
             var movedIndex;
@@ -224,7 +247,7 @@ var SocketFunctions = {
 
             if (alreadyIn != false) {
                 if (movedUser != undefined && movedIndex != undefined) {
-                    roomState[roomcode].players = roomState[roomcode].players.slice(0, movedIndex).concat(roomState[roomcode].players.slice(movedIndex+1))
+                    roomState[roomcode].players = roomState[roomcode].players.slice(0, movedIndex).concat(roomState[roomcode].players.slice(movedIndex + 1))
                     roomState[roomcode].audience.push(movedUser)
                 }
             }
@@ -249,9 +272,9 @@ var SocketFunctions = {
         console.log("Servicing moveToPlayer...")
         console.log("----------------------------------")
         console.log(moveToPlayerUser + " is to be moved to the players in room " + roomcode)
-        
+
         if (roomState[roomcode] != undefined) {
-            
+
             var alreadyIn = false;
             var movedUser;
             var movedIndex;
@@ -270,7 +293,7 @@ var SocketFunctions = {
 
             if (alreadyIn != false) {
                 if (movedUser != undefined && movedIndex != undefined) {
-                    roomState[roomcode].audience = roomState[roomcode].audience.slice(0, movedIndex).concat(roomState[roomcode].audience.slice(movedIndex+1))
+                    roomState[roomcode].audience = roomState[roomcode].audience.slice(0, movedIndex).concat(roomState[roomcode].audience.slice(movedIndex + 1))
                     roomState[roomcode].players.push(movedUser)
                 }
             }
