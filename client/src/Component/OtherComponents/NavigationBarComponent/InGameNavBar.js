@@ -17,7 +17,7 @@ const InGameNavBar = ({ exact, path, component: Component,roomcode, loggedIn, ..
 
         const id = localStorage.getItem("userid");
 
-        if(!id || window.location.href !== process.env.REACT_APP_API_URL+ "/multiplayer/"){
+        if(!id && !window.location.href.includes("multiplayer") ){
             return <Redirect to="/login" />
         }
 
