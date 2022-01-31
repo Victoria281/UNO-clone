@@ -8,6 +8,7 @@ import { Typography, Box, Link } from '@mui/material';
 
 // CSS Module Imports
 import styles from '../styles.module.css';
+import DisplayStatisticsData from './StatsChart';
 
 // Other Imports
 import DisplayStatsChart from './StatsChart.jsx';
@@ -141,7 +142,7 @@ const DisplayStatsData = () => {
                     </Box>
 
                     <Box className='col-xl-7 col-lg-7 col-md-7 col-sm-7 pt-2'>
-                        <DisplayStatsChart />
+                        <DisplayStatisticsData />
                     </Box>
                 </Box>
 
