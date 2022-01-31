@@ -12,11 +12,7 @@ import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import EndPage from "./pages/end";
 import AccountPage from "./Component/AccountComponents/LoginComponent/account";
 import RegisterPage from "./Component/AccountComponents/RegisterComponents/register";
-<<<<<<< HEAD
 import ProfilePage from "./Component/ProfileComponents/ProfilePage";
-=======
-import ProfilePage from "./pages/profile";
->>>>>>> a1db2c8 (INCOMPLETE -- Added Music to navbar and redux store)
 import LeaderboardPage from "./Component/Leaderboard/tabs.jsx";
 import Music from "./Component/OtherComponents/MusicComponent/Music";
 import Room from "./pages/multiplayer/room";

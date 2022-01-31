@@ -3,6 +3,7 @@ import { homeAnimation } from "./homeAnimation";
 import { useEffect, useState } from "react";
 import { typography } from "@mui/system";
 import BotDifficultyModal from "../OtherComponents/BotDifficultyComponent/BotDifficultyModal";
+import { useHistory } from "react-router-dom";
 
 const Item = styled(Paper)(({ theme }) => ({
   ...theme.typography.body2,
@@ -24,6 +25,7 @@ const Home = ({ socket }) => {
     homeAnimation()
     socket.emit("exitMultiplayer", localStorage.getItem("username"))
   }, [])
+  let history = useHistory();
 
   return (
     <Grid container spacing={2} className="App">
@@ -33,27 +35,45 @@ const Home = ({ socket }) => {
         <Typography variant="h1" sx={{ mt: 10,mb:10 }}>Uno Clone</Typography>
 
         <Item sx={{ bgcolor: 'info.main' }}>
-        <a className="startBtn" onClick={()=>{setOpen(true)}}>
+        <div className="startBtn" onClick={()=>{setOpen(true)}}>
             Single Player
-          </a>
+          </div>
         </Item>
 
         <Item sx={{ bgcolor: 'secondary.main' }}>
+<<<<<<< HEAD
           <a href="./createroom">
             <p className={styles.startMultiBtn}>Multiplayer</p>
           </a>
+=======
+          <div className="startMultiBtn" onClick={()=>history.push("./createroom")}>
+            Multiplayer
+          </div>
+>>>>>>> ecb08f6 (changed redirection)
         </Item>
 
         <Item sx={{ bgcolor: 'error.main' }}>
+<<<<<<< HEAD
           <a href="./leaderboard">
             <p className={styles.leaderBoardBtn}>LeaderBoard</p>
           </a>
+=======
+          <div className="leaderBoardBtn" onClick={()=>history.push("./leaderboard")}>
+            LeaderBoard
+          </div>
+>>>>>>> ecb08f6 (changed redirection)
         </Item>
 
         <Item sx={{ bgcolor: 'success.main' }}>
+<<<<<<< HEAD
           <a href="./profile">
             <p className={styles.profileBtn}>Profile</p>
           </a>
+=======
+          <div className="profileBtn" onClick={()=>history.push("./profile")}>
+            Profile
+          </div>
+>>>>>>> ecb08f6 (changed redirection)
         </Item>
       </Grid>
     </Grid>
