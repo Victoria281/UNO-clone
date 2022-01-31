@@ -72,8 +72,8 @@ const GameRoom = () => {
             {(game_state.mainDeck.length === 0 || otherPlayers.length === 0) ?
                 <p>Loading</p>
                 :
-                <Box style={{ marginTop: "5vh" }}>
-                    <Grid container>
+                <Box>
+                    <Grid container style={{ height: "20vh" }}>
                         <Grid item xs={6}
                             style={{ marginRight: "auto", marginLeft: "auto" }}>
                             <Bot
@@ -86,7 +86,7 @@ const GameRoom = () => {
                         </Grid>
                     </Grid>
                     <Grid container
-                        style={{ height: "45vh" }}>
+                        style={{ height: "35vh" }}>
                         <Grid item xs={3}
                             style={{
                                 marginTop: "auto",
