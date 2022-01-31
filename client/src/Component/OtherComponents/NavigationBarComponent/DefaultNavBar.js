@@ -11,12 +11,16 @@ import QuestionMarkIcon from '@mui/icons-material/QuestionMark';
 import PersonIcon from '@mui/icons-material/Person';
 import SportsEsportsIcon from '@mui/icons-material/SportsEsports';
 import SettingsIcon from '@mui/icons-material/Settings';
+import Music from "../MusicComponent/Music";
 
 // Components Import
 import Account from "./Account";
 import styles from "./styles.module.css"
+import BotDifficultyModal from "../BotDifficultyComponent/BotDifficultyModal";
+import { useState } from "react";
 
 const DefaultNavBar = ({ exact, path, component: Component, loggedIn, ...rest }) => {
+    const [open, setOpen] = useState(false);
     return <Route exact={exact} path={path} {...rest} render={(routeProps) => {
 
         return (
@@ -73,11 +77,12 @@ const DefaultNavBar = ({ exact, path, component: Component, loggedIn, ...rest })
                                             }}
                                             className={`navbarDesign ${styles.menu}`}
                                         >
-                                            <NavLink to="/game">
+                                             <BotDifficultyModal open={open} setOpen={setOpen}/>
+                                            <Button onClick={()=>{setOpen(true)}}>
                                                 <Tooltip title="SinglePlayer" placement="left">
                                                     <PersonIcon className={styles.icons} />
                                                 </Tooltip>
-                                            </NavLink>
+                                            </Button>
                                         </li>
 
                                         <li
@@ -127,7 +132,7 @@ const DefaultNavBar = ({ exact, path, component: Component, loggedIn, ...rest })
                                             className={`navbarDesign ${styles.menu}`}
                                         >
                                             <Tooltip title="Music" placement="left">
-                                                <MusicNoteIcon className={styles.icons} />
+                                                <Music/>
                                             </Tooltip>
                                         </li>
 

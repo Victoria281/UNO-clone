@@ -10,7 +10,9 @@ import ViewInArIcon from "@mui/icons-material/ViewInAr";
 import QuestionMarkIcon from '@mui/icons-material/QuestionMark';
 
 // Components Import
+// @ts-ignore
 import Account from "./Account";
+import Music from "../MusicComponent/Music";
 import styles from "./styles.module.css"
 
 const HomeNavBar = ({ exact, path, component: Component, loggedIn, ...rest }) => {
@@ -44,7 +46,9 @@ const HomeNavBar = ({ exact, path, component: Component, loggedIn, ...rest }) =>
 
                                 <li className="nav-item active navbarDesign" style={{ background: '#e71e1e' }}>
                                     <div className="borderHover" style={{ borderColor: '#e71e1e' }}>
-                                        <MusicNoteIcon className={styles.icons} />
+                                        <p className="nav-link navBarWord">
+                                            <Music />
+                                        </p>
                                     </div>
                                 </li>
 
