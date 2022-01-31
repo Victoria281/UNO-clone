@@ -227,7 +227,7 @@ export default function App() {
 
   const initializeGoogleAuth = () => {
     google.accounts.id.initialize({
-      client_id: '991501856442-jcqllikm4b4jodj6s9bdkv0amfs5f2oi.apps.googleusercontent.com',
+      client_id: process.env.REACT_APP_GOOGLE_CLIENT_ID,
       callback: handleCredentialResponse
     });
     google.accounts.id.renderButton(document.getElementById("google-auth-button"), { theme: 'outline', size: 'large', position: 'absolute', top: '300px' });
