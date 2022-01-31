@@ -25,7 +25,7 @@ const initialState = {
     botPlayingCard: false,
     botcurrentstate: "",
     bot_settings: {},
-    end: false
+    end: false,
     botcurrentstate: "",
     bot_settings: {},
 };

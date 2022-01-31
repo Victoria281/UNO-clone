@@ -60,6 +60,7 @@ const GameRoom = () => {
                 // console.log("Its the bots turn now")
                 console.log("PlayerBot " + game_state.turn + " now")
                 dispatch(botTurn())
+            }
         }
 
     }, [game_state]);
