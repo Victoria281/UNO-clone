@@ -19,27 +19,26 @@ var User = {
 
         return pool.query(query, function (error, result) {
             if (error) {
-                callback(error, null);
-                return;
+                return callback(error, null);
             } else {
-                if (result.rows.length == 0){
-                    callback("404", null);
+                if (result.rows.length == 0) {
+                    return callback("404", null);
                 } else {
                     console.log(result.rows)
-                return callback(null, result.rows[0]);
+                    return callback(null, result.rows[0]);
                 }
-                
+
             }
         },
         );
     },
-    
+
     getUserStat: function (id, callback) {
         console.log("====================================");
         console.log("getUserStats running!");
         console.log("userId:", id);
         console.log("====================================");
-        
+
         const query = {
             name: 'getUserStat',
             text: `SELECT 
@@ -51,7 +50,7 @@ var User = {
                         AND ul.userid = p.userid`,
             values: [id],
         };
-        
+
         return pool.query(query, function (error, result) {
             if (error) {
                 callback(error, null);
@@ -68,7 +67,7 @@ var User = {
         console.log("getUserOverallStat running!\n\n");
         console.log("userId:", id);
         console.log("====================================");
-        
+
         const query = {
             name: 'getUserOverallStat',
             text: `SELECT 
@@ -84,7 +83,7 @@ var User = {
                 `,
             values: [id],
         };
-        
+
         return pool.query(query, function (error, result) {
             if (error) {
                 callback(error, null);
@@ -135,12 +134,12 @@ var User = {
             }
         });
     },
-    
+
     updateUserInfo: function (userid, username, email, callback) {
         const query = {
             name: 'updateUserInfo',
             text: 'UPDATE players SET username=$1,email=$2 WHERE userid=$3',
-            values: [username,email,userid],
+            values: [username, email, userid],
         }
 
         return pool.query(query, function (error, result) {
@@ -207,7 +206,7 @@ var User = {
             }
         });
     },
-    
+
     resetUserPasswordGmail: function (email, password, callback) {
         const query = {
             name: 'resetUserPassword',
