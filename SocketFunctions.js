@@ -59,7 +59,7 @@ var SocketFunctions = {
         if (username != undefined) {
             if (playerRooms[id] != undefined) {
                 removePlayer = SocketFunctions.leftRoom(id, username)
-    
+
                 console.log("Result...")
                 console.log("==================================\n")
             }
@@ -67,7 +67,7 @@ var SocketFunctions = {
                 delete playersConnected[username]
             }
         }
-        
+
         return {
             success: true,
             send: broadcastOne,
@@ -168,7 +168,7 @@ var SocketFunctions = {
 
 
                 if (alreadyIn == false) {
-                    if (roomState[roomcode].players.length >= 4 || roomState[roomcode].status == true){
+                    if (roomState[roomcode].players.length >= 4 || roomState[roomcode].status == true) {
                         roomState[roomcode].audience.push(user)
                     } else {
                         roomState[roomcode].players.push(user)
@@ -203,9 +203,9 @@ var SocketFunctions = {
         console.log("Servicing moveToAudience...")
         console.log("----------------------------------")
         console.log(moveToAudUser + " is to be moved to the audience in room " + roomcode)
-        
+
         if (roomState[roomcode] != undefined) {
-            
+
             var alreadyIn = false;
             var movedUser;
             var movedIndex;
@@ -224,7 +224,7 @@ var SocketFunctions = {
 
             if (alreadyIn != false) {
                 if (movedUser != undefined && movedIndex != undefined) {
-                    roomState[roomcode].players = roomState[roomcode].players.slice(0, movedIndex).concat(roomState[roomcode].players.slice(movedIndex+1))
+                    roomState[roomcode].players = roomState[roomcode].players.slice(0, movedIndex).concat(roomState[roomcode].players.slice(movedIndex + 1))
                     roomState[roomcode].audience.push(movedUser)
                 }
             }
@@ -249,9 +249,9 @@ var SocketFunctions = {
         console.log("Servicing moveToPlayer...")
         console.log("----------------------------------")
         console.log(moveToPlayerUser + " is to be moved to the players in room " + roomcode)
-        
+
         if (roomState[roomcode] != undefined) {
-            
+
             var alreadyIn = false;
             var movedUser;
             var movedIndex;
@@ -269,8 +269,8 @@ var SocketFunctions = {
             })
 
             if (alreadyIn != false) {
-                if (movedUser != undefined && movedIndex != undefined) {
-                    roomState[roomcode].audience = roomState[roomcode].audience.slice(0, movedIndex).concat(roomState[roomcode].audience.slice(movedIndex+1))
+                if (movedUser != undefined && movedIndex != undefined && roomState[roomcode].players.length < 4) {
+                    roomState[roomcode].audience = roomState[roomcode].audience.slice(0, movedIndex).concat(roomState[roomcode].audience.slice(movedIndex + 1))
                     roomState[roomcode].players.push(movedUser)
                 }
             }
@@ -305,7 +305,9 @@ var SocketFunctions = {
 
         if (roomState[roomcode] != undefined) {
             console.log("Filtering out player in room if room exists")
-            roomState[roomcode].players = roomState[roomcode].players.filter((data, index) => data.username != username);
+            roomState[roomcode].players = roomState[roomcode].players.filter((data, index) => data.id != id);
+            roomState[roomcode].audience = roomState[roomcode].audience.filter((data, index) => data.id != id);
+
 
             if (roomState[roomcode].players.length != 0) {
                 if (roomState[roomcode].status == true) {
@@ -342,7 +344,23 @@ var SocketFunctions = {
                 break;
             }
         }
+
+        var removePlayer;
+        if (playerRooms[id] != undefined) {
+            removePlayer = SocketFunctions.leftRoom(id, username)
+
+            console.log("Result...")
+            console.log("==================================\n")
+        }
+
         delete playersConnected[username]
+
+        return {
+            success: true,
+            send: broadcastOne,
+            removePlayer: removePlayer
+        };
+
     },
 
     startGame: function (game_state) {

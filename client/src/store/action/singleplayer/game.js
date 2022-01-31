@@ -13,6 +13,7 @@ import {
 import {
     drawACard,
     applyCard,
+    saveScore
 } from "../../features/singleplayer/game"
 import {
     setBotSettings,
@@ -36,6 +37,28 @@ export const UPDATE_UNO_PRESSED = "UPDATE_UNO_PRESSED"
 export const SET_BOT_SETTINGS = "SET_BOT_SETTINGS"
 export const GET_BOT_STATE = "GET_BOT_STATE"
 
+
+export const endGame = (uid, token) => async (dispatch, getState) => {
+    if (uid !== undefined && token !== undefined){
+        const game_state = getState().singleplayer_game;
+        var score = 10;
+        var status = 0;
+        if (game_state.playerdeck["player0"].length === 0) {
+            status = 1;
+            for (var card in game_state.playerdeck) {
+                game_state.playerdeck[card].map((single)=>{
+                    if (single.color === "wild"){
+                        score += 5;
+                    } else {
+                        score += 5;
+                    }
+                })
+            }
+        }
+        console.log("Saving score...")
+        saveScore(uid, score, status, token)
+    }
+}
 
 export const prepareGameMaterials = () => async (dispatch, getState) => {
     return getAllCards()

@@ -15,7 +15,7 @@ import {
     prepareGameMaterials,
     botTurn,
     checkCard,
-    getBotState
+    endGame,
 } from "../../store/action/singleplayer/game"
 import styles from "./styles.module.css";
 import EndGameModal from "./gameComponents/EndGameModal"
@@ -41,6 +41,7 @@ const GameRoom = () => {
         console.log(game_state)
 
         if (game_state.end === true) {
+            dispatch(endGame(localStorage.getItem("userid"), localStorage.getItem("token")))
             setEndGameModalOpen(true)
         } else {
             if (game_state.unoPressed.player !== false) {
@@ -73,8 +74,8 @@ const GameRoom = () => {
             {(game_state.mainDeck.length === 0 || otherPlayers.length === 0) ?
                 <p>Loading</p>
                 :
-                <Box style={{ marginTop: "5vh" }}>
-                    <Grid container>
+                <Box>
+                    <Grid container style={{ height: "20vh" }}>
                         <Grid item xs={6}
                             style={{ marginRight: "auto", marginLeft: "auto" }}>
                             <Bot
@@ -87,7 +88,7 @@ const GameRoom = () => {
                         </Grid>
                     </Grid>
                     <Grid container
-                        style={{ height: "50vh" }}>
+                        style={{ height: "35vh" }}>
                         <Grid item xs={3}
                             style={{
                                 marginTop: "auto",
