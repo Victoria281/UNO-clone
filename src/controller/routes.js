@@ -209,7 +209,7 @@ app.put('/game/update/', printingDebuggingInfo, function (req, res, next) {
     const qValue = req.body.qvalue
     const state = req.body.state
     const action = req.body.action
-console.log(req.body)
+    console.log(req.body)
     Game.updateQvalue(qValue, state, action, function (err, result) {
         if (err) {
             if (err === "404") {
@@ -428,27 +428,11 @@ app.post('/register', printingDebuggingInfo, function (req, res, next) {
             results = Auth.register(userName, email, hash, function (error, results) {
                 console.log("RESULTS: " + results)
                 if (results != null) {
-                    LeaderBoard.insertNewScore(results[0].userid, 0, function (err, result) {
-                        console.log(results)
-                        console.log(results[0].userid)
-                        if (err) {
-                            if (err.code === '23505') {
-                                return next(createHttpError(404, `Not found`));
-                            }
-                            else {
-                                return next(err);
-                            }
-                        } else {
+                    // Deletes the allUsers key inside of Redis (if any)
+                    // So that a new allUsers list can be generated
+                    redisClient.del("allUsers");
 
-                            // Deletes the allUsers key inside of Redis (if any)
-                            // So that a new allUsers list can be generated
-                            redisClient.del("allUsers");
-
-                            return res.status(201).json({ statusMessage: 'Completed registration.' });
-                        }
-                    });
-
-
+                    return res.status(201).json({ statusMessage: 'Completed registration.' });
                 }
                 console.log("IM HEREEEEEEEEEEEEEEEE and the error here is " + error)
                 if (error) {
