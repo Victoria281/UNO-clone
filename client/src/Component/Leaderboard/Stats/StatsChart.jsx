@@ -5,7 +5,7 @@ import { RootState } from '../../../store/types';
 import { LineChart, ComposedChart, Bar, Line, LabelList, Label, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import Loader from '../../OtherComponents/LoadingComponent/Loader';
 
-const DisplayStatsData = () => {
+const DisplayStatisticsData = () => {
     const [data, setData] = useState([]);
     const userStats = useSelector(
         /**
@@ -115,40 +115,6 @@ const DisplayStatsData = () => {
             </LineChart>
         </ResponsiveContainer>
     );
-
-    // return (
-    //     <Suspense fallback={<Loader />}>
-    //         <ResponsiveContainer width="100%" height="100%">
-    //             <ComposedChart
-    //                 width={500}
-    //                 height={300}
-    //                 data={data}
-    //                 margin={{
-    //                     top: 15,
-    //                     right: 30,
-    //                     left: 20,
-    //                     bottom: 5,
-    //                 }}
-    //             >
-    //                 <CartesianGrid strokeDasharray="3 3" />
-    //                 <XAxis dataKey="date">
-    //                     <Label value="Date" offset={0} position="insideBottom" />
-    //                 </XAxis>
-    //                 <YAxis>
-    //                     <Label value="Score" angle={-90} position="insideLeft" />
-    //                 </YAxis>
-    //                 <Tooltip />
-    //                 <Legend verticalAlign='top' />
-
-    //                 <Bar dataKey="score"  barSize={20} fill='#8884d8'>
-    //                     <LabelList dataKey="score" position="top"/>
-    //                 </Bar>
-    //                 <Line type="monotone" dataKey="noOfGames" stroke="#0000FF" />
-    //             </ComposedChart>
-    //         </ResponsiveContainer>
-    //     </Suspense>
-
-    // );
 }
 
-export default DisplayStatsData;
+export default DisplayStatisticsData;

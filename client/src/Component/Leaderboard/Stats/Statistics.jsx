@@ -8,10 +8,9 @@ import { Typography, Box, Link } from '@mui/material';
 
 // CSS Module Imports
 import styles from '../styles.module.css';
+import DisplayStatisticsData from './StatsChart';
 
 // Other Imports
-import Chart from 'chart.js/auto';
-import { getRelativePosition } from 'chart.js/helpers';
 import DisplayStatsChart from './StatsChart.jsx';
 
 /**
@@ -39,7 +38,6 @@ const DisplayStatsData = () => {
     let totalGames = 0;
     let totalWins = 0;
     let lastGame = new Date();
-
 
     if (userStats.score !== undefined) {
         totalGames = userStats.score.length;
@@ -144,7 +142,7 @@ const DisplayStatsData = () => {
                     </Box>
 
                     <Box className='col-xl-7 col-lg-7 col-md-7 col-sm-7 pt-2'>
-                        <DisplayStatsChart />
+                        <DisplayStatisticsData />
                     </Box>
                 </Box>
 

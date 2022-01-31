@@ -19,6 +19,10 @@ const redisClient = redis.createClient({
     port: process.env.REDIS_PORT,
     password: process.env.REDIS_PASSWORD
 });
+
+redisClient.on('error', (errorStream) => {
+    console.log("Error has occured in the redisClient:", errorStream);
+})
 // const redisClient = redis.createClient(process.env.REDIS_PORT, process.env.REDIS_URL);
 
 //ROUTES//
@@ -1092,19 +1096,33 @@ app.delete('/user/friend', printingDebuggingInfo, verifyToken, function (req, re
                 return res.status(404).json(response);
 
             } else {
-                // Invalidate the cache for this user's friends list and pending friends list
-                redisClient.del(`friends_${uid}`);
 
-                // This sentence is generally redundant as the chances of it happening is super duper slim
-                // However, i just added it to ensure the robustness of the web application
-                redisClient.del(`pendingFriends_${uid}_${friendid}`);
+                User.deleteFriend(friendid, uid, (err, result) => {
+                    if (err) {
+                        if (err.code === '23505') {
+                            return next(createHttpError(404, `Not found`));
+                        }
+                        else {
+                            return next(err);
+                        }
+                    } else {
+                        // Invalidate the cache for this user's friends list and pending friends list
+                        redisClient.del(`friends_${uid}`);
+                        redisClient.del(`friends_${friendid}`);
 
-                const response = {
-                    statusCode: 200,
-                    message: 'Friend Deleted'
-                };
+                        // This sentence is generally redundant as the chances of it happening is super duper slim
+                        // However, i just added it to ensure the robustness of the web application
+                        redisClient.del(`pendingFriends_${uid}_${friendid}`);
+                        redisClient.del(`pendingFriends_${friendid}_${uid}`);
 
-                return res.status(200).json(response);
+                        const response = {
+                            statusCode: 200,
+                            message: 'Friend Deleted'
+                        };
+
+                        return res.status(200).json(response);
+                    }
+                });
             }
         }
     });
@@ -1213,7 +1231,7 @@ app.get('/leaderboard/:num', printingDebuggingInfo, function (req, res, next) {
 });
 
 //updateHighestScore
-app.put('/score/:id', printingDebuggingInfo, verifyToken, verifyGoogleToken, function (req, res, next) {
+app.post('/score/:id', printingDebuggingInfo, verifyToken, verifyGoogleToken, function (req, res, next) {
     const id = req.params.id;
     const score = req.body.score;
     const game_status = req.body.game_status;

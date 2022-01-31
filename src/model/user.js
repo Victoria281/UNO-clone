@@ -20,12 +20,19 @@ const User = {
 
         return pool.query(query, function (error, result) {
             if (error) {
+<<<<<<< HEAD
                 console.log("error:", error);
                 callback(error, null);
                 return;
             } else {
                 if (result.rows.length == 0) {
                     callback("404", null);
+=======
+                return callback(error, null);
+            } else {
+                if (result.rows.length == 0) {
+                    return callback("404", null);
+>>>>>>> 7df7f4e (added oauth v2.0 authentication to unoclone, however some functions are breaking atm)
                 } else {
                     console.log(result.rows)
                     return callback(null, result.rows[0]);

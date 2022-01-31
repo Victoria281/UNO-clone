@@ -26,6 +26,8 @@ const initialState = {
     botcurrentstate: "",
     bot_settings: {},
     end: false
+    botcurrentstate: "",
+    bot_settings: {},
 };
 
 const reducer = (state = initialState, action) => {
