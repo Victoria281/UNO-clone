@@ -2,6 +2,7 @@
 import { useState } from "react";
 import {
     sortCards,
+    callUNO
 } from "../../../store/action/singleplayer/game"
 import { useDispatch } from 'react-redux'
 import { Stack, Button } from '@mui/material';
@@ -40,9 +41,7 @@ const Player = ({ playerDeck, current, playerTurn, isTurn }) => {
                                 alignItems: "center"
                             }}>
                             <button className={styles.roomBtn} onClick={() => {
-                                if (isTurn){
                                     dispatch(callUNO())
-                                }
                             }}><p>UNO</p></button>
                         </div>
                     </div>
