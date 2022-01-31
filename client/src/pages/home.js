@@ -1,4 +1,6 @@
 import "../css/home.css";
+import BotDifficultyModal from "../Component/OtherComponents/BotDifficultyComponent/BotDifficultyModal";
+import { useState } from "react";
 import { Grid, styled, Paper, Typography } from '@mui/material';
 import { homeAnimation } from "./homeAnimation";
 import { useEffect } from "react";
@@ -16,7 +18,7 @@ const Item = styled(Paper)(({ theme }) => ({
     transform: 'scale(1.05,1.05)'
   },
   width: '75%'
-}));
+}));  const [open, setOpen] = useState(false);
 
 const Home = () => {
   useEffect(() => {
@@ -27,6 +29,8 @@ const Home = () => {
     <Grid container spacing={2} className="App">
       <Grid item xs={1}></Grid>
       <Grid item xs={6}>
+      <button onClick={()=>{setOpen(true)}}>Start</button>
+      <BotDifficultyModal open={open} setOpen={setOpen}/>
         <Typography variant="h1" sx={{ mt: 10,mb:10 }}>Uno Clone</Typography>
         <Item sx={{ bgcolor: 'info.main' }}>
           <a className="startBtn" href="./game">

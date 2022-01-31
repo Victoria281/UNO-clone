@@ -39,8 +39,8 @@ var Card = {
         }
 
         return pool.query(query, function (error, result) {
-            console.log(error)
-            console.log(result)
+            // console.log(error)
+            // console.log(result)
             if (error) {
                 callback(error, null);
                 return;

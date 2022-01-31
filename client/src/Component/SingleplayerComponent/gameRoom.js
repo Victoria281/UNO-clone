@@ -14,7 +14,8 @@ import Bot from "./gameComponents/Bot"
 import {
     prepareGameMaterials,
     botTurn,
-    checkCard
+    checkCard,
+    getBotState
 } from "../../store/action/singleplayer/game"
 import styles from "./styles.module.css";
 import EndGameModal from "./gameComponents/EndGameModal"
