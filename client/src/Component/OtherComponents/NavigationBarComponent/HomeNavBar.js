@@ -11,6 +11,7 @@ import QuestionMarkIcon from '@mui/icons-material/QuestionMark';
 
 // Components Import
 import Account from "./Account";
+import styles from "./styles.module.css"
 
 const HomeNavBar = ({ exact, path, component: Component, loggedIn, ...rest }) => {
     return <Route exact={exact} path={path} {...rest} render={(routeProps) => {
@@ -40,27 +41,22 @@ const HomeNavBar = ({ exact, path, component: Component, loggedIn, ...rest }) =>
 
                         <div className="collapse navbar-collapse" id="navbarTogglerDemo03">
                             <ul className="navbar-nav ml-auto mt-2 mt-lg-0">
+
                                 <li className="nav-item active navbarDesign" style={{ background: '#e71e1e' }}>
                                     <div className="borderHover" style={{ borderColor: '#e71e1e' }}>
-                                        <p className="nav-link navBarWord">
-                                            <MusicNoteIcon />
-                                        </p>
+                                        <MusicNoteIcon className={styles.icons} />
                                     </div>
                                 </li>
 
                                 <li className="nav-item active navbarDesign" style={{ background: '#1E9FE7' }}>
                                     <div className="borderHover" style={{ borderColor: '#1E9FE7' }}>
-                                        <p className="nav-link navBarWord">
-                                            <ViewInArIcon />
-                                        </p>
+                                        <ViewInArIcon className={styles.icons} />
                                     </div>
                                 </li>
 
                                 <li className="nav-item active navbarDesign" style={{ background: '#46E71E' }}>
                                     <div className="borderHover" style={{ borderColor: '#46E71E' }}>
-                                        <p className="nav-link navBarWord">
-                                            <QuestionMarkIcon />
-                                        </p>
+                                        <QuestionMarkIcon className={styles.icons} />
                                     </div>
                                 </li>
 
