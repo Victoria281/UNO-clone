@@ -71,7 +71,6 @@ function AppCreateRoom(props) {
 const App = ({ hideLoader }) => {
 
   const [o_Notif, o_setNotif] = useState({ open: false, type: "", message: "" });
-  const [room, setRoom] = useState();
 
   useEffect(() => {
     hideLoader()
@@ -84,8 +83,7 @@ const App = ({ hideLoader }) => {
   useEffect(() => {
     socket.on("watchFriend", (data) => {
       console.log("your friend is playing now")
-      o_setNotif({open: true, type: 'success', message : "Your friend is playing now"})
-      setRoom(data);
+      o_setNotif({open: true, type: 'success', message : "Your friend "+data.username+" is playing now", room: data.roomcode})
       console.log(data)
     });
 }, [socket]);
@@ -102,7 +100,7 @@ const App = ({ hideLoader }) => {
 
   return (
    <>
-      <MultiplayerNotification uopen={o_Notif} usetOpen={o_setNotif} socket={room}/>
+      <MultiplayerNotification uopen={o_Notif} usetOpen={o_setNotif}/>
       <Router>
         <Switch>
           <HomeNavBar exact path="/" component={AppHome} loggedIn={loggedIn}/>
@@ -115,10 +113,6 @@ const App = ({ hideLoader }) => {
           <DefaultNavBar exact path="/profile" component={ProfilePage} />
           <DefaultNavBar exact path="/leaderboard" component={LeaderboardPage} />
           <Route exact path="/logout" component={Logout} />
-          {/* <PageRestriction exact path="/createroom" component={Room} socket={socket}/> */}
-          {/* <PageRestriction path="/multiplayer/:roomname/:username" component={Appmain} socket={socket}/> */}
-  
-          {/* new */}
           <InGameNavBar exact path="/createroom" component={AppCreateRoom}/>
           <InGameNavBar path="/multiplayer/:roomcode" component={AppGameRoom} />
         </Switch>
