@@ -62,9 +62,9 @@ const GameRoom = ({ socket }) => {
     return (
         <Box>
             <Grid container
-                style={{ border: "1px solid grey", height: "25vh" }}>
+                style={{ height: "25vh" }}>
                 <Grid item xs={6}
-                    style={{ border: "1px solid grey", marginRight: "auto", marginLeft: "auto" }}>
+                    style={{ marginRight: "auto", marginLeft: "auto" }}>
 
                     {(otherPlayers[1] !== undefined) &&
                         <OtherPlayer
@@ -79,9 +79,8 @@ const GameRoom = ({ socket }) => {
                 </Grid>
             </Grid>
             <Grid container
-                style={{ border: "1px solid grey", height: "40vh" }}>
-                <Grid item xs={3}
-                    style={{ border: "1px solid grey" }}>
+                style={{ height: "40vh" }}>
+                <Grid item xs={3}>
                     {(otherPlayers[0] !== undefined) &&
                         <OtherPlayer
                             placement={'Left'}
@@ -94,7 +93,7 @@ const GameRoom = ({ socket }) => {
                 </Grid>
                 <Grid item xs={6}
                     style={{
-                        border: "1px solid grey", display: "flex",
+                        display: "flex",
                         justifyContent: "space-around",
                         alignItems: "center"
                     }}>
@@ -105,8 +104,7 @@ const GameRoom = ({ socket }) => {
                         used={game_state.used}
                         socket={socket} />}
                 </Grid>
-                <Grid item xs={3}
-                    style={{ border: "1px solid grey" }}>
+                <Grid item xs={3}>
                     {(otherPlayers[2] !== undefined) &&
                         <OtherPlayer
                             placement={'Right'}
@@ -130,7 +128,7 @@ const GameRoom = ({ socket }) => {
                         socket={socket} />
                     :
                     <Grid container
-                        style={{ border: "1px solid grey", height: "25vh" }}>
+                        style={{ height: "25vh" }}>
                         <Grid item xs={2}>
                         </Grid>
                         <Grid item xs={6}
