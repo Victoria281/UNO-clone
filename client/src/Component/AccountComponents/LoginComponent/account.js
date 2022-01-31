@@ -196,7 +196,7 @@ export default function App() {
   return (
     <div className="App">
       <div className="wrapper">
-        <CustomNotification notif={notif} setNotif={setNotif} />
+        <CustomNotification uopen={notif} usetOpen={setNotif} />
         <h1><b className={styles.accountTitle}>Login</b></h1>
         <div className={styles.accountBody}>
 

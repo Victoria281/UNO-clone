@@ -8,6 +8,11 @@
     margin: 10px !important;
 }
 
+.moveBtn{
+    border-radius: 100px !important;
+    margin: 10px !important;
+}
+
 .messagecontainer{
     display: flex !important;
     align-items: center !important;

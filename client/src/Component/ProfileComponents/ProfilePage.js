@@ -15,6 +15,7 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import CustomNotification from "../OtherComponents/NotificationComponent/Notifications";
 import styles from './styles.module.css';
 import FriendsNotification from "../OtherComponents/NotificationComponent/FriendsNotifications";
+//import MultiplayerNotification from "../OtherComponents/NotificationComponent/MultiplayerNotification";
 
 import {
   getUserInfo
@@ -53,7 +54,7 @@ const Profile = () => {
           <p>Loading</p>
           :
           <Box id="root">
-            <FriendsNotification uopen={o_Notif} usetOpen={o_setNotif} />
+            <CustomNotification uopen={o_Notif} usetOpen={o_setNotif} />
 
             <ProfileModal 
             setErrorNotif={setErrorNotif}
