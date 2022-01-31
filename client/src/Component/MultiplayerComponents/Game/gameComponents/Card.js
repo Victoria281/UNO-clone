@@ -63,14 +63,14 @@ const Card = ({ card, cardId, identity, playable, socket }) => {
                 }
                 setInAProp(false);
                 setTimeout(() => {
-                    if (game_state.otherPlayerPlayingCard.player === room_state.myTurnIs){
+                    if (game_state.otherPlayerPlayingCard.player === room_state.myTurnIs) {
                         dispatch(startPlayerAction("play", socket))
                     }
                     setInAProp(true);
                 }, timeout);
 
-                
-                
+
+
 
             }
 
@@ -85,7 +85,7 @@ const Card = ({ card, cardId, identity, playable, socket }) => {
             setCardChosen(card)
             setSelectColorModalOpen(true)
         } else {
-            dispatch(sendPlayerAction("play", socket, {card: card}))
+            dispatch(sendPlayerAction("play", socket, { card: card }))
         }
 
 
@@ -143,24 +143,34 @@ const Card = ({ card, cardId, identity, playable, socket }) => {
                                 }
                             }}
                         >
-                            {playable === undefined || playable === false ?
+                            {identity.includes("bot") === true ?
                                 <img
                                     className="img-responsive"
                                     style={{ width: 50 }}
                                     src={
-                                        process.env.REACT_APP_API_URL + "/api/uno/images/" +
-                                        card.image_file.slice(8)
+                                        process.env.REACT_APP_API_URL + "/api/uno/images/Deck.png"
                                     }
                                 />
                                 :
-                                <img
-                                    className={`img-responsive ${styles.Playable}`}
-                                    style={{ width: 50 }}
-                                    src={
-                                        process.env.REACT_APP_API_URL + "/api/uno/images/" +
-                                        card.image_file.slice(8)
-                                    }
-                                />
+
+                                playable === undefined || playable === false ?
+                                    <img
+                                        className="img-responsive"
+                                        style={{ width: 50 }}
+                                        src={
+                                            process.env.REACT_APP_API_URL + "/api/uno/images/" +
+                                            card.image_file.slice(8)
+                                        }
+                                    />
+                                    :
+                                    <img
+                                        className={`img-responsive ${styles.Playable}`}
+                                        style={{ width: 50 }}
+                                        src={
+                                            process.env.REACT_APP_API_URL + "/api/uno/images/" +
+                                            card.image_file.slice(8)
+                                        }
+                                    />
                             }
 
                         </div>

@@ -28,17 +28,20 @@ const EndGameModal = ({ endGameModalOpen, setEndGameModalOpen }) => {
     const { game_state, points } = useSelector(state => {
         const game_state = state.singleplayer_game
         var points = 10;
-        if (game_state.playerdeck["player0"].length === 0) {
-            for (var card in game_state.playerdeck) {
-                game_state.playerdeck[card].map((single)=>{
-                    if (single.color === "wild"){
-                        points += 5;
-                    } else {
-                        points += 5;
-                    }
-                })
+        if (game_state.playerdeck["player0"] !== undefined){
+            if (game_state.playerdeck["player0"].length === 0) {
+                for (var card in game_state.playerdeck) {
+                    game_state.playerdeck[card].map((single)=>{
+                        if (single.color === "wild"){
+                            points += 5;
+                        } else {
+                            points += 5;
+                        }
+                    })
+                }
             }
         }
+        
         return { game_state, points }
     })
 
@@ -67,7 +70,7 @@ const EndGameModal = ({ endGameModalOpen, setEndGameModalOpen }) => {
                     <Grid item md={12}>
                         <Box className={styles.colormodaltitlecontainer}>
                             {
-                                game_state.playerdeck["player0"].length === 0 ?
+                                (game_state.playerdeck["player0"] !== undefined && game_state.playerdeck["player0"].length === 0) ?
                                     <Typography variant='h6' className={styles.colormodaltitle}>
                                         You Won! Points Scored: {points}
                                     </Typography>
