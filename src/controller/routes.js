@@ -49,12 +49,10 @@ const e = require('express');
 //=====================================
 
 //retrieveImagesForUno
-app.get('/images/*', printingDebuggingInfo, function (req, res, next) {
+app.get('/images/*', function (req, res, next) {
     var request = url.parse(req.url, true);
     var action = request.pathname;
     var filePath = path.join(__dirname, action).split("%20").join(" ");
-    console.log(action)
-    console.log(filePath)
 
     fs.open(filePath, 'r', (err, fd) => {
         if (err) {
@@ -84,12 +82,10 @@ app.get('/images/*', printingDebuggingInfo, function (req, res, next) {
 });
 
 //retrieveImagesForProfile
-app.get('/profile_icons/*', printingDebuggingInfo, function (req, res, next) {
+app.get('/profile_icons/*', function (req, res, next) {
     var request = url.parse(req.url, true);
     var action = request.pathname;
     var filePath = path.join(__dirname, action).split("%20").join(" ");
-    console.log(action)
-    console.log(filePath)
 
     fs.open(filePath, 'r', (err, fd) => {
         if (err) {
@@ -160,12 +156,7 @@ app.get('/game/find/:state', printingDebuggingInfo, function (req, res, next) {
                 return next(err);
             }
         } else {
-            if (result.length == 0) {
-                return next(createHttpError(404, `Not found`));
-            } else {
-                return res.status(200).json({ actions: result });
-            }
-
+            return res.status(200).json({ actions: result });
         }
     });
 });
@@ -175,7 +166,7 @@ app.get('/game/findq/:state/:action', printingDebuggingInfo, function (req, res,
     const state = req.params.state
     const action = req.params.action
 
-    Game.findByStateAction(state,action, function (err, result) {
+    Game.findByStateAction(state, action, function (err, result) {
         if (err) {
             if (err.code === '23505') {
                 return next(createHttpError(404, `Not found`));
@@ -184,12 +175,7 @@ app.get('/game/findq/:state/:action', printingDebuggingInfo, function (req, res,
                 return next(err);
             }
         } else {
-            if (result.length == 0) {
-                return next(createHttpError(404, `Not found`));
-            } else {
-                return res.status(200).json({ data: result });
-            }
-
+            return res.status(200).json({ data: result });
         }
     });
 });
@@ -211,7 +197,7 @@ app.post('/game/insert/', printingDebuggingInfo, function (req, res, next) {
             if (result.length == 0) {
                 return next(createHttpError(404, `Not found`));
             } else {
-                return res.status(200).json({ statusMessage : 'StateAction insert complete' });
+                return res.status(200).json({ statusMessage: 'StateAction insert complete' });
             }
 
         }
@@ -223,22 +209,17 @@ app.put('/game/update/', printingDebuggingInfo, function (req, res, next) {
     const qValue = req.body.qvalue
     const state = req.body.state
     const action = req.body.action
-
-    Game.updateQvalue(qValue,state, action, function (err, result) {
+console.log(req.body)
+    Game.updateQvalue(qValue, state, action, function (err, result) {
         if (err) {
-            if (err.code === '23505') {
+            if (err === "404") {
                 return next(createHttpError(404, `Not found`));
             }
             else {
                 return next(err);
             }
         } else {
-            if (result.length == 0) {
-                return next(createHttpError(404, `Not found`));
-            } else {
-                return res.status(200).json({ statusMessage : 'StateAction update complete' });
-            }
-
+            return res.status(200).json({ statusMessage: 'StateAction update complete' });
         }
     });
 });

@@ -48,8 +48,6 @@ const GameRoom = () => {
                 dispatch(checkCard())
             }, 2000);
         } else if (game_state.turn !== 0 &&
-            game_state.turn !== otherPlayers[1] &&
-            game_state.turn !== otherPlayers[2] &&
             game_state.mainDeck.length !== 0 &&
             !game_state.botPlayingCard &&
             !game_state.toDrawCard &&
@@ -58,8 +56,7 @@ const GameRoom = () => {
         ) {
             // console.log("Its the bots turn now")
             console.log("PlayerBot " + game_state.turn + " now")
-            dispatch(getBotState())
-            dispatch(botTurn())
+                dispatch(botTurn())
         }
 
     }, [game_state]);
