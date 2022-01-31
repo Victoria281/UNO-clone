@@ -9,6 +9,7 @@ import MusicNoteIcon from "@mui/icons-material/MusicNote";
 import ViewInArIcon from "@mui/icons-material/ViewInAr";
 import QuestionMarkIcon from '@mui/icons-material/QuestionMark';
 import SettingsIcon from '@mui/icons-material/Settings';
+import Music from "../MusicComponent/Music";
 
 // Components Import
 import Account from "./Account";
@@ -71,7 +72,7 @@ const PreLoginNavBar = ({ exact, path, component: Component, loggedIn, ...rest }
                                             className={`navbarDesign ${styles.menu}`}
                                         >
                                             <Tooltip title="Music" placement="left">
-                                                <MusicNoteIcon className={styles.icons} />
+                                                <Music />
                                             </Tooltip>
                                         </li>
 

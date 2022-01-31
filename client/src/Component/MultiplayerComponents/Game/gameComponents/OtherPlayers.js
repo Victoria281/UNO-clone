@@ -19,6 +19,7 @@ const OtherPlayer = ({ playerDeck, placement, number, pturn, isTurn }) => {
             <Stack direction="row" spacing={1} className={`${styles.OtherPlayerStack} ${styles['OtherPlayerStack' + placement]}`}>
                 {playerDeck.map((card, i) =>
                     <Card
+                    identity={"bot" + number}
                         card={card}
                         cardId={"p1" + card.id}
                     />

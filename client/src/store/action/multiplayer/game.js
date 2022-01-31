@@ -29,6 +29,33 @@ export const updatePlayerList = (player_list, id) => async dispatch => {
     });
 }
 
+export const sortCards = (sortby) => async (dispatch, getState) => {
+    const room_state = getState().multiplayer_rooms
+    const game_state = getState().multiplayer_rooms.game_state
+    console.log(game_state)
+    console.log(room_state)
+    if (sortby === "color") {
+        game_state.playerdeck["player"+room_state.myTurnIs].sort(function(a, b) {
+          var keyA = a.color, keyB = b.color;
+          if (keyA < keyB) return -1;
+          if (keyA > keyB) return 1;
+          return 0;
+        });
+    } else {
+        game_state.playerdeck["player"+room_state.myTurnIs].sort(function(a, b) {
+          var keyA = parseInt(a.values), keyB = parseInt(b.values);
+          if (keyA < keyB) return -1;
+          if (keyA > keyB) return 1;
+          return 0;
+        });
+    }
+    var data = game_state
+    dispatch({
+        type: UPDATE_GAME,
+        data
+    });
+}
+
 export const prepareGameMaterials = (socket) => async (dispatch, getState) => {
     getAllCards()
         .then(result => {
@@ -45,6 +72,7 @@ export const prepareGameMaterials = (socket) => async (dispatch, getState) => {
                 playerdeck: arr[0],
                 roomcode: roomcode,
                 reverse: 0,
+                end: false,
                 unoPressed: {
                     player: false,
                     pressed: false
@@ -228,33 +256,6 @@ export const unoPenalty = (socket) => async (dispatch, getState) => {
     socket.emit('sendGameUpdate', {
         new_game_state
     })
-}
-
-
-export const sortCards = (sortby) => async (dispatch, getState) => {
-    const game_state = getState().singleplayer_game
-    console.log(game_state.playerdeck["player" + game_state.playerTurn])
-    if (sortby === "color") {
-        game_state.playerdeck["player" + game_state.playerTurn].sort(function (a, b) {
-            var keyA = a.color, keyB = b.color;
-            if (keyA < keyB) return -1;
-            if (keyA > keyB) return 1;
-            return 0;
-        });
-        console.log(game_state.playerdeck["player" + game_state.playerTurn])
-    } else {
-        game_state.playerdeck["player" + game_state.playerTurn].sort(function (a, b) {
-            var keyA = parseInt(a.values), keyB = parseInt(b.values);
-            if (keyA < keyB) return -1;
-            if (keyA > keyB) return 1;
-            return 0;
-        });
-        console.log(game_state.playerdeck["player" + game_state.playerTurn])
-    }
-    dispatch({
-        type: SINGLEPLAYER_UPDATE_GAME,
-        game_state
-    });
 }
 
 export const callUNO = (socket) => async (dispatch, getState) => {

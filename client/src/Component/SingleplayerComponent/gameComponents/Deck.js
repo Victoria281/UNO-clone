@@ -25,7 +25,7 @@ const Deck = () => {
                     <img
                         id="mainDeck"
                         className={`img-responsive ${styles.TopCard}`}
-                        style={{ width: 90 }}
+                        style={{ width: 60 }}
                         src={
                             process.env.REACT_APP_API_URL + "/api/uno/images/" +
                             game_state.current.image_file.slice(8)
@@ -35,7 +35,7 @@ const Deck = () => {
                     {game_state.used.length !== 0 &&
                         <img
                             className={`img-responsive ${styles.BelowCard}`}
-                            style={{ width: 90 }}
+                            style={{ width: 60 }}
                             src={
                                 process.env.REACT_APP_API_URL + "/api/uno/images/" +
                                 game_state.used[game_state.used.length - 1].image_file.slice(8)
@@ -52,7 +52,7 @@ const Deck = () => {
                         {mainDeckState.map((d, i) => 
                             <img
                                 className={`img-responsive ${styles.Deck}`}
-                                style={{ width: 80 }}
+                                style={{ width: 60 }}
                                 src={
                                     process.env.REACT_APP_API_URL + "/api/uno/images/Deck.png"
                                 }

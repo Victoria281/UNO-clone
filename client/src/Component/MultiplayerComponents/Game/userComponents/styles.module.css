@@ -14,6 +14,7 @@
 
 .ChatBody {
     overflow-y: scroll;
+    padding-top: 20px;
     height: 82vh;
     border: 1px solid #1B7CB1
 }
@@ -22,6 +23,60 @@
     height: 8vh;
     border: 1px solid #1B7CB1
 }
+
+.mymessage {
+    position: relative;
+    background: #67AEEF;
+    border-radius: .4em;
+    padding: 5px;
+    width: 30%;
+    margin-right: 10px;
+    margin-left: auto;
+    margin-bottom: 5px;
+}
+
+.myusername {
+    position: relative;
+    padding: 5px;
+    width: fit-content;
+    margin-right: 10px;
+    margin-left: auto;
+    margin-bottom: 30px;
+}
+
+p {
+    font-family: "Armata";
+    padding: 0;
+    margin: 0;
+    font-size: 18px;
+}
+
+.systemMessage {
+    color: #1B7CB1;
+    font-size: 14px;
+    text-align: center;
+}
+
+.othermessage {
+    position: relative;
+    background: #5FA5CC;
+    border-radius: .4em;
+    padding: 5px;
+    width: 30%;
+    margin-left: 10px;
+    margin-right: auto;
+    margin-bottom: 5px;
+}
+
+.otherusername {
+    position: relative;
+    padding: 5px;
+    width: fit-content;
+    margin-left: 5px;
+    margin-right: auto;
+    margin-bottom: 30px;
+}
+
 
 .ChatMessage>input {
     font-family: "Armata";
@@ -34,6 +89,12 @@
 
 .ChatMessage>input:focus {
     outline: none;
+}
+
+.ChatIcon {
+    position: fixed;
+    right: 10px;
+    bottom: 10px;
 }
 
 .btnLove{

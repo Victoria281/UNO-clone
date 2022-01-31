@@ -124,7 +124,7 @@ const DrawCardDeck = ({ socket }) => {
                             (game_state.toDrawCard.number === 2 || game_state.unoPenalty !== false) ?
                                 <img
                                     className="img-responsive"
-                                    style={{ width: 90 }}
+                                    style={{ width: 60 }}
                                     src={
                                         process.env.REACT_APP_API_URL + "/api/uno/images/Blue_2.png"
                                     }
@@ -132,7 +132,7 @@ const DrawCardDeck = ({ socket }) => {
                                 :
                                 <img
                                     className="img-responsive"
-                                    style={{ width: 90 }}
+                                    style={{ width: 60 }}
                                     src={
                                         process.env.REACT_APP_API_URL + "/api/uno/images/Blue_4.png"
                                     }
@@ -140,7 +140,7 @@ const DrawCardDeck = ({ socket }) => {
                             :
                             <img
                                 className="img-responsive"
-                                style={{ width: 90 }}
+                                style={{ width: 60 }}
                                 src={
                                     process.env.REACT_APP_API_URL + "/api/uno/images/Deck.png"
                                 }
