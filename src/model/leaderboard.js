@@ -77,14 +77,13 @@ var LeaderBoard = {
         );
     },
     
-    insertNewScore: function (id, score, callback) {
-        console.log(id)
-        console.log(score)
+    insertNewScore: function (score, id, game_status, callback) {
         const query = {
             name: 'insertNewScore',
-            text: 'INSERT INTO uno_leaderboard("userid", "score") VALUES($1, $2);',
-            values: [id, score],
+            text: 'INSERT INTO uno_leaderboard("userid", "score", "game_status", "created_at") VALUES($1, $2, $3, NOW());',
+            values: [id, score, game_status],
         }
+        console.log(query)
 
         return pool.query(query, function (error, result) {
             if (error) {

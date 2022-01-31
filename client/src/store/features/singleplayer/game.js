@@ -12,7 +12,28 @@ import {
     checkFirstCard,
 } from "../multiplayer/game"
 
+export const saveScore = async (uid, score, status, token) => {
+    try {
+        var data = {
+            score: score,
+            game_status: status
+        }
+        console.log(token)
+        const response = await fetch(process.env.REACT_APP_API_URL + `/api/uno/score/${uid}`, {
+            method: 'POST',
+            headers: {
+              'authorization': token,
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        });
 
+        return response
+    } catch (err) {
+        // console.log("error")
+        // console.error(err.message);
+    }
+}
 
 export const getCardForBot = (r, wild_playable, normal_playable) => {
     var cardplayed = {};

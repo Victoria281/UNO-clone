@@ -971,11 +971,12 @@ app.get('/leaderboard/:num', printingDebuggingInfo, function (req, res, next) {
 });
 
 //updateHighestScore
-app.put('/leaderboard/update/:id', printingDebuggingInfo, verifyToken, function (req, res, next) {
+app.post('/score/:id', printingDebuggingInfo, verifyToken, function (req, res, next) {
     const id = req.params.id;
     const score = req.body.score;
+    const game_status = req.body.game_status;
 
-    LeaderBoard.updateHighestScore(score, id, function (err, result) {
+    LeaderBoard.insertNewScore(score, id, game_status, function (err, result) {
         if (err) {
             if (err.code === '23505') {
                 return next(createHttpError(404, `Not found`));

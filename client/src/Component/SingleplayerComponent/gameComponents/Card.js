@@ -68,7 +68,7 @@ const Card = ({ card, cardId, identity, playable }) => {
         },
         exited: {
             opacity: 1,
-            transform: `scale(1.28) translate(${travelFromDeck.x / 1.28}px, ${travelFromDeck.y / 1.28}px) rotate(${90}deg)`,
+            transform: `scale(1.2) translate(${travelFromDeck.x / 1.2}px, ${travelFromDeck.y / 1.2}px) rotate(${90}deg)`,
             transition: `transform ${timeout}ms`,
             transitionTimingFunction: "linear"
         }

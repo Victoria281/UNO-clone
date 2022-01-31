@@ -14,7 +14,8 @@ import Bot from "./gameComponents/Bot"
 import {
     prepareGameMaterials,
     botTurn,
-    checkCard
+    checkCard,
+    endGame
 } from "../../store/action/singleplayer/game"
 import styles from "./styles.module.css";
 import EndGameModal from "./gameComponents/EndGameModal"
@@ -40,6 +41,7 @@ const GameRoom = () => {
         console.log(game_state)
 
         if (game_state.end === true) {
+            dispatch(endGame(localStorage.getItem("userid"), localStorage.getItem("token")))
             setEndGameModalOpen(true)
         } else {
             if (game_state.unoPressed.player !== false) {
