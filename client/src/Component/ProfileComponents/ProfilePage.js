@@ -4,12 +4,16 @@ import "./profile.css";
 import UserInfoCard from './UserInfoSection/UserInfoCard'
 import SecurityCard from './SecuritySection/SecurityCard'
 import ProfileModal from './ProfileModal/ProfileModal'
+import Friends from './FriendsSection/Friends'
+import FindFriends from './FriendsSection/FindFriends'
+import PendingFriends from './FriendsSection/PendingFriends'
 import { useDispatch, useSelector } from 'react-redux'
 import {Box} from '@mui/material'
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import LockIcon from '@mui/icons-material/Lock';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import CustomNotification from "../OtherComponents/NotificationComponent/Notifications";
+import styles from './styles.module.css';
 
 import {
   getUserInfo
@@ -88,10 +92,57 @@ const Profile = () => {
                       </Box>
                     </Box>
                   </Box>
-                </Box>
-              </Box>
+
+               {/* Friends */}
+              <div className={`card my-3 ${styles.accordionBox}`}>
+                <div id="headerThree" className="card-header d-flex justify-content-between" data-toggle="collapse" href="#collapseThree">
+                  <button className="collapsed card-link text-dark">
+                    <i className="fa fa-user-o"></i>    My Friends
+                  </button>
+                  <i className="fa fa-arrow-down p-1"></i>
+                </div>
+                <div id="collapseThree" className={`collapse ${styles.accordionBoxBody}`} data-parent="#accordion">
+                  <div id="bodyThree" className={`card-body`}>
+                    <Friends />
+                  </div>
+                </div>
+              </div>
+
+              {/* Pending Friend Requests */}
+              <div className={`card my-3 ${styles.accordionBox}`}>
+                <div id="headerFour" className="card-header d-flex justify-content-between" data-toggle="collapse" href="#collapseFour">
+                  <button className="collapsed card-link text-dark">
+                    <i className="fa fa-user-o"></i>    My Pending Friend Requests
+                  </button>
+                  <i className="fa fa-arrow-down p-1"></i>
+                </div>
+                <div id="collapseFour" className={`collapse ${styles.accordionBoxBody}`} data-parent="#accordion">
+                  <div id="bodyFour" className={`card-body`}>
+                    <PendingFriends />
+                  </div>
+                </div>
+              </div>
+
+              {/* Make Friend Requests */}
+              <div className={`card my-3 ${styles.accordionBox}`}>
+                <div id="headerFive" className="card-header d-flex justify-content-between" data-toggle="collapse" href="#collapseFive">
+                  <button className="collapsed card-link text-dark">
+                    <i className="fa fa-user-o"></i>    Find Friends
+                  </button>
+                  <i className="fa fa-arrow-down p-1"></i>
+                </div>
+                <div id="collapseFive" className={`collapse ${styles.accordionBoxBody}`} data-parent="#accordion">
+                  <div id="bodyFive" className={`card-body`}>
+                    <FindFriends />
+                  </div>
+                </div>
+              </div>
+              
             </Box>
           </Box>
+        </Box>
+      </Box>
+
       }
     </Fragment>
   );

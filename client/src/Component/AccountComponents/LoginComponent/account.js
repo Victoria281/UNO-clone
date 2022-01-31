@@ -1,8 +1,6 @@
 //@ts-nocheck
-import React, { useState } from "react";
-// import "../../../css/account.css";
+import React, { useState, useEffect } from "react";
 import styles from '../styles.module.css'
-// import { response } from "express";
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import axios from "axios";
 import ReCAPTCHA from "react-google-recaptcha";
@@ -28,6 +26,37 @@ export default function App() {
   // Hooks to disable Form
   const [attempt, setAttempt] = useState(0);
   const [formDisabled, setFormDisabled] = useState(false);
+  const [btnDisabled, setBtnDisabled] = useState(false);
+  const [seconds, setSeconds] = useState(10);
+  const [isActive, setIsActive] = useState(false);
+  const [isShown, setIsShown] = useState(false);
+
+
+
+  // Resets Timer Function
+  function reset() {
+    setSeconds(10);
+    setIsActive(false);
+    setIsShown(false);
+  }
+
+  useEffect(() => {
+    let interval = null;
+    if (formDisabled) {
+      setIsShown(true);
+      setIsActive(true);
+      interval = setInterval(() => {
+        setSeconds(seconds => seconds - 1);
+      }, 1000);
+    } else{
+      clearInterval(interval);
+    }
+    if(seconds === 0){
+      clearInterval(interval)
+      reset();
+    }
+    return () => clearInterval(interval);
+  }, [formDisabled, seconds]);
 
   // Recaptcha on change function, value used to verify if user is really not a robot
   function onChange(value) {
@@ -48,7 +77,7 @@ export default function App() {
 
   // Function called when login button is clicked
   function createPost() {
-    var status = true;
+    let status = true;
 
     // Check email field
     if (email === "") {
@@ -66,10 +95,9 @@ export default function App() {
       }
     }
 
-    // console.log("AFTERRRRRRRRRRRRRR EMAIL CHECK")
-    // console.log(status);
 
-    if (status === true) {
+
+    if (status) {
       // Check password field
       if (password === "") {
         status = false;
@@ -80,8 +108,6 @@ export default function App() {
         //setPasswordError("");
       }
     }
-    // console.log("AFTERRRRRRR PASSWORD CHECK")
-    // console.log(status)
 
     // Check if status has been validated
     if (status) {
@@ -139,30 +165,11 @@ export default function App() {
           } else {
             // console.log("Login Failed!")
           }
-          // console.log(error.config);
+        
         })
     }
 
 
-    // // checking if email is empty
-    // if (email !== "") {
-    //   // Checks email with regex expression
-    //   const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
-    //   if (emailRegex.test(email)) {
-    //     setEmailError("");
-    //   } else {
-    //     setEmailError("Invalid Email");
-    //   }
-    // } else {
-    //   setEmailError("Email Required");
-    // }
-
-    // // Check if password is empty
-    // if (password != "") {
-    //   // Do something here!
-    // } else {
-    //   setPasswordError("Password Required");
-    // }
   }
 
   const handleEmailChange = (e) => {
@@ -240,6 +247,7 @@ export default function App() {
                 style={{ marginTop: 20, height: 50, backgroundColor: '#FFB967', border: '1px solid #FFB967', borderRadius: '50%' }}
                 onClick={() => { createPost(); play(); }}
                 className={styles.accountSubmitBtn}
+                disabled={btnDisabled}
               >
                 <p className={styles.accountLoginText} style={{ fontSize: 48, fontWeight: 'bolder', fontFamily: 'Rubik Mono One', color: 'black', marginTop: -18 }}><b>Login</b></p>
               </button><br /><br />
@@ -248,6 +256,18 @@ export default function App() {
 
             </fieldset>
           </form>
+
+        {
+          isShown ? 
+          <div className="time">
+            Timeout: {seconds}s
+          </div> :
+          <div></div>
+          
+        }
+          
+
+
         </div>
       </div>
     </div>

@@ -1,0 +1,16 @@
+.dropmenu{
+    min-width: 100px;
+    background-color: transparent;
+    border: none;
+}
+
+.icons{
+    min-width: 100px;
+    min-height: 40px;
+    border-radius: 200px;
+}
+
+.menu:hover{
+    border: 2px solid;
+    border-radius: 20px;
+}

@@ -10,9 +10,9 @@ import {
     playDraw,
     playWild,
     checkFirstCard,
-    
-
 } from "../multiplayer/game"
+
+
 
 export const getCardForBot = (r, wild_playable, normal_playable) => {
     var cardplayed = {};

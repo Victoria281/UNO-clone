@@ -2,7 +2,7 @@
     display: grid;
 }
 
-.TopCard , .BelowCard {
+.TopCard, .BelowCard {
     grid-column: 1;
     grid-row: 1;
 }
@@ -21,17 +21,17 @@
     display: grid;
 }
 
-.TopDrawCard , .BelowDrawCard {
+.TopDrawCard {
     grid-column: 1;
     grid-row: 1;
 }
 
-.BelowDrawCard {
-    z-index: 0;
+.TopDrawCard:nth-child(1) {
+    z-index: 10;
 }
 
-.TopDrawCard {
-    z-index: 10;
+.TopDrawCard:nth-child(2) {
+    display: grid;
 }
 
 
@@ -41,4 +41,24 @@
 
 .Playable:hover {
     transform: translateY(-20px)
+}
+
+.Deck {
+    grid-column: 1;
+    grid-row: 1;
+}
+
+.Deck:nth-child(2) {
+    transform: translate(8px, 8px);
+    z-index: -1;
+}
+
+.Deck:nth-child(3) {
+    transform: translate(16px, 16px);
+    z-index: -2;
+}
+
+.Deck:nth-child(4) {
+    transform: translate(24px, 24px);
+    z-index: -3;
 }

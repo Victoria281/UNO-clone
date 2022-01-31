@@ -4,6 +4,9 @@ import {
     playCard,
     playBotCard
 } from "../../../store/action/singleplayer/game"
+import {
+    getRandomInt,
+} from "../../../store/features/multiplayer/game"
 import { useDispatch } from 'react-redux'
 import { Transition } from "react-transition-group";
 
@@ -18,60 +21,65 @@ const BotCard = ({ card, cardId, identity, botPlay }) => {
         y: 0
     });
 
-    const timeout = 1000;
+    const timeout = 800;
 
-    
+
 
     useEffect(() => {
         if (botPlay) {
-            // console.log("im true")
-            const mainDeckDOM = document.getElementById("mainDeck").getBoundingClientRect();
-            const selectedCardDOM = document.getElementById(`${cardId}`).getBoundingClientRect();
-    
-            switch (identity) {
-                case "bot1": {
-                    setTravelFromDeck({
-                        y: -(mainDeckDOM.x - selectedCardDOM.x),
-                        x: mainDeckDOM.y - selectedCardDOM.y
-                    })
-                    break;
-                }
-                case "bot2": {
-                    setTravelFromDeck({
-                        x: selectedCardDOM.x - mainDeckDOM.x,
-                        y: -(mainDeckDOM.y - selectedCardDOM.y)
-                    })
-                    break;
-                }
-                case "bot3": {
-                    setTravelFromDeck({
-                        y: mainDeckDOM.x - selectedCardDOM.x,
-                        x: -(mainDeckDOM.y - selectedCardDOM.y)
-                    })
-
-                    console.log("bot card")
-                    console.log(selectedCardDOM)
-                    console.log("main card")
-                    console.log(mainDeckDOM)
-                    console.log("calculation")
-                    console.log(mainDeckDOM.x - selectedCardDOM.x)
-                    console.log(mainDeckDOM.y - selectedCardDOM.y)
-                    break;
-                }
-                default: 
-                break;
-            }
-            setInAProp(false);
+            var hesitation = getRandomInt(8, 2) * 500
             setTimeout(() => {
-                setInAProp(true);
-                dispatch(playBotCard(card))
-            }, timeout);
-            
-        } 
-          
+
+                // console.log("im true")
+                const mainDeckDOM = document.getElementById("mainDeck").getBoundingClientRect();
+                const selectedCardDOM = document.getElementById(`${cardId}`).getBoundingClientRect();
+
+                switch (identity) {
+                    case "bot1": {
+                        setTravelFromDeck({
+                            y: -(mainDeckDOM.x - selectedCardDOM.x),
+                            x: mainDeckDOM.y - selectedCardDOM.y
+                        })
+                        break;
+                    }
+                    case "bot2": {
+                        setTravelFromDeck({
+                            x: selectedCardDOM.x - mainDeckDOM.x,
+                            y: -(mainDeckDOM.y - selectedCardDOM.y)
+                        })
+                        break;
+                    }
+                    case "bot3": {
+                        setTravelFromDeck({
+                            y: mainDeckDOM.x - selectedCardDOM.x,
+                            x: -(mainDeckDOM.y - selectedCardDOM.y)
+                        })
+
+                        console.log("bot card")
+                        console.log(selectedCardDOM)
+                        console.log("main card")
+                        console.log(mainDeckDOM)
+                        console.log("calculation")
+                        console.log(mainDeckDOM.x - selectedCardDOM.x)
+                        console.log(mainDeckDOM.y - selectedCardDOM.y)
+                        break;
+                    }
+                    default:
+                        break;
+                }
+                setInAProp(false);
+                setTimeout(() => {
+                    setInAProp(true);
+                    dispatch(playBotCard(card))
+                }, timeout);
+            }, hesitation);
+
+
+        }
+
     }, [botPlay]);
 
-  
+
 
     const defaultStyle = {
 
@@ -107,17 +115,17 @@ const BotCard = ({ card, cardId, identity, botPlay }) => {
                             ...defaultStyle,
                             ...transitionStyles[state]
                         }}
-                        // className="p1cards"
+                    // className="p1cards"
                     >
-                        
-                            <img
-                                className="img-responsive"
-                                style={{ width: 70 }}
-                                src={
-                                    process.env.REACT_APP_API_URL + "/api/uno/images/" +
-                                    card.image_file.slice(8)
-                                }
-                            />
+
+                        <img
+                            className="img-responsive"
+                            style={{ width: 70 }}
+                            src={
+                                process.env.REACT_APP_API_URL + "/api/uno/images/" +
+                                card.image_file.slice(8)
+                            }
+                        />
 
                     </div>
                 );

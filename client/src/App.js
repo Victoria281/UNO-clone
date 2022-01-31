@@ -1,15 +1,13 @@
 // @ts-nocheck
-import React, { Fragment, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 
 const dotenv = require('dotenv');
 dotenv.config();
 
-console.log(">>>>", process.env);
-
 //components
 import SingleplayerGame from "./Component/SingleplayerComponent/gameRoom"
 import GamePage from "./pages/game";
-import HomePage from "./pages/home";
+import HomePage from "./Component/HomePageComponents/home";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import EndPage from "./pages/end";
 import AccountPage from "./Component/AccountComponents/LoginComponent/account";
@@ -28,7 +26,13 @@ import Loader from "./Component/OtherComponents/LoadingComponent/Loader"
 
 import MultiplayerCreateRoom from "./Component/MultiplayerComponents/Dashboard/createRoom"
 import MultiplayerGameRoom from "./Component/MultiplayerComponents/Game/gameRoom"
-import DefaultNavBar from "./Component/OtherComponents/NavigationBar/DefaultNavBar"
+
+// Navigation Bars
+import DefaultNavBar from "./Component/OtherComponents/NavigationBarComponent/DefaultNavBar"
+import InGameNavBar from "./Component/OtherComponents/NavigationBarComponent/InGameNavBar";
+import PreLoginNavBar from "./Component/OtherComponents/NavigationBarComponent/PreLoginNavBar";
+import HomeNavBar from "./Component/OtherComponents/NavigationBarComponent/HomeNavBar";
+
 const socket = io.connect(process.env.REACT_APP_API_URL);
 
 function AppGameRoom(props) {
@@ -42,10 +46,38 @@ function AppGameRoom(props) {
   );
 }
 
+function AppHome(props) {
+  return (
+    <React.Fragment>
+      <HomePage
+        socket={socket}
+      />
+    </React.Fragment>
+  );
+}
+
+function AppCreateRoom(props) {
+  return (
+    <React.Fragment>
+      <MultiplayerCreateRoom
+        socket={socket}
+      />
+    </React.Fragment>
+  );
+}
+
 const App = ({ hideLoader }) => {
   useEffect(() => {
     hideLoader()
   });
+
+  
+  useEffect(() => {
+    socket.on("informFriendPlayiong", (data) => {
+      console.log("your friend is playing now")
+      console.log(data)
+    });
+}, [socket]);
 
   const [loggedIn, setLoggedIn] = useState(localStorage.getItem("userid"));
   useEffect(() => {
@@ -60,30 +92,30 @@ const App = ({ hideLoader }) => {
   return (
     <Router>
       <Switch>
-        <DefaultNavBar exact path="/" component={HomePage} loggedIn={loggedIn}/>
+        <HomeNavBar exact path="/" component={AppHome} loggedIn={loggedIn}/>
         <PageRestriction exact path="/load" component={Loader} />
-        <PageRestriction exact path="/game" component={GamePage} />
-        <PageRestriction exact path="/newgame" component={SingleplayerGame} />
+        <InGameNavBar exact path="/game" component={SingleplayerGame} />
+        <InGameNavBar exact path="/newgame" component={SingleplayerGame} />
         <PageRestriction exact path="/end" component={EndPage} />
-        <Route exact path="/login" component={AccountPage} />
-        <Route exact path="/register" component={RegisterPage} />
-        <PageRestriction exact path="/profile" component={ProfilePage} />
-        <PageRestriction exact path="/leaderboard" component={LeaderboardPage} />
+        <PreLoginNavBar exact path="/login" component={AccountPage} />
+        <PreLoginNavBar exact path="/register" component={RegisterPage} />
+        <DefaultNavBar exact path="/profile" component={ProfilePage} />
+        <DefaultNavBar exact path="/leaderboard" component={LeaderboardPage} />
         <Route exact path="/logout" component={Logout} />
         {/* <PageRestriction exact path="/createroom" component={Room} socket={socket}/> */}
         {/* <PageRestriction path="/multiplayer/:roomname/:username" component={Appmain} socket={socket}/> */}
 
         {/* new */}
-        <Route exact path="/createroom" render={() => <MultiplayerCreateRoom socket={socket} />} />
-        <Route path="/multiplayer/:roomcode" component={AppGameRoom} />
+        <InGameNavBar exact path="/createroom" component={AppCreateRoom}/>
+        <InGameNavBar path="/multiplayer/:roomcode" component={AppGameRoom} />
       </Switch>
     </Router >
   );
 }
-function Logout() {
 
+function Logout() {
   localStorage.clear();
-  window.location = '/';
+  window.location = '/login';
 }
 
 
