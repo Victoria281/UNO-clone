@@ -1,5 +1,5 @@
 // @ts-ignore
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route, Link ,Redirect} from "react-router-dom";
 import { Box, Button, AppBar, Grid } from '@mui/material';
 
 import { NavLink } from 'react-router-dom'
@@ -15,6 +15,12 @@ import styles from "./styles.module.css"
 
 const HomeNavBar = ({ exact, path, component: Component, loggedIn, ...rest }) => {
     return <Route exact={exact} path={path} {...rest} render={(routeProps) => {
+
+        const id = localStorage.getItem("userid");
+
+        if(!id){
+            return <Redirect to="/login" />
+        }
 
         return (
             <>
@@ -69,6 +75,7 @@ const HomeNavBar = ({ exact, path, component: Component, loggedIn, ...rest }) =>
                         </div>
                     </nav>
                 </div>
+
                 <Component {...routeProps} />
             </>
         )

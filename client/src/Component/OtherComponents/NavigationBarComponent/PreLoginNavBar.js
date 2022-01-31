@@ -43,15 +43,6 @@ const PreLoginNavBar = ({ exact, path, component: Component, loggedIn, ...rest }
 
                         <div className="collapse navbar-collapse" id="navbarTogglerDemo03">
                             <ul className="navbar-nav ml-auto mt-2 mt-lg-0">
-                                <li className="nav-item active navbarDesign" style={{ background: '#e71e1e' }}>
-                                    <NavLink to="/leaderboard" exact activeClassName="activeIcon">
-                                        <div className="borderHover" style={{ borderColor: '#e71e1e' }}>
-                                            <p className="nav-link navBarWord">
-                                                Ranks
-                                            </p>
-                                        </div>
-                                    </NavLink>
-                                </li>
 
                                 <div className={`dropdown ${styles.drop}`}>
                                     <button className="btn btn-primary dropdown-toggle nav-item active navbarDesign" type="button" data-toggle="dropdown" style={{ background: '#D27C2C' }}>
