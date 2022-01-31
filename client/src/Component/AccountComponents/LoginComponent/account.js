@@ -159,11 +159,13 @@ export default function App() {
             if (attempt == 4) {
               status = false;
               setFormDisabled(true);
+              setBtnDisabled(true);
               //alert("The form has been disabled. Please wait for a while")
               setNotif({ open: true, type: 'error', message: 'Form is disabled' })
               // Enable form after 10 secs
               setTimeout(() => {
                 setFormDisabled(false);
+                setBtnDisabled(true);
                 setAttempt(0);
               }, 10000);
 
@@ -228,13 +230,19 @@ export default function App() {
   }
 
   const initializeGoogleAuth = () => {
-    google.accounts.id.initialize({
-      client_id: process.env.REACT_APP_GOOGLE_CLIENT_ID,
-      callback: handleCredentialResponse
-    });
-    google.accounts.id.renderButton(document.getElementById("google-auth-button"), { theme: 'outline', size: 'large', position: 'absolute', top: '300px' });
-    // google.accounts.id.prompt();
+    try {
+      google.accounts.id.initialize({
+        client_id: process.env.REACT_APP_GOOGLE_CLIENT_ID,
+        callback: handleCredentialResponse
+      });
+      google.accounts.id.renderButton(document.getElementById("google-auth-button"), { theme: 'outline', size: 'large', position: 'absolute', top: '300px' });
+      // google.accounts.id.prompt();
+    } catch (error) {
+      console.log("google login failed to load in the set time");
+    }
   }
+
+  // initializeGoogleAuth();
 
   return (
     <div className="App">
