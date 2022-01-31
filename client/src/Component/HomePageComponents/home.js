@@ -2,6 +2,7 @@ import { Grid, styled, Paper, Typography } from '@mui/material';
 import { homeAnimation } from "./homeAnimation";
 import { useEffect } from "react";
 import styles from "./styles.module.css"
+import { typography } from "@mui/system";
 
 const Item = styled(Paper)(({ theme }) => ({
   ...theme.typography.body2,
@@ -17,9 +18,10 @@ const Item = styled(Paper)(({ theme }) => ({
   width: '75%'
 }));
 
-const Home = () => {
+const Home = ({ socket }) => {
   useEffect(() => {
     homeAnimation()
+    socket.emit("exitMultiplayer", localStorage.getItem("username"))
   }, [])
 
   return (
