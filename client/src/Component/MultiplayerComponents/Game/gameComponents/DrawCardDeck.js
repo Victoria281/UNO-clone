@@ -1,9 +1,10 @@
 // @ts-nocheck
 import { useEffect, useState, useRef } from "react";
 import {
-    // drawCard,
+    sendPlayerAction,
+    startPlayerAction,
     // playerToDrawCard,
-    // unoPenalty
+    unoPenalty
 } from "../../../../store/action/multiplayer/game"
 import { useDispatch, useSelector } from 'react-redux'
 import { Transition } from "react-transition-group";
@@ -11,11 +12,12 @@ import styles from "./styles.module.css"
 import { Stack } from '@mui/material';
 
 //gets the data from the action object and reducers defined earlier
-const DrawCardDeck = ({ }) => {
+const DrawCardDeck = ({ socket }) => {
     const nodeRef = useRef(null);
     const dispatch = useDispatch();
     const [inAProp, setInAProp] = useState(true);
-    const game_state = useSelector(state => state.singleplayer_game)
+    const game_state = useSelector(state => state.multiplayer_rooms.game_state)
+    const room_state = useSelector(state => state.multiplayer_rooms)
     const [travelFromDrawDeck, setTravelFromDrawDeck] = useState({
         x: 0,
         y: 0
@@ -25,10 +27,12 @@ const DrawCardDeck = ({ }) => {
 
 
     useEffect(() => {
-        if (game_state.toDrawCard) {
-            // console.log("im drawing card for bot")
+        console.log(game_state.toDrawCard)
+        if (game_state.toDrawCard.player !== false) {
+            console.log("im drawing card for bot")
+            console.log(game_state.toDrawCard)
             const drawDeckDOM = document.getElementById("drawCardDeck").getBoundingClientRect();
-            const lastPlayerCard = document.getElementById(`p1${game_state.playerdeck["player" + game_state.turn].slice(-1)[0].id}`).getBoundingClientRect();
+            const lastPlayerCard = document.getElementById(`p1${game_state.playerdeck["player" + game_state.toDrawCard.player].slice(-1)[0].id}`).getBoundingClientRect();
 
             setTravelFromDrawDeck({
                 x: lastPlayerCard.x - drawDeckDOM.x,
@@ -37,28 +41,19 @@ const DrawCardDeck = ({ }) => {
 
             setInAProp(false);
             setTimeout(() => {
-                // console.log("here drawing for bot")
+                if (game_state.toDrawCard.player === room_state.myTurnIs) {
+                    dispatch(startPlayerAction("draw", socket))
+                }
                 setInAProp(true);
                 // dispatch(drawCard());
             }, timeout);
-
-        } else if (game_state.getDrawnCard !== false) {
-            const drawDeckDOM = document.getElementById("drawCardDeck").getBoundingClientRect();
-            const lastPlayerCard = document.getElementById(`p1${game_state.playerdeck["player" + game_state.getDrawnCard.player].slice(-1)[0].id}`).getBoundingClientRect();
-
-            setTravelFromDrawDeck({
-                x: lastPlayerCard.x - drawDeckDOM.x,
-                y: lastPlayerCard.y - drawDeckDOM.y
-            })
-
-
-            setInAProp(false);
-            setTimeout(() => {
-                // console.log("here drawing for bot")
-                setInAProp(true);
-                // dispatch(playerToDrawCard());
-            }, timeout);
-        } else if (game_state.unoPenalty !== null) {
+        }
+        if (game_state.unoPenalty !== false) {
+            console.log("imk applying penalty for UNO")
+            console.log(game_state.unoPenalty)
+            console.log(game_state.playerdeck["player" + game_state.unoPenalty])
+            console.log(game_state.playerdeck["player" + game_state.unoPenalty].slice(-1)[0])
+            console.log(game_state.playerdeck["player" + game_state.unoPenalty].slice(-1)[0].id)
             const drawDeckDOM = document.getElementById("drawCardDeck").getBoundingClientRect();
             const lastPlayerCard = document.getElementById(`p1${game_state.playerdeck["player" + game_state.unoPenalty].slice(-1)[0].id}`).getBoundingClientRect();
 
@@ -67,40 +62,22 @@ const DrawCardDeck = ({ }) => {
                 y: lastPlayerCard.y - drawDeckDOM.y
             })
 
-
             setInAProp(false);
             setTimeout(() => {
-                // console.log("here drawing for bot")
+                if (game_state.unoPenalty === room_state.myTurnIs) {
+                    dispatch(unoPenalty(socket))
+                }
                 setInAProp(true);
-                // dispatch(unoPenalty());
+                // dispatch(drawCard());
             }, timeout);
         }
+
 
     }, [game_state]);
 
     const handleClick = () => {
-        const drawDeckDOM = document.getElementById("drawCardDeck").getBoundingClientRect();
-        const lastPlayerCard = document.getElementById(`p1${game_state.playerdeck["player" + game_state.turn].slice(-1)[0].id}`).getBoundingClientRect();
-
-        switch (game_state.turn) {
-            case 0: {
-                setTravelFromDrawDeck({
-                    x: lastPlayerCard.x - drawDeckDOM.x,
-                    y: lastPlayerCard.y - drawDeckDOM.y
-                })
-
-                setInAProp(false);
-                setTimeout(() => {
-                    // console.log("here")
-                    setInAProp(true);
-                    // dispatch(drawCard());
-                }, timeout);
-
-                break;
-            }
-            default:
-                break;
-        }
+        console.log("drawingcard")
+        dispatch(sendPlayerAction("draw", socket))
 
     }
 
@@ -138,11 +115,13 @@ const DrawCardDeck = ({ }) => {
                         }}
                         className={styles.TopDrawCard}
                         onClick={() => {
-                            handleClick();
+                            if (room_state.myTurnIs === game_state.turn) {
+                                handleClick();
+                            }
                         }}
                     >
-                        {game_state.getDrawnCard !== false ?
-                            game_state.getDrawnCard.num === 2 ?
+                        {(game_state.toDrawCard.player !== false && game_state.toDrawCard.number !== 1) ?
+                            (game_state.toDrawCard.number === 2 || game_state.unoPenalty !== false) ?
                                 <img
                                     className="img-responsive"
                                     style={{ width: 90 }}

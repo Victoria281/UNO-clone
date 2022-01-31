@@ -14,14 +14,17 @@ import Bot from "./gameComponents/Bot"
 import {
     prepareGameMaterials,
     botTurn,
-    checkCard
+    checkCard,
+    getBotState
 } from "../../store/action/singleplayer/game"
 import styles from "./styles.module.css";
+import EndGameModal from "./gameComponents/EndGameModal"
 
 const GameRoom = () => {
     const dispatch = useDispatch();
     const [otherPlayers, setOtherPlayers] = useState([])
     const game_state = useSelector(state => state.singleplayer_game)
+    const [endGameModalOpen, setEndGameModalOpen] = useState(false);
     useEffect(() => {
         console.log("hrerere")
         dispatch(prepareGameMaterials())
@@ -37,27 +40,36 @@ const GameRoom = () => {
         console.log(game_state.turn)
         console.log(game_state)
 
-        if (game_state.unoPressed.player !== false) {
-            console.log("Times start")
-            setTimeout(() => {
-                console.log("Times up")
-                dispatch(checkCard())
-            }, 2000);
-        } else if (game_state.turn !== 0 &&
-            game_state.mainDeck.length !== 0 &&
-            !game_state.botPlayingCard &&
-            !game_state.toDrawCard &&
-            game_state.getDrawnCard == false &&
-            game_state.unoPenalty == null
-        ) {
-            // console.log("Its the bots turn now")
-            console.log("PlayerBot " + game_state.turn + " now")
-            dispatch(botTurn())
+        if (game_state.end === true) {
+            setEndGameModalOpen(true)
+        } else {
+            if (game_state.unoPressed.player !== false) {
+                console.log("Times start")
+                setTimeout(() => {
+                    console.log("Times up")
+                    dispatch(checkCard())
+                }, 2000);
+            } else if (game_state.turn !== 0 &&
+                game_state.mainDeck.length !== 0 &&
+                !game_state.botPlayingCard &&
+                !game_state.toDrawCard &&
+                game_state.getDrawnCard == false &&
+                game_state.unoPenalty == null
+            ) {
+                // console.log("Its the bots turn now")
+                console.log("PlayerBot " + game_state.turn + " now")
+                dispatch(botTurn())
+            }
         }
+
     }, [game_state]);
 
     return (
         <>
+            <EndGameModal
+                endGameModalOpen={endGameModalOpen}
+                setEndGameModalOpen={setEndGameModalOpen}
+            />
             {(game_state.mainDeck.length === 0 || otherPlayers.length === 0) ?
                 <p>Loading</p>
                 :

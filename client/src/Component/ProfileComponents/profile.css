@@ -2,6 +2,7 @@
     width: 75%;
     margin: auto;
     padding-bottom: 5%;
+    overflow-y: scroll;
   }
 
   .changePassword{

@@ -5,26 +5,32 @@ import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import { purple, blue } from '@mui/material/colors';
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from 'react-redux'
+import styles from "./styles.module.css"
+import {
+    movePlayerToAudience,
+    moveAudienceToPlayer
+} from "../../../../store/action/multiplayer/rooms"
+import botLogo from "./image/bot-logo.png"
 
-const WaitingRoom = ({roomcode, handleStart}) => {
+const WaitingRoom = ({ roomcode, handleStart, socket }) => {
     const dispatch = useDispatch();
-    const [progress, setProgress] = useState(25);
-    const [noOfPeople, setnoOfPeople] = useState(1);
-    const uname = localStorage.getItem('username');
-    const [buttonDisabled, setButtonDisabled] = useState(false);
-    const {room_state, unconnected} = useSelector(state => {
+    const username = localStorage.getItem('username');
+    const [owner, setOwner] = useState(false);
+
+    const { room_state, unconnected } = useSelector(state => {
         const room_state = state.multiplayer_rooms
         const unconnected = []
-        for (var i=0; i<4 - state.multiplayer_rooms.players.length; i++){
+        for (var i = 0; i < 4 - state.multiplayer_rooms.players.length; i++) {
             unconnected.push("Waiting")
         }
-        return {room_state, unconnected}
+        return { room_state, unconnected }
     })
 
     const boxColor = purple['200'];
     const boxBorder = purple['500'];
 
-    const copyLink = "https://uno-clone.herokuapp.com/multiplayer/" + uname;
+    // const copyLink = process.env.REACT_APP_API_URL + "/multiplayer/" + roomcode;
+    const copyLink = "http://localhost:3000/multiplayer/" + roomcode;
 
     const theme = createTheme({
         typography: {
@@ -35,7 +41,7 @@ const WaitingRoom = ({roomcode, handleStart}) => {
     const CircularProgressWithLabel = () => {
         return (
             <Box sx={{ position: 'relative', display: 'inline-flex' }}>
-                <CircularProgress variant="determinate" value={progress} color="inherit" size='80px' />
+                <CircularProgress variant="determinate" value={room_state.players.length * 25} color="inherit" size='80px' />
                 <Box
                     sx={{
                         top: 0,
@@ -179,6 +185,20 @@ const WaitingRoom = ({roomcode, handleStart}) => {
         );
     }
 
+    const handleMoveToAudience = (audience_user, socket) => {
+        if (username === room_state.owner.username) {
+            console.log("im the owner. Moving player to audience")
+            dispatch(movePlayerToAudience(audience_user, socket))
+        }
+    }
+
+    const handleMoveToPlayer = (player_user, socket) => {
+        if (username === room_state.owner.username) {
+            console.log("im the owner. Moving audience to player")
+            dispatch(moveAudienceToPlayer(player_user, socket))
+        }
+    }
+
     return (
         <ThemeProvider theme={theme}>
             <Box
@@ -200,18 +220,36 @@ const WaitingRoom = ({roomcode, handleStart}) => {
                     </Grid>
                 </Grid>
 
-
                 <Grid container sx={{ pl: 10, pt: 5 }}>
 
                     {room_state.players.map((data) =>
 
                         <Grid item xs={3}>
-                            <Avatar
-                                sx={{ width: 135, height: 135, bgcolor: blue[500] }}
-                            // src={process.env.REACT_APP_API_URL + "/api/uno/profile_icons/" + userInfo.profileicon + ".png"}
-                            >
-                                Player
-                            </Avatar>
+                            {
+                                username !== room_state.owner.username
+                                    ? <Avatar
+                                        style={owner == true ? { color: "red" } : { color: "black" }}
+                                        sx={{ width: 135, height: 135, bgcolor: "#1565c0" }}
+                                        onClick={() => {
+                                            handleMoveToAudience(data.username, socket)
+                                        }}
+                                        className={styles.movetoAudience}
+                                    // src={process.env.REACT_APP_API_URL + "/api/uno/profile_icons/" + userInfo.profileicon + ".png"}
+                                    />
+                                    : <div className={styles.profile}>
+                                        <Avatar
+                                            style={owner == true ? { color: "red" } : { color: "black" }}
+                                            sx={{ width: 135, height: 135, bgcolor: "#1565c0" }}
+                                            onClick={() => {
+                                                handleMoveToAudience(data.username, socket)
+                                            }}
+                                            className={styles.movetoAudience}
+                                        // src={process.env.REACT_APP_API_URL + "/api/uno/profile_icons/" + userInfo.profileicon + ".png"}
+                                        />
+                                        <div className={styles.movetoAudienceTxt}>Move To Audience</div>
+                                    </div>
+                            }
+
                             <Box
                                 sx={{
                                     width: 180,
@@ -219,14 +257,13 @@ const WaitingRoom = ({roomcode, handleStart}) => {
                                     ml: -3,
                                     mt: 2.3
                                 }} >
-                                <Typography variant="h5" sx={{ color: "#3C56AF", textAlign: "center", pt: 0.4 }}>{data.username}</Typography>
+                                <Typography variant="h5" sx={{ color: "#01579b", textAlign: "center", pt: 0.4 }}>{data.username}</Typography>
                             </Box>
                         </Grid>
                     )}
 
-                    {unconnected.map((data) =>
-
-                       { console.log("herere"); return(<Grid item xs={3}>
+                    {unconnected.map((data) => {
+                        return (<Grid item xs={3}>
                             <CircularProgress color="warning" size='130px' />
                             <Box
                                 sx={{
@@ -237,76 +274,61 @@ const WaitingRoom = ({roomcode, handleStart}) => {
                                 }} >
                                 <Typography variant="h5" sx={{ color: "#d46105", textAlign: "center", pt: 0.4 }}>{data}</Typography>
                             </Box>
-                        </Grid>)}
+                        </Grid>)
+                    }
                     )}
 
+                    <Grid sx={{ ml: 5, mt: 1 }}>
+                        <Grid className={styles.botImage}>
+                            <img alt="Bot" src={botLogo} width="90" height="90" style={{ marginLeft: "20px" }} />
+                        </Grid>
 
-
-                    {/* <Grid item xs={3}>
-                        <Avatar
-                            sx={{ width: 135, height: 135, bgcolor: blue[500] }}
-                        // src={process.env.REACT_APP_API_URL + "/api/uno/profile_icons/" + userInfo.profileicon + ".png"}
-                        >
-                            Player
-                        </Avatar>
-                        <Box
-                            sx={{
-                                width: 180,
-                                height: 40,
-                                ml: -3,
-                                mt: 2.3
-                            }} >
-                            <Typography variant="h5" sx={{ color: "#3C56AF", textAlign: "center", pt: 0.4 }}>{uname}</Typography>
-                        </Box>
+                        <Grid className={styles.bot}>
+                            <button className={styles.addbot}>
+                                Add Bot
+                            </button>
+                            
+                            <button className={styles.minusbot}>
+                                Remove Bot
+                            </button>
+                        </Grid>
                     </Grid>
+                    {/* className={styles.ChatDrawer} */}
 
-                    <Grid item xs={3}>
-                        <CircularProgress color="warning" size='130px' />
-                        <Box
-                            sx={{
-                                width: 180,
-                                height: 40,
-                                ml: -3.2,
-                                mt: 2
-                            }} >
-                            <Typography variant="h5" sx={{ color: "#d46105", textAlign: "center", pt: 0.4 }}>Guest 1</Typography>
-                        </Box>
-                    </Grid>
-
-                    <Grid item xs={3}>
-                        <CircularProgress color="success" size='130px' />
-                        <Box
-                            sx={{
-                                width: 180,
-                                height: 40,
-                                ml: -3.2,
-                                mt: 2
-                            }} >
-                            <Typography variant="h5" sx={{ color: "#1F5558", textAlign: "center", pt: 0.4 }}>Guest 2</Typography>
-                        </Box>
-                    </Grid>
-
-                    <Grid item xs={3}>
-                        <CircularProgress color="inherit" size='130px' />
-                        <Box
-                            sx={{
-                                width: 180,
-                                height: 40,
-                                ml: -3.2,
-                                mt: 2
-                            }} >
-                            <Typography variant="h5" sx={{ color: "#000000", textAlign: "center", pt: 0.4 }}>Guest 3</Typography>
-                        </Box>
-                    </Grid> */}
-
-                    <Grid sx={{ mt: 4, ml: 35 }}>
+                    <Grid sx={{ mt: 3, ml: 5, mb: 1 }}>
                         <CircularProgressWithLabel />
                     </Grid>
 
-                    <Grid sx={{ ml: 10, mt: 4 }}>
-                            <button onClick={()=>{handleStart()}} className="roomBtn">
-                                <p>Start</p>
-                            </button>
+                    <Grid sx={{ ml: 7, mt: 4 }}>
+                        <button onClick={() => { handleStart() }} className="roomBtn">
+                            <p>Start</p>
+                        </button>
+                    </Grid>
+
+                    <Grid sx={{ ml: 5, mt: 1 }}>
+                        <p className={styles.txtStyle}><b>Audience:</b></p>
+                    </Grid>
+
+                    <Grid sx={{ ml: 2, mt: 1 }}>
+                        {
+                            room_state.audience.map((data) =>
+                                <Grid container>
+                                    <Grid xs={9}>
+                                        <p className={styles.txtStyle}>{data.username}</p>
+                                    </Grid>
+                                    <Grid xs={3}>
+                                        <button
+                                            className={styles.movebtn}
+                                            onClick={() => {
+                                                handleMoveToPlayer(data.username, socket)
+                                            }}
+                                        >
+                                            Move
+                                        </button>
+                                    </Grid>
+                                </Grid>
+                            )
+                        }
                     </Grid>
 
                     <CopyCode copyCode={roomcode} />
@@ -318,3 +340,4 @@ const WaitingRoom = ({roomcode, handleStart}) => {
 }
 
 export default WaitingRoom;
+

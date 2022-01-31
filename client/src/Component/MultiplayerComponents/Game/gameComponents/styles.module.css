@@ -62,3 +62,107 @@
     transform: translate(24px, 24px);
     z-index: -3;
 }
+
+
+.PlayerArea {
+    background-color: hsl(32, 100%, 70%);
+    border-radius: 30px;
+    padding: 20px;
+    padding-left: 60px;
+}
+
+.PlayerStack {
+    width: 90%;
+    justify-content: center;
+    display: grid !important;
+    grid-template-columns: repeat(auto-fit, minmax(10px, max-content));
+}
+
+.CurrentColor {
+    width: 50px;
+    height: 50px;
+    border-radius: 15px;
+    margin-left: 35px;
+    margin-bottom: 5px;
+}
+
+.red {
+    background-color: red;
+}
+
+.blue {
+    background-color: blue;
+}
+
+.green {
+    background-color: green;
+}
+
+.yellow {
+    background-color: yellow;
+}
+
+.OtherPlayerStack {
+    max-width: 50vh;
+    margin-left: auto;
+    margin-right: auto;
+    display: grid !important;
+    grid-template-columns: repeat(auto-fit, minmax(10px, max-content));
+}
+
+.OtherPlayerStackLeft {
+    transform: rotate(90deg) translateX(-18px)
+}
+
+.OtherPlayerStackRight {
+    transform: rotate(-90deg) translateX(-18px)
+}
+
+.OtherPlayerStackTop {
+    transform: rotate(180deg)
+}
+
+.PlayerNameLeft {
+    transform: rotate(90deg) translateX(60px) translateY(70px);
+    width: fit-content;
+    margin-left: auto;
+}
+
+.PlayerNameRight {
+    transform: rotate(-90deg) translateX(-60px) translateY(70px);
+    width: fit-content;
+    margin-right: auto;
+}
+
+.PlayerNameTop {
+    transform: rotate(180deg);
+    position: absolute;
+    top: 160px;
+    right: 48vw;
+}
+
+.PlayerName {
+    margin-left: auto;
+    margin-right: auto;
+    width: fit-content;
+}
+
+.PlayersTurn {
+    color: red;
+}
+
+.ReverseIcon {
+    width: 80px;
+    margin-top: 80px;
+    margin-right: 30vw;
+}
+
+.Reversed {
+    transform: scaleX(-1);
+}
+
+.ProfileIcon {
+    width: 80px;
+    margin-top: 80px;
+    margin-left: 10vw;
+}
