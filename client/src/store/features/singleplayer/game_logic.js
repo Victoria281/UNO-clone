@@ -102,19 +102,11 @@ export const getCurrentState = (current_card, player_hand) => {
 
 //get action values
 export const getActionValue = async (actionname) => {
-    console.log("see me")
-    console.log(process.env.REACT_APP_API_URL + `/api/uno/action/${actionname}`)
     try {
-        console.log("oiiii hererere")
         const response = await fetch(process.env.REACT_APP_API_URL + `/api/uno/action/${actionname}`, {
             method: "GET",
         })
-        console.log("oiiii hererere")
-        console.log(response)
-        console.log(response.action_value)
-        console.log(response.body)
         var result = await response.json();
-
         console.log("Data from get action value------------------------------------")
         console.log(result.action_value[0])
         console.log("------------------------------------")
@@ -273,120 +265,56 @@ export const getCardForBot = async (r, wild_playable, normal_playable) => {
         cardplayed = wild_playable[Math.floor(Math.random() * wild_playable.length)];
     } else if (normal_playable.length !== 0) {
         cardplayed = normal_playable[Math.floor(Math.random() * normal_playable.length)];
+    }
+
+    if (cardplayed.values === undefined) {
+        return "draw"
     } else {
-        // console.log("Bot has no card to play");
-        // players["player" + order[turn]].push(mainDeck[0]);
-        // setMainDeck(mainDeck.slice(1, mainDeck.length));
-        // setTurn(nextTurn(turn));
-        // setAction(["No Cards to Play", order[turn]])
-        // setTimeout(() => {
-        //     setAction([])
-        // }, 5000);
+        var actionname;
+        console.log("THE CARD PLAYED")
+        console.log(cardplayed)
+        switch (cardplayed.values) {
+            // switch ("1") {
+            //skip is 10
+            case "10":
+                actionname = "SKI"
+                break;
 
-    }
+            //reverse is 11
+            case "11":
+                actionname = "REV"
+                break;
 
-    var actionname;
-    console.log("THE CARD PLAYED")
-    console.log(cardplayed)
-    switch (cardplayed.values) {
-        // switch ("1") {
-        //skip is 10
-        case "10":
-            actionname = "SKI"
-            break;
+            //+2 draw is 12
+            case "12":
+                actionname = "PL2"
+                break;
 
-        //reverse is 11
-        case "11":
-            actionname = "REV"
-            break;
+            //wild is 13
+            case "13":
+                actionname = "COL"
+                break;
 
-        //+2 draw is 12
-        case "12":
-            actionname = "PL2"
-            break;
+            //+4 is 14
+            case "14":
+                actionname = "PL4"
+                break;
+            default:
+                actionname = cardplayed.color.toUpperCase()
+        }
 
-        //wild is 13
-        case "13":
-            actionname = "COL"
-            break;
-
-        //+4 is 14
-        case "14":
-            actionname = "PL4"
-            break;
-        default:
-            actionname = cardplayed.color.toUpperCase()
-    }
-
-    console.log("DO YOU SEE ME:  " + actionname)
-    var results;
-
-
-    getActionValue(actionname).then((actionvalue) => {
-
-        console.log("resultsssssssssssssssssssssssssssssssssss")
-        console.log(actionvalue)
-
-
-        console.log("THIS IS THE ACTION VALUE")
-        console.log(actions.action_value)
-
+        console.log("DO YOU SEE ME:  " + actionname)
+        var results;
+        var actionvalue = await getActionValue(actionname);
+        actions.action_value = actionvalue.action
         actions.action_taken = cardplayed
-
-        console.log(actions.action_taken)
+        console.log("Actions gotten")
+        console.log(actions)
 
         return actions
-    })
-}
-
-//The epsilon greedy algo and the getting the card to be played by bot
-export const setCardPlay = (r, state, wild_playable, normal_playable) => {
-
-    //var player_hand = normal_playable.concat(wild_playable);
-
-    //var state = getCurrentState(current_card, playable_hand);
-
-    console.log("Error Message See State : ---------------------------------")
-    console.log(state);
-
-    var list_of_actions = listStateActions(state).actions;
-
-    var epsilon = 5
-
-    var action;
-
-    console.log("Error Message For list of actions: ---------------------------------")
-    console.log(list_of_actions);
-
-    if ((r * 10) > epsilon && list_of_actions !== undefined) {
-        action = chooseAction(list_of_actions, player_hand)
-    } else {
-        console.log("ïm hererer")
-        getCardForBot(r, wild_playable, normal_playable).then((result)=>{
-
-        
-            console.log("maqryseeeeeeeesaction")
-            console.log(result)
-            action = result
-        })
     }
-    var cardplayed = action.action_taken
-
-    console.log("Action value to be inserted into table");
-    console.log(action.action_value)
-    console.log("---------------------")
-    insertQStateAction(state, action.action_value)
-        .then((result) => {
-            console.log(result)
-            console.log("Insert completed")
-        })
-
-    console.log("Card Played ------------------------------------")
-    console.log(cardplayed)
-    console.log("------------------------------------")
-
-    return cardplayed;
 }
+
 
 // Insert a new state and action
 export const insertQStateAction = async (state, action) => {
@@ -417,7 +345,7 @@ export const insertQStateAction = async (state, action) => {
 }
 
 // Plays the card itself
-export const botPlayCard = (gameState) => {
+export const botPlayCard = async (gameState) => {
     console.log("Bot is choosing card ----------");
 
     // console.log(gameState);
@@ -428,24 +356,41 @@ export const botPlayCard = (gameState) => {
     var wild_playable = arr.filter((item) => item.color === "wild");
     var r = Math.random();
 
-    var cardplayed = setCardPlay(r, gameState.botcurrentstate, normal_playable, wild_playable);
+
+    console.log("getting states")
+    var list_of_actions = listStateActions(gameState.botcurrentstate).actions;
 
 
-    console.log(wild_playable);
-    console.log(normal_playable);
-    console.log("Bot has chosen");
-    console.log(cardplayed);
-    // console.log(cardplayed)
-    // console.log(cardplayed === {})
-    // console.log(cardplayed.length)
+    var epsilon = 5
 
-    if (cardplayed.id === undefined) {
-        // console.log("Bot card is empty");
-        // console.log(gameState);
-        gameState.toDrawCard = true
-    } else {
-        // console.log("THE BOT HAS CHOSEN ")
-        // console.log(cardplayed)
+    console.log("Error Message For list of actions: ---------------------------------")
+    console.log(list_of_actions);
+
+    // if ((r * 10) > epsilon && list_of_actions !== undefined) {
+    //     console.log("im herere")
+    //     action = chooseAction(list_of_actions, normal_playable.concat(wild_playable))
+    // } else {
+        var action = await getCardForBot(r, wild_playable, normal_playable)
+        if (action === "draw") {
+            gameState.toDrawCard = true
+            return gameState
+        }
+        console.log("What is the action")
+        console.log(action)
+        var cardplayed = action.action_taken
+        console.log("cardplayed")
+        console.log(cardplayed)
+        console.log("inserting action")
+
+        await insertQStateAction(gameState.botcurrentstate, action.action_value)
+            .then((result) => {
+                console.log(result)
+                console.log("Insert completed")
+
+            })
+
+
+
         gameState.playerdeck["player" + gameState.turn].map((bcards) => {
             if (bcards === cardplayed) {
                 bcards["botPlayCard"] = true;
@@ -454,10 +399,22 @@ export const botPlayCard = (gameState) => {
             }
         })
         gameState.botPlayingCard = true
-    }
 
-    // console.log(gameState)
-    return gameState
+        return gameState
+
+        // })
+    // }
+
+    // .then
+
+    // console.log(wild_playable);
+    // console.log(normal_playable);
+    // console.log("Bot has chosen");
+
+
+
+    // // console.log(gameState)
+    // return gameState
 };
 
 // Get reward for action
@@ -487,23 +444,26 @@ export const rewardFn = (current_card, cardplayed) => {
 }
 
 // Get the max q value for the next state and its actions
-export const getMaxQValue = (current_card, player_hand) => {
+export const getMaxQValue = async (current_card, player_hand) => {
     var possible_actions = [0.0]
 
     var new_state = getCurrentState(current_card, player_hand);
-    possible_actions = listStateActions(new_state).actions;
+    possible_actions = await listStateActions(new_state);
 
     var highestQ = 0;
     var index = 0;
 
-    possible_actions.map((action) => {
+    console.log("going through possible actions")
+    console.log(possible_actions)
+
+    possible_actions.actions.map((action) => {
         if (action.qvalue > highestQ) {
             highestQ = list_of_actions[i].qvalue;
             index = i;
         }
     })
 
-    var max_qvalue = possible_actions[index].qvalue;
+    var max_qvalue = possible_actions.actions[index].qvalue;
 
     console.log("Max Q Value ------------------------------------")
     console.log(max_qvalue)
@@ -513,20 +473,21 @@ export const getMaxQValue = (current_card, player_hand) => {
 
 // Update the Q table
 export const updateQ = async (qvalue, state, action, bot_settings, reward, max_qvalue) => {
-
     qvalue = qvalue + bot_settings.learning_rate * (reward + bot_settings.discount_factor * (max_qvalue - qvalue));
-
+    var qdata = {
+        state: state,
+        action: action,
+        qvalue: Math.round(qvalue * 100) / 100
+    }
+    console.log(qdata)
+    console.log(JSON.stringify(qdata))
     try {
         const response = await fetch(process.env.REACT_APP_API_URL + `/api/uno/game/update/`, {
             method: "PUT",
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: {
-                state: state,
-                action: action,
-                qvalue: qvalue
-            }
+            body: JSON.stringify(qdata)
         });
 
         console.log("response: " + response.statusText);

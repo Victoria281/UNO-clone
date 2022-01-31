@@ -24,7 +24,7 @@ var Game = {
                 callback(error, null);
                 return;
             } else {
-                console.log(result.rows)
+                // console.log(result.rows)
                 const actions = [];
                 for (let i = 0; i < result.rows.length; i++) {
                     const action = result.rows[i];
@@ -43,13 +43,13 @@ var Game = {
         }
 
         return pool.query(query, function (error, result) {
-            console.log(error)
-            console.log(result)
+            // console.log(error)
+            // console.log(result)
             if (error) {
                 callback(error, null);
                 return;
             } else {
-                console.log(result.rows)
+                // console.log(result.rows)
                 return callback(null, result.rows[0]);
             }
         },
@@ -81,7 +81,11 @@ var Game = {
             text: 'UPDATE uno_qtable SET qValue = $1 WHERE state = $2 AND action = $3;',
             values: [qvalue,state,action],
         }
-
+        console.log("query")
+        console.log(qvalue)
+        console.log(state)
+        console.log(action)
+        console.log(query)
         return pool.query(query, function (error, result) {
             console.log(error)
             console.log(result)

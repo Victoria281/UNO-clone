@@ -146,8 +146,7 @@ export const prepareBotSettings = (user_input) => async (dispatch, getState) => 
 }
 
 //get the bot state id
-export const getBotState = () => async (dispatch, getState) => {
-    var new_game_state = getState().singleplayer_game;
+const getBotState = (new_game_state) => {
     const player_hand = filterPlayableCards(new_game_state.current, new_game_state.playerdeck["player" + new_game_state.turn], new_game_state.turn === new_game_state.playerTurn);
 
     console.log("Bot State (player_hand): --------------------")
@@ -158,89 +157,103 @@ export const getBotState = () => async (dispatch, getState) => {
 
     new_game_state.botcurrentstate = bot_state;
 
-    dispatch({
-        type: GET_BOT_STATE,
-        new_game_state
-    })
+    return new_game_state
 }
 
 //The whole of the bot turn
 export const botTurn = () => async (dispatch, getState) => {
+
+    var new_game_state = getState().singleplayer_game;
+    //get state of bot
+    new_game_state = getBotState(new_game_state);
+
+    console.log("Got the updated state")
+    console.log(new_game_state)
+
     var qvalue;
 
-    const game_state = getState().singleplayer_game;
+    new_game_state = await botPlayCard(new_game_state)
 
-    const new_game_state = botPlayCard(game_state);
+    if (new_game_state.toDrawCard === true) {
 
-    //Still need to convert the used card into an action name/ value
-    var action_name = "";
+        dispatch({
+            type: SINGLEPLAYER_UPDATE_GAME,
+            new_game_state
+        });
 
-    switch (new_game_state.current.values) {
-        case "10":
-            action_name = "SKI"
-            break;
-        case "11":
-            action_name = "REV"
-            break;
-        case "12":
-            action_name = "PL2"
-            break;
-        case "13":
-            action_name = "COL"
-            break;
-        case "14":
-            action_name = "PL4"
-            break;
-        default:
-            action_name = new_game_state.current.color.toUpperCase();
-    }
+    } else {
+        console.log("Boy play card has rum")
+        console.log(new_game_state)
 
-    console.log("Action Name" + action_name + "--------------------")
-
-    const action = getActionValue(action_name).action;
-
-    console.log("Action Value-------------------------------------")
-    console.log(action)
-    console.log("-------------------------------------")
+        var cardplayed = {}
+        new_game_state.playerdeck["player" + new_game_state.turn].map((card) => {
+            if (card.botPlayCard) {
+                cardplayed = card
+            }
+        })
+        console.log("Retriving card played")
+        console.log(cardplayed)
 
 
-    var current_qvalue = getQValue(game_state.botcurrentstate, action)
-    .then((result)=>{
-        
-        if (result === undefined) {
+        //Still need to convert the used card into an action name/ value
+        var action_name = "";
+
+        switch (new_game_state.current.values) {
+            case "10":
+                action_name = "SKI"
+                break;
+            case "11":
+                action_name = "REV"
+                break;
+            case "12":
+                action_name = "PL2"
+                break;
+            case "13":
+                action_name = "COL"
+                break;
+            case "14":
+                action_name = "PL4"
+                break;
+            default:
+                action_name = new_game_state.current.color.toUpperCase();
+        }
+
+        console.log("Action Name " + action_name + "--------------------")
+
+        const action = await getActionValue(action_name);
+
+        console.log("Action Value-------------------------------------")
+        console.log(action.action)
+        console.log("-------------------------------------")
+
+
+
+        var current_qvalue = await getQValue(new_game_state.botcurrentstate, action.action)
+        console.log("what came back")
+        console.log(current_qvalue)
+
+        if (current_qvalue.data === undefined) {
             qvalue = 0.0
         } else {
             console.log("RESULTS FOR Q VALUE FETCH")
-            console.log(result)
-            qvalue = result
+            console.log(current_qvalue)
+            qvalue = parseFloat(current_qvalue.data.qvalue)
         }
-    });
 
-    const reward = rewardFn(game_state.current, new_game_state.current);
+        const reward = rewardFn(new_game_state.current, cardplayed);
 
-    const playable_hand = filterPlayableCards(new_game_state.current, new_game_state.playerdeck["player" + new_game_state.turn], new_game_state.turn === new_game_state.playerTurn)
+        const playable_hand = filterPlayableCards(new_game_state.current, new_game_state.playerdeck["player" + new_game_state.turn], new_game_state.turn === new_game_state.playerTurn)
 
-    const max_qvalue = getMaxQValue(new_game_state.current, playable_hand)
+        const max_qvalue = await getMaxQValue(new_game_state.current, playable_hand)
 
-    updateQ(qvalue, game_state.botcurrentstate, action, game_state.bot_settings, reward, max_qvalue);
+        updateQ(qvalue, new_game_state.botcurrentstate, action.action, new_game_state.bot_settings, reward, max_qvalue);
 
-    // // console.log(card)
-    // // console.log(game_state)
-    // // console.log(new_game_state)
-    // if (game_state.playerdeck["player0"].length ===new_game_state 1) {
-    //     // console.log("Times start")
-    //     setTimeout(() => {
-    //         // console.log("Times up")
-    //         const timeout_game_state = getState().multiplayer_game;
-    //         checkOneCardLeft(timeout_game_state)
-    //     }, 5000);
-    // }
-    // console.log("check thisss")
-    // console.log(new_game_state)
-    dispatch({
-        type: SINGLEPLAYER_UPDATE_GAME,
-        new_game_state
-    });
+        dispatch({
+            type: SINGLEPLAYER_UPDATE_GAME,
+            new_game_state
+        });
+
+    }
 }
 
 export const callUNO = () => async (dispatch, getState) => {

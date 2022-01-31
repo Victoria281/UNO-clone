@@ -28,12 +28,10 @@ const url = require("url");
 //=====================================
 
 //retrieveImagesForUno
-app.get('/images/*', printingDebuggingInfo, function (req, res, next) {
+app.get('/images/*', function (req, res, next) {
     var request = url.parse(req.url, true);
     var action = request.pathname;
     var filePath = path.join(__dirname, action).split("%20").join(" ");
-    console.log(action)
-    console.log(filePath)
 
     fs.open(filePath, 'r', (err, fd) => {
         if (err) {
@@ -63,12 +61,10 @@ app.get('/images/*', printingDebuggingInfo, function (req, res, next) {
 });
 
 //retrieveImagesForProfile
-app.get('/profile_icons/*', printingDebuggingInfo, function (req, res, next) {
+app.get('/profile_icons/*', function (req, res, next) {
     var request = url.parse(req.url, true);
     var action = request.pathname;
     var filePath = path.join(__dirname, action).split("%20").join(" ");
-    console.log(action)
-    console.log(filePath)
 
     fs.open(filePath, 'r', (err, fd) => {
         if (err) {
@@ -139,12 +135,7 @@ app.get('/game/find/:state', printingDebuggingInfo, function (req, res, next) {
                 return next(err);
             }
         } else {
-            if (result.length == 0) {
-                return next(createHttpError(404, `Not found`));
-            } else {
-                return res.status(200).json({ actions: result });
-            }
-
+            return res.status(200).json({ actions: result });
         }
     });
 });
@@ -154,7 +145,7 @@ app.get('/game/findq/:state/:action', printingDebuggingInfo, function (req, res,
     const state = req.params.state
     const action = req.params.action
 
-    Game.findByStateAction(state,action, function (err, result) {
+    Game.findByStateAction(state, action, function (err, result) {
         if (err) {
             if (err.code === '23505') {
                 return next(createHttpError(404, `Not found`));
@@ -163,12 +154,7 @@ app.get('/game/findq/:state/:action', printingDebuggingInfo, function (req, res,
                 return next(err);
             }
         } else {
-            if (result.length == 0) {
-                return next(createHttpError(404, `Not found`));
-            } else {
-                return res.status(200).json({ data: result });
-            }
-
+            return res.status(200).json({ data: result });
         }
     });
 });
@@ -190,7 +176,7 @@ app.post('/game/insert/', printingDebuggingInfo, function (req, res, next) {
             if (result.length == 0) {
                 return next(createHttpError(404, `Not found`));
             } else {
-                return res.status(200).json({ statusMessage : 'StateAction insert complete' });
+                return res.status(200).json({ statusMessage: 'StateAction insert complete' });
             }
 
         }
@@ -202,22 +188,17 @@ app.put('/game/update/', printingDebuggingInfo, function (req, res, next) {
     const qValue = req.body.qvalue
     const state = req.body.state
     const action = req.body.action
-
-    Game.updateQvalue(qValue,state, action, function (err, result) {
+console.log(req.body)
+    Game.updateQvalue(qValue, state, action, function (err, result) {
         if (err) {
-            if (err.code === '23505') {
+            if (err === "404") {
                 return next(createHttpError(404, `Not found`));
             }
             else {
                 return next(err);
             }
         } else {
-            if (result.length == 0) {
-                return next(createHttpError(404, `Not found`));
-            } else {
-                return res.status(200).json({ statusMessage : 'StateAction update complete' });
-            }
-
+            return res.status(200).json({ statusMessage: 'StateAction update complete' });
         }
     });
 });
@@ -570,17 +551,17 @@ app.put('/user/reset', printingDebuggingInfo, function (req, res, next) {
     const email = req.body.email;
     const new_password = req.body.password;
 
-    try {       
+    try {
         // console.log("-----------------------------------------------------------------")
         // console.log(results)
         // console.log("-----------------------------------------------------------------")
         console.log(email)
-                
+
         bcrypt.hash(new_password, 10, async (err, hash) => {
-                            
+
             results = User.resetUserPasswordGmail(email, hash, function (error, results) {
                 console.log(results)
-                if(results===0){
+                if (results === 0) {
                     console.log("There is no such user in the database! Ensure that you have registered with us!")
                     return res.status(404).json({ statusMessage: 'No user found' })
                 }
@@ -591,7 +572,7 @@ app.put('/user/reset', printingDebuggingInfo, function (req, res, next) {
                     return res.status(500).json({ statusMessage: 'Unable to complete reset' });
                 }
             });
-                            
+
         });
     } catch (error) {
         return next(err);
