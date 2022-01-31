@@ -1,4 +1,3 @@
-import "./home.css";
 import { Grid, styled, Paper, Typography } from '@mui/material';
 import { homeAnimation } from "./homeAnimation";
 import { useEffect } from "react";
@@ -29,24 +28,28 @@ const Home = ({ socket }) => {
       <Grid item xs={1}></Grid>
       <Grid item xs={6}>
         <Typography variant="h1" sx={{ mt: 10,mb:10 }}>Uno Clone</Typography>
+
         <Item sx={{ bgcolor: 'info.main' }}>
-          <a className="startBtn" href="./game">
-            Single Player
+          <a href="./game">
+            <p className={styles.startBtn}>Single Player</p>
           </a>
         </Item>
+
         <Item sx={{ bgcolor: 'secondary.main' }}>
-          <a className="startMultiBtn" href="./createroom">
-            Multiplayer
+          <a href="./createroom">
+            <p className={styles.startMultiBtn}>Multiplayer</p>
           </a>
         </Item>
+
         <Item sx={{ bgcolor: 'error.main' }}>
-          <a className="leaderBoardBtn" href="./leaderboard">
-            LeaderBoard
+          <a href="./leaderboard">
+            <p className={styles.leaderBoardBtn}>LeaderBoard</p>
           </a>
         </Item>
+
         <Item sx={{ bgcolor: 'success.main' }}>
-          <a className="profileBtn" href="./profile">
-            Profile
+          <a href="./profile">
+            <p className={styles.profileBtn}>Profile</p>
           </a>
         </Item>
       </Grid>
