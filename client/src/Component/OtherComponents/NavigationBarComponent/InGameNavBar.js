@@ -9,6 +9,7 @@ import MusicNoteIcon from "@mui/icons-material/MusicNote";
 import ViewInArIcon from "@mui/icons-material/ViewInAr";
 import QuestionMarkIcon from '@mui/icons-material/QuestionMark';
 import SettingsIcon from '@mui/icons-material/Settings';
+import Music from "../MusicComponent/Music";
 
 import styles from "./styles.module.css"
 
@@ -58,7 +59,7 @@ const InGameNavBar = ({ exact, path, component: Component, ...rest }) => {
                                             className={`navbarDesign ${styles.menu}`}
                                         >
                                             <Tooltip title="Music" placement="left">
-                                                <MusicNoteIcon className={styles.icons} />
+                                                <Music />
                                             </Tooltip>
                                         </li>
 
