@@ -45,6 +45,7 @@ const initialState = {
     toDrawCard: false,
     getDrawnCard: false,
     otherPlayerPlayingCard: false,
+    end: false,
   },
   chat: []
 };
@@ -79,6 +80,7 @@ const reducer = (state = initialState, action) => {
           toDrawCard: false,
           getDrawnCard: false,
           otherPlayerPlayingCard: false,
+          end: false,
         },
       };
     case UPDATE_IDENTITY:
@@ -102,11 +104,27 @@ const reducer = (state = initialState, action) => {
         ...state,
         roomcode: action.start.roomcode,
         status: action.start.status,
+        game_state: {
+          mainDeck: [],
+          used: [],
+          current: {},
+          playerdeck: [],
+          turn: "",
+          pauseTurn: "",
+          order: [],
+          reverse: 0,
+          unoPressed: {
+            player: false,
+            pressed: false
+          },
+          unoPenalty: false,
+          toDrawCard: false,
+          getDrawnCard: false,
+          otherPlayerPlayingCard: false,
+          end: false,
+        },
       };
     case UPDATE_ROOM:
-      console.log("Called teh reducer")
-      console.log(action)
-      console.log(action.roomState.status)
       return {
         ...state,
         status: action.roomState.status,

@@ -42,44 +42,79 @@ const SelectColorModal = ({ card, socket, selectColorModalOpen, setSelectColorMo
             onClose={handleClose}
             aria-labelledby="modal-modal-title"
             aria-describedby="modal-modal-description"
+            className = {styles.colormodal}
         >
-            <>
-                <div> Select Color </div>
-                <br />
-                <br />
-                <div>
-                    <button
-                        onClick={() => {
-                            handleSelectColor("red")
-                        }}
-                    >
-                        red
-                    </button>
+            <Paper className = {styles.colormodalcontainer}>
 
-                    <button
-                        onClick={() => {
-                            handleSelectColor("blue")
-                        }}
-                    >
-                        blue
-                    </button>
+                <Grid container rowSpacing={4}>
+                    
+                    <Grid item md={12}>
+                        <Box className={styles.colormodaltitlecontainer}><Typography variant='h4' className={styles.colormodaltitle}> Select A Color </Typography></Box>
+                    </Grid>
+                  
+                       <Grid item md={3}>
+                       <Box className={styles.btncontainer}>
+                                <Button
+                                 variant="contained"
+                                className={styles.btnRed}
+                                color='error'
+                                    onClick={() => {
+                                        handleSelectColor("red")
+                                    }}
+                                >
+                                   ---
+                                </Button>
+                       </Box>
+                       </Grid>
+    
+                        <Grid item md={3}>
+                        <Box className={styles.btncontainer}>
+                            <Button
+                             variant="contained"
+                            className={styles.btnBlue}
+                            color='primary'
+                                onClick={() => {
+                                    handleSelectColor("blue")
+                                }}
+                            >
+                                 ---
+                            </Button>
+                            </Box>
+                        </Grid>
+    
+                       <Grid item md={3}>
+                       <Box className={styles.btncontainer}>
+                            <Button
+                             variant="contained"
+                            className={styles.btnYellow}
+                            color='warning'
+                                onClick={() => {
+                                    handleSelectColor("yellow")
+                                }}
+                            >
+                                 ---
+                            </Button>
+                        </Box>
+                       </Grid>
+                        <Grid item md={3}>
+                        <Box className={styles.btncontainer}>
+                            <Button
+                             variant="contained"
+                            className={styles.btnGreen}
+                            color='success'
+                                onClick={() => {
+                                    handleSelectColor("green")
+                                }}
+                            >
+                                ---
+                            </Button>
+                            </Box>
+                        </Grid>
 
-                    <button
-                        onClick={() => {
-                            handleSelectColor("yellow")
-                        }}
-                    >
-                        yellow
-                    </button>
 
-                    <button
-                        onClick={() => {
-                            handleSelectColor("green")
-                        }}
-                    >
-                        green
-                    </button>
-                </div></>
+                </Grid >  
+
+            </Paper>
         </Modal>
     );
 }

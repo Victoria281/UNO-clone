@@ -6,7 +6,8 @@ import { Stack, Button } from '@mui/material';
 import Card from "./Card"
 import styles from "../styles.module.css"
 import {
-    callUNO
+    callUNO,
+    sortCards
 } from "../../../../store/action/multiplayer/game"
 //gets the data from the action object and reducers defined earlier
 const Player = ({ playerDeck, current, playerTurn, isTurn, socket }) => {
@@ -52,8 +53,8 @@ const Player = ({ playerDeck, current, playerTurn, isTurn, socket }) => {
                 </Stack>
 
                 <Stack spacing={2} direction="row">
-                    {/* <Button variant="outlined" onClick={()=>{dispatch(sortCards("color"))}}>Sort By Color</Button> */}
-                    {/* <Button variant="outlined" onClick={()=>{dispatch(sortCards("number"))}}>Sort By Number</Button> */}
+                    <Button variant="outlined" onClick={()=>{dispatch(sortCards("color"))}}>Sort By Color</Button>
+                    <Button variant="outlined" onClick={()=>{dispatch(sortCards("number"))}}>Sort By Number</Button>
                 </Stack>
             </div>
         </>
