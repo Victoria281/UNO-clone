@@ -132,7 +132,6 @@ const GameRoom = ({ socket }) => {
                     <Grid container
                         style={{ border: "1px solid grey", height: "25vh" }}>
                         <Grid item xs={2}>
-                            <img className={styles.ProfileIcon} src={"./images/uno-reverse.png"} />
                         </Grid>
                         <Grid item xs={6}
                             style={{ marginRight: "auto", marginLeft: "auto" }}>
@@ -145,12 +144,6 @@ const GameRoom = ({ socket }) => {
                             />
                         </Grid>
                         <Grid item xs={2}>
-                            {
-                                game_state.reverse === 0 ?
-                                    <img className={`${styles.ReverseIcon}`} src={"./images/uno-reverse.png"} />
-                                    :
-                                    <img className={`${styles.ReverseIcon}  ${styles.Reversed}`} src={"./images/uno-reverse.png"} />
-                            }
 
                         </Grid>
                     </Grid>
