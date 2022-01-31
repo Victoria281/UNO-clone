@@ -297,7 +297,7 @@ export default function App() {
 
               {/* Recaptcha section */}
               <ReCAPTCHA
-                sitekey="6LcitAkeAAAAAE9MsKKtc5-CFwLhZiRTrlxNfOYK"
+                sitekey="6Lc08UseAAAAAExZUzDfat5aE0-Q37Q4qXUJu-Ne"
                 size="normal"
                 type="image"
                 onChange={onChange}
