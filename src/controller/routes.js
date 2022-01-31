@@ -19,6 +19,10 @@ const redisClient = redis.createClient({
     port: process.env.REDIS_PORT,
     password: process.env.REDIS_PASSWORD
 });
+
+redisClient.on('error', (errorStream) => {
+    console.log("Error has occured in the redisClient:", errorStream);
+})
 // const redisClient = redis.createClient(process.env.REDIS_PORT, process.env.REDIS_URL);
 
 //ROUTES//

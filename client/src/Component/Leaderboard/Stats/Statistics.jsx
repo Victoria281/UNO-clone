@@ -9,10 +9,6 @@ import { Typography, Box, Link } from '@mui/material';
 // CSS Module Imports
 import styles from '../styles.module.css';
 
-// Other Imports
-import Chart from 'chart.js/auto';
-import { getRelativePosition } from 'chart.js/helpers';
-
 /**
  * Checks the store for the user's information and display it 
  * when the statistics tab is clicked on
@@ -38,102 +34,6 @@ const DisplayStatsData = () => {
     let totalGames = 0;
     let totalWins = 0;
     let lastGame = new Date();
-
-    // const LoadChart = () => {
-    //     const ctx = 'statisticsChart';
-
-    //     const data = {
-    //         labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-    //         datasets: [{
-    //             label: '# of Votes',
-    //             data: [12, 19, 3, 4, 2, 3],
-    //             backgroundColor: [
-    //                 'rgba(255, 99, 132, 0.2)',
-    //                 'rgba(54, 162, 235, 0.2)',
-    //                 'rgba(255, 206, 86, 0.2)',
-    //                 'rgba(75, 192, 192, 0.2)',
-    //                 'rgba(153, 102, 255, 0.2',
-    //                 'rgba(255, 159, 64, 0.2)'
-    //             ],
-    //             borderColor: [
-    //                 'rgba(255, 99, 132, 1)',
-    //                 'rgba(54, 162, 235, 1)',
-    //                 'rgba(255, 206, 86, 1)',
-    //                 'rgba(75, 192, 192, 1)',
-    //                 'rgba(153, 102, 255, 1)',
-    //                 'rgba(255, 159, 64, 1)'
-    //             ],
-    //             borderWidth: 1
-    //         }]
-    //     };
-
-    //     let chart = new Chart(ctx, {
-    //         type: 'line',
-    //         data: data,
-    //         options: {
-    //             onClick: (e) => {
-    //                 const canvasPosition = getRelativePosition(e, chart);
-
-    //                 // Substitute the appropriate scale IDs
-    //                 const dataX = chart.scales.x.getValueForPixel(canvasPosition.x);
-    //                 const dataY = chart.scales.y.getValueForPixel(canvasPosition.y);
-    //             }
-    //         }
-    //     });
-
-    //     chart.destroy();
-
-    //     chart = new Chart(ctx, {
-    //         type: 'line',
-    //         data: data,
-    //         options: {
-    //             onClick: (e) => {
-    //                 const canvasPosition = getRelativePosition(e, chart);
-
-    //                 // Substitute the appropriate scale IDs
-    //                 const dataX = chart.scales.x.getValueForPixel(canvasPosition.x);
-    //                 const dataY = chart.scales.y.getValueForPixel(canvasPosition.y);
-    //             }
-    //         }
-    //     });
-
-    //     // chart = new Chart(canvasContext, {
-    //     //     type: 'bar',
-    //     //     data: {
-    //     //         labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-    //     //         datasets: [{
-    //     //             label: '# of Votes',
-    //     //             data: [12, 19, 3, 4, 2, 3],
-    //     //             backgroundColor: [
-    //     //                 'rgba(255, 99, 132, 0.2)',
-    //     //                 'rgba(54, 162, 235, 0.2)',
-    //     //                 'rgba(255, 206, 86, 0.2)',
-    //     //                 'rgba(75, 192, 192, 0.2)',
-    //     //                 'rgba(153, 102, 255, 0.2',
-    //     //                 'rgba(255, 159, 64, 0.2)'
-    //     //             ],
-    //     //             borderColor: [
-    //     //                 'rgba(255, 99, 132, 1)',
-    //     //                 'rgba(54, 162, 235, 1)',
-    //     //                 'rgba(255, 206, 86, 1)',
-    //     //                 'rgba(75, 192, 192, 1)',
-    //     //                 'rgba(153, 102, 255, 1)',
-    //     //                 'rgba(255, 159, 64, 1)'
-    //     //             ],
-    //     //             borderWidth: 1
-    //     //         }]
-    //     //     },
-    //     //     options: {
-    //     //         scales: {
-    //     //             y: {
-    //     //                 beginAtZero: true
-    //     //             }
-    //     //         }
-    //     //     }
-    //     // });
-
-
-    // }
 
     if (userStats.score !== undefined) {
         totalGames = userStats.score.length;
