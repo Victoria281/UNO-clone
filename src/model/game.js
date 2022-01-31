@@ -18,8 +18,8 @@ var Game = {
         }
 
         return pool.query(query, function (error, result) {
-            console.log(error)
-            console.log(result)
+            // console.log(error)
+            // console.log(result)
             if (error) {
                 callback(error, null);
                 return;
@@ -37,7 +37,7 @@ var Game = {
     },
     findByStateAction: function (state, action, callback) {
         const query = {
-            name: 'findByState',
+            name: 'findQValue',
             text: 'SELECT q.state, a.actionName, q.qvalue FROM uno_qtable AS q, uno_actions AS a WHERE q.state = $1 AND q.action = $2',
             values: [state, action],
         }
@@ -58,7 +58,7 @@ var Game = {
     insertStateAction: function (state,action,callback) {
         const query = {
             name: 'insertStateAction',
-            text: 'INSERT INTO uno_qtable("state", "action") VALUES($1, $2);',
+            text: 'INSERT INTO uno_qtable("state", "action") VALUES ($1, $2);',
             values: [state,action],
         }
 
@@ -96,21 +96,23 @@ var Game = {
         );
     },
     findActionValue: function (actionname, callback) {
+        console.log("actionname")
+        console.log(actionname)
         const query = {
-            name: 'findByState',
+            name: 'findByAction',
             text: 'SELECT action FROM uno_actions WHERE actionname = $1',
             values: [actionname],
         }
 
         return pool.query(query, function (error, result) {
-            console.log(error)
-            console.log(result)
+            // console.log("Error" + error)
+            // console.log("Result" +result)
             if (error) {
                 callback(error, null);
                 return;
             } else {
                 console.log(result.rows)
-                return callback(null, result.rows[0]);
+                return callback(null, result.rows);
             }
         },
         );

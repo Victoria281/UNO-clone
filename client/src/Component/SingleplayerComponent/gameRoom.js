@@ -48,6 +48,8 @@ const GameRoom = () => {
                 dispatch(checkCard())
             }, 2000);
         } else if (game_state.turn !== 0 &&
+            game_state.turn !== otherPlayers[1] &&
+            game_state.turn !== otherPlayers[2] &&
             game_state.mainDeck.length !== 0 &&
             !game_state.botPlayingCard &&
             !game_state.toDrawCard &&

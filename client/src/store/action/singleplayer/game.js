@@ -210,41 +210,52 @@ export const botTurn = () => async (dispatch, getState) => {
     const new_game_state = botPlayCard(game_state);
 
     //Still need to convert the used card into an action name/ value
-    var action_name;
+    var action_name = "";
 
     switch (new_game_state.current.values) {
-        case 10:
+        case "10":
             action_name = "SKI"
             break;
-        case 11:
+        case "11":
             action_name = "REV"
             break;
-        case 12:
+        case "12":
             action_name = "PL2"
             break;
-        case 13:
+        case "13":
             action_name = "COL"
             break;
-        case 14:
+        case "14":
             action_name = "PL4"
             break;
         default:
             action_name = new_game_state.current.color.toUpperCase();
     }
 
-    const action = getActionValue(action_name);
+    console.log("Action Name" + action_name + "--------------------")
+
+    const action = getActionValue(action_name).action;
+
+    console.log("Action Value-------------------------------------")
+    console.log(action)
+    console.log("-------------------------------------")
+
 
     var current_qvalue = getQValue(game_state.botcurrentstate, action)
-
-    if (current_qvalue.err) {
-        qvalue = 0.0
-    } else {
-        qvalue = current_qvalue
-    }
+    .then((result)=>{
+        
+        if (result === undefined) {
+            qvalue = 0.0
+        } else {
+            console.log("RESULTS FOR Q VALUE FETCH")
+            console.log(result)
+            qvalue = result
+        }
+    });
 
     const reward = rewardFn(game_state.current, new_game_state.current);
 
-    const playable_hand = filterPlayableCards(new_game_state.playerdeck["player" + game_state.turn])
+    const playable_hand = filterPlayableCards(new_game_state.current, new_game_state.playerdeck["player" + new_game_state.turn], new_game_state.turn === new_game_state.playerTurn)
 
     const max_qvalue = getMaxQValue(new_game_state.current, playable_hand)
 

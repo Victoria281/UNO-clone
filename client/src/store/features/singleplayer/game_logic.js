@@ -42,53 +42,53 @@ export const getCurrentState = (current_card, player_hand) => {
         PL4: 0
     }
 
-    for (var i = 0; i < player_hand.length; i++) {
-        console.log("Did u go throuogh?")
-        var card_value = player_hand[i].values;
-        var card_color = player_hand[i].color;
+    player_hand.map((card) => {
+        //console.log("Did u go throuogh?")
+        var card_value = card.values;
+        var card_color = card.color;
 
         switch (card_value) {
-            case 10:
-                console.log("Added")
-                actionc_count.SKI =+ 1;
+            case "10":
+                //console.log("Added")
+                actionc_count.SKI += 1;
                 break;
-            case 11:
-                console.log("Added")
-                actionc_count.REV=+ 1;
+            case "11":
+                //console.log("Added")
+                actionc_count.REV += 1;
                 break;
-            case 12:
-                console.log("Added")
-                actionc_count.PL2=+ 1;
+            case "12":
+                //console.log("Added")
+                actionc_count.PL2 += 1;
                 break;
-            case 13:
-                console.log("Added")
-                actionc_count.COL=+ 1;
+            case "13":
+                //console.log("Added")
+                actionc_count.COL += 1;
                 break;
-            case 14:
-                console.log("Added")
-                actionc_count.PL4=+ 1;
+            case "14":
+                //console.log("Added")
+                actionc_count.PL4 += 1;
                 break;
             default:
                 switch (card_color) {
                     case 'red':
-                        console.log("Added")
-                        normalc_count.R=+ 1;
+                        // console.log("Added")
+                        normalc_count.R += 1;
                         break;
                     case 'blue':
-                        console.log("Added")
-                        normalc_count.B=+ 1;
+                        //  console.log("Added")
+                        normalc_count.B += 1;
                         break;
                     case 'yellow':
-                        console.log("Added")
-                        normalc_count.Y=+ 1;
+                        //  console.log("Added")
+                        normalc_count.Y += 1;
                         break;
                     case 'green':
-                        console.log("Added")
-                        normalc_count.G=+ 1;
+                        //console.log("Added")
+                        normalc_count.G += 1;
                         break;
                 }
         }
-    }
+    })
 
     var state_playable = "" + normalc_count.R + normalc_count.B + normalc_count.Y + normalc_count.G + actionc_count.SKI + actionc_count.REV + actionc_count.PL2 + actionc_count.COL + actionc_count.PL4;
     var state = "" + state_current + state_playable;
@@ -100,39 +100,46 @@ export const getCurrentState = (current_card, player_hand) => {
     return state;
 }
 
+//get action values
 export const getActionValue = async (actionname) => {
+    console.log("see me")
+    console.log(process.env.REACT_APP_API_URL + `/api/uno/action/${actionname}`)
     try {
-        const response = await fetch(process.env.REACT_APP_API_URL + `/api/uno/game/${actionname}`, {
+        console.log("oiiii hererere")
+        const response = await fetch(process.env.REACT_APP_API_URL + `/api/uno/action/${actionname}`, {
             method: "GET",
-        });
+        })
+        console.log("oiiii hererere")
+        console.log(response)
+        console.log(response.action_value)
+        console.log(response.body)
+        var result = await response.json();
 
-        console.log("response: " + response.statusText);
-
-        const data = await response.json();
-
-        console.log("Data from get stateaction ------------------------------------")
-        console.log(data)
+        console.log("Data from get action value------------------------------------")
+        console.log(result.action_value[0])
         console.log("------------------------------------")
 
-        return data.action_value;
+        return result.action_value[0];
     } catch (err) {
 
-        const data = {
-            error: err
-        };
+        console.log("err")
+        console.log(err)
+        // const data = {
+        //     error: err
+        // };
 
-        return data;
+        // return data;
     }
 }
 
 //Get Q value of the state and action if any
-export const getQValue  = async (state, action) => {
+export const getQValue = async (state, action) => {
     try {
-        const response = await fetch(process.env.REACT_APP_API_URL + `/api/uno/game/${state}/${action}`, {
+        const response = await fetch(process.env.REACT_APP_API_URL + `/api/uno/game/findq/${state}/${action}`, {
             method: "GET",
         });
 
-        console.log("response: " + response.statusText);
+        //console.log("response: " + response.statusText);
 
         const data = await response.json();
 
@@ -140,25 +147,21 @@ export const getQValue  = async (state, action) => {
         console.log(data)
         console.log("------------------------------------")
 
-        return data.data.qvalue;
+        return data;
     } catch (err) {
 
-        const data = {
-            error: err
-        };
-
-        return data;
+        console.log(err)
     }
 }
 
 //Get all possible actions and qvalues for state
 export const listStateActions = async (state) => {
     try {
-        const response = await fetch(process.env.REACT_APP_API_URL + `/api/uno/game/${state}` , {
+        const response = await fetch(process.env.REACT_APP_API_URL + `/api/uno/game/find/${state}`, {
             method: "GET",
         });
 
-        console.log("response: " + response.statusText);
+        //console.log("response: " + response.statusText);
 
         const data = await response.json();
 
@@ -169,11 +172,7 @@ export const listStateActions = async (state) => {
         return data;
     } catch (err) {
 
-        const data = {
-            error: err
-        };
-
-        return data;
+        console.log(err)
     }
 }
 
@@ -245,8 +244,8 @@ export const chooseAction = (list_of_actions, player_hand) => {
     }
 
     action = {
-        action_value : action_value,
-        action_taken : cardplayed
+        action_value: action_value,
+        action_taken: cardplayed
     }
 
     console.log("Action from Choose Action ------------------------------------")
@@ -257,9 +256,9 @@ export const chooseAction = (list_of_actions, player_hand) => {
 }
 
 //Choose random action for the bot
-export const getCardForBot = (r, wild_playable, normal_playable) => {
+export const getCardForBot = async (r, wild_playable, normal_playable) => {
     var cardplayed = {};
-    var action = {
+    var actions = {
         action_value: 0,
         action_taken: {}
     };
@@ -286,39 +285,58 @@ export const getCardForBot = (r, wild_playable, normal_playable) => {
 
     }
 
+    var actionname;
+    console.log("THE CARD PLAYED")
+    console.log(cardplayed)
     switch (cardplayed.values) {
         // switch ("1") {
-            //skip is 10
-            case "10":
-                action.action_value = getActionValue("SKI")
-                break;
-    
-            //reverse is 11
-            case "11":
-                action.action_value = getActionValue("REV")
-                break;
-    
-            //+2 draw is 12
-            case "12":
-                action.action_value = getActionValue("PL2")
-                break;
-    
-            //wild is 13
-            case "13":
-                action.action_value = getActionValue("COL")
-                break;
-    
-            //+4 is 14
-            case "14":
-                action.action_value = getActionValue("PL4")
-                break;
-            default: 
-                action.action_value = getActionValue(cardplayed.color.toUpperCase())
+        //skip is 10
+        case "10":
+            actionname = "SKI"
+            break;
+
+        //reverse is 11
+        case "11":
+            actionname = "REV"
+            break;
+
+        //+2 draw is 12
+        case "12":
+            actionname = "PL2"
+            break;
+
+        //wild is 13
+        case "13":
+            actionname = "COL"
+            break;
+
+        //+4 is 14
+        case "14":
+            actionname = "PL4"
+            break;
+        default:
+            actionname = cardplayed.color.toUpperCase()
     }
 
-        action.action_taken = cardplayed
+    console.log("DO YOU SEE ME:  " + actionname)
+    var results;
 
-    return action
+
+    getActionValue(actionname).then((actionvalue) => {
+
+        console.log("resultsssssssssssssssssssssssssssssssssss")
+        console.log(actionvalue)
+
+
+        console.log("THIS IS THE ACTION VALUE")
+        console.log(actions.action_value)
+
+        actions.action_taken = cardplayed
+
+        console.log(actions.action_taken)
+
+        return actions
+    })
 }
 
 //The epsilon greedy algo and the getting the card to be played by bot
@@ -337,17 +355,31 @@ export const setCardPlay = (r, state, wild_playable, normal_playable) => {
 
     var action;
 
-    console.log("Error Message : ---------------------------------")
+    console.log("Error Message For list of actions: ---------------------------------")
     console.log(list_of_actions);
 
     if ((r * 10) > epsilon && list_of_actions !== undefined) {
         action = chooseAction(list_of_actions, player_hand)
     } else {
-        action = getCardForBot(r, wild_playable, normal_playable);
+        console.log("ïm hererer")
+        getCardForBot(r, wild_playable, normal_playable).then((result)=>{
+
+        
+            console.log("maqryseeeeeeeesaction")
+            console.log(result)
+            action = result
+        })
     }
     var cardplayed = action.action_taken
 
-    insertQStateAction(state,action.action_value)
+    console.log("Action value to be inserted into table");
+    console.log(action.action_value)
+    console.log("---------------------")
+    insertQStateAction(state, action.action_value)
+        .then((result) => {
+            console.log(result)
+            console.log("Insert completed")
+        })
 
     console.log("Card Played ------------------------------------")
     console.log(cardplayed)
@@ -358,17 +390,18 @@ export const setCardPlay = (r, state, wild_playable, normal_playable) => {
 
 // Insert a new state and action
 export const insertQStateAction = async (state, action) => {
-    
+
     try {
-        const response = await fetch(process.env.REACT_APP_API_URL + `/api/uno/game/`, {
+        const response = await fetch(process.env.REACT_APP_API_URL + `/api/uno/game/insert/`, {
             method: "POST",
-            body: {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
                 state: state,
                 action: action
-            }
+            })
         });
-
-        console.log("response: " + response.statusText);
 
         const data = await response.json();
 
@@ -379,11 +412,7 @@ export const insertQStateAction = async (state, action) => {
         return data;
     } catch (err) {
 
-        const data = {
-            error: err
-        };
-
-        return data;
+        console.log(err)
     }
 }
 
@@ -447,6 +476,10 @@ export const rewardFn = (current_card, cardplayed) => {
         reward = (1 / 1 + Math.pow(Math.E, -cardplayed.values / 5)) - 0.5
     }
 
+    if (reward < 0) {
+        reward = 0
+    }
+
     console.log("Reward ------------------------------------")
     console.log(reward)
     console.log("------------------------------------")
@@ -455,9 +488,10 @@ export const rewardFn = (current_card, cardplayed) => {
 
 // Get the max q value for the next state and its actions
 export const getMaxQValue = (current_card, player_hand) => {
+    var possible_actions = [0.0]
 
     var new_state = getCurrentState(current_card, player_hand);
-    var possible_actions = listStateActions(new_state).actions;
+    possible_actions = listStateActions(new_state).actions;
 
     var highestQ = 0;
     var index = 0;
@@ -483,8 +517,11 @@ export const updateQ = async (qvalue, state, action, bot_settings, reward, max_q
     qvalue = qvalue + bot_settings.learning_rate * (reward + bot_settings.discount_factor * (max_qvalue - qvalue));
 
     try {
-        const response = await fetch(process.env.REACT_APP_API_URL + `/api/uno/game/update/` + state, {
+        const response = await fetch(process.env.REACT_APP_API_URL + `/api/uno/game/update/`, {
             method: "PUT",
+            headers: {
+                'Content-Type': 'application/json',
+            },
             body: {
                 state: state,
                 action: action,
@@ -503,10 +540,6 @@ export const updateQ = async (qvalue, state, action, bot_settings, reward, max_q
         return data;
     } catch (err) {
 
-        const data = {
-            error: err
-        };
-
-        return data;
+        console.log(err)
     }
 }

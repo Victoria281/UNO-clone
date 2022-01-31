@@ -148,7 +148,7 @@ app.get('/cards', printingDebuggingInfo, function (req, res, next) {
 //=====================================
 
 //findbystate
-app.get('/game/:state', printingDebuggingInfo, function (req, res, next) {
+app.get('/game/find/:state', printingDebuggingInfo, function (req, res, next) {
     const state = req.params.state;
 
     Game.findByState(state, function (err, result) {
@@ -171,7 +171,7 @@ app.get('/game/:state', printingDebuggingInfo, function (req, res, next) {
 });
 
 //findbystateaction
-app.get('/game/:state/:action', printingDebuggingInfo, function (req, res, next) {
+app.get('/game/findq/:state/:action', printingDebuggingInfo, function (req, res, next) {
     const state = req.params.state
     const action = req.params.action
 
@@ -195,7 +195,7 @@ app.get('/game/:state/:action', printingDebuggingInfo, function (req, res, next)
 });
 
 //insertstateaction
-app.post('/game/', printingDebuggingInfo, function (req, res, next) {
+app.post('/game/insert/', printingDebuggingInfo, function (req, res, next) {
     const state = req.body.state
     const action = req.body.action
 
@@ -244,9 +244,9 @@ app.put('/game/update/', printingDebuggingInfo, function (req, res, next) {
 });
 
 //findbyactionname
-app.get('/game/:actionname', printingDebuggingInfo, function (req, res, next) {
+app.get('/action/:actionname', printingDebuggingInfo, function (req, res, next) {
     const action = req.params.actionname
-
+    console.log("im not here")
     Game.findActionValue(action, function (err, result) {
         if (err) {
             if (err.code === '23505') {
@@ -256,9 +256,13 @@ app.get('/game/:actionname', printingDebuggingInfo, function (req, res, next) {
                 return next(err);
             }
         } else {
+            console.log("result")
+            console.log(result)
             if (result.length == 0) {
                 return next(createHttpError(404, `Not found`));
             } else {
+                console.log("ïm returning")
+                console.log({ action_value: result })
                 return res.status(200).json({ action_value: result });
             }
 
