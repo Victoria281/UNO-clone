@@ -1,4 +1,3 @@
-// @ts-nocheck
 const SecurityReducer = (state = {}, action) => {
     switch (action.type) {
 
