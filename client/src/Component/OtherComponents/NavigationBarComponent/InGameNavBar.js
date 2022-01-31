@@ -10,6 +10,8 @@ import ViewInArIcon from "@mui/icons-material/ViewInAr";
 import QuestionMarkIcon from '@mui/icons-material/QuestionMark';
 import SettingsIcon from '@mui/icons-material/Settings';
 
+import styles from "./styles.module.css"
+
 const InGameNavBar = ({ exact, path, component: Component, ...rest }) => {
     return <Route exact={exact} path={path} {...rest} render={(routeProps) => {
 
@@ -40,46 +42,52 @@ const InGameNavBar = ({ exact, path, component: Component, ...rest }) => {
                             <ul className="navbar-nav ml-auto mt-2 mt-lg-0">
                             <div className="dropdown">
                                     <button className="btn btn-primary dropdown-toggle nav-item active navbarDesign" type="button" data-toggle="dropdown" style={{ background: '#D27C2C' }}>
-                                        <SettingsIcon />
-                                        <span className="caret"></span>
+                                        <SettingsIcon style={{ fill: "black" }} />
+                                        <span className="caret" ></span>
                                     </button>
-                                    <ul className="dropdown-menu">
+
+                                    <ul className={`dropdown-menu ${styles.dropmenu}`}>
                                         <li
                                             style={{
-                                                borderRadius: 100 / 50,
+                                                borderRadius: 200,
                                                 backgroundColor: "#DC9F66",
                                                 color: "black",
-                                                fontFamily: 'RubikOne'
+                                                fontFamily: 'RubikOne',
+                                                marginBottom: 20,
                                             }}
+                                            className={`navbarDesign ${styles.menu}`}
                                         >
                                             <Tooltip title="Music" placement="left">
-                                                <MusicNoteIcon />
+                                                <MusicNoteIcon className={styles.icons} />
                                             </Tooltip>
                                         </li>
 
                                         <li
                                             style={{
-                                                borderRadius: 100 / 50,
-                                                backgroundColor: "#DC9F66",
+                                                borderRadius: 200,
+                                                backgroundColor: "#D9AD84",
                                                 color: "black",
-                                                fontFamily: 'RubikOne'
+                                                fontFamily: 'RubikOne',
+                                                marginBottom: 20,
                                             }}
+                                            className={`navbarDesign ${styles.menu}`}
                                         >
                                             <Tooltip title="Background Animation" placement="left">
-                                                <ViewInArIcon />
+                                                <ViewInArIcon className={styles.icons} />
                                             </Tooltip>
                                         </li>
 
                                         <li
                                             style={{
-                                                borderRadius: 100 / 50,
-                                                backgroundColor: "#DC9F66",
+                                                borderRadius: 200,
+                                                backgroundColor: "#E8B88B",
                                                 color: "black",
                                                 fontFamily: 'RubikOne'
                                             }}
+                                            className={`navbarDesign ${styles.menu}`}
                                         >
                                             <Tooltip title="Tutorial" placement="left">
-                                                <QuestionMarkIcon />
+                                                <QuestionMarkIcon className={styles.icons} />
                                             </Tooltip>
                                         </li>
                                     </ul>
@@ -89,7 +97,7 @@ const InGameNavBar = ({ exact, path, component: Component, ...rest }) => {
                                     <NavLink to="/" exact activeClassName="activeIcon">
                                         <div className="borderHover" style={{ borderColor: '#e71e1e' }}>
                                             <p className="nav-link navBarWord">
-                                                Exit
+                                            &nbsp;Exit
                                             </p>
                                         </div>
                                     </NavLink>

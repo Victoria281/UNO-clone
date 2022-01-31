@@ -26,10 +26,13 @@ const Card = require("../model/card")
 const User = require("../model/user")
 const LeaderBoard = require("../model/leaderboard")
 const Auth = require("../model/auth")
+const Game = require("../model/game")
 
 //Middleware//
-const verifyToken = require("../middlewares/verifyToken");
+const verifyGoogleToken = require('../middlewares/verifyGoogleToken');
+const verifyToken = require('../middlewares/verifyToken');
 const printingDebuggingInfo = require("../middlewares/printingRequest");
+
 // Requiring modules
 const http = require("http");
 const fs = require("fs");
@@ -42,12 +45,10 @@ const e = require('express');
 //=====================================
 
 //retrieveImagesForUno
-app.get('/images/*', printingDebuggingInfo, function (req, res, next) {
+app.get('/images/*', function (req, res, next) {
     var request = url.parse(req.url, true);
     var action = request.pathname;
     var filePath = path.join(__dirname, action).split("%20").join(" ");
-    console.log(action)
-    console.log(filePath)
 
     fs.open(filePath, 'r', (err, fd) => {
         if (err) {
@@ -77,12 +78,10 @@ app.get('/images/*', printingDebuggingInfo, function (req, res, next) {
 });
 
 //retrieveImagesForProfile
-app.get('/profile_icons/*', printingDebuggingInfo, function (req, res, next) {
+app.get('/profile_icons/*', function (req, res, next) {
     var request = url.parse(req.url, true);
     var action = request.pathname;
     var filePath = path.join(__dirname, action).split("%20").join(" ");
-    console.log(action)
-    console.log(filePath)
 
     fs.open(filePath, 'r', (err, fd) => {
         if (err) {
@@ -137,6 +136,119 @@ app.get('/cards', printingDebuggingInfo, function (req, res, next) {
 });
 
 //=====================================
+//  Game
+//=====================================
+
+//findbystate
+app.get('/game/find/:state', printingDebuggingInfo, function (req, res, next) {
+    const state = req.params.state;
+
+    Game.findByState(state, function (err, result) {
+        if (err) {
+            if (err.code === '23505') {
+                return next(createHttpError(404, `Not found`));
+            }
+            else {
+                return next(err);
+            }
+        } else {
+            return res.status(200).json({ actions: result });
+        }
+    });
+});
+
+//findbystateaction
+app.get('/game/findq/:state/:action', printingDebuggingInfo, function (req, res, next) {
+    const state = req.params.state
+    const action = req.params.action
+
+    Game.findByStateAction(state, action, function (err, result) {
+        if (err) {
+            if (err.code === '23505') {
+                return next(createHttpError(404, `Not found`));
+            }
+            else {
+                return next(err);
+            }
+        } else {
+            return res.status(200).json({ data: result });
+        }
+    });
+});
+
+//insertstateaction
+app.post('/game/insert/', printingDebuggingInfo, function (req, res, next) {
+    const state = req.body.state
+    const action = req.body.action
+
+    Game.insertStateAction(state, action, function (err, result) {
+        if (err) {
+            if (err.code === '23505') {
+                return next(createHttpError(404, `Not found`));
+            }
+            else {
+                return next(err);
+            }
+        } else {
+            if (result.length == 0) {
+                return next(createHttpError(404, `Not found`));
+            } else {
+                return res.status(200).json({ statusMessage: 'StateAction insert complete' });
+            }
+
+        }
+    });
+});
+
+//updateqvalue
+app.put('/game/update/', printingDebuggingInfo, function (req, res, next) {
+    const qValue = req.body.qvalue
+    const state = req.body.state
+    const action = req.body.action
+console.log(req.body)
+    Game.updateQvalue(qValue, state, action, function (err, result) {
+        if (err) {
+            if (err === "404") {
+                return next(createHttpError(404, `Not found`));
+            }
+            else {
+                return next(err);
+            }
+        } else {
+            return res.status(200).json({ statusMessage: 'StateAction update complete' });
+        }
+    });
+});
+
+//findbyactionname
+app.get('/action/:actionname', printingDebuggingInfo, function (req, res, next) {
+    const action = req.params.actionname
+    console.log("im not here")
+    Game.findActionValue(action, function (err, result) {
+        if (err) {
+            if (err.code === '23505') {
+                return next(createHttpError(404, `Not found`));
+            }
+            else {
+                return next(err);
+            }
+        } else {
+            console.log("result")
+            console.log(result)
+            if (result.length == 0) {
+                return next(createHttpError(404, `Not found`));
+            } else {
+                console.log("ïm returning")
+                console.log({ action_value: result })
+                return res.status(200).json({ action_value: result });
+            }
+
+        }
+    });
+});
+
+
+//=====================================
 //  Auth
 //=====================================
 
@@ -170,6 +282,123 @@ app.post('/login', printingDebuggingInfo, function (req, res, next) {
                     }
                 }
 
+            }
+
+        })
+    } catch (error) {
+        return res.status(500).json({ message: error });
+    }
+});
+
+// OAuth v2.0 Login -- Google
+app.post('/login/google', printingDebuggingInfo, verifyGoogleToken, function (req, res, next) {
+    // const googleJWTtoken = req.headers.authorization.replace('Bearer ', '');
+    // console.log("googleJWTtoken: " + googleJWTtoken);
+
+    const googlePayload = req.googlePayload;
+    const googleToken = req.googleToken;
+
+    console.log("googlePayload:", googlePayload);
+    console.log("googleToken:", googleToken);
+
+    try {
+        Auth.login(googlePayload.email, function (error, results) {
+            if (error) {
+                const message = {
+                    code: 500,
+                    message: 'Internal Server Error',
+                    error: error
+                }
+
+                return res.status(500).json(message);
+
+            } else {
+                console.log("thelength:", results);
+                // Indicates that the user is registered with our internal system
+                if (results.length === 1) {
+                    const userid = results.userid;
+                    console.log("results: " + results);
+
+                    const data = {
+                        name: googlePayload.name,
+                        email: googlePayload.email,
+                        gid: googlePayload.sub,
+                    };
+
+                    Auth.attachGoogleId(data, (error2, results2) => {
+                        if (error2) {
+                            const message = {
+                                code: 500,
+                                message: 'Internal Server Error',
+                                error: error2
+                            }
+
+                            return res.status(500).json(message);
+
+                        } else {
+
+                            const decodedToken = {
+                                id: results[0].userid,
+                            };
+
+                            req.decodedToken = decodedToken;
+                            console.log("decodedToken:", decodedToken);
+
+                            const data = {
+                                user_id: results[0].userid,
+                                token: googleToken,
+                                username: results[0].username
+                            };
+
+                            return res.status(200).json(data);
+                        }
+                    });
+                }
+
+                else if (results.length <= 0) {
+                    const data = {
+                        name: googlePayload.name,
+                        email: googlePayload.email,
+                        gid: googlePayload.sub,
+                    };
+
+                    Auth.registerWithGoogle(data, (error2, results2) => {
+                        if (error2) {
+                            const message = {
+                                code: 500,
+                                message: 'Internal Server Error',
+                                error: error2
+                            }
+
+                            return res.status(500).json(message);
+
+                        } else {
+                            console.log("done registering!");
+                            console.log("results2:", results2);
+
+                            const data = {
+                                user_id: results2[0].userid,
+                                token: googleToken,
+                                username: googlePayload.name
+                            };
+
+                            console.log(">>", data);
+
+                            return res.status(200).json(data);
+                        }
+                    });
+                }
+
+                else {
+                    console.log("ERROR!!!!, Results:", results);
+
+                    const message = {
+                        code: 500,
+                        message: 'Internal Server Error Signing up With Google'
+                    }
+
+                    return res.status(500).json(message);
+                }
             }
 
         })
@@ -233,7 +462,7 @@ app.post('/register', printingDebuggingInfo, function (req, res, next) {
 //  User
 //=====================================
 //getUserStatistics
-app.get('/user/stat', printingDebuggingInfo, verifyToken, function (req, res, next) {
+app.get('/user/stat', printingDebuggingInfo, verifyToken, verifyGoogleToken, function (req, res, next) {
     const uid = req.decodedToken.id;
     console.log(">>>>", uid);
     User.getUserStat(uid, function (err, result) {
@@ -251,7 +480,7 @@ app.get('/user/stat', printingDebuggingInfo, verifyToken, function (req, res, ne
 });
 
 //getUserOverallStatistics
-app.get('/user/stat/overall', printingDebuggingInfo, verifyToken, function (req, res, next) {
+app.get('/user/stat/overall', printingDebuggingInfo, verifyToken, verifyGoogleToken, function (req, res, next) {
     const uid = req.decodedToken.id;
     console.log(">>>>", uid);
 
@@ -270,29 +499,39 @@ app.get('/user/stat/overall', printingDebuggingInfo, verifyToken, function (req,
 });
 
 //findByUserId
-app.get('/user/:id', printingDebuggingInfo, verifyToken, function (req, res, next) {
+app.get('/user/:id', printingDebuggingInfo, verifyToken, verifyGoogleToken, function (req, res, next) {
     const id = req.params.id;
 
     User.findByUserID(id, function (err, result) {
         if (err) {
             if (err === "404") {
+                console.log("result: 404");
                 return next(createHttpError(404, `Not found`));
             }
             else {
+                console.log("result: thank you next");
                 return next(err);
             }
         } else {
-            if (result.length == 0) {
+            if (result.length === 0) {
+                console.log("result:", "no result");
                 return next(createHttpError(404, `Not found`));
             } else {
-                return res.status(200).json({ user: result });
+                console.log("result:", result);
+
+                const message = {
+                    user: result
+                };
+
+                console.log("returning!");
+                return res.status(200).json(message);
             }
         }
     });
 });
 
 //updateUserIcon
-app.put('/user/icon/:id', printingDebuggingInfo, verifyToken, function (req, res, next) {
+app.put('/user/icon/:id', printingDebuggingInfo, verifyToken, verifyGoogleToken, function (req, res, next) {
     const id = req.params.id;
     const icon = req.body.icon;
 
@@ -312,7 +551,7 @@ app.put('/user/icon/:id', printingDebuggingInfo, verifyToken, function (req, res
 });
 
 //updateUserInfo
-app.put('/user/updateinfo/:id', printingDebuggingInfo, verifyToken, function (req, res, next) {
+app.put('/user/updateinfo/:id', printingDebuggingInfo, verifyToken, verifyGoogleToken, function (req, res, next) {
     const id = req.params.id;
     const newusername = req.body.username;
     const newemail = req.body.email;
@@ -333,7 +572,7 @@ app.put('/user/updateinfo/:id', printingDebuggingInfo, verifyToken, function (re
 });
 
 //updateUserPassword
-app.put('/user/update/:id', printingDebuggingInfo, verifyToken, function (req, res, next) {
+app.put('/user/update/:id', printingDebuggingInfo, verifyToken, verifyGoogleToken, function (req, res, next) {
     const id = req.params.id;
     const old_password = req.body.old_password;
     const new_password = req.body.new_password;
@@ -380,7 +619,7 @@ app.put('/user/update/:id', printingDebuggingInfo, verifyToken, function (req, r
 
 
 //deleteUser
-app.delete('/user/delete/:id', printingDebuggingInfo, verifyToken, function (req, res, next) {
+app.delete('/user/delete/:id', printingDebuggingInfo, verifyToken, verifyGoogleToken, function (req, res, next) {
     const id = req.params.id;
 
     User.deleteUser(id, function (err, result) {
@@ -460,6 +699,9 @@ app.get('/user/friend/:uid', printingDebuggingInfo, verifyToken, async (req, res
     } else {
         uid = parseInt(uid);
     }
+
+    console.log("decodedToken:", req.decodedToken);
+
 
     if (uid !== req.decodedToken.id) {
         console.error("ERROR: uid is not the same as the user id");
@@ -971,7 +1213,7 @@ app.get('/leaderboard/:num', printingDebuggingInfo, function (req, res, next) {
 });
 
 //updateHighestScore
-app.post('/score/:id', printingDebuggingInfo, verifyToken, function (req, res, next) {
+app.put('/score/:id', printingDebuggingInfo, verifyToken, verifyGoogleToken, function (req, res, next) {
     const id = req.params.id;
     const score = req.body.score;
     const game_status = req.body.game_status;
@@ -995,17 +1237,17 @@ app.put('/user/reset', printingDebuggingInfo, function (req, res, next) {
     const email = req.body.email;
     const new_password = req.body.password;
 
-    try {       
+    try {
         // console.log("-----------------------------------------------------------------")
         // console.log(results)
         // console.log("-----------------------------------------------------------------")
         console.log(email)
-                
+
         bcrypt.hash(new_password, 10, async (err, hash) => {
-                            
+
             results = User.resetUserPasswordGmail(email, hash, function (error, results) {
                 console.log(results)
-                if(results===0){
+                if (results === 0) {
                     console.log("There is no such user in the database! Ensure that you have registered with us!")
                     return res.status(404).json({ statusMessage: 'No user found' })
                 }
@@ -1016,7 +1258,7 @@ app.put('/user/reset', printingDebuggingInfo, function (req, res, next) {
                     return res.status(500).json({ statusMessage: 'Unable to complete reset' });
                 }
             });
-                            
+
         });
     } catch (error) {
         return next(err);

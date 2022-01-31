@@ -1,8 +1,11 @@
-import "./home.css";
 import { Grid, styled, Paper, Typography } from '@mui/material';
 import { homeAnimation } from "./homeAnimation";
-import { useEffect } from "react";
+
+import styles from "./styles.module.css"
+import { useEffect, useState } from "react";
 import { typography } from "@mui/system";
+import BotDifficultyModal from "../OtherComponents/BotDifficultyComponent/BotDifficultyModal";
+
 
 const Item = styled(Paper)(({ theme }) => ({
   ...theme.typography.body2,
@@ -19,6 +22,7 @@ const Item = styled(Paper)(({ theme }) => ({
 }));
 
 const Home = ({ socket }) => {
+  const [open, setOpen] = useState(false);
   useEffect(() => {
     homeAnimation()
     socket.emit("exitMultiplayer", localStorage.getItem("username"))
@@ -28,25 +32,30 @@ const Home = ({ socket }) => {
     <Grid container spacing={2} className="App">
       <Grid item xs={1}></Grid>
       <Grid item xs={6}>
+      <BotDifficultyModal open={open} setOpen={setOpen}/>
         <Typography variant="h1" sx={{ mt: 10,mb:10 }}>Uno Clone</Typography>
+
         <Item sx={{ bgcolor: 'info.main' }}>
-          <a className="startBtn" href="./game">
+        <a className="startBtn" onClick={()=>{setOpen(true)}}>
             Single Player
           </a>
         </Item>
+
         <Item sx={{ bgcolor: 'secondary.main' }}>
-          <a className="startMultiBtn" href="./createroom">
-            Multiplayer
+          <a href="./createroom">
+            <p className={styles.startMultiBtn}>Multiplayer</p>
           </a>
         </Item>
+
         <Item sx={{ bgcolor: 'error.main' }}>
-          <a className="leaderBoardBtn" href="./leaderboard">
-            LeaderBoard
+          <a href="./leaderboard">
+            <p className={styles.leaderBoardBtn}>LeaderBoard</p>
           </a>
         </Item>
+
         <Item sx={{ bgcolor: 'success.main' }}>
-          <a className="profileBtn" href="./profile">
-            Profile
+          <a href="./profile">
+            <p className={styles.profileBtn}>Profile</p>
           </a>
         </Item>
       </Grid>

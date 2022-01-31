@@ -15,7 +15,7 @@ import {
     prepareGameMaterials,
     botTurn,
     checkCard,
-    endGame
+    endGame,
 } from "../../store/action/singleplayer/game"
 import styles from "./styles.module.css";
 import EndGameModal from "./gameComponents/EndGameModal"
