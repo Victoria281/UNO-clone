@@ -43,50 +43,45 @@ const AudienceOptions = ({ socket, roomcode }) => {
 
     return (
         <div>
-            <Typography variant="h5" sx={{ml:8, mt:2, mb:2}}>
+            <Typography variant="h5" sx={{ ml: 8, mt: 2, mb: 2 }}>
                 Interact with the players!
             </Typography>
 
             <Stack spacing={2} direction="row">
-                <Button startIcon={<FavoriteIcon />} className={styles.btnLove} onClick={() => { handleClick("Love") }}>Send Hearts</Button>
-                <Button className={styles.btnCheer} onClick={() => { handleClick("Cheer") }}>Clap</Button>
+                <Button startIcon={<FavoriteIcon />} className={styles.btnLove} onClick={() => { handleClick("Love") }}>Love</Button>
+                <Button startIcon={<FavoriteIcon />} className={styles.btnCheer} onClick={() => { handleClick("Cheer") }}>Clap</Button>
+                <Button startIcon={<RecordVoiceOverIcon />} className={styles.btnModal} onClick={handleOpen}>Speak</Button>
+
             </Stack>
 
-            <div>
-                <Button endIcon={<RecordVoiceOverIcon />} className={styles.btnModal} onClick={handleOpen}>Send a Voice Message</Button>
 
-                <Modal
-                    open={open}
-                    onClose={handleClose}
-                    aria-labelledby="modal-modal-title"
-                    aria-describedby="modal-modal-description"
-                >
-                    <Box className={styles.txtModal}>
-                        <Typography id="modal-modal-title" variant="h6" component="h2">
-                            Send a voice message
-                        </Typography>
+            <Modal
+                open={open}
+                onClose={handleClose}
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description"
+            >
+                <Box className={styles.txtModal}>
+                    <Typography id="modal-modal-title" variant="h6" component="h2">
+                        Send a voice message
+                    </Typography>
 
-                        <MessageIcon className={styles.smsIcon} />
+                    <MessageIcon className={styles.smsIcon} />
 
-                        <TextField
-                            className={styles.message}
-                            id="message"
-                            label="Message"
-                            variant="standard"
-                            value={myValue}
-                            onChange={(e) => setValue(e.target.value)}
-                        />
+                    <TextField
+                        className={styles.message}
+                        id="message"
+                        label="Message"
+                        variant="standard"
+                        value={myValue}
+                        onChange={(e) => setValue(e.target.value)}
+                    />
 
-                        <Button className={styles.btnVoice} onClick={() => { handleVoiceMessage() }}>
-                            Send Voice Message
-                        </Button>
-                    </Box>
-                </Modal>
-            </div>
-
-            {/* <div >
-                <p>drop down with player selection</p>
-            </div> */}
+                    <Button className={styles.btnVoice} onClick={() => { handleVoiceMessage() }}>
+                        Send Voice Message
+                    </Button>
+                </Box>
+            </Modal>
         </div>
 
     );
