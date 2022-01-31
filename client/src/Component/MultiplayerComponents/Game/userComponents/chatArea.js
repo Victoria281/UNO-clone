@@ -12,7 +12,7 @@ import {
     sendMessage,
 } from "../../../../store/action/multiplayer/rooms"
 //gets the data from the action object and reducers defined earlier
-const ChatArea = ({ username, roomcode, socket }) => {
+const ChatArea = ({ username, roomcode, socket, messagesEndRef }) => {
     const dispatch = useDispatch();
     const [textingMsg, setTextingMsg] = useState("");
     const [chatOpen, setChatOpen] = useState(false);
@@ -32,21 +32,10 @@ const ChatArea = ({ username, roomcode, socket }) => {
         }
     };
 
-    const messagesEndRef = useRef(null);
-
-    const scrollToBottom = () => {
-        console.log("im called")
-        if (messagesEndRef && messagesEndRef.current)
-            messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
-    };
-
-
-    useEffect(
-        scrollToBottom , [messages]);
 
     return (
         <div>
-            <Box onClick={toggleDrawer(true)}>
+            <Box onClick={toggleDrawer(true)} className={styles.ChatIcon}>
                 <img
                     className="img-responsive"
                     style={{ width: 100 }}
@@ -80,26 +69,27 @@ const ChatArea = ({ username, roomcode, socket }) => {
                         {messages.map((i, index) => {
                             if (i.username === username) {
                                 return (
-                                    <div key={'p1' + index} className="mymessage">
-                                        <p>{i.text}</p>
+                                    <div key={'p1' + index}>
+                                        <p className={styles.mymessage}>{i.text}</p>
+                                        <p className={styles.myusername}>{i.username}</p>
                                     </div>
                                 );
                             } else if (i.username === "system") {
                                 return (
-                                    <div key={'sys' + index} className="systemMessage">
-                                        <p>{i.text}</p>
+                                    <div key={'sys' + index}>
+                                        <p className={styles.systemMessage}>{i.text}</p>
                                     </div>
                                 );
                             } else {
                                 return (
-                                    <div key={'other' + index} className="othermessage">
-                                        <p>{i.text} </p>
+                                    <div key={'other' + index}>
+                                        <p className={styles.othermessage}>{i.text} </p>
+                                        <p className={styles.otherusername}>{i.username}</p>
                                     </div>
                                 );
                             }
                         })}
                         <div ref={messagesEndRef} />
-                        <p>Where am i?</p>
                     </div>
                     <div className={styles.ChatMessage}>
                         <input

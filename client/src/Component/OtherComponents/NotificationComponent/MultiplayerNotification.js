@@ -5,14 +5,13 @@ import styles from './styles.module.css';
 import { CompareArrows } from '@material-ui/icons';
 import { useHistory } from 'react-router-dom';
 
-const MultiplayerNotification = ({ uopen, usetOpen, socket }) => {
+const MultiplayerNotification = ({ uopen, usetOpen }) => {
     const [mopen, msetOpen] = useState(false)
 
-    let history = useHistory();
 
     function moveToMulti(){
+        window.location.href = './multiplayer/' + uopen.room
         handleClose();
-        history.push('./multiplayer/' + socket)
     }
 
     function handleClose() {

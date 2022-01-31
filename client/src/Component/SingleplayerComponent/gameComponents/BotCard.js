@@ -120,10 +120,9 @@ const BotCard = ({ card, cardId, identity, botPlay }) => {
 
                         <img
                             className="img-responsive"
-                            style={{ width: 70 }}
+                            style={{ width: 50 }}
                             src={
-                                process.env.REACT_APP_API_URL + "/api/uno/images/" +
-                                card.image_file.slice(8)
+                                process.env.REACT_APP_API_URL + "/api/uno/images/Deck.png"
                             }
                         />
 

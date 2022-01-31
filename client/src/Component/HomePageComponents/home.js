@@ -1,8 +1,10 @@
-import "./home.css";
 import { Grid, styled, Paper, Typography } from '@mui/material';
 import { homeAnimation } from "./homeAnimation";
-import { useEffect } from "react";
+import styles from "./styles.module.css"
+import { useEffect, useState } from "react";
 import { typography } from "@mui/system";
+import BotDifficultyModal from "../OtherComponents/BotDifficultyComponent/BotDifficultyModal";
+import { useHistory } from "react-router-dom";
 
 const Item = styled(Paper)(({ theme }) => ({
   ...theme.typography.body2,
@@ -19,35 +21,42 @@ const Item = styled(Paper)(({ theme }) => ({
 }));
 
 const Home = ({ socket }) => {
+  const [open, setOpen] = useState(false);
   useEffect(() => {
     homeAnimation()
     socket.emit("exitMultiplayer", localStorage.getItem("username"))
   }, [])
+  let history = useHistory();
 
   return (
     <Grid container spacing={2} className="App">
       <Grid item xs={1}></Grid>
       <Grid item xs={6}>
+      <BotDifficultyModal open={open} setOpen={setOpen}/>
         <Typography variant="h1" sx={{ mt: 10,mb:10 }}>Uno Clone</Typography>
+
         <Item sx={{ bgcolor: 'info.main' }}>
-          <a className="startBtn" href="./game">
+        <div className={styles.startBtn} onClick={()=>{setOpen(true)}}>
             Single Player
-          </a>
+          </div>
         </Item>
+
         <Item sx={{ bgcolor: 'secondary.main' }}>
-          <a className="startMultiBtn" href="./createroom">
+          <div className={styles.startMultiBtn} onClick={()=>history.push("./createroom")}>
             Multiplayer
-          </a>
+          </div>
         </Item>
+
         <Item sx={{ bgcolor: 'error.main' }}>
-          <a className="leaderBoardBtn" href="./leaderboard">
+          <div className={styles.leaderBoardBtn} onClick={()=>history.push("./leaderboard")}>
             LeaderBoard
-          </a>
+          </div>
         </Item>
+
         <Item sx={{ bgcolor: 'success.main' }}>
-          <a className="profileBtn" href="./profile">
+          <div className={styles.profileBtn} onClick={()=>history.push("./profile")}>
             Profile
-          </a>
+          </div>
         </Item>
       </Grid>
     </Grid>

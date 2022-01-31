@@ -1,6 +1,7 @@
 // @ts-ignore
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route, Link, Redirect } from "react-router-dom";
 import { Box, Button, AppBar, Grid, styled, InputLabel, MenuItem, FormControl, Select, Tooltip } from '@mui/material';
+import { useState } from "react";
 
 import { NavLink } from 'react-router-dom'
 
@@ -11,13 +12,25 @@ import QuestionMarkIcon from '@mui/icons-material/QuestionMark';
 import PersonIcon from '@mui/icons-material/Person';
 import SportsEsportsIcon from '@mui/icons-material/SportsEsports';
 import SettingsIcon from '@mui/icons-material/Settings';
+import Music from "../MusicComponent/Music";
+
+import Tutorial from "../../TutorialComponent/Tutorial";
 
 // Components Import
 import Account from "./Account";
 import styles from "./styles.module.css"
+import BotDifficultyModal from "../BotDifficultyComponent/BotDifficultyModal";
 
 const DefaultNavBar = ({ exact, path, component: Component, loggedIn, ...rest }) => {
+    const [open, setOpen] = useState(false);
+    const [isTutorialOpen, setisTutorialOpen] = useState(false);
     return <Route exact={exact} path={path} {...rest} render={(routeProps) => {
+
+        const id = localStorage.getItem("userid");
+
+        if(!id){
+            return <Redirect to="/login" />
+        }
 
         return (
             <>
@@ -73,11 +86,12 @@ const DefaultNavBar = ({ exact, path, component: Component, loggedIn, ...rest })
                                             }}
                                             className={`navbarDesign ${styles.menu}`}
                                         >
-                                            <NavLink to="/game">
+                                             <BotDifficultyModal open={open} setOpen={setOpen}/>
+                                            <Button onClick={()=>{setOpen(true)}}>
                                                 <Tooltip title="SinglePlayer" placement="left">
                                                     <PersonIcon className={styles.icons} />
                                                 </Tooltip>
-                                            </NavLink>
+                                            </Button>
                                         </li>
 
                                         <li
@@ -127,7 +141,7 @@ const DefaultNavBar = ({ exact, path, component: Component, loggedIn, ...rest })
                                             className={`navbarDesign ${styles.menu}`}
                                         >
                                             <Tooltip title="Music" placement="left">
-                                                <MusicNoteIcon className={styles.icons} />
+                                                <Music/>
                                             </Tooltip>
                                         </li>
 
@@ -155,8 +169,14 @@ const DefaultNavBar = ({ exact, path, component: Component, loggedIn, ...rest })
                                             }}
                                             className={`navbarDesign ${styles.menu}`}
                                         >
+                                            <Tutorial
+                                                isTutorialOpen={isTutorialOpen}
+                                                setisTutorialOpen={setisTutorialOpen}
+                                            />
                                             <Tooltip title="Tutorial" placement="left">
-                                                <QuestionMarkIcon className={styles.icons} />
+                                                <Button onClick={() => setisTutorialOpen(true)}>
+                                                    <QuestionMarkIcon className={styles.icons} />
+                                                </Button>
                                             </Tooltip>
                                         </li>
                                     </ul>
@@ -170,6 +190,7 @@ const DefaultNavBar = ({ exact, path, component: Component, loggedIn, ...rest })
                         </div>
                     </nav>
                 </div>
+
                 <Component {...routeProps} />
             </>
         )

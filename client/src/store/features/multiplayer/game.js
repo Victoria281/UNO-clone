@@ -90,7 +90,7 @@ export const dealCards = (cardarray, numOfPlayers) => {
     var dealplayers = {};
     for (var players = 0; players < numOfPlayers; players++) {
         dealplayers["player" + players] = []
-        for (var start = 0; start < 1; start++) {
+        for (var start = 0; start < 7; start++) {
             dealplayers["player" + players].push(cardarray[(start * numOfPlayers) + players]);
         }
     }

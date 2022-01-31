@@ -369,6 +369,13 @@ io.on("connection", (socket) => {
         //     } 
         // }
         console.log("disconnected")
+        if (success.removePlayer != undefined) {
+            socket.leave(success.removePlayer.roomcode)
+
+            io.sockets.in(success.removePlayer.roomcode).emit("playerLeft", {
+                state: success.removePlayer.msg,
+            });
+        }
 
 
         // console.log("disconnected")

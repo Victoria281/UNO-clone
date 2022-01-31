@@ -14,7 +14,7 @@ import AccountPage from "./Component/AccountComponents/LoginComponent/account";
 import RegisterPage from "./Component/AccountComponents/RegisterComponents/register";
 import ProfilePage from "./Component/ProfileComponents/ProfilePage";
 import LeaderboardPage from "./Component/Leaderboard/tabs.jsx";
-import Music from "./components/Music";
+import Music from "./Component/OtherComponents/MusicComponent/Music";
 import Room from "./pages/multiplayer/room";
 import MultiPlayer from "./pages/multiplayer/multiplayer";
 import PageRestriction from "./PageRestriction"
@@ -72,7 +72,6 @@ function AppCreateRoom(props) {
 const App = ({ hideLoader }) => {
 
   const [o_Notif, o_setNotif] = useState({ open: false, type: "", message: "" });
-  const [room, setRoom] = useState();
 
   useEffect(() => {
     hideLoader()
@@ -85,8 +84,7 @@ const App = ({ hideLoader }) => {
   useEffect(() => {
     socket.on("watchFriend", (data) => {
       console.log("your friend is playing now")
-      o_setNotif({open: true, type: 'success', message : "Your friend is playing now"})
-      setRoom(data);
+      o_setNotif({open: true, type: 'success', message : "Your friend "+data.username+" is playing now", room: data.roomcode})
       console.log(data)
     });
 }, [socket]);
@@ -103,7 +101,7 @@ const App = ({ hideLoader }) => {
 
   return (
    <>
-      <MultiplayerNotification uopen={o_Notif} usetOpen={o_setNotif} socket={room}/>
+      <MultiplayerNotification uopen={o_Notif} usetOpen={o_setNotif}/>
       <Router>
         <Switch>
           <HomeNavBar exact path="/" component={AppHome} loggedIn={loggedIn}/>

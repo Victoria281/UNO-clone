@@ -20,12 +20,10 @@ const User = {
 
         return pool.query(query, function (error, result) {
             if (error) {
-                console.log("error:", error);
-                callback(error, null);
-                return;
+                return callback(error, null);
             } else {
                 if (result.rows.length == 0) {
-                    callback("404", null);
+                    return callback("404", null);
                 } else {
                     console.log(result.rows)
                     return callback(null, result.rows[0]);
@@ -372,7 +370,7 @@ const User = {
             }
         });
     },
-    
+
     resetUserPasswordGmail: function (email, password, callback) {
         const query = {
             name: 'resetUserPassword',

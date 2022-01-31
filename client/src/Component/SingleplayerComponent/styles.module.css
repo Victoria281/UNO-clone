@@ -1,7 +1,7 @@
 .PlayerArea {
     background-color: hsl(32, 100%, 70%);
     border-radius: 30px;
-    padding: 20px;
+    padding: 10px;
     padding-left: 60px;
 }
 
@@ -13,9 +13,9 @@
 }
 
 .CurrentColor {
-    width: 50px;
-    height: 50px;
-    border-radius: 15px;
+    width: 30px;
+    height: 30px;
+    border-radius: 5px;
     margin-left: 35px;
     margin-bottom: 5px;
 }
@@ -37,7 +37,7 @@
 }
 
 .OtherPlayerStack {
-    max-width: 50vh;
+    max-width: 30vh;
     margin-left: auto;
     margin-right: auto;
     display: grid !important;
@@ -57,18 +57,22 @@
 }
 
 .PlayerNameLeft {
+    font-size: 15px;
     transform: rotate(90deg) translateX(60px) translateY(70px);
     width: fit-content;
     margin-left: auto;
 }
 
 .PlayerNameRight {
+    font-size: 15px;
+    font-size: 15px;
     transform: rotate(-90deg) translateX(-60px) translateY(70px);
     width: fit-content;
     margin-right: auto;
 }
 
 .PlayerNameTop {
+    font-size: 15px;
     transform: rotate(180deg);
     position: absolute;
     top: 160px;
@@ -76,6 +80,7 @@
 }
 
 .PlayerName {
+    font-size: 15px;
     margin-left: auto;
     margin-right: auto;
     width: fit-content;
@@ -99,4 +104,87 @@
     width: 80px;
     margin-top: 80px;
     margin-left: 10vw;
+}
+
+/* Start of Styles for Modals */
+.colormodal{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.colormodalcontainer{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 40%;
+    width: 50%;
+    border: 5px solid black;
+    border-radius: 15px;
+}
+.colormodaltitle{
+    font-family: 'RubikOne' !important;
+    color: black !important;
+}
+.colormodaltitlecontainer{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.btncontainer{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.btnYellow{
+    
+    background-color: #FFC825 !important;
+    padding: 10px !important;
+    color: #FFC825 !important;
+}
+
+.btnGreen{
+    background-color: #33984B !important;
+    color: #33984B !important;
+    padding: 10px !important;
+}
+
+.btnBlue{
+    background-color: #1E9FE7 !important;
+    color: #1E9FE7 !important;
+    padding: 10px !important;
+}
+
+.btnRed{
+    background-color: #E71E1E !important;
+    color: #E71E1E !important;
+    padding: 10px !important;
+}
+/* End of Styles for Color Modal */
+
+.roomBtn {
+    width: 80px;
+    height: 30px;
+    margin: 10px 20px;
+    -moz-border-radius: 100px / 40px;
+    -webkit-border-radius: 100px / 40px;
+    border-radius: 100px / 40px;
+    background: #6C01AD;
+    transform: matrix(0.99, 0.11, -0.14, 0.99, 0, 0);
+}
+
+.roomBtn>p {
+    font-family: "RubikOne";
+    font-size: 21px;
+    color: black;
+    -webkit-text-stroke: 0.4px black;
+    -webkit-text-fill-color: white;
+    transform: rotate(-15deg);
+}
+
+.btn {
+    font-size: 11px;
+    padding: 5px;
 }

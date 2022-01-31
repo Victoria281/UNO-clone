@@ -1,6 +1,6 @@
 // @ts-ignore
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
-import { Box, Button, AppBar, Grid } from '@mui/material';
+import { BrowserRouter as Router, Switch, Route, Link ,Redirect} from "react-router-dom";
+import { Box, Button, AppBar, Grid, Tooltip } from '@mui/material';
 
 import { NavLink } from 'react-router-dom'
 
@@ -10,11 +10,22 @@ import ViewInArIcon from "@mui/icons-material/ViewInAr";
 import QuestionMarkIcon from '@mui/icons-material/QuestionMark';
 
 // Components Import
+// @ts-ignore
 import Account from "./Account";
+import Music from "../MusicComponent/Music";
 import styles from "./styles.module.css"
+import Tutorial from "../../TutorialComponent/Tutorial";
+import { useState } from "react";
 
 const HomeNavBar = ({ exact, path, component: Component, loggedIn, ...rest }) => {
+    const [isTutorialOpen, setisTutorialOpen] = useState(false);
     return <Route exact={exact} path={path} {...rest} render={(routeProps) => {
+
+        const id = localStorage.getItem("userid");
+
+        if(!id){
+            return <Redirect to="/login" />
+        }
 
         return (
             <>
@@ -44,7 +55,9 @@ const HomeNavBar = ({ exact, path, component: Component, loggedIn, ...rest }) =>
 
                                 <li className="nav-item active navbarDesign" style={{ background: '#e71e1e' }}>
                                     <div className="borderHover" style={{ borderColor: '#e71e1e' }}>
-                                        <MusicNoteIcon className={styles.icons} />
+                                        <p className="nav-link navBarWord">
+                                            <Music />
+                                        </p>
                                     </div>
                                 </li>
 
@@ -56,7 +69,13 @@ const HomeNavBar = ({ exact, path, component: Component, loggedIn, ...rest }) =>
 
                                 <li className="nav-item active navbarDesign" style={{ background: '#46E71E' }}>
                                     <div className="borderHover" style={{ borderColor: '#46E71E' }}>
-                                        <QuestionMarkIcon className={styles.icons} />
+                                        <Tutorial
+                                            isTutorialOpen={isTutorialOpen}
+                                            setisTutorialOpen={setisTutorialOpen}
+                                        />
+                                        <Button onClick={() => setisTutorialOpen(true)}>
+                                            <QuestionMarkIcon className={styles.icons} />
+                                        </Button>
                                     </div>
                                 </li>
 
@@ -69,6 +88,7 @@ const HomeNavBar = ({ exact, path, component: Component, loggedIn, ...rest }) =>
                         </div>
                     </nav>
                 </div>
+
                 <Component {...routeProps} />
             </>
         )
