@@ -21,9 +21,11 @@ import { useHistory } from "react-router-dom";
 import Friend from "./FriendComponents/Friend"
 import Room from "./Room"
 import {
-	Stack,
-	Grid
+	List,
+	Grid,
+	Typography
 } from '@mui/material';
+import styles from "./styles.module.css"
 const CreateRoom = ({ socket }) => {
 	const dispatch = useDispatch();
 	let history = useHistory();
@@ -39,7 +41,7 @@ const CreateRoom = ({ socket }) => {
 				console.log("Please Login First")
 			} else {
 				dispatch(createNewRoom(roomname, username, socket))
-					.then(result =>history.push(`/multiplayer/${result}`))
+					.then(result => history.push(`/multiplayer/${result}`))
 			}
 		} else {
 			alert("Please enter room name!");
@@ -77,7 +79,7 @@ const CreateRoom = ({ socket }) => {
 
 
 	useEffect(() => {
-		dispatch(initialiseState()).then(()=>{
+		dispatch(initialiseState()).then(() => {
 			if (username != undefined) {
 				dispatch(enterMultiplayer(username, socket, localStorage.getItem("userid"), localStorage.getItem("token")))
 			}
@@ -113,58 +115,56 @@ const CreateRoom = ({ socket }) => {
 			console.log(data)
 			dispatch(receiveRequestToPlay(data))
 		});
-
-		// socket.on("friendRequestAccepted", (data) => {
-		// 	console.log("Your friend Request was accepted")
-		// 	console.log(data)
-		// 	var username = localStorage.getItem("username")
-		// 	var newRoom = {
-		// 		username: username,
-		// 		roomcode: data.message
-		// 	}
-		// 	socket.emit('othersJoinRoom', newRoom)
-		// });
-
-
 	}, [socket]);
 
 
 	return (
 		<>
 			<Grid
-				style={{ border: "1px solid grey", height: "95vh" }} container spacing={2}>
+				className={styles.box} container spacing={2}>
 				<Grid
-					style={{ border: "1px solid grey", height: "95vh" }} item xs={2}>
-					<Stack direction="column" spacing={3}>
-						{room_state.friends.map((data) => <Friend
-							data={data}
-							requestFriend={requestFriend}
-						/>)}
-					</Stack>
+					className={`${styles.box}`} item xs={3}>
+					<p
+						className={styles.friendHead}
+					>Friends</p>
+					<List className={styles.friends}>
+						{room_state.friends.map((data) =>
+							<Friend
+								data={data}
+								requestFriend={requestFriend}
+							/>
+						)}
+					</List>
 				</Grid>
 				<Grid
-					style={{ border: "1px solid grey", height: "95vh" }} item xs={10}>
+					className={styles.box} item xs={9}>
 
 					<div className="homepage">
-						{/* <h1 className="name">MULTIPLAYER</h1> */}
-						<div className="input-box">
+						<div className={styles.cardsHome}>
+							<img className={styles.cardImage1} src={process.env.REACT_APP_API_URL + "/api/uno/images/Wild.png"} />
+							<img className={styles.cardImage2} src={process.env.REACT_APP_API_URL + "/api/uno/images/Wild_Draw.png"} />
+						</div>
+
+						<div className={styles["input-box"]}>
 							<input
-								className="roomInput"
+								className={styles.roomInput}
 								placeholder="Room Name"
 								value={roomname}
 								onChange={(e) => { setroomname(e.target.value) }}
 							></input>
 							<br />
+							<div className={`row d-flex justify-content-center`}>
+								<button className={styles.startBtn} onClick={() => { create() }}>CREATE ROOM</button><br />
+								<button className={styles.startMultiBtn} onClick={() => { join() }}>JOIN ROOM</button><br />
+							</div>
 
-							<button className="" onClick={() => { create() }}>Create Room</button><br />
-							<button className="" onClick={() => { join() }}>Join Room</button><br />
-							<button className="" onClick={() => { joinRandom() }}>Join Random Room</button><br />
+							<button className={styles.randomBtn} onClick={() => { joinRandom() }}>JOIN RANDOM ROOM</button><br />
 						</div>
 						<div>
 							<p>Friend Requests</p>
 							{room_state.friendRequests.map((data) =>
 								<div>
-									<p>{data.username} has requested to play UNO</p>
+									<Typography>{data.username} has requested to play UNO</Typography>
 									<button className="" onClick={() => { acceptFriend(data) }}>accept</button><br />
 									<button className="" onClick={() => { rejectFriend(data) }}>Reject</button><br />
 									<hr />

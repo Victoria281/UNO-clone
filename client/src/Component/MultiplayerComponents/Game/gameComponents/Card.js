@@ -32,10 +32,35 @@ const Card = ({ card, cardId, identity, playable, socket }) => {
                 const mainDeckDOM = document.getElementById("mainDeck").getBoundingClientRect();
                 const selectedCardDOM = document.getElementById(`p1${game_state.otherPlayerPlayingCard.card.id}`).getBoundingClientRect();
 
-                setTravelFromDeck({
-                    x: mainDeckDOM.x - selectedCardDOM.x,
-                    y: mainDeckDOM.y - selectedCardDOM.y
-                })
+                switch (identity) {
+                    case "bot1": {
+                        setTravelFromDeck({
+                            y: -(mainDeckDOM.x - selectedCardDOM.x),
+                            x: mainDeckDOM.y - selectedCardDOM.y
+                        })
+                        break;
+                    }
+                    case "bot2": {
+                        setTravelFromDeck({
+                            x: selectedCardDOM.x - mainDeckDOM.x,
+                            y: -(mainDeckDOM.y - selectedCardDOM.y)
+                        })
+                        break;
+                    }
+                    case "bot3": {
+                        setTravelFromDeck({
+                            y: mainDeckDOM.x - selectedCardDOM.x,
+                            x: -(mainDeckDOM.y - selectedCardDOM.y)
+                        })
+                        break;
+                    }
+                    default:
+                        setTravelFromDeck({
+                            x: mainDeckDOM.x - selectedCardDOM.x,
+                            y: mainDeckDOM.y - selectedCardDOM.y
+                        })
+                        break;
+                }
                 setInAProp(false);
                 setTimeout(() => {
                     if (game_state.otherPlayerPlayingCard.player === room_state.myTurnIs){
@@ -43,6 +68,9 @@ const Card = ({ card, cardId, identity, playable, socket }) => {
                     }
                     setInAProp(true);
                 }, timeout);
+
+                
+                
 
             }
 
@@ -118,7 +146,7 @@ const Card = ({ card, cardId, identity, playable, socket }) => {
                             {playable === undefined || playable === false ?
                                 <img
                                     className="img-responsive"
-                                    style={{ width: 70 }}
+                                    style={{ width: 50 }}
                                     src={
                                         process.env.REACT_APP_API_URL + "/api/uno/images/" +
                                         card.image_file.slice(8)
@@ -127,7 +155,7 @@ const Card = ({ card, cardId, identity, playable, socket }) => {
                                 :
                                 <img
                                     className={`img-responsive ${styles.Playable}`}
-                                    style={{ width: 70 }}
+                                    style={{ width: 50 }}
                                     src={
                                         process.env.REACT_APP_API_URL + "/api/uno/images/" +
                                         card.image_file.slice(8)
