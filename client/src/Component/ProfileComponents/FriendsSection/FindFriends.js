@@ -39,12 +39,13 @@ const FindFriends = () => {
 
       allUsersData = await findFriendsResponse.json();
       extAllUsers = allUsersData.users;
+      backupAllUsersData = allUsersData.users;
       setAllUsers(allUsersData);
 
       console.log("allUsers", allUsersData);
 
-    } catch (error1) {
-      console.error("error retrieving users:", error1);
+    } catch (err) {
+      console.error("error retrieving users:", err);
 
     }
 
@@ -66,8 +67,8 @@ const FindFriends = () => {
 
       setFriendsList(friendsList);
 
-    } catch (error2) {
-      console.error("error retrieving friends:", error2);
+    } catch (err) {
+      console.error("error retrieving friends:", err);
     }
 
     // Get all pending friends
@@ -267,8 +268,8 @@ const FindFriends = () => {
       setFilteredUsers(extAllUsers);
       setSearchFilter(extAllUsers);
 
-    } catch (error3) {
-      console.error("error filtering users:", error3);
+    } catch (err) {
+      console.error("error filtering users:", err);
     }
 
   };
