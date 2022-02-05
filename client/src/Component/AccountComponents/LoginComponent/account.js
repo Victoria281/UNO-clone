@@ -31,7 +31,6 @@ export default function App() {
   const [notif, setNotif] = useState({ open: false, type: "", message: "" });
 
   // Hooks to disable Form
-  const [attempt, setAttempt] = useState(0);
   const [formDisabled, setFormDisabled] = useState(false);
   const [btnDisabled, setBtnDisabled] = useState(false);
   const [seconds, setSeconds] = useState(10);
@@ -86,50 +85,58 @@ export default function App() {
   // Function called when login button is clicked
   function createPost() {
     let status = true;
+    let attempt = localStorage.getItem("attempt");
 
     // Check email field
     if (email === "") {
       status = false;
       setNotif({ open: true, type: 'error', message: 'Email is required!' })
-      //setEmailError("Email Required!");
     } else {
       const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
       if (emailRegex.test(email)) {
+        console.log("passed status:", status);
         status = true;
+        console.log("passed after status:", status);
       } else {
+        console.log("false status:", status);
         status = false;
-        //setEmailError("Not a valid format")
         setNotif({ open: true, type: 'error', message: 'Email is not valid!' })
       }
     }
 
-
+    console.log("status:", status);
 
     if (status) {
       // Check password field
       if (password === "") {
         status = false;
-        //setPasswordError("Password Required!");
         setNotif({ open: true, type: 'error', message: 'Password Required!' })
       } else {
         status = true;
-        //setPasswordError("");
       }
     }
+
+    console.log("status:", status);
 
     // Check if status has been validated
     if (status) {
       if (captcha === false) {
         status = false;
-        //setCaptchaError("Please ensure you are not a robot!")
         setNotif({ open: true, type: 'error', message: 'Please input captcha!' })
       } else {
-        setCaptchaError("");
         console.log("Attempt Number: " + attempt);
-        setAttempt(attempt + 1);
-        localStorage.setItem("attempt", attempt)
+        let toUpdate;
+
+        if (isNaN(attempt)) {
+          toUpdate = 1;
+        } else {
+          toUpdate = parseInt(attempt) + 1;
+        }
+        localStorage.setItem("attempt", toUpdate);
       }
     }
+
+    console.log("status:", status);
 
     if (status) {
       axios
@@ -142,7 +149,6 @@ export default function App() {
           localStorage.setItem('token', 'Bearer ' + response.data.token)
           localStorage.setItem('userid', response.data.user_id)
           localStorage.setItem('username', response.data.username)
-          setCredWrong("");
           setNotif({ open: true, type: 'success', message: 'Login Successful' })
           window.location = '/'
           // alert("Login successful!")
@@ -166,7 +172,7 @@ export default function App() {
               setTimeout(() => {
                 setFormDisabled(false);
                 setBtnDisabled(true);
-                setAttempt(0);
+                localStorage.setItem("attempt", 0);
               }, 10000);
 
               console.log("CANNOT SEND FORM DUE TO ATTEMPT")
@@ -175,7 +181,7 @@ export default function App() {
           } else {
             // console.log("Login Failed!")
           }
-        
+
         })
     }
 
