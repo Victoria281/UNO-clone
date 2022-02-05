@@ -25,6 +25,7 @@ const FindFriends = () => {
 
   const loadData = async () => {
     let allUsersData;
+    let extAllUsers;
     let backupAllUsersData;
     let friendsList;
     let pendingFriends_tmpArray;
@@ -37,7 +38,7 @@ const FindFriends = () => {
       });
 
       allUsersData = await findFriendsResponse.json();
-      backupAllUsersData = allUsersData;
+      extAllUsers = allUsersData.users;
       setAllUsers(allUsersData);
 
       console.log("allUsers", allUsersData);
@@ -147,7 +148,7 @@ const FindFriends = () => {
 
         let sentFRArray = [];
 
-        allUsersData.forEach((user) => {
+        extAllUsers.forEach((user) => {
           for (let i = 0; i < tmpArray2.length; i++) {
             console.log("user:", user.userid);
             console.log("tmpArray:", tmpArray2[i]);
@@ -175,7 +176,7 @@ const FindFriends = () => {
 
     // Filter out all users that are already friends
     try {
-      // console.log("filter | allUsersData", allUsersData);
+      // console.log("filter | extAllUsers", extAllUsers);
       // console.log("filter | friendsList", friendsList);
       console.log("filter | pendingFriends_tmpArray", pendingFriends_tmpArray);
       // console.log("filter | pendingFRs", pendingFRs);
@@ -189,9 +190,9 @@ const FindFriends = () => {
           userid = parseInt(userid);
         }
 
-        for (let i = 0; i < allUsersData.length; i++) {
-          if (allUsersData[i].userid == userid) {
-            allUsersData.splice(i, 1);
+        for (let i = 0; i < extAllUsers.length; i++) {
+          if (extAllUsers[i].userid == userid) {
+            extAllUsers.splice(i, 1);
             break;
           }
         }
@@ -200,7 +201,7 @@ const FindFriends = () => {
       }
 
       let x = 0;
-      for (let i = 0; i < allUsersData.length; i++) {
+      for (let i = 0; i < extAllUsers.length; i++) {
         if (friendsList.length <= 0) {
           break;
         }
@@ -209,18 +210,18 @@ const FindFriends = () => {
           break;
         }
 
-        if (allUsersData[i].userid == friendsList[x].userid) {
-          allUsersData.splice(i, 1);
+        if (extAllUsers[i].userid == friendsList[x].userid) {
+          extAllUsers.splice(i, 1);
           i = -1;
           x++;
         }
-        console.log(">", allUsersData);
+        console.log(">", extAllUsers);
       }
 
-      console.log("filter | after deduction of friends", allUsersData);
+      console.log("filter | after deduction of friends", extAllUsers);
 
       let y = 0;
-      for (let j = 0; j < allUsersData.length; j++) {
+      for (let j = 0; j < extAllUsers.length; j++) {
 
         console.log("ppppp", pendingFriends_tmpArray);
         if (pendingFriends_tmpArray.length <= 0) {
@@ -231,18 +232,18 @@ const FindFriends = () => {
           break;
         }
 
-        if (allUsersData[j].userid == pendingFriends_tmpArray[y]) {
-          allUsersData.splice(j, 1);
+        if (extAllUsers[j].userid == pendingFriends_tmpArray[y]) {
+          extAllUsers.splice(j, 1);
           j = -1;
           y++;
         }
-        console.log(">>", allUsersData);
+        console.log(">>", extAllUsers);
       }
 
-      console.log("filter | after deduction of pending friends", allUsersData);
+      console.log("filter | after deduction of pending friends", extAllUsers);
 
       let z = 0;
-      for (let k = 0; k < allUsersData.length; k++) {
+      for (let k = 0; k < extAllUsers.length; k++) {
 
         if (pendingFRs.length <= 0) {
           break;
@@ -252,19 +253,19 @@ const FindFriends = () => {
           break;
         }
 
-        if (allUsersData[k] == pendingFRs[z]) {
-          allUsersData.splice(k, 1);
+        if (extAllUsers[k] == pendingFRs[z]) {
+          extAllUsers.splice(k, 1);
           k = -1;
           z++;
         }
-        console.log(">>>", k, ".", z, allUsersData);
+        console.log(">>>", k, ".", z, extAllUsers);
       }
 
-      console.log("filter | after deduction of pending FRs", allUsersData);
+      console.log("filter | after deduction of pending FRs", extAllUsers);
 
 
-      setFilteredUsers(allUsersData);
-      setSearchFilter(allUsersData);
+      setFilteredUsers(extAllUsers);
+      setSearchFilter(extAllUsers);
 
     } catch (error3) {
       console.error("error filtering users:", error3);

@@ -642,7 +642,12 @@ app.get('/user', printingDebuggingInfo, async (req, res, next) => {
 
         const response = JSON.parse(allUsers);
 
-        return res.status(200).json(response);
+        const message = {
+            code: 200,
+            users: response
+        };
+
+        return res.status(200).json(message);
     }
 
     User.getAllUsers((err, response) => {
@@ -657,7 +662,7 @@ app.get('/user', printingDebuggingInfo, async (req, res, next) => {
         } else {
             const message = {
                 code: 200,
-                rowCount: response.rowCout,
+                // rowCount: response.rowCout,
                 users: response.rows
             };
 

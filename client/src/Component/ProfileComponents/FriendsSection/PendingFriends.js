@@ -11,6 +11,7 @@ const PendingFriends = () => {
 
   const getPendingFriends = async () => {
     let allUsersData; // Retrieve All users
+    let extAllUsers;
     let tmpArray = []; // Retrive Friend Requests from Other People
     let tmpArray2 = []; // Retrieve Sent Friend Requests
     let pendingFRs;
@@ -22,6 +23,7 @@ const PendingFriends = () => {
       });
 
       allUsersData = await findFriendsResponse.json();
+      extAllUsers = allUsersData.users;
       setAllUsers(allUsersData);
 
       console.log("allUsers", allUsersData);
@@ -56,13 +58,13 @@ const PendingFriends = () => {
 
         getRequest.forEach(friend => {
           let userid = parseInt(friend.split('_')[1]);
-          for (let i = 0; i < allUsersData.length; i++) {
-            if (allUsersData[i].userid === userid) {
+          for (let i = 0; i < extAllUsers.length; i++) {
+            if (extAllUsers[i].userid === userid) {
               let newData = {
-                userid: allUsersData[i].userid,
-                username: allUsersData[i].username,
-                email: allUsersData[i].email,
-                profileicon: allUsersData[i].profileicon,
+                userid: extAllUsers[i].userid,
+                username: extAllUsers[i].username,
+                email: extAllUsers[i].email,
+                profileicon: extAllUsers[i].profileicon,
                 origin: 'receive',
               };
 
@@ -119,26 +121,30 @@ const PendingFriends = () => {
         
         let originSent = [];
         let xy = 0;
+        let concatSentReceive = [];
 
-        allUsersData.forEach(user => {
-          // console.log("XYZ", user);
-          // console.log(user.userid === tmpArray2[xy]);
-          if (user.userid === tmpArray2[xy]) {
-            let newData = {
-              userid: user.userid,
-              username: user.username,
-              profileicon: user.profileicon,
-              origin: 'sent',
-            };
-
-            originSent.push(newData);
-            xy++;
-          }
-        });
-
-        console.log("originSent", originSent);
-
-        const concatSentReceive = tmpArray.concat(originSent);
+        if (extAllUsers !== undefined || extAllUsers !== null) {
+          extAllUsers.forEach(user => {
+            // console.log("XYZ", user);
+            // console.log(user.userid === tmpArray2[xy]);
+            if (user.userid === tmpArray2[xy]) {
+              let newData = {
+                userid: user.userid,
+                username: user.username,
+                profileicon: user.profileicon,
+                origin: 'sent',
+              };
+  
+              originSent.push(newData);
+              xy++;
+            }
+          });
+          console.log("originSent", originSent);
+          concatSentReceive = tmpArray.concat(originSent);
+        } else {
+          concatSentReceive = tmpArray;
+        }
+        
         setFriendsList(concatSentReceive);
         setPendingFR(concatSentReceive);
 
