@@ -18,7 +18,7 @@ const verifyGoogleToken = async (req, res, next) => {
   }
 
   const token = authHeader.replace("Bearer ", "");
-  console.log("token:", token);
+  // console.log("token:", token);
 
   if (token.length < 150) {
     console.log("moving on!");

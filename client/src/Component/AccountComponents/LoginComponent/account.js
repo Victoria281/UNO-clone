@@ -11,6 +11,8 @@ import boopSfx from '../soundEffect/boop.wav';
 import LockIcon from '@mui/icons-material/Lock';
 import EmailIcon from '@mui/icons-material/Email';
 import CustomNotification from '../../OtherComponents/NotificationComponent/Notifications';
+import { TextField, Box } from "@mui/material";
+import { AccountCircle, PasswordRounded, KeyRounded } from "@mui/icons-material";
 
 import dotenv from 'dotenv';
 dotenv.config();
@@ -18,13 +20,6 @@ dotenv.config();
 console.log(process.env);
 
 export default function App() {
-  const [email, setEmail] = useState("");
-  const [emailError, setEmailError] = useState("");
-  const [password, setPassword] = useState("");
-  const [passwordError, setPasswordError] = useState("");
-  const [credWrong, setCredWrong] = useState("");
-  const [successMsg, setSuccessMsg] = useState("");
-  const [passwordShown1, setPasswordShown1] = useState(false);
   const [captcha, setCaptcha] = useState(false);
   const [captchaError, setCaptchaError] = useState("");
   const [play] = useSound(boopSfx);
@@ -84,134 +79,109 @@ export default function App() {
 
   // Function called when login button is clicked
   function createPost() {
-    let status = true;
     let attempt = localStorage.getItem("attempt");
+
+    const email = document.getElementById("email-input").value;
+    const password = document.getElementById("password-input").value;
+
+    console.log("email:", email);
+    console.log("password:", password);
 
     // Check email field
     if (email === "") {
-      status = false;
-      setNotif({ open: true, type: 'error', message: 'Email is required!' })
+      setNotif({ open: true, type: 'error', message: 'Email is required!' });
+
     } else {
       const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+
       if (emailRegex.test(email)) {
-        console.log("passed status:", status);
-        status = true;
-        console.log("passed after status:", status);
-      } else {
-        console.log("false status:", status);
-        status = false;
-        setNotif({ open: true, type: 'error', message: 'Email is not valid!' })
-      }
-    }
 
-    console.log("status:", status);
+        // Check password field
+        if (password === "") {
+          setNotif({ open: true, type: 'error', message: 'Password Required!' });
 
-    if (status) {
-      // Check password field
-      if (password === "") {
-        status = false;
-        setNotif({ open: true, type: 'error', message: 'Password Required!' })
-      } else {
-        status = true;
-      }
-    }
-
-    console.log("status:", status);
-
-    // Check if status has been validated
-    if (status) {
-      if (captcha === false) {
-        status = false;
-        setNotif({ open: true, type: 'error', message: 'Please input captcha!' })
-      } else {
-        console.log("Attempt Number: " + attempt);
-        let toUpdate;
-
-        if (isNaN(attempt)) {
-          toUpdate = 1;
         } else {
-          toUpdate = parseInt(attempt) + 1;
+
+          // Check if status has been validated
+          if (captcha === false) {
+            setNotif({ open: true, type: 'error', message: 'Please input captcha!' });
+
+          } else {
+            console.log("Attempt Number: " + attempt);
+            let toUpdate;
+
+            if (isNaN(attempt)) {
+              toUpdate = 1;
+
+            } else {
+              toUpdate = parseInt(attempt) + 1;
+
+            }
+
+            localStorage.setItem("attempt", toUpdate);
+
+            axios
+              .post(process.env.REACT_APP_API_URL + "/api/uno/login", {
+                email: email,
+                password: password
+              })
+              .then((response) => {
+                // console.log(response)
+                localStorage.setItem('token', 'Bearer ' + response.data.token);
+                localStorage.setItem('userid', response.data.user_id);
+                localStorage.setItem('username', response.data.username);
+                setNotif({ open: true, type: 'success', message: 'Login Successful' });
+                history.push("/");
+
+              })
+              .catch((error) => {
+                if (error.response) {
+                  // console.log("ERROR RESPONSESSSSSSSSS")
+                  // console.log(error.response.data)
+                  // console.log(error.response.status);
+                  // console.log(error.response.headers);
+                  //setCredWrong("Wrong Credentials Entered!");
+                  setNotif({ open: true, type: 'error', message: 'Login Unsuccessful' })
+                  // If attempt is 5 times, disable form
+                  if (attempt == 4) {
+                    setFormDisabled(true);
+                    setBtnDisabled(true);
+                    //alert("The form has been disabled. Please wait for a while")
+                    setNotif({ open: true, type: 'error', message: 'Form is disabled' })
+                    // Enable form after 10 secs
+                    setTimeout(() => {
+                      setFormDisabled(false);
+                      setBtnDisabled(true);
+                      localStorage.setItem("attempt", 0);
+                    }, 10000);
+
+                    console.log("CANNOT SEND FORM DUE TO ATTEMPT");
+
+                  }
+
+                  console.log("Login Error");
+                } else {
+                  console.log("error:", error);
+                }
+
+              })
+          }
         }
-        localStorage.setItem("attempt", toUpdate);
+
+      } else {
+        setNotif({ open: true, type: 'error', message: 'Email is not valid!' });
+
       }
     }
-
-    console.log("status:", status);
-
-    if (status) {
-      axios
-        .post(process.env.REACT_APP_API_URL + "/api/uno/login", {
-          email: email,
-          password: password
-        })
-        .then((response) => {
-          // console.log(response)
-          localStorage.setItem('token', 'Bearer ' + response.data.token)
-          localStorage.setItem('userid', response.data.user_id)
-          localStorage.setItem('username', response.data.username)
-          setNotif({ open: true, type: 'success', message: 'Login Successful' })
-          window.location = '/'
-          // alert("Login successful!")
-        })
-        .catch((error) => {
-          if (error.response) {
-            // console.log("ERROR RESPONSESSSSSSSSS")
-            // console.log(error.response.data)
-            // console.log(error.response.status);
-            // console.log(error.response.headers);
-            //setCredWrong("Wrong Credentials Entered!");
-            setNotif({ open: true, type: 'error', message: 'Login Unsuccessful' })
-            // If attempt is 5 times, disable form
-            if (attempt == 4) {
-              status = false;
-              setFormDisabled(true);
-              setBtnDisabled(true);
-              //alert("The form has been disabled. Please wait for a while")
-              setNotif({ open: true, type: 'error', message: 'Form is disabled' })
-              // Enable form after 10 secs
-              setTimeout(() => {
-                setFormDisabled(false);
-                setBtnDisabled(true);
-                localStorage.setItem("attempt", 0);
-              }, 10000);
-
-              console.log("CANNOT SEND FORM DUE TO ATTEMPT")
-            }
-            console.log("Login Error")
-          } else {
-            // console.log("Login Failed!")
-          }
-
-        })
-    }
-
-
   }
-
-  const handleEmailChange = (e) => {
-    setSuccessMsg("");
-    setEmailError("");
-    setEmail(e.target.value);
-  };
-
-  const handlePasswordChange = (e) => {
-    setSuccessMsg("");
-    setPasswordError("");
-    setPassword(e.target.value);
-  };
 
   const handleFormSubmit = (e) => {
     e.preventDefault();
   };
 
-  // Password visibility function
-  const togglePassword1 = () => {
-    setPasswordShown1(!passwordShown1);
-  };
-
   // Google OAuth Button
   const handleCredentialResponse = async (response) => {
-    console.log("Encoded JWT ID Token: " + response.credential);
+    //console.log("Encoded JWT ID Token: " + response.credential);
 
     const result = await fetch(process.env.REACT_APP_API_URL + "/api/uno/login/google", {
       method: "POST",
@@ -268,46 +238,30 @@ export default function App() {
 
           <h5 className={styles.oauthSeparator}><span>OR</span></h5>
 
-          <form
-            className={`form-group form ${styles.accountForm}`}
-            autoComplete="off"
-            onSubmit={handleFormSubmit}
-          >
+          <form className={`form-group form ${styles.accountForm}`} autoComplete="off" onSubmit={handleFormSubmit}>
             <fieldset disabled={formDisabled}>
-              {/* {successMsg && <div className="success-msg">{successMsg}</div>} */}
-              <label style={{ marginRight: 445 }}>Email:</label>
 
+              <Box sx={{ display: 'flex', alignItems: 'flex-end' }}>
+                <AccountCircle sx={{ color: 'action.active', mr: 1, my: 0.5 }} />
+                <TextField fullWidth id="email-input" variant="standard" label="Email" type="email" style={{ paddingRight: 10 }} />
+              </Box>
 
-              <div className={`input-group ${styles.accountEmailDiv}`}>
-                <div className={`input-group-prepend`}>
-                  <span className={`input-group-text ${styles.accountInputItems}`}><EmailIcon /></span>
-                </div>
-                <input type="text" className={`form-control ${styles.accountInputItems}`} style={{ paddingRight: 10 }} placeholder="Email Address" onChange={handleEmailChange} value={email} />
-              </div>
-
-              {/* {emailError && <div className="error-msg">{emailError}</div>} */}
-
-              <label style={{ marginRight: 415 }}>Password:</label>
-              <div className={`input-group`} style={{ marginBottom: 20 }}>
-                <div className={`input-group-prepend`}>
-                  <span className={`input-group-text ${styles.accountInputItems}`}><LockIcon /></span>
-                </div>
-                <input type={passwordShown1 ? "text" : "password"} className={`form-control ${styles.accountInputItems}`} style={{ paddingRight: 10 }} placeholder="Password" onChange={handlePasswordChange} value={password} />
-                <button onClick={togglePassword1}><VisibilityIcon style={{ padding: 2, marginTop: 6 }} /></button>
-              </div>
-
-              {/* {passwordError && <div className="error-msg">{passwordError}</div>} */}
-
-              {/* {credWrong && <div className="error-msg">{credWrong}</div>} */}
-
+              <Box sx={{ display: 'flex', alignItems: 'flex-end', marginY: 2 }}>
+                <KeyRounded sx={{ color: 'action.active', mr: 1, my: 0.5 }} />
+                <TextField fullWidth id="password-input" variant="standard" label="Password" type="password" style={{ paddingRight: 10 }} />
+              </Box>
 
               {/* Recaptcha section */}
-              <ReCAPTCHA
-                sitekey="6LcitAkeAAAAAE9MsKKtc5-CFwLhZiRTrlxNfOYK"
-                size="normal"
-                type="image"
-                onChange={onChange}
-              />
+              <Box sx={{ marginY: 1, alignItem: 'center' }}>
+                <ReCAPTCHA
+                  sitekey="6LcitAkeAAAAAE9MsKKtc5-CFwLhZiRTrlxNfOYK"
+                  size="normal"
+                  type="image"
+                  onChange={onChange}
+                />
+              </Box>
+
+
               {captchaError && <div>{captchaError}</div>}
 
               <button
@@ -324,6 +278,8 @@ export default function App() {
 
             </fieldset>
           </form>
+
+
 
           {
             isShown ?

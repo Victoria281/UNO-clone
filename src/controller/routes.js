@@ -494,16 +494,33 @@ app.get('/user/:id', printingDebuggingInfo, verifyToken, verifyGoogleToken, func
         if (err) {
             if (err === "404") {
                 console.log("result: 404");
-                return next(createHttpError(404, `Not found`));
+                const message = {
+                    code: 404,
+                    message: 'Not found'
+                };
+
+                return res.status(404).json(message);
+
+            } else {
+                const message = {
+                    code: 500,
+                    message: 'Internal Server Error'
+                };
+                return res.status(500).json(message);
+
             }
-            else {
-                console.log("result: thank you next");
-                return next(err);
-            }
+
         } else {
-            if (result.length === 0) {
+            if (result === undefined || result === null) {
                 console.log("result:", "no result");
-                return next(createHttpError(404, `Not found`));
+
+                const message = {
+                    code: 404,
+                    message: 'Not found'
+                };
+
+                return res.status(404).json(message);
+
             } else {
                 console.log("result:", result);
 
@@ -676,7 +693,7 @@ app.get('/user', printingDebuggingInfo, async (req, res, next) => {
 });
 
 //getFriend
-app.get('/user/friend/:uid', printingDebuggingInfo, verifyToken, async (req, res, next) => {
+app.get('/user/friend/:uid', printingDebuggingInfo, verifyToken, verifyGoogleToken, async (req, res, next) => {
     let { uid } = req.params;
     // console.log("uid", uid);
     // console.log("req.decodedToken.id", req.decodedToken.id);
