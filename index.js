@@ -65,7 +65,7 @@ console.log(path.join(__dirname, "client/build"));
 app.use('/api', ApiRouter);
 
 app.get("*", (req, res) => {
-    console.log(req)
+    // console.log(req)
     res.sendFile(path.join(__dirname, "client/build/index.html"))
 })
 
